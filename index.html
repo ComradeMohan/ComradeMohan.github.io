@@ -323,45 +323,78 @@
       </div> 
         <!-- extra content -->
         <div class="home-count">
-          <div class="box">
-              <h1 class="count" data-target="2">0</h1>
-              <p>Years of experience</p>
-          </div>
-          <div class="box">
-              <h1 class="count" data-target="8">0</h1>
-              <p>Technologies mastered</p>
-          </div> <div class="box">
-            <h1 class="count" data-target="25">0</h1>
-            <p>Projects completed</p>
-        </div>
-          <div class="box">
-              <h1 class="count" data-target="459">0</h1>
-              <p>Code commits</p>
-          </div>
-      </div>
+  <div class="box">
+      <h1 class="count" data-target="https://devpulseweb.netlify.app/api/stats/experience/ComradeMohan">0</h1>
+      <p>Years of experience</p>
+  </div>
+  <div class="box">
+      <h1 class="count" data-target="8">0</h1>
+      <p>Technologies mastered</p>
+  </div>
+  <div class="box">
+      <h1 class="count" data-target="https://devpulseweb.netlify.app/api/stats/projects/ComradeMohan">0</h1>
+      <p>Projects completed</p>
+  </div>
+  <div class="box">
+      <h1 class="count" data-target="https://devpulseweb.netlify.app/api/stats/commits/ComradeMohan">0</h1>
+      <p>Code commits</p>
+  </div>
+</div>
     
-        <script>document.addEventListener('DOMContentLoaded', function() {
-          const counters = document.querySelectorAll('.count');
-          const duration = 2000; // Duration of the animation in milliseconds
-      
-          counters.forEach(counter => {
-              const updateCount = () => {
-                  const target = +counter.getAttribute('data-target');
-                  const count = +counter.innerText;
-                  const increment = target / (duration / 50); // Adjust the increment based on the duration and update frequency
-      
-                  if (count < target) {
-                      counter.innerText = Math.ceil(count + increment);
-                      setTimeout(updateCount, 50); // Update frequency in milliseconds
-                  } else {
-                      counter.innerText = target; // Ensure the target value is set exactly at the end
-                  }
-              };
-      
-              updateCount();
-          });
-      });
-      </script>
+       <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const counters = document.querySelectorAll('.count');
+    const duration = 2000; // Animation duration
+
+    counters.forEach(counter => {
+        const targetValue = counter.getAttribute('data-target');
+
+        // This function starts the animation
+        const animateCount = (target) => {
+            const count = +counter.innerText;
+            // Ensure target is a number and increment is valid
+            if (isNaN(target) || target === 0) {
+                counter.innerText = target;
+                return;
+            }
+            
+            const increment = target / (duration / 50);
+
+            if (count < target) {
+                counter.innerText = Math.ceil(count + increment);
+                setTimeout(animateCount, 50, target);
+            } else {
+                counter.innerText = target;
+            }
+        };
+
+        // Check if the target is a URL
+        if (targetValue.startsWith('http')) {
+            // It's a URL, fetch the data first
+            fetch(targetValue)
+                .then(response => response.ok ? response.text() : '0')
+                .then(text => {
+                    const target = parseInt(text, 10);
+                    if (!isNaN(target)) {
+                        animateCount(target);
+                    } else {
+                        counter.innerText = '0'; // Fallback
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    counter.innerText = '0'; // Fallback on error
+                });
+        } else {
+            // It's a static number, just animate it
+            const target = parseInt(targetValue, 10);
+            if (!isNaN(target)) {
+                animateCount(target);
+            }
+        }
+    });
+});
+</script> 
       </section>
 
 
