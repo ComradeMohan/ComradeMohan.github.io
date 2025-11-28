@@ -47,7 +47,7 @@
   transition: transform 1s;
 }
 :root{
-  --primary-color:#1a1a2e;
+  --primary-color:#020617;
   --secondary-color:#f89b29;
   --text-color:white;
   --home-color: rgba(255, 255, 255, 0.804);
