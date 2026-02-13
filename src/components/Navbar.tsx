@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Mail } from "lucide-react";
+import { Menu, X, Mail, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const navLinks = [
@@ -15,6 +15,29 @@ const navLinks = [
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("#home");
+  const [isDark, setIsDark] = useState(true);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("theme");
+    if (saved === "light") {
+      setIsDark(false);
+      document.documentElement.classList.add("light");
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    setIsDark((prev) => {
+      const next = !prev;
+      if (next) {
+        document.documentElement.classList.remove("light");
+        localStorage.setItem("theme", "dark");
+      } else {
+        document.documentElement.classList.add("light");
+        localStorage.setItem("theme", "light");
+      }
+      return next;
+    });
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -68,6 +91,13 @@ const Navbar = () => {
                 )}
               </a>
             ))}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-full border border-border hover:border-primary/50 text-muted-foreground hover:text-primary transition-colors"
+              aria-label="Toggle theme"
+            >
+              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
             <Button asChild size="sm" className="bg-primary hover:bg-primary/80">
               <a href="mailto:mohanreddy0703@gmail.com">
                 <Mail className="w-4 h-4 mr-1" /> Hire Me
@@ -75,19 +105,27 @@ const Navbar = () => {
             </Button>
           </div>
 
-          <button
-            className="md:hidden text-foreground"
-            onClick={() => setMobileOpen(!mobileOpen)}
-          >
-            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          <div className="flex items-center gap-3 md:hidden">
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-full border border-border hover:border-primary/50 text-muted-foreground hover:text-primary transition-colors"
+              aria-label="Toggle theme"
+            >
+              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
+            <button
+              className="text-foreground"
+              onClick={() => setMobileOpen(!mobileOpen)}
+            >
+              {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
       </div>
 
       <AnimatePresence>
         {mobileOpen && (
           <>
-            {/* Backdrop overlay - click to close */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -96,13 +134,13 @@ const Navbar = () => {
               className="fixed inset-0 top-16 bg-background/60 backdrop-blur-sm md:hidden z-40"
               onClick={() => setMobileOpen(false)}
             />
-            {/* Menu panel */}
             <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25 }}
-              className="fixed top-16 right-0 bottom-0 w-72 bg-card/95 backdrop-blur-xl border-l border-border p-8 flex flex-col gap-5 md:hidden z-50 shadow-2xl shadow-background/80"
+              className="fixed top-16 right-0 bottom-0 w-72 bg-card border-l border-border p-8 flex flex-col gap-5 md:hidden z-50 shadow-2xl shadow-background/50"
+              style={{ backdropFilter: "blur(24px)" }}
             >
               {navLinks.map((link) => (
                 <a
