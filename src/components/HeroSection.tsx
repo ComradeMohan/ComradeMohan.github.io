@@ -40,12 +40,12 @@ const HeroSection = () => {
   ];
 
   return (
-    <section id="home" className="min-h-screen flex items-center pt-16 relative overflow-hidden">
+    <section id="home" className="min-h-screen flex items-center relative overflow-hidden">
       {/* Background glow */}
-      <div className="absolute top-1/4 -right-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 -left-32 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
+      <div className="absolute top-1/4 -right-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 -left-32 w-96 h-96 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-20 w-full relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -64,22 +64,24 @@ const HeroSection = () => {
               </span>
             </div>
             <p className="text-muted-foreground mb-8 max-w-lg leading-relaxed font-grotesk">
-              Passionate Full Stack Developer crafting digital experiences with modern technologies. 
+              Passionate Full Stack Developer crafting digital experiences with modern technologies.
               Turning ideas into elegant, functional solutions.
             </p>
 
             <div className="flex flex-wrap gap-3 mb-12">
-              <Button asChild variant="outline" size="icon" className="rounded-full border-border hover:border-primary hover:text-primary">
+              <Button asChild variant="outline" size="icon" className="rounded-full border-border hover:border-white hover:text-white hover:bg-white/10 transition-colors">
                 <a href="https://github.com/comrademohan" target="_blank" rel="noopener noreferrer"><Github className="w-5 h-5" /></a>
               </Button>
-              <Button asChild variant="outline" size="icon" className="rounded-full border-border hover:border-primary hover:text-primary">
+              <Button asChild variant="outline" size="icon" className="rounded-full border-border hover:border-[#0077b5] hover:text-[#0077b5] hover:bg-[#0077b5]/10 transition-colors">
                 <a href="https://www.linkedin.com/in/mohan-reddy-39b989250/" target="_blank" rel="noopener noreferrer"><Linkedin className="w-5 h-5" /></a>
               </Button>
-              <Button asChild variant="outline" size="icon" className="rounded-full border-border hover:border-primary hover:text-primary">
+              <Button asChild variant="outline" size="icon" className="rounded-full border-border hover:border-[#E1306C] hover:text-[#E1306C] hover:bg-[#E1306C]/10 transition-colors">
                 <a href="https://www.instagram.com/mr_comrade_07/" target="_blank" rel="noopener noreferrer"><Instagram className="w-5 h-5" /></a>
               </Button>
-              <Button className="ml-2 bg-primary hover:bg-primary/80">
-                <Download className="w-4 h-4 mr-2" /> Resume
+              <Button asChild className="ml-2 bg-primary hover:bg-primary/80">
+                <a href="/mohan_resume_.pdf" download>
+                  <Download className="w-4 h-4 mr-2" /> Resume
+                </a>
               </Button>
             </div>
 
@@ -106,8 +108,8 @@ const HeroSection = () => {
             className="hidden lg:flex justify-center"
           >
             <div className="relative">
-              <div className="w-80 h-80 rounded-full bg-gradient-to-br from-primary/30 to-accent/30 flex items-center justify-center">
-                <div className="w-72 h-72 rounded-full bg-secondary flex items-center justify-center text-6xl font-extrabold font-outfit text-primary">
+              <div className="w-64 h-64 lg:w-80 lg:h-80 rounded-full bg-gradient-to-br from-primary/30 to-accent/30 flex items-center justify-center">
+                <div className="w-56 h-56 lg:w-72 lg:h-72 rounded-full bg-secondary flex items-center justify-center text-4xl lg:text-6xl font-extrabold font-outfit text-primary">
                   MR
                 </div>
               </div>
