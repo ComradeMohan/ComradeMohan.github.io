@@ -7,7 +7,7 @@ const projects = [
   {
     title: "Saveetha CGPA Calculator",
     desc: "A comprehensive CGPA calculator designed specifically for Saveetha Engineering College students. Features intuitive grade input and instant CGPA computation.",
-    link: "https://comrademohan.github.io/Saveetha-CGPA-Calculator/",
+    link: "https://saveetha-companion.netlify.app/",
     color: "from-primary/20 to-primary/5",
   },
   {
