@@ -165,7 +165,7 @@ const Navbar = () => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -12, scale: 0.96 }}
               transition={{ type: "spring", damping: 26, stiffness: 300 }}
-              className="mt-2 mx-2 rounded-[1.5rem] border border-foreground/10 p-6 flex flex-col gap-3 md:hidden z-50 relative overflow-hidden"
+              className="mt-2 mx-2 rounded-[1.5rem] border border-foreground/10 p-4 flex flex-col gap-0.5 md:hidden z-50 relative overflow-hidden"
               style={{
                 background: "linear-gradient(135deg, hsl(var(--background) / 0.35), hsl(var(--background) / 0.2))",
                 backdropFilter: "blur(32px) saturate(1.8)",
@@ -188,7 +188,7 @@ const Navbar = () => {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.04 }}
-                  className={`relative text-base font-medium transition-all font-outfit px-4 py-2.5 rounded-xl ${
+                  className={`relative text-sm font-medium transition-all font-outfit px-3 py-2 rounded-lg ${
                     activeSection === link.href
                       ? "text-primary"
                       : "text-foreground/70 hover:text-primary"
