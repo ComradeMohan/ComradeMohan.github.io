@@ -27,7 +27,7 @@ const SkillsSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold mb-4">
+          <h2 className="text-4xl font-extrabold mb-4 font-outfit">
             My <span className="text-primary">Skills</span>
           </h2>
           <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
@@ -43,8 +43,8 @@ const SkillsSection = () => {
               transition={{ delay: i * 0.08, duration: 0.5 }}
             >
               <div className="flex justify-between mb-2">
-                <span className="text-sm font-medium text-foreground">{skill.name}</span>
-                <span className="text-sm text-primary font-semibold">{skill.percent}%</span>
+                <span className="text-sm font-medium text-foreground font-outfit">{skill.name}</span>
+                <span className="text-sm text-primary font-bold font-mono">{skill.percent}%</span>
               </div>
               <div className="h-2.5 bg-secondary rounded-full overflow-hidden">
                 <motion.div
@@ -65,7 +65,7 @@ const SkillsSection = () => {
             {[...techIcons, ...techIcons].map((tech, i) => (
               <span
                 key={i}
-                className="text-lg font-genos text-muted-foreground hover:text-primary transition-colors px-4 py-2 border border-border rounded-lg"
+                className="text-lg font-mono text-muted-foreground hover:text-primary transition-colors px-4 py-2 border border-border rounded-lg"
               >
                 {tech}
               </span>

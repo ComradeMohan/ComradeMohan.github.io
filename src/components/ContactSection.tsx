@@ -26,7 +26,7 @@ const ContactSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold mb-4">
+          <h2 className="text-4xl font-extrabold mb-4 font-outfit">
             Get In <span className="text-primary">Touch</span>
           </h2>
           <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
