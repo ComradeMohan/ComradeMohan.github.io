@@ -52,18 +52,18 @@ const HeroSection = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <p className="text-muted-foreground text-lg mb-2">Hi there, I'm</p>
-            <h1 className="text-5xl md:text-7xl font-bold mb-4">
+            <p className="text-muted-foreground text-lg mb-2 font-grotesk tracking-wide uppercase text-sm">Hi there, I'm</p>
+            <h1 className="text-5xl md:text-7xl font-extrabold mb-4 font-outfit tracking-tight">
               <span className="text-primary">Mohan</span>{" "}
               <span className="text-foreground">Reddy</span>
             </h1>
             <div className="h-10 mb-6">
-              <span className="text-xl md:text-2xl font-genos text-accent">
+              <span className="text-xl md:text-2xl font-mono text-accent tracking-wide">
                 {displayText}
-                <span className="animate-pulse">|</span>
+                <span className="animate-pulse text-primary">|</span>
               </span>
             </div>
-            <p className="text-muted-foreground mb-8 max-w-lg leading-relaxed">
+            <p className="text-muted-foreground mb-8 max-w-lg leading-relaxed font-grotesk">
               Passionate Full Stack Developer crafting digital experiences with modern technologies. 
               Turning ideas into elegant, functional solutions.
             </p>
@@ -92,8 +92,8 @@ const HeroSection = () => {
                   transition={{ delay: 0.5 + i * 0.15 }}
                   className="text-center"
                 >
-                  <div className="text-3xl font-bold text-primary">{stat.value}</div>
-                  <div className="text-xs text-muted-foreground mt-1">{stat.label}</div>
+                  <div className="text-3xl font-extrabold text-primary font-outfit">{stat.value}</div>
+                  <div className="text-xs text-muted-foreground mt-1 font-grotesk">{stat.label}</div>
                 </motion.div>
               ))}
             </div>
@@ -107,7 +107,7 @@ const HeroSection = () => {
           >
             <div className="relative">
               <div className="w-80 h-80 rounded-full bg-gradient-to-br from-primary/30 to-accent/30 flex items-center justify-center">
-                <div className="w-72 h-72 rounded-full bg-secondary flex items-center justify-center text-6xl font-bold font-genos text-primary">
+                <div className="w-72 h-72 rounded-full bg-secondary flex items-center justify-center text-6xl font-extrabold font-outfit text-primary">
                   MR
                 </div>
               </div>

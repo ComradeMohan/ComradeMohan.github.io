@@ -19,7 +19,7 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <a href="#home" className="font-genos text-2xl font-bold tracking-wider">
+          <a href="#home" className="font-outfit text-2xl font-extrabold tracking-wider">
             <span className="text-primary">COMRADE</span>
             <span className="text-foreground">MOHAN</span>
           </a>
@@ -29,7 +29,7 @@ const Navbar = () => {
               <a
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors duration-300"
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors duration-300 font-grotesk"
               >
                 {link.label}
               </a>

@@ -55,7 +55,7 @@ const ProjectsSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold mb-4">
+          <h2 className="text-4xl font-extrabold mb-4 font-outfit">
             My <span className="text-primary">Projects</span>
           </h2>
           <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
@@ -78,8 +78,8 @@ const ProjectsSection = () => {
                 }`}
                 onClick={() => setActiveIndex(i)}
               >
-                <h3 className="text-lg font-semibold text-foreground mb-2">{project.title}</h3>
-                <p className="text-sm text-muted-foreground line-clamp-2">{project.desc}</p>
+                <h3 className="text-lg font-semibold text-foreground mb-2 font-outfit">{project.title}</h3>
+                <p className="text-sm text-muted-foreground line-clamp-2 font-grotesk">{project.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -94,8 +94,8 @@ const ProjectsSection = () => {
           >
             <div className={`rounded-2xl bg-gradient-to-br ${projects[activeIndex].color} border border-border p-8 min-h-[400px] flex flex-col justify-between`}>
               <div>
-                <h3 className="text-2xl font-bold text-foreground mb-4">{projects[activeIndex].title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{projects[activeIndex].desc}</p>
+                <h3 className="text-2xl font-extrabold text-foreground mb-4 font-outfit">{projects[activeIndex].title}</h3>
+                <p className="text-muted-foreground leading-relaxed font-grotesk">{projects[activeIndex].desc}</p>
               </div>
               <Button asChild className="mt-8 bg-primary hover:bg-primary/80 self-start">
                 <a href={projects[activeIndex].link} target="_blank" rel="noopener noreferrer">

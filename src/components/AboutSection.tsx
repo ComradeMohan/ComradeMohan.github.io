@@ -23,7 +23,7 @@ const AboutSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold mb-4">
+          <h2 className="text-4xl font-extrabold mb-4 font-outfit">
             About <span className="text-primary">Me</span>
           </h2>
           <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
@@ -36,12 +36,12 @@ const AboutSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <p className="text-muted-foreground leading-relaxed mb-6">
+             <p className="text-muted-foreground leading-relaxed mb-6 font-grotesk">
               I'm a <span className="text-primary font-semibold">Creative Director & Full Stack Developer</span> based in 
               Andhra Pradesh, India. I specialize in building exceptional digital experiences 
               that live on the internet.
             </p>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-muted-foreground leading-relaxed font-grotesk">
               Whether it's web development, app development, or UI/UX design, I bring a unique blend 
               of creativity and technical expertise to every project. I'm passionate about turning 
               complex problems into simple, beautiful, and intuitive solutions.
@@ -59,8 +59,8 @@ const AboutSection = () => {
                 className="p-6 rounded-xl bg-card border border-border hover:border-primary/50 transition-all duration-300 group"
               >
                 <service.icon className="w-10 h-10 text-primary mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="font-semibold text-foreground mb-2">{service.title}</h3>
-                <p className="text-sm text-muted-foreground">{service.desc}</p>
+                <h3 className="font-semibold text-foreground mb-2 font-outfit">{service.title}</h3>
+                <p className="text-sm text-muted-foreground font-grotesk">{service.desc}</p>
               </motion.div>
             ))}
           </div>
