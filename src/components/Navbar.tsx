@@ -86,33 +86,45 @@ const Navbar = () => {
 
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 25 }}
-            className="fixed top-16 right-0 bottom-0 w-64 bg-card border-l border-border p-6 flex flex-col gap-4 md:hidden"
-          >
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className={`text-lg transition-colors ${
-                  activeSection === link.href
-                    ? "text-primary font-semibold"
-                    : "text-muted-foreground hover:text-primary"
-                }`}
-                onClick={() => setMobileOpen(false)}
-              >
-                {link.label}
-              </a>
-            ))}
-            <Button asChild className="mt-4 bg-primary hover:bg-primary/80">
-              <a href="mailto:mohanreddy0703@gmail.com">
-                <Mail className="w-4 h-4 mr-1" /> Hire Me
-              </a>
-            </Button>
-          </motion.div>
+          <>
+            {/* Backdrop overlay - click to close */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 top-16 bg-background/60 backdrop-blur-sm md:hidden z-40"
+              onClick={() => setMobileOpen(false)}
+            />
+            {/* Menu panel */}
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25 }}
+              className="fixed top-16 right-0 bottom-0 w-72 bg-card/95 backdrop-blur-xl border-l border-border p-8 flex flex-col gap-5 md:hidden z-50 shadow-2xl shadow-background/80"
+            >
+              {navLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className={`text-lg transition-colors font-outfit ${
+                    activeSection === link.href
+                      ? "text-primary font-semibold"
+                      : "text-muted-foreground hover:text-primary"
+                  }`}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {link.label}
+                </a>
+              ))}
+              <Button asChild className="mt-4 bg-primary hover:bg-primary/80">
+                <a href="mailto:mohanreddy0703@gmail.com">
+                  <Mail className="w-4 h-4 mr-1" /> Hire Me
+                </a>
+              </Button>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </nav>

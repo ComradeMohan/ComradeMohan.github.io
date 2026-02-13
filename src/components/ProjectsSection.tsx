@@ -61,8 +61,33 @@ const ProjectsSection = () => {
           <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
-          {/* Project List */}
+        {/* Mobile: Cards with direct links */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:hidden">
+          {projects.map((project, i) => (
+            <motion.a
+              key={project.title}
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08 }}
+              whileHover={{ y: -4 }}
+              className={`p-6 rounded-2xl bg-gradient-to-br ${project.color} border border-border hover:border-primary/50 transition-all duration-300 group relative overflow-hidden`}
+            >
+              <div className="absolute top-0 right-0 w-20 h-20 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-primary/10 transition-colors" />
+              <h3 className="text-lg font-bold text-foreground mb-2 font-outfit">{project.title}</h3>
+              <p className="text-sm text-muted-foreground line-clamp-3 font-grotesk mb-4">{project.desc}</p>
+              <span className="inline-flex items-center text-xs text-primary font-semibold font-mono gap-1 group-hover:gap-2 transition-all">
+                View Project <ExternalLink className="w-3.5 h-3.5" />
+              </span>
+            </motion.a>
+          ))}
+        </div>
+
+        {/* Desktop: Split view */}
+        <div className="hidden lg:grid lg:grid-cols-2 gap-8">
           <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2 snap-y snap-mandatory">
             {projects.map((project, i) => (
               <motion.div
@@ -84,7 +109,6 @@ const ProjectsSection = () => {
             ))}
           </div>
 
-          {/* Active Project Preview */}
           <motion.div
             key={activeIndex}
             initial={{ opacity: 0, scale: 0.95 }}
