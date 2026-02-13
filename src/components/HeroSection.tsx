@@ -73,13 +73,13 @@ const HeroSection = () => {
                 <a href="https://github.com/comrademohan" target="_blank" rel="noopener noreferrer"><Github className="w-5 h-5" /></a>
               </Button>
               <Button asChild variant="outline" size="icon" className="rounded-full border-border hover:border-[#0077b5] hover:text-[#0077b5] hover:bg-[#0077b5]/10 transition-colors">
-                <a href="https://www.linkedin.com/in/mohan-reddy-39b989250/" target="_blank" rel="noopener noreferrer"><Linkedin className="w-5 h-5" /></a>
+                <a href="https://www.linkedin.com/in/mmohanreddy" target="_blank" rel="noopener noreferrer"><Linkedin className="w-5 h-5" /></a>
               </Button>
               <Button asChild variant="outline" size="icon" className="rounded-full border-border hover:border-[#E1306C] hover:text-[#E1306C] hover:bg-[#E1306C]/10 transition-colors">
-                <a href="https://www.instagram.com/mr_comrade_07/" target="_blank" rel="noopener noreferrer"><Instagram className="w-5 h-5" /></a>
+                <a href="https://www.instagram.com/comrade_mohan666/" target="_blank" rel="noopener noreferrer"><Instagram className="w-5 h-5" /></a>
               </Button>
               <Button asChild className="ml-2 bg-primary hover:bg-primary/80">
-                <a href="/mohan_resume_.pdf" download>
+                <a href="/mohan_resume_.pdf" target="_blank" rel="noopener noreferrer">
                   <Download className="w-4 h-4 mr-2" /> Resume
                 </a>
               </Button>

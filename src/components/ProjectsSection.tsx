@@ -5,41 +5,36 @@ import { Button } from "@/components/ui/button";
 
 const projects = [
   {
-    title: "Saveetha CGPA Calculator",
-    desc: "A comprehensive CGPA calculator designed specifically for Saveetha Engineering College students. Features intuitive grade input and instant CGPA computation.",
-    link: "https://saveetha-companion.netlify.app/",
-    color: "from-primary/20 to-primary/5",
-  },
-  {
     title: "Object Detection in Python",
     desc: "Real-time object detection system built with Python and OpenCV. Utilizes machine learning models for accurate identification and classification of objects.",
-    link: "https://github.com/comrademohan",
-    color: "from-accent/20 to-accent/5",
+    link: "https://github.com/ComradeMohan/CSA0810PythonProgramming/tree/main/Various%20Object%20Identification",
+    color: "from-slate-800/20 to-slate-800/5",
   },
   {
     title: "Saveetha Hub",
     desc: "A centralized platform for Saveetha University students to access resources, collaborate on projects, and stay connected with campus activities.",
-    link: "https://github.com/comrademohan",
-    color: "from-primary/20 to-accent/5",
+    link: "https://saveetha-companion.netlify.app/",
+    color: "from-orange-500/20 to-orange-500/5",
   },
   {
-    title: "TodoThings",
-    desc: "A sleek and modern task management application with drag-and-drop functionality, priority levels, and deadline tracking for maximum productivity.",
-    link: "https://github.com/comrademohan",
-    color: "from-accent/20 to-primary/5",
-  },
-  {
-    title: "DeepChat",
-    desc: "An AI-powered conversational platform leveraging deep learning for natural language understanding and intelligent response generation.",
-    link: "https://github.com/comrademohan",
-    color: "from-primary/15 to-primary/5",
+    title: "Univault",
+    desc: "A smart academic management platform designed for university students to track grades, calculate CGPA, manage courses, monitor attendance, and generate detailed academic reports — all in one centralized dashboard.",
+    link: "https://play.google.com/store/apps/details?id=com.simats.univault",
+    color: "from-blue-600/20 to-blue-600/5",
   },
   {
     title: "Skylink Deliveries",
     desc: "A logistics and delivery management system with real-time tracking, route optimization, and automated dispatch capabilities.",
-    link: "https://github.com/comrademohan",
-    color: "from-accent/15 to-accent/5",
+    link: "https://skylinkdeliveries.netlify.app/",
+    color: "from-sky-500/20 to-sky-500/5",
   },
+  {
+    title: "DevPulse ⭐",
+    desc: "A full-stack GitHub analytics and widget generator that transforms developer activity into interactive, real-time insights. It provides dynamic widgets for READMEs, tracks commits, PRs, reviews, streaks, and delivers AI-powered tech stack evolution and profile analysis with public portfolio pages.",
+    link: "https://devpulseweb.netlify.app/",
+    color: "from-purple-600/20 to-purple-600/5",
+  }
+
 ];
 
 const ProjectsSection = () => {
@@ -96,11 +91,10 @@ const ProjectsSection = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className={`p-6 rounded-xl border cursor-pointer transition-all duration-300 snap-start ${
-                  activeIndex === i
+                className={`p-6 rounded-xl border cursor-pointer transition-all duration-300 snap-start ${activeIndex === i
                     ? "border-primary bg-primary/5"
                     : "border-border hover:border-primary/30 bg-card"
-                }`}
+                  }`}
                 onClick={() => setActiveIndex(i)}
               >
                 <h3 className="text-lg font-semibold text-foreground mb-2 font-outfit">{project.title}</h3>

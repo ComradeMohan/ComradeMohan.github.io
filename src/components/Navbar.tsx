@@ -19,21 +19,28 @@ const Navbar = () => {
 
   useEffect(() => {
     const saved = localStorage.getItem("theme");
+    const metaThemeColor = document.querySelector("meta[name='theme-color']");
     if (saved === "light") {
       setIsDark(false);
       document.documentElement.classList.add("light");
+      metaThemeColor?.setAttribute("content", "hsla(12, 65%, 88%, 1.00)");
+    } else {
+      metaThemeColor?.setAttribute("content", "hsl(289, 65%, 10%)");
     }
   }, []);
 
   const toggleTheme = () => {
     setIsDark((prev) => {
       const next = !prev;
+      const metaThemeColor = document.querySelector("meta[name='theme-color']");
       if (next) {
         document.documentElement.classList.remove("light");
         localStorage.setItem("theme", "dark");
+        metaThemeColor?.setAttribute("content", "hsl(289, 65%, 10%)");
       } else {
         document.documentElement.classList.add("light");
         localStorage.setItem("theme", "light");
+        metaThemeColor?.setAttribute("content", "hsl(289, 65%, 95%)");
       }
       return next;
     });
@@ -93,11 +100,10 @@ const Navbar = () => {
               <a
                 key={link.href}
                 href={link.href}
-                className={`text-sm font-medium transition-all duration-300 font-grotesk relative px-2 py-1 rounded-full ${
-                  activeSection === link.href
-                    ? "text-primary"
-                    : "text-foreground/60 hover:text-primary"
-                }`}
+                className={`text-sm font-medium transition-all duration-300 font-grotesk relative px-2 py-1 rounded-full ${activeSection === link.href
+                  ? "text-primary"
+                  : "text-foreground/60 hover:text-primary"
+                  }`}
               >
                 {link.label}
                 {activeSection === link.href && (
@@ -188,17 +194,16 @@ const Navbar = () => {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.04 }}
-                  className={`relative text-sm font-medium transition-all font-outfit px-3 py-2 rounded-lg ${
-                    activeSection === link.href
-                      ? "text-primary"
-                      : "text-foreground/70 hover:text-primary"
-                  }`}
+                  className={`relative text-sm font-medium transition-all font-outfit px-3 py-2 rounded-lg ${activeSection === link.href
+                    ? "text-primary"
+                    : "text-foreground/70 hover:text-primary"
+                    }`}
                   style={
                     activeSection === link.href
                       ? {
-                          background: "hsl(var(--primary) / 0.1)",
-                          boxShadow: "0 0 12px hsl(var(--primary) / 0.1)",
-                        }
+                        background: "hsl(var(--primary) / 0.1)",
+                        boxShadow: "0 0 12px hsl(var(--primary) / 0.1)",
+                      }
                       : {}
                   }
                   onClick={() => setMobileOpen(false)}
