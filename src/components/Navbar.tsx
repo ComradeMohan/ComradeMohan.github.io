@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,29 @@ const navLinks = [
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("#home");
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = navLinks.map((link) => link.href.replace("#", ""));
+      let current = "#home";
+
+      for (const id of sections) {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 120) {
+            current = `#${id}`;
+          }
+        }
+      }
+      setActiveSection(current);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
@@ -29,9 +52,20 @@ const Navbar = () => {
               <a
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors duration-300 font-grotesk"
+                className={`text-sm font-medium transition-colors duration-300 font-grotesk relative ${
+                  activeSection === link.href
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-primary"
+                }`}
               >
                 {link.label}
+                {activeSection === link.href && (
+                  <motion.div
+                    layoutId="nav-underline"
+                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
               </a>
             ))}
             <Button asChild size="sm" className="bg-primary hover:bg-primary/80">
@@ -63,7 +97,11 @@ const Navbar = () => {
               <a
                 key={link.href}
                 href={link.href}
-                className="text-lg text-muted-foreground hover:text-primary transition-colors"
+                className={`text-lg transition-colors ${
+                  activeSection === link.href
+                    ? "text-primary font-semibold"
+                    : "text-muted-foreground hover:text-primary"
+                }`}
                 onClick={() => setMobileOpen(false)}
               >
                 {link.label}
