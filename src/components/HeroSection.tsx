@@ -133,7 +133,7 @@ const HeroSection = () => {
               <div className="w-[320px] h-[400px] lg:w-[350px] lg:h-[430px] rounded-[2.5rem] bg-gradient-to-tr from-primary to-accent p-[2px] shadow-2xl relative z-10">
                 <div className="w-full h-full rounded-[2.4rem] bg-background/90 overflow-hidden relative group">
                   <img
-                    src="/comrademohan.png"
+                    src="/comrademohan.webp"
                     alt="Mohan Reddy"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
