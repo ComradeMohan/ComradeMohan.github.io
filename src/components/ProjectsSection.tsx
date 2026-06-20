@@ -159,7 +159,7 @@ const projects = [
     icon: Database,
     iconColor: "text-blue-600",
     iconBg: "bg-blue-600/10",
-    logoImg: "/univault_logo.png",
+    logoImg: "/univault_logo.webp",
     isFeatured: true,
     liveBadges: [
       { text: "Exam Preparation Platform", color: "bg-blue-500/10 border-blue-500/20 text-blue-500" }
@@ -168,7 +168,7 @@ const projects = [
       { text: "Website", url: "https://web.univault.live/", icon: "globe" },
       { text: "Play Store", url: "https://play.google.com/store/apps/details?id=com.simats.univault", icon: "playstore" }
     ],
-    mobileMockup: "/univault_mobile.png",
+    mobileMockup: "/univault_mobile.webp",
     stats: [
       { label: "Active Students", value: "2.4K+", iconName: "users" },
       { label: "Study Materials", value: "10K+", iconName: "book" },
@@ -499,7 +499,7 @@ const ProjectDetailContent = ({ project }: { project: typeof projects[0] }) => {
           {project.title === "Object Detection in Python" && (
             <div className="relative rounded-xl overflow-hidden shadow-lg border border-border/50 bg-black/40">
               <img
-                src="/object_detection_comparison.png"
+                src="/object_detection_comparison.webp"
                 alt="Object Detection Comparison"
                 className="w-full h-auto"
               />

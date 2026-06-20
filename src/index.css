@@ -163,3 +163,27 @@
   background: hsl(12 95% 58%);
   border-radius: 3px;
 }
+
+/* Doodle active vibration keyframes and classes */
+@keyframes doodle-vibrate {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  20% { transform: translate(-0.3px, 0.3px) rotate(-0.15deg); }
+  40% { transform: translate(0.3px, -0.3px) rotate(0.15deg); }
+  60% { transform: translate(-0.3px, -0.3px) rotate(-0.1deg); }
+  80% { transform: translate(0.3px, 0.3px) rotate(0.1deg); }
+}
+
+.animate-doodle-vibrate {
+  animation: doodle-vibrate 0.25s linear infinite;
+  transform-origin: center;
+}
+
+@keyframes paper-vibrate {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  50% { transform: translateY(0.4px) scaleY(1.005); }
+}
+
+.animate-paper-vibrate {
+  animation: paper-vibrate 0.4s ease-in-out infinite;
+  transform-origin: bottom;
+}

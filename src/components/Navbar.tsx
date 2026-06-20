@@ -47,6 +47,12 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
+      // If scroll is near top of the page, force Home active to avoid layout calculation races on reload
+      if (window.scrollY < 80) {
+        setActiveSection("#home");
+        return;
+      }
+
       const sections = navLinks.map((link) => link.href.replace("#", ""));
       let current = "#home";
 
@@ -54,7 +60,7 @@ const Navbar = () => {
         const el = document.getElementById(id);
         if (el) {
           const rect = el.getBoundingClientRect();
-          if (rect.top <= 160) {
+          if (rect.height > 0 && rect.top <= 160) {
             current = `#${id}`;
           }
         }

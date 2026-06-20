@@ -43,14 +43,34 @@ const CountUp = ({ end, duration = 1500, suffix = "" }) => {
 
 // Hand-Drawn SVG Components
 const HandDrawnUnderline = () => (
-  <svg className="absolute -bottom-3 left-0 w-full h-4 text-[#F05323] opacity-80" viewBox="0 0 100 10" preserveAspectRatio="none">
-    <path d="M 1 5 C 20 2, 40 8, 60 4 C 80 1, 90 6, 99 3" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+  <svg className="absolute -bottom-3 left-0 w-full h-4 text-[#F05323] opacity-80 animate-doodle-vibrate" viewBox="0 0 100 10" preserveAspectRatio="none">
+    <motion.path 
+      d="M 1 5 C 20 2, 40 8, 60 4 C 80 1, 90 6, 99 3" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2.5" 
+      strokeLinecap="round" 
+      initial={{ pathLength: 0 }}
+      whileInView={{ pathLength: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+    />
   </svg>
 );
 
 const HandDrawnCircle = () => (
-  <svg className="absolute -inset-x-3 -inset-y-2 w-[calc(100%+24px)] h-[calc(100%+16px)] text-[#F05323] pointer-events-none opacity-80" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 5 50 C 5 20, 95 15, 95 50 C 95 85, 8 80, 10 50 C 12 25, 88 18, 90 48" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeDasharray="300" />
+  <svg className="absolute -inset-x-3 -inset-y-2 w-[calc(100%+24px)] h-[calc(100%+16px)] text-[#F05323] pointer-events-none opacity-80 animate-doodle-vibrate" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <motion.path 
+      d="M 5 50 C 5 20, 95 15, 95 50 C 95 85, 8 80, 10 50 C 12 25, 88 18, 90 48" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      initial={{ pathLength: 0 }}
+      whileInView={{ pathLength: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 1.0, ease: "easeInOut" }}
+    />
   </svg>
 );
 
@@ -64,23 +84,40 @@ const CurvedDivider = () => (
 
 const TornPaperDividerTop = () => (
   <div className="w-full h-8 bg-orange-100/30 overflow-hidden relative">
-    <svg className="absolute bottom-0 w-full h-8 text-[#FAF6EE] fill-current" viewBox="0 0 1200 120" preserveAspectRatio="none">
+    <svg className="absolute bottom-0 w-full h-8 text-[#FAF6EE] fill-current animate-paper-vibrate" viewBox="0 0 1200 120" preserveAspectRatio="none">
       <path d="M0,0 L1200,0 L1200,80 L1170,75 L1140,85 L1110,78 L1080,82 L1050,75 L1020,83 L990,77 L960,81 L930,74 L900,85 L870,78 L840,82 L810,75 L780,83 L750,77 L720,81 L690,74 L660,85 L630,78 L600,82 L570,75 L540,83 L510,77 L480,81 L450,74 L420,85 L390,78 L360,82 L330,75 L300,83 L270,77 L240,81 L210,74 L180,85 L150,78 L120,82 L90,75 L60,83 L30,77 L0,81 Z" />
     </svg>
   </div>
 );
 
 const HandDrawnCheck = () => (
-  <svg className="w-6 h-6 text-[#F05323] shrink-0 transform -rotate-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M 4 12 C 6.5 13.5, 7.5 17.5, 9.5 18 C 12.5 13.5, 16.5 7.5, 20.5 4.5" />
+  <svg className="w-6 h-6 text-[#F05323] shrink-0 transform -rotate-6 animate-doodle-vibrate" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+    <motion.path 
+      d="M 4 12 C 6.5 13.5, 7.5 17.5, 9.5 18 C 12.5 13.5, 16.5 7.5, 20.5 4.5" 
+      initial={{ pathLength: 0 }}
+      whileInView={{ pathLength: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    />
   </svg>
 );
 
 const HandDrawnPin = () => (
-  <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center">
+  <motion.div 
+    className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center pointer-events-none"
+    animate={{ 
+      rotate: [-3, 3, -3, 3, -3],
+      x: ["-50%", "-48%", "-52%", "-48%", "-50%"]
+    }}
+    transition={{
+      repeat: Infinity,
+      duration: 1.5,
+      ease: "easeInOut"
+    }}
+  >
     <div className="w-4 h-4 bg-red-600 rounded-full shadow-md border border-red-700"></div>
     <div className="w-1 h-3 bg-slate-400 opacity-80 -mt-1"></div>
-  </div>
+  </motion.div>
 );
 
 // Phone Mockup wrapper component
@@ -100,6 +137,36 @@ const PhoneFrame = ({ children, className = "" }) => (
 );
 
 export default function UniVaultCaseStudy() {
+  useEffect(() => {
+    // Dynamic SEO Metadata for UniVault Case Study
+    document.title = "UniVault Case Study | Mohan Reddy";
+    
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute("content", "Case study on UniVault: A secure, decentralized file storage system for university students. Designed and developed by Mohan Reddy.");
+    }
+
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute("content", "UniVault Case Study | Mohan Reddy");
+
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute("content", "Case study on UniVault: A secure, decentralized file storage system for university students. Designed and developed by Mohan Reddy.");
+
+    const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+    if (twitterTitle) twitterTitle.setAttribute("content", "UniVault Case Study | Mohan Reddy");
+
+    const twitterDesc = document.querySelector('meta[name="twitter:description"]');
+    if (twitterDesc) twitterDesc.setAttribute("content", "Case study on UniVault: A secure, decentralized file storage system for university students. Designed and developed by Mohan Reddy.");
+
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', "https://comrademohan.netlify.app/case-study/univault");
+  }, []);
+
   // Stats Section Data
   const stats = [
     { value: "2400", label: "Active Students", note: "enrolled & studying! 👥", suffix: "+" },
@@ -179,11 +246,17 @@ export default function UniVaultCaseStudy() {
       </header>
 
       {/* Section 1: Hero Block */}
+      {/* Section 1: Hero Block */}
       <section className="max-w-5xl mx-auto px-6 pt-8 pb-20 relative">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           {/* Hero Content */}
-          <div className="lg:col-span-7 text-left">
+          <motion.div 
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="lg:col-span-7 text-left"
+          >
             <div className="inline-block px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full mb-6 border border-blue-200">
               Exam Preparation Platform · Live on Play Store
             </div>
@@ -245,10 +318,15 @@ export default function UniVaultCaseStudy() {
                 <span className="font-semibold text-slate-700 text-sm">Mobile + API Backend</span>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Hero Tilted Phone Mockup */}
-          <div className="lg:col-span-5 flex justify-center items-center relative">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9, rotate: 10 }}
+            animate={{ opacity: 1, scale: 1, rotate: 3 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="lg:col-span-5 flex justify-center items-center relative"
+          >
             <div className="transform rotate-3 hover:rotate-0 transition-transform duration-300 relative z-10 cursor-pointer">
               <PhoneFrame>
                 {/* Simulated Screen Homepage */}
@@ -290,7 +368,7 @@ export default function UniVaultCaseStudy() {
               </svg>
               <span>mobile-first layout 📱</span>
             </div>
-          </div>
+          </motion.div>
 
         </div>
       </section>
@@ -300,7 +378,13 @@ export default function UniVaultCaseStudy() {
 
       {/* Section 2: The Story */}
       <section className="bg-orange-100/30 py-16 border-b border-orange-100">
-        <div className="max-w-2xl mx-auto px-6 relative">
+        <motion.div 
+          className="max-w-2xl mx-auto px-6 relative"
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+        >
           <div className="absolute -left-12 top-0 text-blue-600 opacity-60 hidden lg:block">
             <span className="font-handwritten text-4xl">“</span>
           </div>
@@ -320,7 +404,7 @@ export default function UniVaultCaseStudy() {
               "Students cram using phones on the commute. Building a native Kotlin Android experience was the only option that made sense."
             </span>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Section 3: Stat Band */}
@@ -375,7 +459,13 @@ export default function UniVaultCaseStudy() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch relative">
           
           {/* Left Side: Fragmented Content */}
-          <div className="lg:col-span-5 bg-red-50/50 rounded-3xl p-8 border-2 border-red-100 relative flex flex-col justify-between">
+          <motion.div 
+            className="lg:col-span-5 bg-red-50/50 rounded-3xl p-8 border-2 border-red-100 relative flex flex-col justify-between"
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
             <div className="absolute top-4 right-4 bg-red-100 text-red-700 text-xs font-bold px-3 py-1 rounded-full">
               CHAOTIC PREPARATION
             </div>
@@ -413,21 +503,46 @@ export default function UniVaultCaseStudy() {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Middle Connecting Arrow */}
-          <div className="lg:col-span-2 flex flex-col items-center justify-center min-h-[100px] lg:min-h-0 relative">
-            <svg className="w-16 h-16 lg:w-full lg:h-40 text-orange-400 transform rotate-90 lg:rotate-0" fill="none" viewBox="0 0 100 100" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
-              <path d="M 10 50 Q 50 20 90 50" strokeDasharray="5 5" />
-              <path d="M 75 35 L 90 50 L 75 65" />
+          <motion.div 
+            className="lg:col-span-2 flex flex-col items-center justify-center min-h-[100px] lg:min-h-0 relative"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <svg className="w-16 h-16 lg:w-full lg:h-40 text-orange-400 transform rotate-90 lg:rotate-0 animate-doodle-vibrate" fill="none" viewBox="0 0 100 100" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
+              <motion.path 
+                d="M 10 50 Q 50 20 90 50" 
+                strokeDasharray="5 5" 
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+              />
+              <motion.path 
+                d="M 75 35 L 90 50 L 75 65" 
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: 0.6, ease: "easeOut" }}
+              />
             </svg>
             <span className="font-handwritten text-[#F05323] text-xl absolute lg:-top-2 rotate-12 text-center w-36">
-              native dashboard flow! 🎯
+              structured & cacheable! ⚡
             </span>
-          </div>
+          </motion.div>
 
-          {/* Right Side: UniVault Core Icon */}
-          <div className="lg:col-span-5 bg-green-50/50 rounded-3xl p-8 border-2 border-green-100 relative flex flex-col justify-between">
+          {/* Right Side: Structured Repository */}
+          <motion.div 
+            className="lg:col-span-5 bg-green-50/50 rounded-3xl p-8 border-2 border-green-100 relative flex flex-col justify-between"
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
             <div className="absolute top-4 right-4 bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">
               STRUCTURED PORTAL
             </div>
@@ -462,7 +577,7 @@ export default function UniVaultCaseStudy() {
                 <span className="font-bold text-slate-700">Mock Assessments</span>
               </div>
             </div>
-          </div>
+          </motion.div>
 
         </div>
       </section>
@@ -482,45 +597,75 @@ export default function UniVaultCaseStudy() {
           {/* Staggered Vertical Badges */}
           <div className="flex flex-wrap justify-center gap-6 md:gap-8 items-center max-w-2xl mx-auto">
             
-            <div className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform -translate-y-2 rotate-2 shadow-sm">
+            <motion.div 
+              initial={{ opacity: 0, y: 20, rotate: 0 }}
+              whileInView={{ opacity: 1, y: 0, rotate: 2 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform -translate-y-2 shadow-sm"
+            >
               <span className="text-3xl">⚛️</span>
               <div className="text-left">
                 <span className="font-bold block text-sm text-slate-800">Next.js</span>
                 <span className="text-xs text-slate-500 font-semibold">Website Frontend</span>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform translate-y-3 -rotate-3 shadow-sm">
+            <motion.div 
+              initial={{ opacity: 0, y: 20, rotate: 0 }}
+              whileInView={{ opacity: 1, y: 0, rotate: -3 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform translate-y-3 shadow-sm"
+            >
               <span className="text-3xl">🤖</span>
               <div className="text-left">
                 <span className="font-bold block text-sm text-slate-800">Kotlin</span>
                 <span className="text-xs text-slate-500 font-semibold">Native Android App</span>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform -translate-y-3 rotate-1 shadow-sm">
+            <motion.div 
+              initial={{ opacity: 0, y: 20, rotate: 0 }}
+              whileInView={{ opacity: 1, y: 0, rotate: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform -translate-y-3 shadow-sm"
+            >
               <span className="text-3xl">🐘</span>
               <div className="text-left">
                 <span className="font-bold block text-sm text-slate-800">PHP</span>
                 <span className="text-xs text-slate-500 font-semibold">Backend REST API</span>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform translate-y-1 -rotate-1 shadow-sm">
+            <motion.div 
+              initial={{ opacity: 0, y: 20, rotate: 0 }}
+              whileInView={{ opacity: 1, y: 0, rotate: -1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform translate-y-1 shadow-sm"
+            >
               <span className="text-3xl">🛢️</span>
               <div className="text-left">
                 <span className="font-bold block text-sm text-slate-800">SQL</span>
                 <span className="text-xs text-slate-500 font-semibold">Relational Database</span>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform -translate-y-1 rotate-3 shadow-sm">
+            <motion.div 
+              initial={{ opacity: 0, y: 20, rotate: 0 }}
+              whileInView={{ opacity: 1, y: 0, rotate: 3 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform -translate-y-1 shadow-sm"
+            >
               <span className="text-3xl">🔥</span>
               <div className="text-left">
                 <span className="font-bold block text-sm text-slate-800">Firebase</span>
                 <span className="text-xs text-slate-500 font-semibold">Authentication & Sync</span>
               </div>
-            </div>
+            </motion.div>
 
           </div>
 
@@ -533,7 +678,13 @@ export default function UniVaultCaseStudy() {
 
       {/* Section 6: My Role */}
       <section className="max-w-4xl mx-auto px-6 py-20">
-        <div className="bg-white rounded-3xl p-8 md:p-12 border-2 border-slate-900 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] relative">
+        <motion.div 
+          className="bg-white rounded-3xl p-8 md:p-12 border-2 border-slate-900 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] relative"
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
           
           <div className="absolute -top-5 right-8 bg-[#F05323] text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transform rotate-3">
             End-To-End Execution
@@ -542,40 +693,64 @@ export default function UniVaultCaseStudy() {
           <h2 className="text-3xl font-extrabold text-slate-900 mb-8 font-grotesk">My Role & Responsibilities</h2>
 
           <div className="space-y-6">
-            <div className="flex gap-4 items-start">
+            <motion.div 
+              className="flex gap-4 items-start"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
               <HandDrawnCheck />
               <div>
                 <h3 className="font-bold text-lg text-slate-800">Kotlin Android App Development</h3>
                 <p className="text-slate-600 text-sm mt-1">Built the native Android app using Kotlin, implementing screen navigation, offline study caching, and practice test grading modules.</p>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="flex gap-4 items-start">
+            <motion.div 
+              className="flex gap-4 items-start"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
               <HandDrawnCheck />
               <div>
                 <h3 className="font-bold text-lg text-slate-800">PHP & SQL Backend API</h3>
                 <p className="text-slate-600 text-sm mt-1">Designed relational database schemas in SQL and deployed PHP endpoints for structured academic content delivery and test submission tracking.</p>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="flex gap-4 items-start">
+            <motion.div 
+              className="flex gap-4 items-start"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
               <HandDrawnCheck />
               <div>
                 <h3 className="font-bold text-lg text-slate-800">Firebase User State Synchronization</h3>
                 <p className="text-slate-600 text-sm mt-1">Integrated Firebase authentication and data sync listeners to sync user progress, bookmarks, and test history across multiple devices.</p>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="flex gap-4 items-start">
+            <motion.div 
+              className="flex gap-4 items-start"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
               <HandDrawnCheck />
               <div>
                 <h3 className="font-bold text-lg text-slate-800">App Store Publishing & Web Companion</h3>
                 <p className="text-slate-600 text-sm mt-1">Managed Google Play Console assets, configured release bundles, and deployed a marketing landing page (web.univault.live) to drive discoverability.</p>
               </div>
-            </div>
+            </motion.div>
           </div>
           
-        </div>
+        </motion.div>
       </section>
 
       {/* Section 7: App Screenshot Gallery (Tilted Phone Polaroids) */}
@@ -700,9 +875,21 @@ export default function UniVaultCaseStudy() {
 
               {/* Hand-drawn arrow pointing at the quiz screen */}
               <div className="absolute -right-16 top-1/3 text-blue-600 hidden lg:block select-none pointer-events-none">
-                <svg className="w-16 h-12" viewBox="0 0 100 50" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                  <path d="M10,10 Q50,40 85,20" />
-                  <path d="M70,15 L85,20 L80,35" />
+                <svg className="w-16 h-12 animate-doodle-vibrate" viewBox="0 0 100 50" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                  <motion.path 
+                    d="M10,10 Q50,40 85,20" 
+                    initial={{ pathLength: 0 }}
+                    whileInView={{ pathLength: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                  />
+                  <motion.path 
+                    d="M70,15 L85,20 L80,35" 
+                    initial={{ pathLength: 0 }}
+                    whileInView={{ pathLength: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.3, delay: 0.6, ease: "easeOut" }}
+                  />
                 </svg>
                 <span className="font-handwritten text-lg block w-32 -mt-4 text-left font-bold rotate-1">
                   self-graded instantly! ⚡
@@ -770,7 +957,13 @@ export default function UniVaultCaseStudy() {
       <section className="max-w-2xl mx-auto px-6 py-20 relative">
         
         {/* Sticky Note Box */}
-        <div className="bg-[#FEF9C3] p-8 md:p-12 rounded-3xl border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] transform -rotate-1 relative overflow-hidden">
+        <motion.div 
+          className="bg-[#FEF9C3] p-8 md:p-12 rounded-3xl border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] transform -rotate-1 relative overflow-hidden"
+          initial={{ opacity: 0, scale: 0.95, rotate: -3 }}
+          whileInView={{ opacity: 1, scale: 1, rotate: -1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
           
           {/* Subtle tape effect at top */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-slate-200/50 backdrop-blur-xs border-x border-b border-slate-300 transform -translate-y-2"></div>
@@ -803,11 +996,17 @@ export default function UniVaultCaseStudy() {
           <span className="font-handwritten text-[#b45309] text-xl absolute right-8 bottom-4 rotate-6 hidden sm:block">
             scaling fast! 🚀
           </span>
-        </div>
+        </motion.div>
       </section>
 
       {/* Section 9: CTA Section */}
-      <section className="max-w-4xl mx-auto px-6 py-16 text-center relative">
+      <motion.section 
+        className="max-w-4xl mx-auto px-6 py-16 text-center relative"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
         <h2 className="text-3xl md:text-5xl font-black text-slate-900 font-grotesk tracking-tight mb-4">
           Get UniVault App
         </h2>
@@ -817,9 +1016,22 @@ export default function UniVaultCaseStudy() {
 
         {/* Hand-drawn arrow pointing to buttons */}
         <div className="absolute top-0 right-1/4 text-blue-600 hidden md:block select-none transform rotate-12">
-          <svg className="w-16 h-16" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-            <path d="M10,80 Q30,30 80,20" strokeDasharray="4 4" />
-            <path d="M65,10 L80,20 L75,35" />
+          <svg className="w-16 h-16 animate-doodle-vibrate" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <motion.path 
+              d="M10,80 Q30,30 80,20" 
+              strokeDasharray="4 4" 
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            />
+            <motion.path 
+              d="M65,10 L80,20 L75,35" 
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: 0.6, ease: "easeOut" }}
+            />
           </svg>
           <span className="font-handwritten text-lg block w-32 -mt-4 text-left font-bold rotate-1">
             install on Google Play!
@@ -857,7 +1069,7 @@ export default function UniVaultCaseStudy() {
             <span>Source Code</span>
           </a>
         </div>
-      </section>
+      </motion.section>
 
     </div>
   );

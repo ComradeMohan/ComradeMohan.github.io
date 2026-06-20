@@ -10,6 +10,7 @@ const HeroSection = () => {
   const [roleIndex, setRoleIndex] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   useEffect(() => {
     const current = roles[roleIndex];
@@ -71,13 +72,13 @@ const HeroSection = () => {
 
             <div className="flex flex-wrap gap-3 mb-12">
               <Button asChild variant="outline" size="icon" className="rounded-full border-border hover:border-white hover:text-white hover:bg-white/10 transition-colors" onClick={() => trackEvent("click", "social", "github_hero")}>
-                <a href="https://github.com/comrademohan" target="_blank" rel="noopener noreferrer"><Github className="w-5 h-5" /></a>
+                <a href="https://github.com/comrademohan" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile"><Github className="w-5 h-5" /></a>
               </Button>
               <Button asChild variant="outline" size="icon" className="rounded-full border-border hover:border-[#0077b5] hover:text-[#0077b5] hover:bg-[#0077b5]/10 transition-colors" onClick={() => trackEvent("click", "social", "linkedin_hero")}>
-                <a href="https://www.linkedin.com/in/mmohanreddy" target="_blank" rel="noopener noreferrer"><Linkedin className="w-5 h-5" /></a>
+                <a href="https://www.linkedin.com/in/mmohanreddy" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile"><Linkedin className="w-5 h-5" /></a>
               </Button>
               <Button asChild variant="outline" size="icon" className="rounded-full border-border hover:border-[#E1306C] hover:text-[#E1306C] hover:bg-[#E1306C]/10 transition-colors" onClick={() => trackEvent("click", "social", "instagram_hero")}>
-                <a href="https://www.instagram.com/comrade_mohan666/" target="_blank" rel="noopener noreferrer"><Instagram className="w-5 h-5" /></a>
+                <a href="https://www.instagram.com/comrade_mohan666/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Profile"><Instagram className="w-5 h-5" /></a>
               </Button>
               <Button asChild className="ml-2 bg-primary hover:bg-primary/80" onClick={() => trackEvent("download", "resume", "resume_hero")}>
                 <a href="/mohan_resume_.pdf" target="_blank" rel="noopener noreferrer">
@@ -132,10 +133,18 @@ const HeroSection = () => {
               {/* Outer Card with border gradient */}
               <div className="w-[320px] h-[400px] lg:w-[350px] lg:h-[430px] rounded-[2.5rem] bg-gradient-to-tr from-primary to-accent p-[2px] shadow-2xl relative z-10">
                 <div className="w-full h-full rounded-[2.4rem] bg-background/90 overflow-hidden relative group">
+                  {!isImageLoaded && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-muted/10 animate-pulse">
+                      <div className="w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin"></div>
+                    </div>
+                  )}
                   <img
                     src="/comrademohan.webp"
                     alt="Mohan Reddy"
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    onLoad={() => setIsImageLoaded(true)}
+                    className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-105 ${
+                      isImageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                    }`}
                   />
                   
                   {/* Badge */}

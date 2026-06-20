@@ -43,14 +43,34 @@ const CountUp = ({ end, duration = 1500, suffix = "" }) => {
 
 // Hand-Drawn SVG Components
 const HandDrawnUnderline = () => (
-  <svg className="absolute -bottom-3 left-0 w-full h-4 text-[#F05323] opacity-80" viewBox="0 0 100 10" preserveAspectRatio="none">
-    <path d="M 1 5 C 20 2, 40 8, 60 4 C 80 1, 90 6, 99 3" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+  <svg className="absolute -bottom-3 left-0 w-full h-4 text-[#F05323] opacity-80 animate-doodle-vibrate" viewBox="0 0 100 10" preserveAspectRatio="none">
+    <motion.path 
+      d="M 1 5 C 20 2, 40 8, 60 4 C 80 1, 90 6, 99 3" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2.5" 
+      strokeLinecap="round" 
+      initial={{ pathLength: 0 }}
+      whileInView={{ pathLength: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+    />
   </svg>
 );
 
 const HandDrawnCircle = () => (
-  <svg className="absolute -inset-x-3 -inset-y-2 w-[calc(100%+24px)] h-[calc(100%+16px)] text-[#F05323] pointer-events-none opacity-80" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 5 50 C 5 20, 95 15, 95 50 C 95 85, 8 80, 10 50 C 12 25, 88 18, 90 48" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeDasharray="300" />
+  <svg className="absolute -inset-x-3 -inset-y-2 w-[calc(100%+24px)] h-[calc(100%+16px)] text-[#F05323] pointer-events-none opacity-80 animate-doodle-vibrate" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <motion.path 
+      d="M 5 50 C 5 20, 95 15, 95 50 C 95 85, 8 80, 10 50 C 12 25, 88 18, 90 48" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      initial={{ pathLength: 0 }}
+      whileInView={{ pathLength: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 1.0, ease: "easeInOut" }}
+    />
   </svg>
 );
 
@@ -64,26 +84,73 @@ const CurvedDivider = () => (
 
 const TornPaperDividerTop = () => (
   <div className="w-full h-8 bg-orange-100/30 overflow-hidden relative">
-    <svg className="absolute bottom-0 w-full h-8 text-[#FAF6EE] fill-current" viewBox="0 0 1200 120" preserveAspectRatio="none">
+    <svg className="absolute bottom-0 w-full h-8 text-[#FAF6EE] fill-current animate-paper-vibrate" viewBox="0 0 1200 120" preserveAspectRatio="none">
       <path d="M0,0 L1200,0 L1200,80 L1170,75 L1140,85 L1110,78 L1080,82 L1050,75 L1020,83 L990,77 L960,81 L930,74 L900,85 L870,78 L840,82 L810,75 L780,83 L750,77 L720,81 L690,74 L660,85 L630,78 L600,82 L570,75 L540,83 L510,77 L480,81 L450,74 L420,85 L390,78 L360,82 L330,75 L300,83 L270,77 L240,81 L210,74 L180,85 L150,78 L120,82 L90,75 L60,83 L30,77 L0,81 Z" />
     </svg>
   </div>
 );
 
 const HandDrawnCheck = () => (
-  <svg className="w-6 h-6 text-[#F05323] shrink-0 transform -rotate-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M 4 12 C 6.5 13.5, 7.5 17.5, 9.5 18 C 12.5 13.5, 16.5 7.5, 20.5 4.5" />
+  <svg className="w-6 h-6 text-[#F05323] shrink-0 transform -rotate-6 animate-doodle-vibrate" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+    <motion.path 
+      d="M 4 12 C 6.5 13.5, 7.5 17.5, 9.5 18 C 12.5 13.5, 16.5 7.5, 20.5 4.5" 
+      initial={{ pathLength: 0 }}
+      whileInView={{ pathLength: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    />
   </svg>
 );
 
 const HandDrawnPin = () => (
-  <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center">
+  <motion.div 
+    className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center pointer-events-none"
+    animate={{ 
+      rotate: [-3, 3, -3, 3, -3],
+      x: ["-50%", "-48%", "-52%", "-48%", "-50%"]
+    }}
+    transition={{
+      repeat: Infinity,
+      duration: 1.5,
+      ease: "easeInOut"
+    }}
+  >
     <div className="w-4 h-4 bg-red-600 rounded-full shadow-md border border-red-700"></div>
     <div className="w-1 h-3 bg-slate-400 opacity-80 -mt-1"></div>
-  </div>
+  </motion.div>
 );
 
 export default function SaveethaHubCaseStudy() {
+  useEffect(() => {
+    // Dynamic SEO Metadata for SaveethaHub Case Study
+    document.title = "SaveethaHub Case Study | Mohan Reddy";
+    
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute("content", "Case study on SaveethaHub: A comprehensive web application designed for students at SIMATS Saveetha University. Designed and developed by Mohan Reddy.");
+    }
+
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute("content", "SaveethaHub Case Study | Mohan Reddy");
+
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute("content", "Case study on SaveethaHub: A comprehensive web application designed for students at SIMATS Saveetha University. Designed and developed by Mohan Reddy.");
+
+    const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+    if (twitterTitle) twitterTitle.setAttribute("content", "SaveethaHub Case Study | Mohan Reddy");
+
+    const twitterDesc = document.querySelector('meta[name="twitter:description"]');
+    if (twitterDesc) twitterDesc.setAttribute("content", "Case study on SaveethaHub: A comprehensive web application designed for students at SIMATS Saveetha University. Designed and developed by Mohan Reddy.");
+
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', "https://comrademohan.netlify.app/case-study/saveethahub");
+  }, []);
+
   // Stats Section Data
   const stats = [
     { value: "24706", label: "Search Clicks", sub: "Google Search (lifetime)", note: "real organic clicks! 🚀" },
@@ -207,23 +274,43 @@ export default function SaveethaHubCaseStudy() {
 
       {/* Section 1: Hero Block */}
       <section className="max-w-4xl mx-auto px-6 pt-8 pb-16 text-center relative">
-        <div className="inline-block px-3 py-1 bg-orange-100 text-[#F05323] text-sm font-semibold rounded-full mb-6 border border-orange-200">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="inline-block px-3 py-1 bg-orange-100 text-[#F05323] text-sm font-semibold rounded-full mb-6 border border-orange-200"
+        >
           Live Project · Web Platform
-        </div>
+        </motion.div>
         
-        <div className="relative inline-block mb-6">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="relative inline-block mb-6"
+        >
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 font-grotesk select-none relative z-10 px-4">
             SaveethaHub
           </h1>
           <HandDrawnCircle />
-        </div>
+        </motion.div>
         
-        <p className="text-xl md:text-2xl text-slate-600 max-w-2xl mx-auto font-medium mt-4">
+        <motion.p 
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="text-xl md:text-2xl text-slate-600 max-w-2xl mx-auto font-medium mt-4"
+        >
           The centralized academic companion for Saveetha University students.
-        </p>
+        </motion.p>
 
         {/* Hero Metadata */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-2xl mx-auto mt-12 bg-white/60 backdrop-blur-sm rounded-2xl p-6 border-2 border-dashed border-slate-200 shadow-sm">
+        <motion.div 
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.45 }}
+          className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-2xl mx-auto mt-12 bg-white/60 backdrop-blur-sm rounded-2xl p-6 border-2 border-dashed border-slate-200 shadow-sm"
+        >
           <div>
             <span className="text-xs text-slate-400 uppercase tracking-wider block font-bold">Role</span>
             <span className="font-semibold text-slate-700 text-sm md:text-base">Solo Full Stack Dev</span>
@@ -236,18 +323,33 @@ export default function SaveethaHubCaseStudy() {
             <span className="text-xs text-slate-400 uppercase tracking-wider block font-bold">Platform</span>
             <span className="font-semibold text-slate-700 text-sm md:text-base">Web Application</span>
           </div>
-        </div>
+        </motion.div>
 
         {/* Decorative arrow drawing attention downwards */}
-        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-slate-400 hidden md:block">
-          <svg className="w-12 h-16 animate-bounce" viewBox="0 0 50 100" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-            <path d="M25,10 Q35,50 25,90" />
-            <path d="M15,80 L25,90 L35,80" />
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8, duration: 0.5 }}
+          className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-slate-400 hidden md:block"
+        >
+          <svg className="w-12 h-16 animate-bounce animate-doodle-vibrate" viewBox="0 0 50 100" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <motion.path 
+              d="M25,10 Q35,50 25,90" 
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            />
+            <motion.path 
+              d="M15,80 L25,90 L35,80" 
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 0.3, delay: 0.6, ease: "easeOut" }}
+            />
           </svg>
           <span className="font-handwritten text-blue-600 text-lg absolute left-14 top-8 w-32 text-left rotate-6">
             scroll down to read the story!
           </span>
-        </div>
+        </motion.div>
       </section>
 
       {/* Torn paper partition */}
@@ -255,7 +357,13 @@ export default function SaveethaHubCaseStudy() {
 
       {/* Section 2: The Story */}
       <section className="bg-orange-100/30 py-16 border-b border-orange-100">
-        <div className="max-w-2xl mx-auto px-6 relative">
+        <motion.div 
+          className="max-w-2xl mx-auto px-6 relative"
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+        >
           <div className="absolute -left-12 top-0 text-blue-600 opacity-60 hidden lg:block">
             <span className="font-handwritten text-4xl">“</span>
           </div>
@@ -275,7 +383,7 @@ export default function SaveethaHubCaseStudy() {
               "I wanted to build something I would actually use daily. It turned out 3.8K other students needed it too."
             </span>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Section 3: Stat Band */}
@@ -335,7 +443,13 @@ export default function SaveethaHubCaseStudy() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch relative">
           
           {/* Left: The Problem */}
-          <div className="lg:col-span-5 bg-red-50/50 rounded-3xl p-8 border-2 border-red-100 relative flex flex-col justify-between">
+          <motion.div 
+            className="lg:col-span-5 bg-red-50/50 rounded-3xl p-8 border-2 border-red-100 relative flex flex-col justify-between"
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
             <div className="absolute top-4 right-4 bg-red-100 text-red-700 text-xs font-bold px-3 py-1 rounded-full">
               BEFORE (The Chaos)
             </div>
@@ -364,21 +478,46 @@ export default function SaveethaHubCaseStudy() {
                 <p className="text-sm font-medium text-slate-700">Physical paper schedules missed by off-campus students.</p>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Middle: SVG connecting arrow */}
-          <div className="lg:col-span-2 flex flex-col items-center justify-center min-h-[100px] lg:min-h-0 relative">
-            <svg className="w-16 h-16 lg:w-full lg:h-40 text-orange-400 transform rotate-90 lg:rotate-0" fill="none" viewBox="0 0 100 100" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
-              <path d="M 10 50 Q 50 20 90 50" strokeDasharray="5 5" />
-              <path d="M 75 35 L 90 50 L 75 65" />
+          <motion.div 
+            className="lg:col-span-2 flex flex-col items-center justify-center min-h-[100px] lg:min-h-0 relative"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <svg className="w-16 h-16 lg:w-full lg:h-40 text-orange-400 transform rotate-90 lg:rotate-0 animate-doodle-vibrate" fill="none" viewBox="0 0 100 100" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
+              <motion.path 
+                d="M 10 50 Q 50 20 90 50" 
+                strokeDasharray="5 5" 
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+              />
+              <motion.path 
+                d="M 75 35 L 90 50 L 75 65" 
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: 0.6, ease: "easeOut" }}
+              />
             </svg>
             <span className="font-handwritten text-[#F05323] text-xl absolute lg:-top-2 rotate-12 text-center w-36">
               one unified portal! 🎯
             </span>
-          </div>
+          </motion.div>
 
           {/* Right: The Solution */}
-          <div className="lg:col-span-5 bg-green-50/50 rounded-3xl p-8 border-2 border-green-100 relative flex flex-col justify-between">
+          <motion.div 
+            className="lg:col-span-5 bg-green-50/50 rounded-3xl p-8 border-2 border-green-100 relative flex flex-col justify-between"
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
             <div className="absolute top-4 right-4 bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">
               AFTER (The Solution)
             </div>
@@ -407,7 +546,7 @@ export default function SaveethaHubCaseStudy() {
                 <p className="text-sm font-medium text-slate-700">Direct grade conversion mapped to Saveetha grading scheme.</p>
               </div>
             </div>
-          </div>
+          </motion.div>
 
         </div>
       </section>
@@ -427,37 +566,61 @@ export default function SaveethaHubCaseStudy() {
           {/* Staggered Vertical Badges */}
           <div className="flex flex-wrap justify-center gap-6 md:gap-8 items-center max-w-xl mx-auto">
             
-            <div className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform -translate-y-2 rotate-2 shadow-sm">
+            <motion.div 
+              initial={{ opacity: 0, y: 20, rotate: 0 }}
+              whileInView={{ opacity: 1, y: 0, rotate: 2 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform -translate-y-2 shadow-sm"
+            >
               <span className="text-3xl">⚛️</span>
               <div className="text-left">
                 <span className="font-bold block text-sm text-slate-800">React</span>
                 <span className="text-xs text-slate-500 font-semibold">Fast Frontend VDOM</span>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform translate-y-3 -rotate-3 shadow-sm">
+            <motion.div 
+              initial={{ opacity: 0, y: 20, rotate: 0 }}
+              whileInView={{ opacity: 1, y: 0, rotate: -3 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform translate-y-3 shadow-sm"
+            >
               <span className="text-3xl">🎨</span>
               <div className="text-left">
                 <span className="font-bold block text-sm text-slate-800">Tailwind CSS</span>
                 <span className="text-xs text-slate-500 font-semibold">Rapid UI Styling</span>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform -translate-y-3 rotate-1 shadow-sm">
+            <motion.div 
+              initial={{ opacity: 0, y: 20, rotate: 0 }}
+              whileInView={{ opacity: 1, y: 0, rotate: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform -translate-y-3 shadow-sm"
+            >
               <span className="text-3xl">🔥</span>
               <div className="text-left">
                 <span className="font-bold block text-sm text-slate-800">Firebase</span>
                 <span className="text-xs text-slate-500 font-semibold">Real-time DB & Auth</span>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform translate-y-1 -rotate-1 shadow-sm">
+            <motion.div 
+              initial={{ opacity: 0, y: 20, rotate: 0 }}
+              whileInView={{ opacity: 1, y: 0, rotate: -1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform translate-y-1 shadow-sm"
+            >
               <span className="text-3xl">⚡</span>
               <div className="text-left">
                 <span className="font-bold block text-sm text-slate-800">Vite</span>
                 <span className="text-xs text-slate-500 font-semibold">Instant HMR builds</span>
               </div>
-            </div>
+            </motion.div>
 
           </div>
 
@@ -470,7 +633,13 @@ export default function SaveethaHubCaseStudy() {
 
       {/* Section 6: My Role */}
       <section className="max-w-4xl mx-auto px-6 py-20">
-        <div className="bg-white rounded-3xl p-8 md:p-12 border-2 border-slate-900 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] relative">
+        <motion.div 
+          className="bg-white rounded-3xl p-8 md:p-12 border-2 border-slate-900 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] relative"
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
           
           <div className="absolute -top-5 right-8 bg-[#F05323] text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transform rotate-3">
             End-To-End Execution
@@ -479,40 +648,64 @@ export default function SaveethaHubCaseStudy() {
           <h2 className="text-3xl font-extrabold text-slate-900 mb-8 font-grotesk">My Role & Responsibilities</h2>
 
           <div className="space-y-6">
-            <div className="flex gap-4 items-start">
+            <motion.div 
+              className="flex gap-4 items-start"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
               <HandDrawnCheck />
               <div>
                 <h3 className="font-bold text-lg text-slate-800">Firestore Schema Design</h3>
                 <p className="text-slate-600 text-sm mt-1">Designed scalable data collections for real-time community threads, comment sub-collections, and structured academic study files.</p>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="flex gap-4 items-start">
+            <motion.div 
+              className="flex gap-4 items-start"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
               <HandDrawnCheck />
               <div>
                 <h3 className="font-bold text-lg text-slate-800">Authentication & Security Rules</h3>
                 <p className="text-slate-600 text-sm mt-1">Configured Firebase Security Rules to enforce university email domains, protecting academic resources from public access.</p>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="flex gap-4 items-start">
+            <motion.div 
+              className="flex gap-4 items-start"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
               <HandDrawnCheck />
               <div>
                 <h3 className="font-bold text-lg text-slate-800">Grading System Algorithm</h3>
                 <p className="text-slate-600 text-sm mt-1">Translated Saveetha University's official grading scale (O, A+, A, B+, B, C, F) into a custom calculator algorithm mapping grade points to weighted credits.</p>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="flex gap-4 items-start">
+            <motion.div 
+              className="flex gap-4 items-start"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
               <HandDrawnCheck />
               <div>
                 <h3 className="font-bold text-lg text-slate-800">SEO & Deployment Maintenance</h3>
                 <p className="text-slate-600 text-sm mt-1">Handled build compilation, deployed live via Netlify, registered pages with Google Search Console, and configured Google Analytics events.</p>
               </div>
-            </div>
+            </motion.div>
           </div>
           
-        </div>
+        </motion.div>
       </section>
 
       {/* Section 7: Polaroid Screenshot & Interactive Widget Gallery */}
@@ -532,7 +725,13 @@ export default function SaveethaHubCaseStudy() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
             
             {/* Polaroid 1: Real Landing Page Screenshot */}
-            <div className="bg-white p-4 pb-8 rounded-lg shadow-xl border border-slate-200 transform -rotate-3 hover:rotate-0 transition-transform relative hover:z-20">
+            <motion.div 
+              initial={{ opacity: 0, x: -30, rotate: -8 }}
+              whileInView={{ opacity: 1, x: 0, rotate: -3 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="bg-white p-4 pb-8 rounded-lg shadow-xl border border-slate-200 transform -rotate-3 hover:rotate-0 transition-transform relative hover:z-20"
+            >
               <HandDrawnPin />
               <div className="aspect-[4/3] bg-slate-100 rounded overflow-hidden relative group">
                 <img 
@@ -555,10 +754,16 @@ export default function SaveethaHubCaseStudy() {
                 </p>
                 <p className="text-slate-400 text-xs font-bold mt-1">Clean. Fast. Responsive.</p>
               </div>
-            </div>
+            </motion.div>
 
             {/* Polaroid 2: Interactive CGPA Calculator Widget */}
-            <div className="bg-white p-4 pb-8 rounded-lg shadow-xl border border-slate-200 transform rotate-2 hover:rotate-0 transition-transform relative hover:z-20">
+            <motion.div 
+              initial={{ opacity: 0, y: 30, rotate: -2 }}
+              whileInView={{ opacity: 1, y: 0, rotate: 2 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className="bg-white p-4 pb-8 rounded-lg shadow-xl border border-slate-200 transform rotate-2 hover:rotate-0 transition-transform relative hover:z-20"
+            >
               <HandDrawnPin />
               
               {/* Actual Mini calculator app */}
@@ -631,10 +836,16 @@ export default function SaveethaHubCaseStudy() {
                 </p>
                 <p className="text-slate-400 text-xs font-bold mt-1">Try adding and changing courses above.</p>
               </div>
-            </div>
+            </motion.div>
 
             {/* Polaroid 3: Interactive Forum Feed Simulator */}
-            <div className="bg-white p-4 pb-8 rounded-lg shadow-xl border border-slate-200 transform -rotate-1 hover:rotate-0 transition-transform relative hover:z-20">
+            <motion.div 
+              initial={{ opacity: 0, x: 30, rotate: 4 }}
+              whileInView={{ opacity: 1, x: 0, rotate: -1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="bg-white p-4 pb-8 rounded-lg shadow-xl border border-slate-200 transform -rotate-1 hover:rotate-0 transition-transform relative hover:z-20"
+            >
               <HandDrawnPin />
               
               {/* Forum Feed Simulator */}
@@ -680,7 +891,7 @@ export default function SaveethaHubCaseStudy() {
                 </p>
                 <p className="text-slate-400 text-xs font-bold mt-1">Simulated real-time db sync.</p>
               </div>
-            </div>
+            </motion.div>
 
           </div>
 
@@ -691,7 +902,13 @@ export default function SaveethaHubCaseStudy() {
       <section className="max-w-2xl mx-auto px-6 py-20 relative">
         
         {/* Sticky Note Box */}
-        <div className="bg-[#FEF9C3] p-8 md:p-12 rounded-3xl border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] transform -rotate-1 relative overflow-hidden">
+        <motion.div 
+          className="bg-[#FEF9C3] p-8 md:p-12 rounded-3xl border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] transform -rotate-1 relative overflow-hidden"
+          initial={{ opacity: 0, scale: 0.95, rotate: -3 }}
+          whileInView={{ opacity: 1, scale: 1, rotate: -1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
           
           {/* Subtle tape effect at top */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-slate-200/50 backdrop-blur-xs border-x border-b border-slate-300 transform -translate-y-2"></div>
@@ -724,11 +941,17 @@ export default function SaveethaHubCaseStudy() {
           <span className="font-handwritten text-[#b45309] text-xl absolute right-8 bottom-4 rotate-6 hidden sm:block">
             always iterating! 🔄
           </span>
-        </div>
+        </motion.div>
       </section>
 
       {/* Section 9: CTA Section */}
-      <section className="max-w-4xl mx-auto px-6 py-16 text-center relative">
+      <motion.section 
+        className="max-w-4xl mx-auto px-6 py-16 text-center relative"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
         <h2 className="text-3xl md:text-5xl font-black text-slate-900 font-grotesk tracking-tight mb-4">
           Explore SaveethaHub
         </h2>
@@ -738,9 +961,22 @@ export default function SaveethaHubCaseStudy() {
 
         {/* Hand-drawn arrow pointing to buttons */}
         <div className="absolute top-0 right-1/4 text-blue-600 hidden md:block select-none transform rotate-12">
-          <svg className="w-16 h-16" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-            <path d="M10,80 Q30,30 80,20" strokeDasharray="4 4" />
-            <path d="M65,10 L80,20 L75,35" />
+          <svg className="w-16 h-16 animate-doodle-vibrate" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <motion.path 
+              d="M10,80 Q30,30 80,20" 
+              strokeDasharray="4 4" 
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            />
+            <motion.path 
+              d="M65,10 L80,20 L75,35" 
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: 0.6, ease: "easeOut" }}
+            />
           </svg>
           <span className="font-handwritten text-lg block w-32 -mt-4 text-left font-bold rotate-1">
             inspect the source code!
@@ -768,7 +1004,7 @@ export default function SaveethaHubCaseStudy() {
             <span>Source Code</span>
           </a>
         </div>
-      </section>
+      </motion.section>
 
     </div>
   );
