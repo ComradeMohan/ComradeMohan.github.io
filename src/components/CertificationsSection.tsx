@@ -423,38 +423,50 @@ export default function CertificationsSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="border-t border-border/40 pt-10 grid grid-cols-2 md:grid-cols-4 gap-6 text-center"
+          className="border-t border-border/40 pt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
         >
-          <div className="flex flex-col items-center space-y-1">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-1">
-              <Award className="w-5 h-5 text-primary" />
+          {/* Card 1 */}
+          <div className="flex items-center space-x-4 p-4 rounded-2xl border border-border/40 bg-card/30 backdrop-blur-md shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300 group">
+            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-300">
+              <Award className="w-6 h-6 text-primary group-hover:scale-110 transition-transform duration-300" />
             </div>
-            <span className="text-2xl font-extrabold font-outfit text-foreground">5+</span>
-            <span className="text-xs text-muted-foreground font-grotesk">Certifications Earned</span>
+            <div className="flex flex-col text-left">
+              <span className="text-2xl font-extrabold font-outfit text-foreground tracking-tight">5+</span>
+              <span className="text-xs font-semibold text-muted-foreground font-grotesk tracking-wide uppercase mt-0.5">Certifications Earned</span>
+            </div>
           </div>
 
-          <div className="flex flex-col items-center space-y-1">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-1">
-              <ShieldCheck className="w-5 h-5 text-primary" />
+          {/* Card 2 */}
+          <div className="flex items-center space-x-4 p-4 rounded-2xl border border-border/40 bg-card/30 backdrop-blur-md shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300 group">
+            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-300">
+              <ShieldCheck className="w-6 h-6 text-primary group-hover:scale-110 transition-transform duration-300" />
             </div>
-            <span className="text-2xl font-extrabold font-outfit text-foreground">4</span>
-            <span className="text-xs text-muted-foreground font-grotesk">Trusted Issuers</span>
+            <div className="flex flex-col text-left">
+              <span className="text-2xl font-extrabold font-outfit text-foreground tracking-tight">4</span>
+              <span className="text-xs font-semibold text-muted-foreground font-grotesk tracking-wide uppercase mt-0.5">Trusted Issuers</span>
+            </div>
           </div>
 
-          <div className="flex flex-col items-center space-y-1">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-1">
-              <Calendar className="w-5 h-5 text-primary" />
+          {/* Card 3 */}
+          <div className="flex items-center space-x-4 p-4 rounded-2xl border border-border/40 bg-card/30 backdrop-blur-md shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300 group">
+            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-300">
+              <Calendar className="w-6 h-6 text-primary group-hover:scale-110 transition-transform duration-300" />
             </div>
-            <span className="text-2xl font-extrabold font-outfit text-foreground">2023 - 2025</span>
-            <span className="text-xs text-muted-foreground font-grotesk">Active Learning Period</span>
+            <div className="flex flex-col text-left">
+              <span className="text-2xl font-extrabold font-outfit text-foreground tracking-tight">2023 - 2026</span>
+              <span className="text-xs font-semibold text-muted-foreground font-grotesk tracking-wide uppercase mt-0.5">Active Learning Period</span>
+            </div>
           </div>
 
-          <div className="flex flex-col items-center space-y-1">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-1">
-              <CheckCircle2 className="w-5 h-5 text-primary" />
+          {/* Card 4 */}
+          <div className="flex items-center space-x-4 p-4 rounded-2xl border border-border/40 bg-card/30 backdrop-blur-md shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300 group">
+            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-300">
+              <CheckCircle2 className="w-6 h-6 text-primary group-hover:scale-110 transition-transform duration-300" />
             </div>
-            <span className="text-2xl font-extrabold font-outfit text-foreground">100%</span>
-            <span className="text-xs text-muted-foreground font-grotesk">Verified Credentials</span>
+            <div className="flex flex-col text-left">
+              <span className="text-2xl font-extrabold font-outfit text-foreground tracking-tight">100%</span>
+              <span className="text-xs font-semibold text-muted-foreground font-grotesk tracking-wide uppercase mt-0.5">Verified Credentials</span>
+            </div>
           </div>
         </motion.div>
 

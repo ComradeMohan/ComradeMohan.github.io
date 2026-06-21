@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   ExternalLink, Github, Camera, Users, Database, Truck, Activity,
   FileText, MessageSquare, Share2, Calculator, Calendar, Lock, TrendingUp,
   BookOpen, Smartphone, ShieldCheck, Crosshair, GitBranch, Coins, Brain, FileDown,
-  X
+  X, Star
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { trackEvent } from "@/lib/analytics";
@@ -300,6 +300,26 @@ const projects = [
 ];
 
 const ProjectDetailContent = ({ project }: { project: typeof projects[0] }) => {
+  const [stars, setStars] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (project.title === "Saveetha Hub") {
+      fetch("https://api.github.com/repos/ComradeMohan/saveetha-companion")
+        .then((res) => {
+          if (!res.ok) throw new Error();
+          return res.json();
+        })
+        .then((data) => {
+          if (data && typeof data.stargazers_count === "number") {
+            setStars(data.stargazers_count);
+          }
+        })
+        .catch(() => {
+          setStars(21);
+        });
+    }
+  }, [project.title]);
+
   return (
     <div className="space-y-4">
       {/* Header */}
@@ -325,6 +345,16 @@ const ProjectDetailContent = ({ project }: { project: typeof projects[0] }) => {
                   {badge.text}
                 </span>
               ))}
+              {project.title === "Saveetha Hub" && (
+                <a
+                  href={project.githubLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-yellow-500/20 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20 transition-all duration-300"
+                >
+                  <Star className="w-3 h-3 fill-current text-yellow-500" /> {stars !== null ? stars : "21"} Stars
+                </a>
+              )}
             </div>
             <p className="text-xs sm:text-sm text-muted-foreground font-grotesk">{project.desc}</p>
           </div>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import LoadingScreen from "@/components/LoadingScreen";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
@@ -11,7 +12,13 @@ import Footer from "@/components/Footer";
 import { trackEvent } from "@/lib/analytics";
 
 const Index = () => {
-  const [loading, setLoading] = useState(true);
+  const { hash } = useLocation();
+  const [loading, setLoading] = useState(() => {
+    if (typeof window !== "undefined") {
+      return !sessionStorage.getItem("portfolio_has_loaded");
+    }
+    return true;
+  });
 
   useEffect(() => {
     // Dynamic SEO Metadata for Home Page
@@ -87,9 +94,31 @@ const Index = () => {
     };
   }, [loading]);
 
+  useEffect(() => {
+    if (!loading && hash) {
+      const id = hash.substring(1);
+      const element = document.getElementById(id);
+      if (element) {
+        const timer = setTimeout(() => {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 150);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [loading, hash]);
+
   return (
     <>
-      {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
+      {loading && (
+        <LoadingScreen
+          onComplete={() => {
+            if (typeof window !== "undefined") {
+              sessionStorage.setItem("portfolio_has_loaded", "true");
+            }
+            setLoading(false);
+          }}
+        />
+      )}
       <div className={loading ? "hidden" : ""}>
         <Navbar />
         <main>

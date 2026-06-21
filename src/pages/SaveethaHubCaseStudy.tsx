@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { 
-  Github, ExternalLink, ArrowLeft, MessageSquare, 
-  BookOpen, Calculator, Calendar, Plus, Trash, Sparkles 
+  Github, ArrowLeft, MessageSquare, 
+  BookOpen, Calculator, Calendar, Plus, Trash, Sparkles, Star, Rocket
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // CountUp Component for animating stats on scroll
 const CountUp = ({ end, duration = 1500, suffix = "" }) => {
@@ -120,7 +120,396 @@ const HandDrawnPin = () => (
   </motion.div>
 );
 
+const ArchitectureExplorer = ({ project }: { project: "saveethahub" | "univault" }) => {
+  const [activeNode, setActiveNode] = useState<string>("client");
+
+  const nodes = project === "saveethahub" ? {
+    client: {
+      name: "React Frontend",
+      tech: "Vite + Tailwind",
+      role: "Client Interface",
+      description: "Handles responsive UI layout, local state management, and real-time socket connections with Firebase. Built on Vite with client-side history API routing.",
+      detailsTitle: "Data Binding Details",
+      details: [
+        "Dynamic updates: listens to Firestore streams via onSnapshot listener.",
+        "Routing: client-side fallback via public/_redirects rule.",
+        "Optimization: code-splitting with React lazy/Suspense on dynamic route pages."
+      ],
+      code: `// Real-time listener in SaveethaHub
+const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+const unsubscribe = onSnapshot(q, (snapshot) => {
+  const postsList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  setPosts(postsList);
+});`
+    },
+    cdn: {
+      name: "Netlify Hosting",
+      tech: "Global Edge Network",
+      role: "Asset Delivery",
+      description: "Serves compiled static HTML/JS/CSS assets. Configured for SPA client-side routing fallback.",
+      detailsTitle: "Server Redirect Rule",
+      details: [
+        "Asset compression: Gzip/Brotli compression handled natively by edge nodes.",
+        "Direct routing support: maps all non-asset requests to index.html.",
+        "SSL termination: automatic Let's Encrypt renewal."
+      ],
+      code: `# public/_redirects config
+/*    /index.html   200`
+    },
+    auth: {
+      name: "Firebase Auth",
+      tech: "OAuth 2.0 / JWT",
+      role: "Identity Provider",
+      description: "Manages student sessions and restricts database reads to authorized domain users.",
+      detailsTitle: "Verification Pipeline",
+      details: [
+        "Domain lock: regex checks for student emails during registration.",
+        "Token: Firebase ID token validated by client SDK.",
+        "Security: integrated directly with Firestore Security Rules."
+      ],
+      code: `rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /community_posts/{postId} {
+      allow read, write: if request.auth != null && 
+        request.auth.token.email.matches('.*@saveetha\\\\.com$');
+    }
+  }
+}`
+    },
+    db: {
+      name: "Cloud Firestore",
+      tech: "NoSQL DB",
+      role: "Real-time DB",
+      description: "Document-oriented database storing community messages, study guide indexes, and user profiles.",
+      detailsTitle: "Firestore Collections Schema",
+      details: [
+        "Collection /users: indexed by Firebase auth UID.",
+        "Collection /community_posts: stores thread text and replies sub-collection.",
+        "Collection /materials: course-specific indexes."
+      ],
+      code: `// Firestore Schema draft
+{
+  "community_posts": {
+    "postId": "UUID",
+    "title": "Exam Prep Tips",
+    "content": "Make sure to review past papers...",
+    "author": "Mohan Reddy",
+    "authorId": "UID",
+    "likes": 24,
+    "createdAt": "Timestamp"
+  }
+}`
+    },
+    storage: {
+      name: "Firebase Storage",
+      tech: "Google Cloud Bucket",
+      role: "File Storage",
+      description: "Stores academic resources, study PDFs, and presentation slides uploaded by students.",
+      detailsTitle: "Storage Metadata Structure",
+      details: [
+        "Upload restriction: maximum size capped at 15MB.",
+        "MIME checks: limited to .pdf, .docx, .png, .jpg.",
+        "CORS: configured to allow Netlify domain reads."
+      ],
+      code: `// File Metadata payload
+{
+  "name": "Unit-1-OOP-Notes.pdf",
+  "size": "4820120", // bytes
+  "contentType": "application/pdf",
+  "downloadURL": "https://firebasestorage.googleapis.com/...",
+  "uploadedBy": "UID"
+}`
+    }
+  } : {
+    client: {
+      name: "React Native Mobile App",
+      tech: "Expo + React Navigation",
+      role: "Cross-Platform UI",
+      description: "Delivers a fast, native mobile experience on Android devices. Features offline caching of exam documents and progress tracking metrics.",
+      detailsTitle: "Mobile Offline Sync",
+      details: [
+        "Local cache: stores downloaded PDFs using Expo FileSystem.",
+        "Navigation: stack-based navigation with deep linking to test modules.",
+        "Progress tracking: saves attempt history locally before syncing."
+      ],
+      code: `// File caching snippet in React Native
+import * as FileSystem from 'expo-file-system';
+
+const downloadPdf = async (remoteUrl, localName) => {
+  const localUri = FileSystem.documentDirectory + localName;
+  const { uri } = await FileSystem.downloadAsync(remoteUrl, localUri);
+  return uri; // Local path to serve PDF
+};`
+    },
+    api: {
+      name: "Node.js Backend API",
+      tech: "Express + Axios",
+      role: "API Gateway & Logic",
+      description: "Handles dynamic practice test generation, score calculations, and database integrations. Offloads heavy computation from the mobile client.",
+      detailsTitle: "Score Evaluation Engine",
+      details: [
+        "Scoring logic: processes submitted MCQs and calculates unit-wise scores.",
+        "Access control: JWT validation middleware on protected API endpoints.",
+        "Rate limiting: prevents spamming test submissions."
+      ],
+      code: `// Test scoring endpoint in Express
+app.post('/api/tests/submit', authenticateToken, (req, res) => {
+  const { testId, answers } = req.body;
+  const score = calculateTestScore(testId, answers);
+  await db.saveProgress(req.user.uid, testId, score);
+  res.json({ score, passed: score >= 50 });
+});`
+    },
+    auth: {
+      name: "Firebase Auth & Sync",
+      tech: "JWT Sessions",
+      role: "User Directory",
+      description: "Validates user identities and generates session tokens used for authenticating requests to the Node.js API.",
+      detailsTitle: "Secure Session Pipeline",
+      details: [
+        "JWT generation: mobile client retrieves Firebase ID token.",
+        "Validation: Node.js API verifies token using firebase-admin SDK.",
+        "Session sync: keeps student test records synced across devices."
+      ],
+      code: `// Node.js Authentication Middleware
+const verifyFirebaseToken = async (req, res, next) => {
+  const token = req.headers.authorization?.split('Bearer ')[1];
+  try {
+    const decodedToken = await admin.auth().verifyIdToken(token);
+    req.user = decodedToken;
+    next();
+  } catch (error) {
+    res.status(401).json({ error: 'Unauthorized Session' });
+  }
+};`
+    },
+    db: {
+      name: "Cloud Firestore",
+      tech: "NoSQL Database",
+      role: "Core Storage",
+      description: "Houses course syllabi, unit-wise practice questions, test definitions, and student achievement logs.",
+      detailsTitle: "Database Schemas",
+      details: [
+        "Collection /tests: holds MCQs, options, and correct keys (encrypted).",
+        "Collection /progress: records student test scores and unit completion states.",
+        "Collection /courses: syllabus structures."
+      ],
+      code: `// Practice Test document structure
+{
+  "testId": "test_unit_1_oop",
+  "courseId": "cs8392",
+  "questions": [
+    {
+      "qId": 1,
+      "question": "What is encapsulation?",
+      "options": ["Hiding details", "Inheriting class", "Polymorphism", "None"],
+      "correctIndex": 0
+    }
+  ]
+}`
+    }
+  };
+
+  const activeNodeData = nodes[activeNode as keyof typeof nodes];
+
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mt-8">
+      {/* Blueprint Visualizer */}
+      <div className="lg:col-span-6 flex flex-col justify-center space-y-4 bg-slate-900 border-2 border-slate-800 p-6 rounded-3xl relative overflow-hidden shadow-inner min-h-[450px]">
+        {/* Grid lines simulating blueprint paper */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none"></div>
+        
+        <span className="absolute top-4 left-4 text-[10px] font-mono text-primary/60 uppercase tracking-widest z-10">System Schema Layout</span>
+
+        {project === "saveethahub" ? (
+          <div className="relative z-10 flex flex-col items-center space-y-8 w-full py-4">
+            <button
+              onClick={() => setActiveNode("client")}
+              className={`w-48 p-3 rounded-xl border font-semibold text-center transition-all duration-300 font-outfit ${
+                activeNode === "client" 
+                  ? "bg-primary border-primary text-white shadow-[0_0_15px_rgba(240,83,35,0.4)]" 
+                  : "bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600"
+              }`}
+            >
+              🖥️ React Frontend
+            </button>
+
+            {/* Connection Line */}
+            <div className="w-0.5 h-6 border-l-2 border-dashed border-slate-700"></div>
+
+            <div className="grid grid-cols-2 gap-8 w-full max-w-sm">
+              <button
+                onClick={() => setActiveNode("cdn")}
+                className={`p-3 rounded-xl border text-xs font-semibold text-center transition-all duration-300 font-outfit ${
+                  activeNode === "cdn" 
+                    ? "bg-primary border-primary text-white shadow-[0_0_15px_rgba(240,83,35,0.4)]" 
+                    : "bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600"
+                }`}
+              >
+                🌐 Netlify CDN
+              </button>
+
+              <button
+                onClick={() => setActiveNode("auth")}
+                className={`p-3 rounded-xl border text-xs font-semibold text-center transition-all duration-300 font-outfit ${
+                  activeNode === "auth" 
+                    ? "bg-primary border-primary text-white shadow-[0_0_15px_rgba(240,83,35,0.4)]" 
+                    : "bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600"
+                }`}
+              >
+                🔑 Firebase Auth
+              </button>
+            </div>
+
+            {/* Connection Lines */}
+            <div className="flex justify-between w-full max-w-sm px-16">
+              <div className="w-0.5 h-6 border-l-2 border-dashed border-slate-700"></div>
+              <div className="w-0.5 h-6 border-l-2 border-dashed border-slate-700"></div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-8 w-full max-w-sm">
+              <button
+                onClick={() => setActiveNode("db")}
+                className={`p-3 rounded-xl border text-xs font-semibold text-center transition-all duration-300 font-outfit ${
+                  activeNode === "db" 
+                    ? "bg-primary border-primary text-white shadow-[0_0_15px_rgba(240,83,35,0.4)]" 
+                    : "bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600"
+                }`}
+              >
+                🔥 Cloud Firestore
+              </button>
+
+              <button
+                onClick={() => setActiveNode("storage")}
+                className={`p-3 rounded-xl border text-xs font-semibold text-center transition-all duration-300 font-outfit ${
+                  activeNode === "storage" 
+                    ? "bg-primary border-primary text-white shadow-[0_0_15px_rgba(240,83,35,0.4)]" 
+                    : "bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600"
+                }`}
+              >
+                📦 Firebase Storage
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="relative z-10 flex flex-col items-center space-y-8 w-full py-4">
+            <button
+              onClick={() => setActiveNode("client")}
+              className={`w-48 p-3 rounded-xl border font-semibold text-center transition-all duration-300 font-outfit ${
+                activeNode === "client" 
+                  ? "bg-[#6366f1] border-[#6366f1] text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]" 
+                  : "bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600"
+              }`}
+            >
+              📱 React Native App
+            </button>
+
+            {/* Connection Line */}
+            <div className="w-0.5 h-6 border-l-2 border-dashed border-slate-700"></div>
+
+            <div className="grid grid-cols-2 gap-8 w-full max-w-sm">
+              <button
+                onClick={() => setActiveNode("api")}
+                className={`p-3 rounded-xl border text-xs font-semibold text-center transition-all duration-300 font-outfit ${
+                  activeNode === "api" 
+                    ? "bg-[#6366f1] border-[#6366f1] text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]" 
+                    : "bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600"
+                }`}
+              >
+                🟢 Node.js / Express API
+              </button>
+
+              <button
+                onClick={() => setActiveNode("auth")}
+                className={`p-3 rounded-xl border text-xs font-semibold text-center transition-all duration-300 font-outfit ${
+                  activeNode === "auth" 
+                    ? "bg-[#6366f1] border-[#6366f1] text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]" 
+                    : "bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600"
+                }`}
+              >
+                🔑 Firebase Auth
+              </button>
+            </div>
+
+            {/* Connection Line */}
+            <div className="w-0.5 h-6 border-l-2 border-dashed border-slate-700"></div>
+
+            <button
+              onClick={() => setActiveNode("db")}
+              className={`w-48 p-3 rounded-xl border text-xs font-semibold text-center transition-all duration-300 font-outfit ${
+                activeNode === "db" 
+                  ? "bg-[#6366f1] border-[#6366f1] text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]" 
+                  : "bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600"
+              }`}
+            >
+              🔥 Cloud Firestore
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Blueprint Inspector Card */}
+      <div className="lg:col-span-6 flex flex-col justify-between border-2 border-slate-200 bg-white p-6 rounded-3xl shadow-sm">
+        <div>
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold border border-slate-200 bg-slate-100 text-slate-600 font-grotesk uppercase">
+              {activeNodeData.tech}
+            </span>
+            <span className="text-xs font-bold text-slate-400 font-grotesk">· {activeNodeData.role}</span>
+          </div>
+
+          <h3 className="text-xl font-bold text-slate-900 mb-2 font-outfit">{activeNodeData.name}</h3>
+          <p className="text-sm text-slate-600 leading-relaxed font-grotesk mb-6">
+            {activeNodeData.description}
+          </p>
+
+          <div className="border-t border-slate-100 pt-4 mb-6">
+            <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2.5 font-grotesk">
+              {activeNodeData.detailsTitle}
+            </h4>
+            <ul className="space-y-1.5">
+              {activeNodeData.details.map((detail, idx) => (
+                <li key={idx} className="text-xs text-slate-500 font-medium font-grotesk flex items-start">
+                  <span className="text-[#F05323] mr-1.5 shrink-0">•</span>
+                  <span>{detail}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className="border border-slate-800 bg-slate-950 p-4 rounded-xl shadow-inner relative max-h-[160px] overflow-y-auto">
+          <span className="absolute top-1.5 right-2 text-[8px] font-mono text-slate-600 select-none">CODE / BLUEPRINT</span>
+          <pre className="text-[10px] font-mono text-slate-300 leading-normal overflow-x-auto select-all">
+            <code>{activeNodeData.code}</code>
+          </pre>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function SaveethaHubCaseStudy() {
+  const navigate = useNavigate();
+  const [stars, setStars] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch("https://api.github.com/repos/ComradeMohan/saveetha-companion")
+      .then((res) => {
+        if (!res.ok) throw new Error();
+        return res.json();
+      })
+      .then((data) => {
+        if (data && typeof data.stargazers_count === "number") {
+          setStars(data.stargazers_count);
+        }
+      })
+      .catch(() => {
+        setStars(21);
+      });
+  }, []);
+
   useEffect(() => {
     // Dynamic SEO Metadata for SaveethaHub Case Study
     document.title = "SaveethaHub Case Study | Mohan Reddy";
@@ -245,29 +634,39 @@ export default function SaveethaHubCaseStudy() {
 
       {/* Top Navigation */}
       <header className="max-w-6xl mx-auto px-6 py-8 flex justify-between items-center relative z-20">
-        <Link 
-          to="/" 
-          className="group flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors font-medium"
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            if (window.history.state && window.history.state.idx > 0) {
+              navigate(-1);
+            } else {
+              navigate("/#projects");
+            }
+          }}
+          className="group flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors font-medium bg-transparent border-none p-0 cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span>Back to Portfolio</span>
-        </Link>
+        </button>
         <div className="flex gap-4">
           <a 
             href="https://github.com/ComradeMohan/saveetha-companion" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="p-2 text-slate-500 hover:text-slate-900 hover:bg-orange-50 rounded-full transition-all border border-transparent hover:border-orange-100"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-slate-500 hover:text-[#F05323] hover:bg-orange-50 rounded-full transition-all border border-slate-200 hover:border-orange-200 text-xs font-semibold"
           >
-            <Github className="w-5 h-5" />
+            <Github className="w-4 h-4" />
+            <Star className="w-3.5 h-3.5 fill-current text-yellow-500" />
+            <span>{stars !== null ? stars : "21"}</span>
           </a>
           <a 
             href="https://saveetha-hub.netlify.app/" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="p-2 text-slate-500 hover:text-slate-900 hover:bg-orange-50 rounded-full transition-all border border-transparent hover:border-orange-100"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-slate-500 hover:text-[#F05323] hover:bg-orange-50 rounded-full transition-all border border-slate-200 hover:border-orange-200 text-xs font-semibold"
           >
-            <ExternalLink className="w-5 h-5" />
+            <Rocket className="w-4 h-4 text-[#F05323] animate-pulse" />
+            <span>Live Project</span>
           </a>
         </div>
       </header>
@@ -309,7 +708,7 @@ export default function SaveethaHubCaseStudy() {
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.45 }}
-          className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-2xl mx-auto mt-12 bg-white/60 backdrop-blur-sm rounded-2xl p-6 border-2 border-dashed border-slate-200 shadow-sm"
+          className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto mt-12 bg-white/60 backdrop-blur-sm rounded-2xl p-6 border-2 border-dashed border-slate-200 shadow-sm"
         >
           <div>
             <span className="text-xs text-slate-400 uppercase tracking-wider block font-bold">Role</span>
@@ -319,9 +718,20 @@ export default function SaveethaHubCaseStudy() {
             <span className="text-xs text-slate-400 uppercase tracking-wider block font-bold">Timeline</span>
             <span className="font-semibold text-slate-700 text-sm md:text-base">2023 – Present</span>
           </div>
-          <div className="col-span-2 md:col-span-1">
+          <div>
             <span className="text-xs text-slate-400 uppercase tracking-wider block font-bold">Platform</span>
             <span className="font-semibold text-slate-700 text-sm md:text-base">Web Application</span>
+          </div>
+          <div>
+            <span className="text-xs text-slate-400 uppercase tracking-wider block font-bold">GitHub Stars</span>
+            <a 
+              href="https://github.com/ComradeMohan/saveetha-companion" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 font-semibold text-slate-700 hover:text-[#F05323] transition-colors text-sm md:text-base mt-0.5"
+            >
+              <Star className="w-4 h-4 fill-current text-yellow-500" /> {stars !== null ? stars : "21"} Stars
+            </a>
           </div>
         </motion.div>
 
@@ -628,6 +1038,29 @@ export default function SaveethaHubCaseStudy() {
             <span className="font-handwritten text-[#F05323] text-xl block mb-2">why Firebase?</span>
             Firestore dynamic streams allowed real-time chats and materials indexing without writing a custom WebSocket layer.
           </div>
+        </div>
+      </section>
+
+      {/* Section 5.5: System Architecture Explorer */}
+      <section className="bg-slate-50 py-20 border-y border-slate-200">
+        <div className="max-w-4xl mx-auto px-6">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <span className="font-handwritten text-[#F05323] text-2xl block mb-2">interactive blueprints</span>
+            <h2 className="text-3xl md:text-5xl font-black text-slate-900 font-grotesk tracking-tight">
+              System Architecture Explorer
+            </h2>
+            <p className="text-slate-500 font-medium text-sm md:text-base mt-3 max-w-xl mx-auto">
+              Click on components in the interactive blueprint below to inspect database schemas, token validation logic, and real-time streaming flows.
+            </p>
+          </motion.div>
+
+          <ArchitectureExplorer project="saveethahub" />
         </div>
       </section>
 
@@ -990,7 +1423,7 @@ export default function SaveethaHubCaseStudy() {
             rel="noopener noreferrer"
             className="w-full sm:w-auto px-8 py-4 bg-[#F05323] hover:bg-orange-600 text-white font-bold rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center gap-2 text-lg"
           >
-            <ExternalLink className="w-5 h-5" />
+            <Rocket className="w-5 h-5" />
             <span>Visit Live Portal</span>
           </a>
 
@@ -1001,7 +1434,7 @@ export default function SaveethaHubCaseStudy() {
             className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-slate-50 text-slate-900 font-bold rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center gap-2 text-lg"
           >
             <Github className="w-5 h-5" />
-            <span>Source Code</span>
+            <span>Source Code ({stars !== null ? `★ ${stars}` : "★ 21"})</span>
           </a>
         </div>
       </motion.section>

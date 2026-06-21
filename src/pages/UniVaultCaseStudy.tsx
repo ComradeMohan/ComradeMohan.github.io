@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { 
-  Github, ExternalLink, ArrowLeft, Smartphone, Play, 
-  BookOpen, Calculator, Calendar, Plus, Trash, Sparkles, Check, Info
+  Github, ArrowLeft, Smartphone, Play, 
+  BookOpen, Calculator, Calendar, Plus, Trash, Sparkles, Check, Info, Star, Rocket
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // CountUp Component for animating stats on scroll
 const CountUp = ({ end, duration = 1500, suffix = "" }) => {
@@ -136,7 +136,372 @@ const PhoneFrame = ({ children, className = "" }) => (
   </div>
 );
 
+const ArchitectureExplorer = ({ project }: { project: "saveethahub" | "univault" }) => {
+  const [activeNode, setActiveNode] = useState<string>("client");
+
+  const nodes = project === "saveethahub" ? {
+    client: {
+      name: "React Frontend",
+      tech: "Vite + Tailwind",
+      role: "Client Interface",
+      description: "Handles responsive UI layout, local state management, and real-time socket connections with Firebase. Built on Vite with client-side history API routing.",
+      detailsTitle: "Data Binding Details",
+      details: [
+        "Dynamic updates: listens to Firestore streams via onSnapshot listener.",
+        "Routing: client-side fallback via public/_redirects rule.",
+        "Optimization: code-splitting with React lazy/Suspense on dynamic route pages."
+      ],
+      code: `// Real-time listener in SaveethaHub
+const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+const unsubscribe = onSnapshot(q, (snapshot) => {
+  const postsList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  setPosts(postsList);
+});`
+    },
+    cdn: {
+      name: "Netlify Hosting",
+      tech: "Global Edge Network",
+      role: "Asset Delivery",
+      description: "Serves compiled static HTML/JS/CSS assets. Configured for SPA client-side routing fallback.",
+      detailsTitle: "Server Redirect Rule",
+      details: [
+        "Asset compression: Gzip/Brotli compression handled natively by edge nodes.",
+        "Direct routing support: maps all non-asset requests to index.html.",
+        "SSL termination: automatic Let's Encrypt renewal."
+      ],
+      code: `# public/_redirects config
+/*    /index.html   200`
+    },
+    auth: {
+      name: "Firebase Auth",
+      tech: "OAuth 2.0 / JWT",
+      role: "Identity Provider",
+      description: "Manages student sessions and restricts database reads to authorized domain users.",
+      detailsTitle: "Verification Pipeline",
+      details: [
+        "Domain lock: regex checks for student emails during registration.",
+        "Token: Firebase ID token validated by client SDK.",
+        "Security: integrated directly with Firestore Security Rules."
+      ],
+      code: `rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /community_posts/{postId} {
+      allow read, write: if request.auth != null && 
+        request.auth.token.email.matches('.*@saveetha\\\\.com$');
+    }
+  }
+}`
+    },
+    db: {
+      name: "Cloud Firestore",
+      tech: "NoSQL DB",
+      role: "Real-time DB",
+      description: "Document-oriented database storing community messages, study guide indexes, and user profiles.",
+      detailsTitle: "Firestore Collections Schema",
+      details: [
+        "Collection /users: indexed by Firebase auth UID.",
+        "Collection /community_posts: stores thread text and replies sub-collection.",
+        "Collection /materials: course-specific indexes."
+      ],
+      code: `// Firestore Schema draft
+{
+  "community_posts": {
+    "postId": "UUID",
+    "title": "Exam Prep Tips",
+    "content": "Make sure to review past papers...",
+    "author": "Mohan Reddy",
+    "authorId": "UID",
+    "likes": 24,
+    "createdAt": "Timestamp"
+  }
+}`
+    },
+    storage: {
+      name: "Firebase Storage",
+      tech: "Google Cloud Bucket",
+      role: "File Storage",
+      description: "Stores academic resources, study PDFs, and presentation slides uploaded by students.",
+      detailsTitle: "Storage Metadata Structure",
+      details: [
+        "Upload restriction: maximum size capped at 15MB.",
+        "MIME checks: limited to .pdf, .docx, .png, .jpg.",
+        "CORS: configured to allow Netlify domain reads."
+      ],
+      code: `// File Metadata payload
+{
+  "name": "Unit-1-OOP-Notes.pdf",
+  "size": "4820120", // bytes
+  "contentType": "application/pdf",
+  "downloadURL": "https://firebasestorage.googleapis.com/...",
+  "uploadedBy": "UID"
+}`
+    }
+  } : {
+    client: {
+      name: "Kotlin Mobile App",
+      tech: "Kotlin + Native Android SDK",
+      role: "Native Android Mobile App",
+      description: "Delivers a fast, native mobile experience on Android devices. Integrates with the backend REST API using Retrofit and processes local files.",
+      detailsTitle: "Mobile Integration Pipeline",
+      details: [
+        "Local Storage: caches downloaded syllabus sheets and exams locally.",
+        "Network Engine: uses Retrofit for standard CRUD and HTTP REST operations.",
+        "Native view: renders unit tests and progress with custom UI components."
+      ],
+      code: `// Retrofit Service in Kotlin
+interface UniVaultApi {
+    @GET("api/materials.php")
+    fun getStudyMaterials(
+        @Query("courseId") id: String
+    ): Call<List<Material>>
+}`
+    },
+    web: {
+      name: "Next.js Web Portal",
+      tech: "Next.js + Tailwind CSS",
+      role: "Web Companion Portal",
+      description: "Web portal allowing students to access course materials, syllabi, and practice tests through any web browser. Server-side rendered (SSR) for search engines.",
+      detailsTitle: "SSR & Hydration Details",
+      details: [
+        "Hydration: Next.js pre-renders course routes for search optimization.",
+        "Styling: modern responsive grids built with Tailwind CSS.",
+        "Fetch api: reads data from the PHP API layer on server render."
+      ],
+      code: `// Next.js Server Side Props page
+export async function getServerSideProps(context) {
+  const res = await fetch('https://api.univault.live/api/materials.php');
+  const materials = await res.json();
+  return { props: { materials } };
+}`
+    },
+    api: {
+      name: "PHP Backend API",
+      tech: "PHP 8.x REST API",
+      role: "API Gateway & Router",
+      description: "Handles secure endpoint routing, test answer validations, and returns course materials queries in JSON format.",
+      detailsTitle: "REST Endpoints Pipeline",
+      details: [
+        "Payload verification: checks user request headers and params.",
+        "Database bridge: runs parameterized SQL queries using PDO bindings.",
+        "Cross-origin access: handles CORS validations for Next.js web clients."
+      ],
+      code: `<?php
+// materials.php endpoint in PHP
+header("Content-Type: application/json");
+require_once "db_config.php";
+
+$course_id = $_GET['courseId'];
+$stmt = $pdo->prepare("SELECT * FROM materials WHERE course_id = ?");
+$stmt->execute([$course_id]);
+echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));`
+    },
+    db: {
+      name: "Relational SQL Database",
+      tech: "SQL (MySQL / MariaDB)",
+      role: "Relational Storage",
+      description: "Acts as the central system of record, storing normalized course data, exam structures, student progress logs, and test results.",
+      detailsTitle: "Relational SQL Schema Details",
+      details: [
+        "Normalized structures: separate tables for courses, tests, and student progress.",
+        "Foreign constraints: links attempt logs securely to test definitions.",
+        "Indexes: indexed on course_id and student_uid for high-speed queries."
+      ],
+      code: `-- Schema Creation for Attempts
+CREATE TABLE student_attempts (
+    attempt_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_uid VARCHAR(100) NOT NULL,
+    test_id VARCHAR(50) NOT NULL,
+    score INT NOT NULL,
+    attempted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);`
+    }
+  };
+
+  const activeNodeData = nodes[activeNode as keyof typeof nodes];
+
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mt-8">
+      {/* Blueprint Visualizer */}
+      <div className="lg:col-span-6 flex flex-col justify-center space-y-4 bg-slate-900 border-2 border-slate-800 p-6 rounded-3xl relative overflow-hidden shadow-inner min-h-[450px]">
+        {/* Grid lines simulating blueprint paper */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none"></div>
+        
+        <span className="absolute top-4 left-4 text-[10px] font-mono text-primary/60 uppercase tracking-widest z-10">System Schema Layout</span>
+
+        {project === "saveethahub" ? (
+          <div className="relative z-10 flex flex-col items-center space-y-8 w-full py-4">
+            <button
+              onClick={() => setActiveNode("client")}
+              className={`w-48 p-3 rounded-xl border font-semibold text-center transition-all duration-300 font-outfit ${
+                activeNode === "client" 
+                  ? "bg-primary border-primary text-white shadow-[0_0_15px_rgba(240,83,35,0.4)]" 
+                  : "bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600"
+              }`}
+            >
+              🖥️ React Frontend
+            </button>
+
+            {/* Connection Line */}
+            <div className="w-0.5 h-6 border-l-2 border-dashed border-slate-700"></div>
+
+            <div className="grid grid-cols-2 gap-8 w-full max-w-sm">
+              <button
+                onClick={() => setActiveNode("cdn")}
+                className={`p-3 rounded-xl border text-xs font-semibold text-center transition-all duration-300 font-outfit ${
+                  activeNode === "cdn" 
+                    ? "bg-primary border-primary text-white shadow-[0_0_15px_rgba(240,83,35,0.4)]" 
+                    : "bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600"
+                }`}
+              >
+                🌐 Netlify CDN
+              </button>
+
+              <button
+                onClick={() => setActiveNode("auth")}
+                className={`p-3 rounded-xl border text-xs font-semibold text-center transition-all duration-300 font-outfit ${
+                  activeNode === "auth" 
+                    ? "bg-primary border-primary text-white shadow-[0_0_15px_rgba(240,83,35,0.4)]" 
+                    : "bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600"
+                }`}
+              >
+                🔑 Firebase Auth
+              </button>
+            </div>
+
+            {/* Connection Lines */}
+            <div className="flex justify-between w-full max-w-sm px-16">
+              <div className="w-0.5 h-6 border-l-2 border-dashed border-slate-700"></div>
+              <div className="w-0.5 h-6 border-l-2 border-dashed border-slate-700"></div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-8 w-full max-w-sm">
+              <button
+                onClick={() => setActiveNode("db")}
+                className={`p-3 rounded-xl border text-xs font-semibold text-center transition-all duration-300 font-outfit ${
+                  activeNode === "db" 
+                    ? "bg-primary border-primary text-white shadow-[0_0_15px_rgba(240,83,35,0.4)]" 
+                    : "bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600"
+                }`}
+              >
+                🔥 Cloud Firestore
+              </button>
+
+              <button
+                onClick={() => setActiveNode("storage")}
+                className={`p-3 rounded-xl border text-xs font-semibold text-center transition-all duration-300 font-outfit ${
+                  activeNode === "storage" 
+                    ? "bg-primary border-primary text-white shadow-[0_0_15px_rgba(240,83,35,0.4)]" 
+                    : "bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600"
+                }`}
+              >
+                📦 Firebase Storage
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="relative z-10 flex flex-col items-center space-y-8 w-full py-4">
+            <div className="grid grid-cols-2 gap-8 w-full max-w-sm">
+              <button
+                onClick={() => setActiveNode("client")}
+                className={`p-3 rounded-xl border text-xs font-semibold text-center transition-all duration-300 font-outfit ${
+                  activeNode === "client" 
+                    ? "bg-[#6366f1] border-[#6366f1] text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]" 
+                    : "bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600"
+                }`}
+              >
+                📱 Kotlin Mobile App
+              </button>
+
+              <button
+                onClick={() => setActiveNode("web")}
+                className={`p-3 rounded-xl border text-xs font-semibold text-center transition-all duration-300 font-outfit ${
+                  activeNode === "web" 
+                    ? "bg-[#6366f1] border-[#6366f1] text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]" 
+                    : "bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600"
+                }`}
+              >
+                🌐 Next.js Web Portal
+              </button>
+            </div>
+
+            {/* Connection Lines */}
+            <div className="flex justify-between w-full max-w-sm px-16">
+              <div className="w-0.5 h-6 border-l-2 border-dashed border-slate-700"></div>
+              <div className="w-0.5 h-6 border-l-2 border-dashed border-slate-700"></div>
+            </div>
+
+            <button
+              onClick={() => setActiveNode("api")}
+              className={`w-48 p-3 rounded-xl border font-semibold text-center transition-all duration-300 font-outfit ${
+                activeNode === "api" 
+                  ? "bg-[#6366f1] border-[#6366f1] text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]" 
+                  : "bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600"
+              }`}
+            >
+              🟢 PHP Backend API
+            </button>
+
+            {/* Connection Line */}
+            <div className="w-0.5 h-6 border-l-2 border-dashed border-slate-700"></div>
+
+            <button
+              onClick={() => setActiveNode("db")}
+              className={`w-48 p-3 rounded-xl border font-semibold text-center transition-all duration-300 font-outfit ${
+                activeNode === "db" 
+                  ? "bg-[#6366f1] border-[#6366f1] text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]" 
+                  : "bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600"
+              }`}
+            >
+              💾 Relational SQL DB
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Blueprint Inspector Card */}
+      <div className="lg:col-span-6 flex flex-col justify-between border-2 border-slate-200 bg-white p-6 rounded-3xl shadow-sm">
+        <div>
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold border border-slate-200 bg-slate-100 text-slate-600 font-grotesk uppercase">
+              {activeNodeData.tech}
+            </span>
+            <span className="text-xs font-bold text-slate-400 font-grotesk">· {activeNodeData.role}</span>
+          </div>
+
+          <h3 className="text-xl font-bold text-slate-900 mb-2 font-outfit">{activeNodeData.name}</h3>
+          <p className="text-sm text-slate-600 leading-relaxed font-grotesk mb-6">
+            {activeNodeData.description}
+          </p>
+
+          <div className="border-t border-slate-100 pt-4 mb-6">
+            <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2.5 font-grotesk">
+              {activeNodeData.detailsTitle}
+            </h4>
+            <ul className="space-y-1.5">
+              {activeNodeData.details.map((detail, idx) => (
+                <li key={idx} className="text-xs text-slate-500 font-medium font-grotesk flex items-start">
+                  <span className={project === "saveethahub" ? "text-[#F05323] mr-1.5 shrink-0" : "text-[#6366f1] mr-1.5 shrink-0"}>•</span>
+                  <span>{detail}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className="border border-slate-800 bg-slate-950 p-4 rounded-xl shadow-inner relative max-h-[160px] overflow-y-auto">
+          <span className="absolute top-1.5 right-2 text-[8px] font-mono text-slate-600 select-none">CODE / BLUEPRINT</span>
+          <pre className="text-[10px] font-mono text-slate-300 leading-normal overflow-x-auto select-all">
+            <code>{activeNodeData.code}</code>
+          </pre>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function UniVaultCaseStudy() {
+  const navigate = useNavigate();
   useEffect(() => {
     // Dynamic SEO Metadata for UniVault Case Study
     document.title = "UniVault Case Study | Mohan Reddy";
@@ -218,29 +583,38 @@ export default function UniVaultCaseStudy() {
 
       {/* Top Navigation */}
       <header className="max-w-6xl mx-auto px-6 py-8 flex justify-between items-center relative z-20">
-        <Link 
-          to="/" 
-          className="group flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors font-medium"
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            if (window.history.state && window.history.state.idx > 0) {
+              navigate(-1);
+            } else {
+              navigate("/#projects");
+            }
+          }}
+          className="group flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors font-medium bg-transparent border-none p-0 cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span>Back to Portfolio</span>
-        </Link>
+        </button>
         <div className="flex gap-4">
           <a 
             href="https://github.com/ComradeMohan/192210400pdd" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="p-2 text-slate-500 hover:text-slate-900 hover:bg-orange-50 rounded-full transition-all border border-transparent hover:border-orange-100"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-slate-500 hover:text-[#6366f1] hover:bg-indigo-50 rounded-full transition-all border border-slate-200 hover:border-indigo-200 text-xs font-semibold"
           >
-            <Github className="w-5 h-5" />
+            <Github className="w-4 h-4" />
+            <span>GitHub</span>
           </a>
           <a 
             href="https://web.univault.live/" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="p-2 text-slate-500 hover:text-slate-900 hover:bg-orange-50 rounded-full transition-all border border-transparent hover:border-orange-100"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-slate-500 hover:text-[#6366f1] hover:bg-indigo-50 rounded-full transition-all border border-slate-200 hover:border-indigo-200 text-xs font-semibold"
           >
-            <ExternalLink className="w-5 h-5" />
+            <Rocket className="w-4 h-4 text-[#6366f1] animate-pulse" />
+            <span>Live Project</span>
           </a>
         </div>
       </header>
@@ -280,7 +654,7 @@ export default function UniVaultCaseStudy() {
                 rel="noopener noreferrer"
                 className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl border border-slate-900 shadow-[3px_3px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all text-sm flex items-center gap-1.5"
               >
-                <ExternalLink className="w-4 h-4" />
+                <Rocket className="w-4 h-4" />
                 <span>Website</span>
               </a>
               <a 
@@ -676,6 +1050,29 @@ export default function UniVaultCaseStudy() {
         </div>
       </section>
 
+      {/* Section 5.5: System Architecture Explorer */}
+      <section className="bg-slate-50 py-20 border-y border-slate-200">
+        <div className="max-w-4xl mx-auto px-6">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <span className="font-handwritten text-[#6366f1] text-2xl block mb-2">interactive blueprints</span>
+            <h2 className="text-3xl md:text-5xl font-black text-slate-900 font-grotesk tracking-tight">
+              System Architecture Explorer
+            </h2>
+            <p className="text-slate-500 font-medium text-sm md:text-base mt-3 max-w-xl mx-auto">
+              Click on components in the interactive blueprint below to inspect database schemas, token validation logic, and server endpoints.
+            </p>
+          </motion.div>
+
+          <ArchitectureExplorer project="univault" />
+        </div>
+      </section>
+
       {/* Section 6: My Role */}
       <section className="max-w-4xl mx-auto px-6 py-20">
         <motion.div 
@@ -1045,7 +1442,7 @@ export default function UniVaultCaseStudy() {
             rel="noopener noreferrer"
             className="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center gap-2 text-lg"
           >
-            <ExternalLink className="w-5 h-5" />
+            <Rocket className="w-5 h-5" />
             <span>Visit Web Portal</span>
           </a>
 
