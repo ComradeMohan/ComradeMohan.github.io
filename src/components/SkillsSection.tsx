@@ -82,8 +82,10 @@ const SkillsSection = () => {
               className="group p-6 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-300 relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-primary/10 transition-colors" />
-              <cat.icon className="w-8 h-8 text-primary mb-4 relative z-10" />
-              <h3 className="font-bold text-foreground mb-3 font-outfit relative z-10">{cat.title}</h3>
+              <div className="flex items-center gap-3 mb-4 relative z-10">
+                <cat.icon className="w-8 h-8 text-primary" />
+                <h3 className="font-bold text-foreground font-outfit text-lg">{cat.title}</h3>
+              </div>
               <div className="flex flex-wrap gap-2 relative z-10">
                 {cat.skills.map((skill) => (
                   <span

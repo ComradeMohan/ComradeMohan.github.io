@@ -396,34 +396,25 @@ export default function CertificationsSection() {
                 className="p-5 rounded-xl bg-card border border-border hover:border-primary/50 transition-all duration-300 group flex flex-col justify-between"
               >
                 <div>
-                  {/* Card Header: Icon and Category Badge */}
-                  <div className="flex items-center justify-between mb-3.5">
-                    <div className="w-10 h-10 rounded-lg bg-primary/5 border border-border/50 flex items-center justify-center group-hover:bg-primary/10 transition-colors duration-300">
+                  {/* Icon & Title */}
+                  <div className="flex items-start gap-3 mb-2">
+                    <div className="w-10 h-10 shrink-0 rounded-lg bg-primary/5 border border-border/50 flex items-center justify-center group-hover:bg-primary/10 transition-colors duration-300">
                       {getCategoryIcon(cert.category)}
                     </div>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${categoryColors[cert.category] || "bg-muted text-muted-foreground border-border"}`}>
-                      {cert.category}
-                    </span>
+                    <h4 className="font-bold text-foreground font-outfit text-left text-base group-hover:text-primary transition-colors duration-300 leading-snug mt-1">
+                      {cert.title}
+                    </h4>
                   </div>
-
-                  {/* Title & Organization */}
-                  <h4 className="font-bold text-foreground mb-1 font-outfit text-left text-base group-hover:text-primary transition-colors duration-300 leading-snug">
-                    {cert.title}
-                  </h4>
                   
-                  <div className="flex items-center gap-1.5 mb-2.5">
+                  <div className="flex items-center gap-1.5 mb-2.5 ml-[52px]">
                     <p className="text-sm text-muted-foreground text-left font-grotesk">
                       {cert.org}
                     </p>
-                    <span className="inline-flex items-center gap-0.5 text-[9px] font-bold text-emerald-500 px-1.5 py-0.2 rounded bg-emerald-500/10 border border-emerald-500/20">
-                      <CheckCircle2 className="w-2.5 h-2.5 text-emerald-500" />
-                      Verified
-                    </span>
                   </div>
 
                   {/* Skills Gained (Compact Flow) */}
                   {cert.skills && (
-                    <div className="flex flex-wrap gap-1 mb-1 mt-2">
+                    <div className="flex flex-wrap gap-1 mb-1 mt-3 ml-[52px]">
                       {cert.skills.map((skill) => (
                         <span key={skill} className="text-[9px] px-1.5 py-0.5 rounded bg-secondary/50 text-foreground/80 border border-border/30 font-grotesk">
                           {skill}

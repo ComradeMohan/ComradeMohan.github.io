@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import SaveethaHubCaseStudy from "./pages/SaveethaHubCaseStudy";
 import UniVaultCaseStudy from "./pages/UniVaultCaseStudy";
 import NotFound from "./pages/NotFound";
+import DeveloperProfile from "./pages/DeveloperProfile";
 import CommandMenu from "./components/CommandMenu";
 
 const queryClient = new QueryClient();
@@ -62,6 +63,7 @@ const AnimatedRoutes = () => {
       <Route path="/univault" element={<PageWrapper><UniVaultCaseStudy /></PageWrapper>} />
       <Route path="/case-study/univault" element={<PageWrapper><UniVaultCaseStudy /></PageWrapper>} />
       <Route path="/case study/univault" element={<PageWrapper><UniVaultCaseStudy /></PageWrapper>} />
+      <Route path="/developer" element={<PageWrapper><DeveloperProfile /></PageWrapper>} />
       <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
     </Routes>
   );

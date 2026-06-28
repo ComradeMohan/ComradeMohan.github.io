@@ -14,9 +14,6 @@ export default {
     },
     extend: {
       fontFamily: {
-        kanit: ["Kanit", "sans-serif"],
-        pacifico: ["Pacifico", "cursive"],
-        genos: ["Genos", "sans-serif"],
         outfit: ["Outfit", "sans-serif"],
         grotesk: ["Space Grotesk", "sans-serif"],
         mono: ["JetBrains Mono", "monospace"],
