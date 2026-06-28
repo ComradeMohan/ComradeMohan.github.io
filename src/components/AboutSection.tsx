@@ -74,23 +74,30 @@ const AboutSection = () => {
               </h3>
 
               <p className="text-muted-foreground leading-relaxed font-grotesk">
-                Third-year Computer Science and Engineering student at Saveetha School of Engineering (SIMATS), Chennai, with a{" "}
-                <span className="text-primary font-medium">CGPA of 8.61</span>.
-                Passionate about building practical software solutions and continuously improving my skills in Full Stack Development, Software Engineering, and Problem Solving.
-              </p>
-
-              <p className="text-muted-foreground leading-relaxed font-grotesk">
-                I have experience developing web applications using HTML, CSS, JavaScript, React, Firebase, and SQL.
-                My projects focus on{" "}
-                <span className="text-primary font-medium">real-world student solutions</span>,
-                including academic tools, community platforms, and full-stack web applications.
-              </p>
-
-              <p className="text-muted-foreground leading-relaxed font-grotesk">
-                Currently strengthening my{" "}
-                <span className="text-primary font-medium">DSA & Java</span>{" "}
-                skills while actively building projects and exploring emerging technologies.
-              </p>
+  Final-year Computer Science and Engineering student at Saveetha School of
+  Engineering (SIMATS), Chennai, with a{" "}
+  <span className="text-primary font-medium">CGPA of 8.61</span>. My focus
+  is on building functional, real-world software rather than isolated
+  academic exercises.
+</p>
+<p className="text-muted-foreground leading-relaxed font-grotesk">
+  I have independently designed and built two complete products:{" "}
+  <span className="text-primary font-medium">SaveethaHub</span>, an academic
+  platform built with React, Supabase, and Firebase that integrates AI
+  features for students, and{" "}
+  <span className="text-primary font-medium">UniVault</span>, an Android
+  exam-preparation app published on the Google Play Store. Both were built
+  from initial concept through deployment.
+</p>
+<p className="text-muted-foreground leading-relaxed font-grotesk">
+  I hold an{" "}
+  <span className="text-primary font-medium">
+    Oracle Certified Professional: Java SE 17 Developer
+  </span>{" "}
+  certification, and I continue to strengthen my foundation in data
+  structures, algorithms, and full-stack development as I prepare to take
+  on a software engineering role.
+</p>
             </div>
 
             {/* Core Interests */}

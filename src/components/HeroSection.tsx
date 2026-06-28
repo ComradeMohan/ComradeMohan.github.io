@@ -4,7 +4,7 @@ import { Github, Linkedin, Instagram, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { trackEvent } from "@/lib/analytics";
 
-const roles = ["Web Developer", "Freelancer", "Youtuber", "Cyber Expert"];
+const roles = ["Software Developer", "Freelancer", "Problem Solver", "Cyber Expert"];
 
 const HeroSection = () => {
   const [roleIndex, setRoleIndex] = useState(0);
@@ -35,10 +35,10 @@ const HeroSection = () => {
   }, [displayText, isDeleting, roleIndex]);
 
   const stats = [
-    { value: "2+", label: "Years Experience" },
-    { value: "15+", label: "Technologies" },
+    { value: "2026", label: "Graduate" },
+    { value: "8.61", label: "CGPA" },
     { value: "10+", label: "Projects" },
-    { value: "500+", label: "Code Commits" },
+    { value: "1000+", label: "Code Commits" },
   ];
 
   return (
@@ -66,8 +66,7 @@ const HeroSection = () => {
               </span>
             </div>
             <p className="text-muted-foreground mb-8 max-w-lg leading-relaxed font-grotesk">
-              Passionate Full Stack Developer crafting digital experiences with modern technologies.
-              Turning ideas into elegant, functional solutions.
+             Product-Minded Developer crafting digital experiences with modern technologies. Turning ideas into elegant, functional solutions.
             </p>
 
             <div className="flex flex-wrap gap-3 mb-12">
