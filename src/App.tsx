@@ -4,11 +4,12 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation, useNavigationType } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import Index from "./pages/Index";
-
-const SaveethaHubCaseStudy = lazy(() => import("./pages/SaveethaHubCaseStudy"));
-const UniVaultCaseStudy = lazy(() => import("./pages/UniVaultCaseStudy"));
-const NotFound = lazy(() => import("./pages/NotFound"));
+import SaveethaHubCaseStudy from "./pages/SaveethaHubCaseStudy";
+import UniVaultCaseStudy from "./pages/UniVaultCaseStudy";
+import NotFound from "./pages/NotFound";
+import CommandMenu from "./components/CommandMenu";
 
 const queryClient = new QueryClient();
 
@@ -18,10 +19,12 @@ const ScrollToTop = () => {
 
   useEffect(() => {
     if (navType !== "POP" && !hash) {
-      window.scrollTo(0, 0);
+      // Small timeout allows framer-motion's IntersectionObserver (whileInView) to register the correct viewport after route transition
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+      }, 50);
     }
 
-    // Track SPA page view on route transition
     if (typeof window !== "undefined" && (window as any).gtag) {
       (window as any).gtag("config", "G-MZYV7RYP9N", {
         page_path: pathname,
@@ -31,6 +34,37 @@ const ScrollToTop = () => {
   }, [pathname, hash, navType]);
 
   return null;
+};
+
+// Wrapper for page transition animations
+const PageWrapper = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -15 }}
+      transition={{ duration: 0.4, ease: "easeInOut" }}
+      className="w-full min-h-screen flex flex-col relative z-0"
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+const AnimatedRoutes = () => {
+  const location = useLocation();
+  return (
+    <Routes location={location} key={location.pathname}>
+      <Route path="/" element={<PageWrapper><Index /></PageWrapper>} />
+      <Route path="/saveethahub" element={<PageWrapper><SaveethaHubCaseStudy /></PageWrapper>} />
+      <Route path="/case-study/saveethahub" element={<PageWrapper><SaveethaHubCaseStudy /></PageWrapper>} />
+      <Route path="/case study/saveethahub" element={<PageWrapper><SaveethaHubCaseStudy /></PageWrapper>} />
+      <Route path="/univault" element={<PageWrapper><UniVaultCaseStudy /></PageWrapper>} />
+      <Route path="/case-study/univault" element={<PageWrapper><UniVaultCaseStudy /></PageWrapper>} />
+      <Route path="/case study/univault" element={<PageWrapper><UniVaultCaseStudy /></PageWrapper>} />
+      <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
+    </Routes>
+  );
 };
 
 const App = () => (
@@ -45,15 +79,8 @@ const App = () => (
             <div className="w-12 h-12 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
           </div>
         }>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/saveethahub" element={<SaveethaHubCaseStudy />} />
-            <Route path="/case-study/saveethahub" element={<SaveethaHubCaseStudy />} />
-            <Route path="/univault" element={<UniVaultCaseStudy />} />
-            <Route path="/case-study/univault" element={<UniVaultCaseStudy />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <CommandMenu />
+          <AnimatedRoutes />
         </Suspense>
       </BrowserRouter>
     </TooltipProvider>

@@ -1,5 +1,5 @@
-import { useState, lazy, Suspense } from "react";
-import { motion } from "framer-motion";
+import { useState, lazy, Suspense, useRef, useEffect } from "react";
+import { motion, useInView } from "framer-motion";
 import {
   Award,
   ExternalLink,
@@ -20,6 +20,72 @@ import { Button } from "@/components/ui/button";
 import { trackEvent } from "@/lib/analytics";
 
 const PdfViewerModal = lazy(() => import("./PdfViewerModal"));
+
+interface AnimatedCounterProps {
+  value: number;
+  duration?: number;
+  suffix?: string;
+  prefix?: string;
+  startValue?: number;
+}
+
+const AnimatedCounter = ({ value, duration = 1.5, suffix = "", prefix = "", startValue = 0 }: AnimatedCounterProps) => {
+  const [count, setCount] = useState(startValue);
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+
+  useEffect(() => {
+    if (!isInView) return;
+
+    let startTimestamp: number | null = null;
+    const step = (timestamp: number) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / (duration * 1000), 1);
+      setCount(Math.floor(progress * (value - startValue) + startValue));
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      }
+    };
+    window.requestAnimationFrame(step);
+  }, [isInView, value, startValue, duration]);
+
+  return <span ref={ref}>{prefix}{count}{suffix}</span>;
+};
+
+interface TypewriterTextProps {
+  text: string;
+  delay?: number;
+}
+
+const TypewriterText = ({ text, delay = 120 }: TypewriterTextProps) => {
+  const [displayText, setDisplayText] = useState("");
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+
+  useEffect(() => {
+    if (!isInView) return;
+
+    let index = 0;
+    const interval = setInterval(() => {
+      setDisplayText(text.slice(0, index + 1));
+      index++;
+      if (index >= text.length) {
+        clearInterval(interval);
+      }
+    }, delay);
+
+    return () => clearInterval(interval);
+  }, [isInView, text, delay]);
+
+  return (
+    <span ref={ref}>
+      {displayText}
+      {displayText.length < text.length && (
+        <span className="animate-pulse text-primary ml-0.5">|</span>
+      )}
+    </span>
+  );
+};
 
 interface Certification {
   title: string;
@@ -431,7 +497,9 @@ export default function CertificationsSection() {
               <Award className="w-6 h-6 text-primary group-hover:scale-110 transition-transform duration-300" />
             </div>
             <div className="flex flex-col text-left">
-              <span className="text-2xl font-extrabold font-outfit text-foreground tracking-tight">5+</span>
+              <span className="text-2xl font-extrabold font-outfit text-foreground tracking-tight">
+                <AnimatedCounter value={5} suffix="+" />
+              </span>
               <span className="text-xs font-semibold text-muted-foreground font-grotesk tracking-wide uppercase mt-0.5">Certifications Earned</span>
             </div>
           </div>
@@ -442,7 +510,9 @@ export default function CertificationsSection() {
               <ShieldCheck className="w-6 h-6 text-primary group-hover:scale-110 transition-transform duration-300" />
             </div>
             <div className="flex flex-col text-left">
-              <span className="text-2xl font-extrabold font-outfit text-foreground tracking-tight">4</span>
+              <span className="text-2xl font-extrabold font-outfit text-foreground tracking-tight">
+                <AnimatedCounter value={4} />
+              </span>
               <span className="text-xs font-semibold text-muted-foreground font-grotesk tracking-wide uppercase mt-0.5">Trusted Issuers</span>
             </div>
           </div>
@@ -453,7 +523,9 @@ export default function CertificationsSection() {
               <Calendar className="w-6 h-6 text-primary group-hover:scale-110 transition-transform duration-300" />
             </div>
             <div className="flex flex-col text-left">
-              <span className="text-2xl font-extrabold font-outfit text-foreground tracking-tight">2023 - 2026</span>
+              <span className="text-2xl font-extrabold font-outfit text-foreground tracking-tight">
+                <TypewriterText text="2023 - 2026" />
+              </span>
               <span className="text-xs font-semibold text-muted-foreground font-grotesk tracking-wide uppercase mt-0.5">Active Learning Period</span>
             </div>
           </div>
@@ -464,7 +536,9 @@ export default function CertificationsSection() {
               <CheckCircle2 className="w-6 h-6 text-primary group-hover:scale-110 transition-transform duration-300" />
             </div>
             <div className="flex flex-col text-left">
-              <span className="text-2xl font-extrabold font-outfit text-foreground tracking-tight">100%</span>
+              <span className="text-2xl font-extrabold font-outfit text-foreground tracking-tight">
+                <AnimatedCounter value={100} suffix="%" />
+              </span>
               <span className="text-xs font-semibold text-muted-foreground font-grotesk tracking-wide uppercase mt-0.5">Verified Credentials</span>
             </div>
           </div>

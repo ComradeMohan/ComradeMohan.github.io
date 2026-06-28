@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { Github, Linkedin, Instagram, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { trackEvent } from "@/lib/analytics";
+import { MagneticButton } from "./MagneticButton";
+import { CyberHUD } from "./CyberHUD";
 
 const roles = ["Software Developer", "Freelancer", "Problem Solver", "Cyber Expert"];
 
@@ -11,6 +13,7 @@ const HeroSection = () => {
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [isHudActive, setIsHudActive] = useState(false);
 
   useEffect(() => {
     const current = roles[roleIndex];
@@ -70,20 +73,28 @@ const HeroSection = () => {
             </p>
 
             <div className="flex flex-wrap gap-3 mb-12">
-              <Button asChild variant="outline" size="icon" className="rounded-full border-border hover:border-white hover:text-white hover:bg-white/10 transition-colors" onClick={() => trackEvent("click", "social", "github_hero")}>
-                <a href="https://github.com/comrademohan" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile"><Github className="w-5 h-5" /></a>
-              </Button>
-              <Button asChild variant="outline" size="icon" className="rounded-full border-border hover:border-[#0077b5] hover:text-[#0077b5] hover:bg-[#0077b5]/10 transition-colors" onClick={() => trackEvent("click", "social", "linkedin_hero")}>
-                <a href="https://www.linkedin.com/in/mmohanreddy" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile"><Linkedin className="w-5 h-5" /></a>
-              </Button>
-              <Button asChild variant="outline" size="icon" className="rounded-full border-border hover:border-[#E1306C] hover:text-[#E1306C] hover:bg-[#E1306C]/10 transition-colors" onClick={() => trackEvent("click", "social", "instagram_hero")}>
-                <a href="https://www.instagram.com/comrade_mohan666/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Profile"><Instagram className="w-5 h-5" /></a>
-              </Button>
-              <Button asChild className="ml-2 bg-primary hover:bg-primary/80" onClick={() => trackEvent("download", "resume", "resume_hero")}>
-                <a href="/mohan_resume_.pdf" target="_blank" rel="noopener noreferrer">
-                  <Download className="w-4 h-4 mr-2" /> Resume
-                </a>
-              </Button>
+              <MagneticButton>
+                <Button asChild variant="outline" size="icon" className="rounded-full border-border hover:border-white hover:text-white hover:bg-white/10 transition-colors" onClick={() => trackEvent("click", "social", "github_hero")}>
+                  <a href="https://github.com/comrademohan" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile"><Github className="w-5 h-5" /></a>
+                </Button>
+              </MagneticButton>
+              <MagneticButton>
+                <Button asChild variant="outline" size="icon" className="rounded-full border-border hover:border-[#0077b5] hover:text-[#0077b5] hover:bg-[#0077b5]/10 transition-colors" onClick={() => trackEvent("click", "social", "linkedin_hero")}>
+                  <a href="https://www.linkedin.com/in/mmohanreddy" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile"><Linkedin className="w-5 h-5" /></a>
+                </Button>
+              </MagneticButton>
+              <MagneticButton>
+                <Button asChild variant="outline" size="icon" className="rounded-full border-border hover:border-[#E1306C] hover:text-[#E1306C] hover:bg-[#E1306C]/10 transition-colors" onClick={() => trackEvent("click", "social", "instagram_hero")}>
+                  <a href="https://www.instagram.com/comrade_mohan666/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Profile"><Instagram className="w-5 h-5" /></a>
+                </Button>
+              </MagneticButton>
+              <MagneticButton className="ml-2">
+                <Button asChild className="bg-primary hover:bg-primary/80" onClick={() => trackEvent("download", "resume", "resume_hero")}>
+                  <a href="/mohan_resume_.pdf" target="_blank" rel="noopener noreferrer">
+                    <Download className="w-4 h-4 mr-2" /> Resume
+                  </a>
+                </Button>
+              </MagneticButton>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
@@ -131,9 +142,13 @@ const HeroSection = () => {
 
               {/* Outer Card with border gradient */}
               <div className="w-[320px] h-[400px] lg:w-[350px] lg:h-[430px] rounded-[2.5rem] bg-gradient-to-tr from-primary to-accent p-[2px] shadow-2xl relative z-10">
-                <div className="w-full h-full rounded-[2.4rem] bg-background/90 overflow-hidden relative group">
+                <div 
+                  className="w-full h-full rounded-[2.4rem] bg-background/90 overflow-visible relative group"
+                  onMouseEnter={() => setIsHudActive(true)}
+                  onMouseLeave={() => setIsHudActive(false)}
+                >
                   {!isImageLoaded && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-muted/10 animate-pulse">
+                    <div className="absolute inset-0 flex items-center justify-center bg-muted/10 animate-pulse rounded-[2.4rem]">
                       <div className="w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin"></div>
                     </div>
                   )}
@@ -141,10 +156,12 @@ const HeroSection = () => {
                     src="/comrademohan.webp"
                     alt="Mohan Reddy"
                     onLoad={() => setIsImageLoaded(true)}
-                    className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-105 ${
+                    className={`w-full h-full object-cover rounded-[2.4rem] transition-all duration-700 group-hover:scale-105 group-hover:brightness-75 ${
                       isImageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
                     }`}
                   />
+                  
+                  <CyberHUD isVisible={isHudActive} />
                   
                   {/* Badge */}
                   <div className="absolute bottom-5 left-1/2 -translate-x-1/2 bg-background/90 backdrop-blur-md px-5 py-2 rounded-full border border-foreground/10 flex items-center gap-2 shadow-lg z-20">

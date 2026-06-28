@@ -150,18 +150,14 @@
   animation: marquee 30s linear infinite;
 }
 
-/* Custom scrollbar */
+/* Hide scrollbar completely to create a clean native-app feel */
 ::-webkit-scrollbar {
-  width: 6px;
+  display: none;
 }
 
-::-webkit-scrollbar-track {
-  background: hsl(230 25% 10%);
-}
-
-::-webkit-scrollbar-thumb {
-  background: hsl(12 95% 58%);
-  border-radius: 3px;
+* {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 /* Doodle active vibration keyframes and classes */
@@ -187,3 +183,10 @@
   animation: paper-vibrate 0.4s ease-in-out infinite;
   transform-origin: bottom;
 }
+
+/* Custom theme visibility utilities since the site is dark by default */
+.show-in-light { display: none !important; }
+.light .show-in-light { display: block !important; }
+
+.hide-in-light { display: block !important; }
+.light .hide-in-light { display: none !important; }

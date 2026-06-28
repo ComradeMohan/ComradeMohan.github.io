@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Mail, Sun, Moon, FileDown } from "lucide-react";
+import { Menu, X, Mail, Sun, Moon, FileDown, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { MagneticButton } from "./MagneticButton";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -17,15 +19,27 @@ const Navbar = () => {
   const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
-    const saved = localStorage.getItem("theme");
-    const metaThemeColor = document.querySelector("meta[name='theme-color']");
-    if (saved === "light") {
-      setIsDark(false);
-      document.documentElement.classList.add("light");
-      metaThemeColor?.setAttribute("content", "hsla(12, 65%, 88%, 1.00)");
-    } else {
-      metaThemeColor?.setAttribute("content", "hsl(289, 65%, 10%)");
-    }
+    const handleThemeChange = () => {
+      const saved = localStorage.getItem("theme");
+      const metaThemeColor = document.querySelector("meta[name='theme-color']");
+      if (saved === "light") {
+        setIsDark(false);
+        document.documentElement.classList.add("light");
+        metaThemeColor?.setAttribute("content", "hsla(12, 65%, 88%, 1.00)");
+      } else {
+        setIsDark(true);
+        document.documentElement.classList.remove("light");
+        metaThemeColor?.setAttribute("content", "hsl(289, 65%, 10%)");
+      }
+    };
+    handleThemeChange();
+
+    window.addEventListener("storage", handleThemeChange);
+    window.addEventListener("local-storage", handleThemeChange);
+    return () => {
+      window.removeEventListener("storage", handleThemeChange);
+      window.removeEventListener("local-storage", handleThemeChange);
+    };
   }, []);
 
   const toggleTheme = () => {
@@ -47,7 +61,6 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      // If scroll is near top of the page, force Home active to avoid layout calculation races on reload
       if (window.scrollY < 80) {
         setActiveSection("#home");
         return;
@@ -73,7 +86,7 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  return (
+  const navbarContent = (
     <nav className="fixed top-4 left-4 right-4 z-50 mx-auto max-w-6xl">
       <div
         className="relative rounded-[2rem] border border-foreground/10 px-5 sm:px-8 overflow-hidden"
@@ -85,7 +98,6 @@ const Navbar = () => {
             "0 8px 32px hsl(var(--primary) / 0.08), inset 0 1px 0 hsl(var(--foreground) / 0.08), inset 0 -1px 0 hsl(var(--foreground) / 0.04)",
         }}
       >
-        {/* Liquid glass highlight */}
         <div
           className="absolute inset-0 rounded-[2rem] pointer-events-none"
           style={{
@@ -134,11 +146,13 @@ const Navbar = () => {
             >
               {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
-            <Button asChild size="sm" className="rounded-full bg-primary hover:bg-primary/80 shadow-[0_0_16px_hsl(var(--primary)/0.3)]">
-              <a href="mailto:madhiremohanreddy@gmail.com">
-                <Mail className="w-4 h-4 mr-1" /> Hire Me
-              </a>
-            </Button>
+            <MagneticButton>
+              <Button asChild size="sm" className="rounded-full bg-primary hover:bg-primary/80 shadow-[0_0_16px_hsl(var(--primary)/0.3)]">
+                <a href="mailto:madhiremohanreddy@gmail.com">
+                  <Mail className="w-4 h-4 mr-1" /> Hire Me
+                </a>
+              </Button>
+            </MagneticButton>
           </div>
 
           <div className="flex items-center gap-3 md:hidden">
@@ -151,10 +165,21 @@ const Navbar = () => {
               {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
             <button
-              className="text-foreground p-1"
+              className="text-foreground p-1 w-8 h-8 flex items-center justify-center focus:outline-none relative"
               onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label="Toggle menu"
             >
-              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={mobileOpen ? "close" : "menu"}
+                  initial={{ rotate: -90, opacity: 0, scale: 0.8 }}
+                  animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                  exit={{ rotate: 90, opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+                </motion.div>
+              </AnimatePresence>
             </button>
           </div>
         </div>
@@ -227,6 +252,8 @@ const Navbar = () => {
       </AnimatePresence>
     </nav>
   );
+
+  return createPortal(navbarContent, document.body);
 };
 
 export default Navbar;

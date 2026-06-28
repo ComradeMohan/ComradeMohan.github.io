@@ -120,7 +120,7 @@ const Index = () => {
         />
       )}
       <div className={loading ? "hidden" : ""}>
-        <Navbar />
+        {!loading && <Navbar />}
         <main>
           <HeroSection />
           <AboutSection />
