@@ -30,8 +30,11 @@ test-results/
 reports/
 playwright/.cache/
 tests/
+playwright.config.ts
+.github/workflows/playwright.yml
 
 # Windows system files
 desktop.ini
+
 
 
