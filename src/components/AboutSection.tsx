@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { MapPin, Award } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const education = [
   {
@@ -115,6 +116,16 @@ const AboutSection = () => {
                   </span>
                 ))}
               </div>
+            </div>
+
+            {/* Link to Full Standalone About Biography Page */}
+            <div className="pt-2">
+              <Button asChild variant="outline" className="rounded-xl border-primary/20 hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 font-grotesk group">
+                <a href="/about">
+                  Read Full Biography & Stats 
+                  <span className="inline-block transition-transform duration-300 group-hover:translate-x-1 ml-1.5">→</span>
+                </a>
+              </Button>
             </div>
 
             {/* Career Focus */}

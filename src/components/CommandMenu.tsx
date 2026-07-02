@@ -101,13 +101,17 @@ export const CommandMenu = ({ open: customOpen, onOpenChange }: CommandMenuProps
         
         {/* Navigation Group */}
         <CommandGroup heading="Navigation">
-          <CommandItem onSelect={() => handleNavigation("#home")}>
+          <CommandItem onSelect={() => handleRoute("/")}>
             <Home className="mr-2 h-4 w-4 text-primary" />
-            <span>Go to Home / Hero</span>
+            <span>Go to Homepage</span>
           </CommandItem>
-          <CommandItem onSelect={() => handleNavigation("#about")}>
+          <CommandItem onSelect={() => handleRoute("/about")}>
             <User className="mr-2 h-4 w-4 text-primary" />
-            <span>Go to About Section</span>
+            <span>Go to About Page (Biography)</span>
+          </CommandItem>
+          <CommandItem onSelect={() => handleRoute("/blog")}>
+            <BookOpen className="mr-2 h-4 w-4 text-primary" />
+            <span>Go to Blog Articles</span>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigation("#skills")}>
             <Laptop className="mr-2 h-4 w-4 text-primary" />

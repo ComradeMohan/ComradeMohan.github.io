@@ -1,1 +1,14 @@
-/*    /index.html   200
+# Permanently redirect Netlify subdomain to primary domain
+https://comrademohan.netlify.app/* https://mohanreddy.me/:splat 301!
+
+# Permanently redirect is-a-good.dev alias to primary domain
+https://mohanreddy.is-a-good.dev/* https://mohanreddy.me/:splat 301!
+
+# Permanently redirect is-a-fullstack.dev alias to primary domain
+https://mohanreddy.is-a-fullstack.dev/* https://mohanreddy.me/:splat 301!
+
+# Redirect www to apex primary domain (if not handled by Netlify settings)
+https://www.mohanreddy.me/* https://mohanreddy.me/:splat 301!
+
+# React SPA Rewrite: Serve index.html for all subpages to allow React Router to mount
+/* /index.html 200

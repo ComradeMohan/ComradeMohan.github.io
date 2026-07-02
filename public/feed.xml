@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>Mohan Reddy | Developer Blog</title>
+  <link>https://mohanreddy.me/blog</link>
+  <description>Technical articles and guides on React, TypeScript, Java, Android, Firebase, and SEO by Mohan Reddy.</description>
+  <language>en-us</language>
+  <pubDate>Thu, 02 Jul 2026 00:00:00 GMT</pubDate>
+  <lastBuildDate>Thu, 02 Jul 2026 00:00:00 GMT</lastBuildDate>
+  <atom:link href="https://mohanreddy.me/feed.xml" rel="self" type="application/rss+xml" />
+  
+  <item>
+    <title>Advanced State Management in React 18: Beyond Redux</title>
+    <link>https://mohanreddy.me/blog/react-state-management</link>
+    <guid>https://mohanreddy.me/blog/react-state-management</guid>
+    <pubDate>Thu, 02 Jul 2026 00:00:00 GMT</pubDate>
+    <description>Explore modern state management paradigms in React 18, including Zustand, Recoil, and Signals, comparing performance and developer experience.</description>
+  </item>
+  
+  <item>
+    <title>Building Real-Time Web Apps with Cloud Firestore and React</title>
+    <link>https://mohanreddy.me/blog/firestore-realtime-react</link>
+    <guid>https://mohanreddy.me/blog/firestore-realtime-react</guid>
+    <pubDate>Thu, 02 Jul 2026 00:00:00 GMT</pubDate>
+    <description>Learn how to design scalable real-time architectures using Firebase Firestore and React, including caching, security rules, and performance tips.</description>
+  </item>
+  
+  <item>
+    <title>Mastering TypeScript: Type-Safe Development for Full Stack Engineers</title>
+    <link>https://mohanreddy.me/blog/typescript-type-safety</link>
+    <guid>https://mohanreddy.me/blog/typescript-type-safety</guid>
+    <pubDate>Thu, 02 Jul 2026 00:00:00 GMT</pubDate>
+    <description>Dive into advanced TypeScript concepts including conditional types, mapped types, utility types, and structural typing for full-stack engineering.</description>
+  </item>
+  
+  <item>
+    <title>Oracle Java SE 17: Deep Dive into Modern Language Features</title>
+    <link>https://mohanreddy.me/blog/modern-java-features</link>
+    <guid>https://mohanreddy.me/blog/modern-java-features</guid>
+    <pubDate>Thu, 02 Jul 2026 00:00:00 GMT</pubDate>
+    <description>A detailed guide to the most impactful features introduced in LTS Java 17, including pattern matching, records, sealed classes, and garbage collectors.</description>
+  </item>
+  
+  <item>
+    <title>Designing UniVault: Building Secure Offline-First Android Applications</title>
+    <link>https://mohanreddy.me/blog/secure-offline-android-univault</link>
+    <guid>https://mohanreddy.me/blog/secure-offline-android-univault</guid>
+    <pubDate>Thu, 02 Jul 2026 00:00:00 GMT</pubDate>
+    <description>Behind the scenes of UniVault, a secure Android application built with Kotlin, Room DB, AES-256 encryption, and offline-first capabilities.</description>
+  </item>
+  
+  <item>
+    <title>How to Design a Developer Portfolio That Wins Recruiter Attention</title>
+    <link>https://mohanreddy.me/blog/developer-portfolio-design</link>
+    <guid>https://mohanreddy.me/blog/developer-portfolio-design</guid>
+    <pubDate>Thu, 02 Jul 2026 00:00:00 GMT</pubDate>
+    <description>Best practices for designing portfolios that recruiters love, focusing on real-world projects, proof of work, performance, and UI details.</description>
+  </item>
+  
+  <item>
+    <title>Technical SEO for React Single Page Applications: The Ultimate Guide</title>
+    <link>https://mohanreddy.me/blog/technical-seo-react-spa</link>
+    <guid>https://mohanreddy.me/blog/technical-seo-react-spa</guid>
+    <pubDate>Thu, 02 Jul 2026 00:00:00 GMT</pubDate>
+    <description>A complete guide to resolving indexation, dynamic meta tags, structured data, and performance issues in React Single Page Applications.</description>
+  </item>
+</channel>
+</rss>
+

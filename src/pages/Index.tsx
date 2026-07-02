@@ -10,6 +10,7 @@ import CertificationsSection from "@/components/CertificationsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import { trackEvent } from "@/lib/analytics";
+import SEO from "@/components/SEO";
 
 const Index = () => {
   const { hash } = useLocation();
@@ -20,35 +21,7 @@ const Index = () => {
     return true;
   });
 
-  useEffect(() => {
-    // Dynamic SEO Metadata for Home Page
-    document.title = "Mohan Reddy | Full Stack Developer | Open to Work";
-    
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) {
-      metaDesc.setAttribute("content", "Mohan Reddy's professional portfolio and resume for technical recruiters. Full Stack Developer specializing in React, Next.js, Kotlin, Java, Python, SQL, and Machine Learning. Open to full-time roles, internships, and software engineering opportunities.");
-    }
 
-    const ogTitle = document.querySelector('meta[property="og:title"]');
-    if (ogTitle) ogTitle.setAttribute("content", "Mohan Reddy | Full Stack Developer | Open to Work");
-
-    const ogDesc = document.querySelector('meta[property="og:description"]');
-    if (ogDesc) ogDesc.setAttribute("content", "Portfolio and resume-style site for Mohan Reddy. Full stack developer open to job opportunities, internships, freelance work, and recruiter outreach.");
-
-    const twitterTitle = document.querySelector('meta[name="twitter:title"]');
-    if (twitterTitle) twitterTitle.setAttribute("content", "Mohan Reddy | Full Stack Developer | Open to Work");
-
-    const twitterDesc = document.querySelector('meta[name="twitter:description"]');
-    if (twitterDesc) twitterDesc.setAttribute("content", "Portfolio and resume-style site for Mohan Reddy. Full stack developer open to job opportunities, internships, freelance work, and recruiter outreach.");
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.setAttribute('rel', 'canonical');
-      document.head.appendChild(canonical);
-    }
-    canonical.setAttribute('href', "https://comrademohan.netlify.app/");
-  }, []);
 
   useEffect(() => {
     if (loading) return;
@@ -107,8 +80,100 @@ const Index = () => {
     }
   }, [loading, hash]);
 
+  // Define schemas
+  const websiteSchema = {
+    "@type": "WebSite",
+    "@id": "https://mohanreddy.me/#website",
+    "url": "https://mohanreddy.me/",
+    "name": "Mohan Reddy Portfolio",
+    "description": "Professional developer portfolio of Mohan Reddy, Full Stack Software Engineer.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://mohanreddy.me/blog?search={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  };
+
+  const personSchema = {
+    "@type": "Person",
+    "@id": "https://mohanreddy.me/#person",
+    "name": "Mohan Reddy",
+    "alternateName": "Comrade Mohan",
+    "jobTitle": "Full Stack Developer",
+    "description": "Full Stack Developer specializing in React, Next.js, Kotlin, Java, Python, SQL, and Machine Learning.",
+    "url": "https://mohanreddy.me/",
+    "image": "https://mohanreddy.me/mohan-reddy-full-stack-developer.webp",
+    "email": "madhiremohanreddy@gmail.com",
+    "gender": "Male",
+    "nationality": {
+      "@type": "Country",
+      "name": "India"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Chennai",
+      "addressRegion": "Tamil Nadu",
+      "addressCountry": "IN"
+    },
+    "alumniOf": {
+      "@type": "EducationalOrganization",
+      "name": "Saveetha School of Engineering (SIMATS)",
+      "url": "https://saveetha.com/"
+    },
+    "sameAs": [
+      "https://github.com/ComradeMohan",
+      "https://www.linkedin.com/in/mmohanreddy/",
+      "https://www.instagram.com/comrade_mohan666/"
+    ],
+    "knowsAbout": [
+      "Software Engineering",
+      "React",
+      "Next.js",
+      "TypeScript",
+      "Java",
+      "Kotlin",
+      "Firebase",
+      "Android Development"
+    ]
+  };
+
+  const faqSchema = {
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Who is Mohan Reddy?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Mohan Reddy (alternate name Comrade Mohan) is a Full Stack Software Developer and student at Saveetha School of Engineering (SIMATS) in Chennai, India. He builds responsive web applications and secure offline-first mobile apps."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are Mohan Reddy's main projects?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Mohan's primary projects are SaveethaHub, a course prep web platform, and UniVault, a secure Android study companion app published on the Google Play Store."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What certifications does Mohan Reddy hold?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Mohan is an Oracle Certified Professional: Java SE 17 Developer, an Oracle Cloud Infrastructure Certified Foundations Associate, and holds HackerRank Frontend React certificates."
+        }
+      }
+    ]
+  };
+
   return (
     <>
+      <SEO
+        title="Mohan Reddy | Full Stack Developer & Software Engineer | Open to Work"
+        description="Explore the professional portfolio and resume of Mohan Reddy. Specializing in React, TypeScript, Java, and Kotlin. Open to internships, full-time jobs, and projects."
+        schema={[websiteSchema, personSchema, faqSchema]}
+      />
       {loading && (
         <LoadingScreen
           onComplete={() => {
@@ -136,3 +201,4 @@ const Index = () => {
 };
 
 export default Index;
+

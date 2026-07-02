@@ -4,19 +4,64 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Mail, Sun, Moon, FileDown, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MagneticButton } from "./MagneticButton";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const navLinks = [
-  { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Skills", href: "#skills" },
-  { label: "Projects", href: "#projects" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "/#home" },
+  { label: "About", href: "/#about" },
+  { label: "Skills", href: "/#skills" },
+  { label: "Projects", href: "/#projects" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("#home");
   const [isDark, setIsDark] = useState(true);
+
+  const handleNavLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith("/#")) {
+      const hash = href.substring(1);
+      if (location.pathname === "/") {
+        e.preventDefault();
+        const id = hash.replace("#", "");
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+          window.history.pushState(null, "", href);
+        }
+      } else {
+        e.preventDefault();
+        navigate(href);
+      }
+    } else {
+      e.preventDefault();
+      navigate(href);
+    }
+  };
+
+  const isLinkActive = (href: string) => {
+    if (href.startsWith("/#")) {
+      const hash = href.substring(1);
+      if (location.pathname === "/") {
+        return activeSection === hash;
+      }
+      if (hash === "#about" && location.pathname === "/about") {
+        return true;
+      }
+      if (hash === "#home" && location.pathname === "/") {
+        return true;
+      }
+      return false;
+    }
+    if (href === "/blog") {
+      return location.pathname.startsWith("/blog");
+    }
+    return location.pathname === href;
+  };
 
   useEffect(() => {
     const handleThemeChange = () => {
@@ -66,7 +111,9 @@ const Navbar = () => {
         return;
       }
 
-      const sections = navLinks.map((link) => link.href.replace("#", ""));
+      const sections = navLinks
+        .filter((link) => link.href.includes("#"))
+        .map((link) => link.href.split("#")[1]);
       let current = "#home";
 
       for (const id of sections) {
@@ -113,29 +160,33 @@ const Navbar = () => {
           </a>
 
           <div className="hidden md:flex items-center gap-5">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className={`text-sm font-medium transition-all duration-300 font-grotesk relative px-2 py-1 rounded-full ${activeSection === link.href
-                  ? "text-primary"
-                  : "text-foreground/60 hover:text-primary"
-                  }`}
-              >
-                {link.label}
-                {activeSection === link.href && (
-                  <motion.div
-                    layoutId="nav-pill"
-                    className="absolute inset-0 rounded-full -z-10"
-                    style={{
-                      background: "hsl(var(--primary) / 0.12)",
-                      boxShadow: "0 0 12px hsl(var(--primary) / 0.15)",
-                    }}
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
-                )}
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const active = isLinkActive(link.href);
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={(e) => handleNavLinkClick(e, link.href)}
+                  className={`text-sm font-medium transition-all duration-300 font-grotesk relative px-2 py-1 rounded-full ${active
+                    ? "text-primary"
+                    : "text-foreground/60 hover:text-primary"
+                    }`}
+                >
+                  {link.label}
+                  {active && (
+                    <motion.div
+                      layoutId="nav-pill"
+                      className="absolute inset-0 rounded-full -z-10"
+                      style={{
+                        background: "hsl(var(--primary) / 0.12)",
+                        boxShadow: "0 0 12px hsl(var(--primary) / 0.15)",
+                      }}
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                </a>
+              );
+            })}
             <button
               onClick={toggleTheme}
               className="p-2 rounded-full text-foreground/60 hover:text-primary transition-colors"
@@ -217,30 +268,36 @@ const Navbar = () => {
                     "radial-gradient(ellipse 70% 50% at 30% 0%, hsl(var(--primary) / 0.1), transparent 60%)",
                 }}
               />
-              {navLinks.map((link, i) => (
-                <motion.a
-                  key={link.href}
-                  href={link.href}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.04 }}
-                  className={`relative text-sm font-medium transition-all font-outfit px-3 py-2 rounded-lg ${activeSection === link.href
-                    ? "text-primary"
-                    : "text-foreground/70 hover:text-primary"
-                    }`}
-                  style={
-                    activeSection === link.href
-                      ? {
-                        background: "hsl(var(--primary) / 0.1)",
-                        boxShadow: "0 0 12px hsl(var(--primary) / 0.1)",
-                      }
-                      : {}
-                  }
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {link.label}
-                </motion.a>
-              ))}
+              {navLinks.map((link, i) => {
+                const active = isLinkActive(link.href);
+                return (
+                  <motion.a
+                    key={link.href}
+                    href={link.href}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.04 }}
+                    className={`relative text-sm font-medium transition-all font-outfit px-3 py-2 rounded-lg ${active
+                      ? "text-primary"
+                      : "text-foreground/70 hover:text-primary"
+                      }`}
+                    style={
+                      active
+                        ? {
+                          background: "hsl(var(--primary) / 0.1)",
+                          boxShadow: "0 0 12px hsl(var(--primary) / 0.1)",
+                        }
+                        : {}
+                    }
+                    onClick={(e) => {
+                      setMobileOpen(false);
+                      handleNavLinkClick(e, link.href);
+                    }}
+                  >
+                    {link.label}
+                  </motion.a>
+                );
+              })}
               <Button asChild className="mt-2 rounded-full bg-primary hover:bg-primary/80 shadow-[0_0_16px_hsl(var(--primary)/0.3)]">
                 <a href="mailto:madhiremohanreddy@gmail.com">
                   <Mail className="w-4 h-4 mr-1" /> Hire Me

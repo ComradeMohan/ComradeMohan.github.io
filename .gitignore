@@ -29,3 +29,9 @@ blob-report/
 test-results/
 reports/
 playwright/.cache/
+tests/
+
+# Windows system files
+desktop.ini
+
+

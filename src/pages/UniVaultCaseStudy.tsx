@@ -5,6 +5,7 @@ import {
   BookOpen, Calculator, Calendar, Plus, Trash, Sparkles, Check, Info, Star, Rocket
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import SEO from "@/components/SEO";
 
 // CountUp Component for animating stats on scroll
 const CountUp = ({ end, duration = 1500, suffix = "" }) => {
@@ -502,35 +503,7 @@ CREATE TABLE student_attempts (
 
 export default function UniVaultCaseStudy() {
   const navigate = useNavigate();
-  useEffect(() => {
-    // Dynamic SEO Metadata for UniVault Case Study
-    document.title = "UniVault Case Study | Mohan Reddy";
-    
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) {
-      metaDesc.setAttribute("content", "Case study on UniVault: A secure, decentralized file storage system for university students. Designed and developed by Mohan Reddy.");
-    }
 
-    const ogTitle = document.querySelector('meta[property="og:title"]');
-    if (ogTitle) ogTitle.setAttribute("content", "UniVault Case Study | Mohan Reddy");
-
-    const ogDesc = document.querySelector('meta[property="og:description"]');
-    if (ogDesc) ogDesc.setAttribute("content", "Case study on UniVault: A secure, decentralized file storage system for university students. Designed and developed by Mohan Reddy.");
-
-    const twitterTitle = document.querySelector('meta[name="twitter:title"]');
-    if (twitterTitle) twitterTitle.setAttribute("content", "UniVault Case Study | Mohan Reddy");
-
-    const twitterDesc = document.querySelector('meta[name="twitter:description"]');
-    if (twitterDesc) twitterDesc.setAttribute("content", "Case study on UniVault: A secure, decentralized file storage system for university students. Designed and developed by Mohan Reddy.");
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.setAttribute('rel', 'canonical');
-      document.head.appendChild(canonical);
-    }
-    canonical.setAttribute('href', "https://comrademohan.netlify.app/case-study/univault");
-  }, []);
 
   // Stats Section Data
   const stats = [
@@ -570,8 +543,54 @@ export default function UniVaultCaseStudy() {
   // Interactive Offline Simulator State
   const [isOffline, setIsOffline] = useState(false);
 
+  // Breadcrumb schema
+  const breadcrumbSchema = {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://mohanreddy.me/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "UniVault Case Study",
+        "item": "https://mohanreddy.me/case-study/univault"
+      }
+    ]
+  };
+
+  // SoftwareApplication schema (MobileApplication subclass)
+  const appSchema = {
+    "@type": "SoftwareApplication",
+    "name": "UniVault",
+    "operatingSystem": "Android",
+    "applicationCategory": "EducationalApplication",
+    "downloadUrl": "https://play.google.com/store/apps/details?id=com.simats.univault",
+    "url": "https://mohanreddy.me/case-study/univault",
+    "description": "A secure offline-first exam preparation Android application. Encrypted with AES-256 and utilizing Room DB for localized caching of syllabus and study guides.",
+    "creator": {
+      "@type": "Person",
+      "name": "Mohan Reddy",
+      "url": "https://mohanreddy.me/"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "ratingCount": "180"
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#FCF9F2] text-slate-800 font-outfit relative selection:bg-[#F05323] selection:text-white pb-24 overflow-x-hidden">
+      <SEO
+        title="UniVault Case Study | Mohan Reddy - Android & Kotlin Developer"
+        description="Comprehensive architectural overview of UniVault. A secure offline-first Android app built with Kotlin and Room DB, protecting exam resources with AES-256."
+        keywords="UniVault, Android developer, Kotlin app, Room database FTS4, local file encryption AES-256, student exam prep app, Mohan Reddy developer"
+        schema={[breadcrumbSchema, appSchema]}
+      />
       
       {/* Background grid texture simulating paper */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px]"></div>
@@ -1471,3 +1490,4 @@ export default function UniVaultCaseStudy() {
     </div>
   );
 }
+

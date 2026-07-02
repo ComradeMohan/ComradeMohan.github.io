@@ -1,0 +1,24 @@
+{
+  "name": "Mohan Reddy | Full Stack Developer",
+  "short_name": "Mohan Reddy",
+  "description": "Professional portfolio and technical blog of Mohan Reddy, a Full Stack Developer specializing in React, TypeScript, Java, and Kotlin.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#8b5cf6",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "64x64",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/mohan-reddy-full-stack-developer.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ]
+}

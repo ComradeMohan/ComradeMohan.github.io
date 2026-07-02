@@ -1,7 +1,16 @@
+# robots.txt for Mohan Reddy's Portfolio
+# Host: https://mohanreddy.me
+
 User-agent: Googlebot
 Allow: /
 
 User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: DuckDuckBot
 Allow: /
 
 User-agent: Twitterbot
@@ -10,8 +19,27 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-User-agent: *
+User-agent: LinkedInBot
 Allow: /
 
-Sitemap: https://comrademohan.netlify.app/sitemap.xml
+# Block aggressive scrapers and generic AI bots from draining bandwidth
+User-agent: CCBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: Anthropic-ai
+Disallow: /
+
+# General rules for other bots
+User-agent: *
+Allow: /
+Crawl-delay: 10
+
+Sitemap: https://mohanreddy.me/sitemap.xml
+Host: https://mohanreddy.me
 

@@ -152,14 +152,21 @@ const HeroSection = () => {
                       <div className="w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin"></div>
                     </div>
                   )}
-                  <img
-                    src="/comrademohan.webp"
-                    alt="Mohan Reddy"
-                    onLoad={() => setIsImageLoaded(true)}
-                    className={`w-full h-full object-cover rounded-[2.4rem] transition-all duration-700 group-hover:scale-105 group-hover:brightness-75 ${
-                      isImageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
-                    }`}
-                  />
+                  <figure className="w-full h-full">
+                    <img
+                      src="/mohan-reddy-full-stack-developer.webp"
+                      alt="Mohan Reddy - Full Stack Software Developer and Android Engineer based in India"
+                      title="Mohan Reddy Professional Profile Photo"
+                      width="350"
+                      height="430"
+                      loading="eager"
+                      onLoad={() => setIsImageLoaded(true)}
+                      className={`w-full h-full object-cover rounded-[2.4rem] transition-all duration-700 group-hover:scale-105 group-hover:brightness-75 ${
+                        isImageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                      }`}
+                    />
+                    <figcaption className="sr-only">Mohan Reddy - Full Stack Developer Profile Photo</figcaption>
+                  </figure>
                   
                   <CyberHUD isVisible={isHudActive} />
                   

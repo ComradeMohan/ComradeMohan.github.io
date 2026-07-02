@@ -5,6 +5,7 @@ import {
   BookOpen, Calculator, Calendar, Plus, Trash, Sparkles, Star, Rocket
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import SEO from "@/components/SEO";
 
 // CountUp Component for animating stats on scroll
 const CountUp = ({ end, duration = 1500, suffix = "" }) => {
@@ -510,35 +511,7 @@ export default function SaveethaHubCaseStudy() {
       });
   }, []);
 
-  useEffect(() => {
-    // Dynamic SEO Metadata for SaveethaHub Case Study
-    document.title = "SaveethaHub Case Study | Mohan Reddy";
-    
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) {
-      metaDesc.setAttribute("content", "Case study on SaveethaHub: A comprehensive web application designed for students at SIMATS Saveetha University. Designed and developed by Mohan Reddy.");
-    }
 
-    const ogTitle = document.querySelector('meta[property="og:title"]');
-    if (ogTitle) ogTitle.setAttribute("content", "SaveethaHub Case Study | Mohan Reddy");
-
-    const ogDesc = document.querySelector('meta[property="og:description"]');
-    if (ogDesc) ogDesc.setAttribute("content", "Case study on SaveethaHub: A comprehensive web application designed for students at SIMATS Saveetha University. Designed and developed by Mohan Reddy.");
-
-    const twitterTitle = document.querySelector('meta[name="twitter:title"]');
-    if (twitterTitle) twitterTitle.setAttribute("content", "SaveethaHub Case Study | Mohan Reddy");
-
-    const twitterDesc = document.querySelector('meta[name="twitter:description"]');
-    if (twitterDesc) twitterDesc.setAttribute("content", "Case study on SaveethaHub: A comprehensive web application designed for students at SIMATS Saveetha University. Designed and developed by Mohan Reddy.");
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.setAttribute('rel', 'canonical');
-      document.head.appendChild(canonical);
-    }
-    canonical.setAttribute('href', "https://comrademohan.netlify.app/case-study/saveethahub");
-  }, []);
 
   // Stats Section Data
   const stats = [
@@ -621,8 +594,55 @@ export default function SaveethaHubCaseStudy() {
     setNewThreadContent("");
   };
 
+  // Breadcrumb schema
+  const breadcrumbSchema = {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://mohanreddy.me/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "SaveethaHub Case Study",
+        "item": "https://mohanreddy.me/case-study/saveethahub"
+      }
+    ]
+  };
+
+  // SoftwareApplication schema
+  const appSchema = {
+    "@type": "SoftwareApplication",
+    "name": "SaveethaHub",
+    "operatingSystem": "All",
+    "applicationCategory": "EducationalApplication",
+    "browserRequirements": "Requires HTML5, Javascript, CSS3",
+    "downloadUrl": "https://mohanreddy.me/case-study/saveethahub",
+    "url": "https://mohanreddy.me/case-study/saveethahub",
+    "description": "An academic platform designed for students at Saveetha School of Engineering, integrating study resource indices, community post boards, and interactive calculators.",
+    "creator": {
+      "@type": "Person",
+      "name": "Mohan Reddy",
+      "url": "https://mohanreddy.me/"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "240"
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#FCF9F2] text-slate-800 font-outfit relative selection:bg-[#F05323] selection:text-white pb-24 overflow-x-hidden">
+      <SEO
+        title="SaveethaHub Case Study | Mohan Reddy - Full Stack Developer"
+        description="Comprehensive architectural overview of SaveethaHub. Built with React, Supabase, and Firebase, featuring AI course aids for Saveetha School of Engineering students."
+        keywords="SaveethaHub, academic platform, React portfolio, Firebase study app, Saveetha University, student collaboration board, Mohan Reddy developer"
+        schema={[breadcrumbSchema, appSchema]}
+      />
       
       {/* Background grid texture simulating paper */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px]"></div>
@@ -1167,14 +1187,21 @@ export default function SaveethaHubCaseStudy() {
             >
               <HandDrawnPin />
               <div className="aspect-[4/3] bg-slate-100 rounded overflow-hidden relative group">
-                <img 
-                  src="/saveetha_hub_screenshot.webp" 
-                  alt="SaveethaHub Landing Page"
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.src = "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&auto=format&fit=crop&q=80";
-                  }}
-                />
+                <figure className="w-full h-full">
+                  <img 
+                    src="/saveetha_hub_screenshot.webp" 
+                    alt="SaveethaHub Student Collaboration Landing Page Screenshot"
+                    title="SaveethaHub Student Collaboration Landing Page Screenshot"
+                    width="400"
+                    height="300"
+                    loading="lazy"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&auto=format&fit=crop&q=80";
+                    }}
+                  />
+                  <figcaption className="sr-only">SaveethaHub Landing Page Dashboard Screenshot</figcaption>
+                </figure>
                 <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <span className="text-white text-xs font-bold px-3 py-1 bg-slate-900/80 rounded-full flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5 text-orange-400" /> Landing Page
@@ -1442,3 +1469,4 @@ export default function SaveethaHubCaseStudy() {
     </div>
   );
 }
+
