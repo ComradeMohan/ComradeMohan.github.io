@@ -1358,6 +1358,113 @@ export default function SaveethaHubCaseStudy() {
         </div>
       </section>
 
+      {/* Section: Technical Challenges & Solutions */}
+      <section className="max-w-6xl mx-auto px-6 py-12 relative z-10">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 font-grotesk relative inline-block">
+            Technical Challenges & Solutions
+            <HandDrawnUnderline />
+          </h2>
+          <p className="text-slate-500 text-sm mt-3 max-w-xl mx-auto font-medium font-outfit">
+            How I addressed core NoSQL database performance issues, websocket scale constraints, and cross-origin security wallings.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          
+          {/* Card 1: Query Scale */}
+          <motion.div 
+            className="bg-white p-6 rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col justify-between relative"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-[9px] font-bold px-2 py-0.5 bg-red-50 text-red-600 border border-red-150 rounded-full font-grotesk uppercase tracking-wider">
+                  Database Bottleneck
+                </span>
+                <span className="text-lg">📈</span>
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 font-grotesk mb-2">NoSQL Query Indexing & Scale</h3>
+              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit">
+                <strong>The Challenge:</strong> Querying large collections of academic guides and student threads sequentially causes major read overheads and freezes client UI threads as data grows.
+              </p>
+              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit mt-2">
+                <strong>The Solution:</strong> Allocated composite indexing (`createdAt DESC`, `tag ASC`) on Firestore to execute sorts directly on Google Cloud nodes, and implemented cursor-based limits (`limit(15)`).
+              </p>
+            </div>
+            <div className="mt-6 border-t border-dashed border-slate-100 pt-3">
+              <span className="font-handwritten text-[#b45309] text-lg leading-tight block transform -rotate-1 font-bold">
+                under 80ms render speeds! 🚀
+              </span>
+            </div>
+          </motion.div>
+
+          {/* Card 2: Websocket Concurrency */}
+          <motion.div 
+            className="bg-white p-6 rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col justify-between relative"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1, duration: 0.5 }}
+          >
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-[9px] font-bold px-2 py-0.5 bg-red-50 text-red-600 border border-red-150 rounded-full font-grotesk uppercase tracking-wider">
+                  Concurrency Limit
+                </span>
+                <span className="text-lg">💬</span>
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 font-grotesk mb-2">Websocket Connection Scaling</h3>
+              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit">
+                <strong>The Challenge:</strong> Keeping real-time web socket snapshot listeners open for 2,000+ simultaneous students exceeds database connection caps and drains mobile battery.
+              </p>
+              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit mt-2">
+                <strong>The Solution:</strong> Implemented query throttling and lifecycle-bound tearing. Real-time queries run only when the feed is in view, immediately unsubscribing on page swap.
+              </p>
+            </div>
+            <div className="mt-6 border-t border-dashed border-slate-100 pt-3">
+              <span className="font-handwritten text-[#b45309] text-lg leading-tight block transform rotate-1 font-bold">
+                efficient network load! 📶
+              </span>
+            </div>
+          </motion.div>
+
+          {/* Card 3: Database Security Firewall */}
+          <motion.div 
+            className="bg-white p-6 rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col justify-between relative"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+          >
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-[9px] font-bold px-2 py-0.5 bg-red-50 text-red-600 border border-red-150 rounded-full font-grotesk uppercase tracking-wider">
+                  Security Vulnerability
+                </span>
+                <span className="text-lg">🛡️</span>
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 font-grotesk mb-2">Domain-Locked Security Firewall</h3>
+              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit">
+                <strong>The Challenge:</strong> Anyone on the internet could query the database and scrape private student emails or post unauthorized academic material.
+              </p>
+              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit mt-2">
+                <strong>The Solution:</strong> Structured strict regular expression security rules enforced at the database layer. Database operations are restricted to verified student emails matching `@saveetha.com`.
+              </p>
+            </div>
+            <div className="mt-6 border-t border-dashed border-slate-100 pt-3">
+              <span className="font-handwritten text-[#b45309] text-lg leading-tight block transform -rotate-1 font-bold">
+                100% data access safety! 🔐
+              </span>
+            </div>
+          </motion.div>
+
+        </div>
+      </section>
+
       {/* Section 8: What I'd Improve Next (Sticky Note Style) */}
       <section className="max-w-2xl mx-auto px-6 py-20 relative">
         

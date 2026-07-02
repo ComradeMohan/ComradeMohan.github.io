@@ -159,6 +159,8 @@ const Navbar = () => {
             <span className="text-foreground">MOHAN</span>
           </a>
 
+
+
           <div className="hidden md:flex items-center gap-5">
             {navLinks.map((link) => {
               const active = isLinkActive(link.href);

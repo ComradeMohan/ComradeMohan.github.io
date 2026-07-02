@@ -87,6 +87,7 @@
 @layer base {
   * {
     @apply border-border;
+    -webkit-tap-highlight-color: transparent;
   }
 
   ::selection {
@@ -150,14 +151,33 @@
   animation: marquee 30s linear infinite;
 }
 
-/* Hide scrollbar completely to create a clean native-app feel */
+/* Sleek custom glassmorphic scrollbar for premium desktop styling */
 ::-webkit-scrollbar {
-  display: none;
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary) / 0.18);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.5);
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 
 * {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--primary) / 0.18) transparent;
 }
 
 /* Doodle active vibration keyframes and classes */

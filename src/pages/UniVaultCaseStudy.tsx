@@ -1369,6 +1369,113 @@ export default function UniVaultCaseStudy() {
         </div>
       </section>
 
+      {/* Section: Technical Challenges & Solutions */}
+      <section className="max-w-6xl mx-auto px-6 py-12 relative z-10">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 font-grotesk relative inline-block">
+            Technical Challenges & Solutions
+            <HandDrawnUnderline />
+          </h2>
+          <p className="text-slate-500 text-sm mt-3 max-w-xl mx-auto font-medium font-outfit">
+            How I addressed key cryptographic bottlenecks, database concurrency issues, and offline storage limitations.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          
+          {/* Card 1: Key Derivation */}
+          <motion.div 
+            className="bg-white p-6 rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col justify-between relative"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-[9px] font-bold px-2 py-0.5 bg-red-50 text-red-600 border border-red-150 rounded-full font-grotesk uppercase tracking-wider">
+                  Security Bottleneck
+                </span>
+                <span className="text-lg">🔐</span>
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 font-grotesk mb-2">Cryptographic Key Derivation</h3>
+              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit">
+                <strong>The Challenge:</strong> Short user-entered passwords are vulnerable to dictionary attacks and cannot be used directly as safe encryption keys.
+              </p>
+              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit mt-2">
+                <strong>The Solution:</strong> Implemented a PBKDF2 (Password-Based Key Derivation Function 2) pipeline. The app derives a 256-bit key by hashing passwords with a 128-bit random salt over 10,000 HMAC-SHA-256 iterations before passing it to the AES-256 GCM cipher.
+              </p>
+            </div>
+            <div className="mt-6 border-t border-dashed border-slate-100 pt-3">
+              <span className="font-handwritten text-[#b45309] text-lg leading-tight block transform -rotate-1 font-bold">
+                zero plain-text storage! 🛡️
+              </span>
+            </div>
+          </motion.div>
+
+          {/* Card 2: Database Locking */}
+          <motion.div 
+            className="bg-white p-6 rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col justify-between relative"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1, duration: 0.5 }}
+          >
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-[9px] font-bold px-2 py-0.5 bg-red-50 text-red-600 border border-red-150 rounded-full font-grotesk uppercase tracking-wider">
+                  Concurrency Issue
+                </span>
+                <span className="text-lg">🔀</span>
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 font-grotesk mb-2">Database Locking & Threading</h3>
+              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit">
+                <strong>The Challenge:</strong> Running heavy file parsing and crypto updates on the main thread causes UI stuttering (ANR warnings), while concurrent async writes cause SQLite lock collisions.
+              </p>
+              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit mt-2">
+                <strong>The Solution:</strong> Built a Coroutine-backed Room Database pipeline. All database transactions are restricted to a single-threaded background execution pool (`Dispatchers.IO` mediated by a Mutex semaphore), avoiding write collisions.
+              </p>
+            </div>
+            <div className="mt-6 border-t border-dashed border-slate-100 pt-3">
+              <span className="font-handwritten text-[#b45309] text-lg leading-tight block transform rotate-1 font-bold">
+                smooth 60 FPS UI rendering! ⚡
+              </span>
+            </div>
+          </motion.div>
+
+          {/* Card 3: Memory Leaks */}
+          <motion.div 
+            className="bg-white p-6 rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col justify-between relative"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+          >
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-[9px] font-bold px-2 py-0.5 bg-red-50 text-red-600 border border-red-150 rounded-full font-grotesk uppercase tracking-wider">
+                  Resource Constraint
+                </span>
+                <span className="text-lg">💾</span>
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 font-grotesk mb-2">Offline Document Caching</h3>
+              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit">
+                <strong>The Challenge:</strong> Caching large academic syllabus and question bank PDF files directly in Android system RAM causes memory leaks and device-wide crash-loops.
+              </p>
+              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit mt-2">
+                <strong>The Solution:</strong> Designed a chunked local storage stream. PDFs are downloaded in background chunks, saved directly to the device's isolated storage directory (`context.cacheDir`), and indexed in a lightweight SQLite metadata manifest.
+              </p>
+            </div>
+            <div className="mt-6 border-t border-dashed border-slate-100 pt-3">
+              <span className="font-handwritten text-[#b45309] text-lg leading-tight block transform -rotate-1 font-bold">
+                near-zero memory leaks! 🗃️
+              </span>
+            </div>
+          </motion.div>
+
+        </div>
+      </section>
+
       {/* Section 8: What I'd Improve Next (Sticky Note Style) */}
       <section className="max-w-2xl mx-auto px-6 py-20 relative">
         
