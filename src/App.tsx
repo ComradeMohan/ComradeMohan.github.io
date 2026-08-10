@@ -6,14 +6,18 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation, useNavigationType } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Index from "./pages/Index";
-import SaveethaHubCaseStudy from "./pages/SaveethaHubCaseStudy";
-import UniVaultCaseStudy from "./pages/UniVaultCaseStudy";
-import NotFound from "./pages/NotFound";
-import DeveloperProfile from "./pages/DeveloperProfile";
-import About from "./pages/About";
-import Blog from "./pages/Blog";
-import BlogPost from "./pages/BlogPost";
 import CommandMenu from "./components/CommandMenu";
+
+// Route-level code splitting: the homepage (Index) is eager since it's the
+// entry point for almost every visitor, but the case studies, blog, and
+// secondary profile pages are only fetched when someone actually navigates there.
+const SaveethaHubCaseStudy = lazy(() => import("./pages/SaveethaHubCaseStudy"));
+const UniVaultCaseStudy = lazy(() => import("./pages/UniVaultCaseStudy"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const DeveloperProfile = lazy(() => import("./pages/DeveloperProfile"));
+const About = lazy(() => import("./pages/About"));
+const Blog = lazy(() => import("./pages/Blog"));
+const BlogPost = lazy(() => import("./pages/BlogPost"));
 
 const queryClient = new QueryClient();
 
@@ -62,10 +66,8 @@ const AnimatedRoutes = () => {
       <Route path="/" element={<PageWrapper><Index /></PageWrapper>} />
       <Route path="/saveethahub" element={<PageWrapper><SaveethaHubCaseStudy /></PageWrapper>} />
       <Route path="/case-study/saveethahub" element={<PageWrapper><SaveethaHubCaseStudy /></PageWrapper>} />
-      <Route path="/case study/saveethahub" element={<PageWrapper><SaveethaHubCaseStudy /></PageWrapper>} />
       <Route path="/univault" element={<PageWrapper><UniVaultCaseStudy /></PageWrapper>} />
       <Route path="/case-study/univault" element={<PageWrapper><UniVaultCaseStudy /></PageWrapper>} />
-      <Route path="/case study/univault" element={<PageWrapper><UniVaultCaseStudy /></PageWrapper>} />
       <Route path="/developer" element={<PageWrapper><DeveloperProfile /></PageWrapper>} />
       <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
       <Route path="/blog" element={<PageWrapper><Blog /></PageWrapper>} />

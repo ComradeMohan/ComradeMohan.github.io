@@ -42,9 +42,9 @@ const BlogPost = () => {
 
   if (!article) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center justify-center font-outfit p-4">
+      <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center font-outfit p-4">
         <h1 className="text-3xl font-extrabold text-primary mb-4">Post Not Found</h1>
-        <p className="text-gray-400 mb-8 font-grotesk">The article you are looking for does not exist or has been moved.</p>
+        <p className="text-muted-foreground mb-8 font-grotesk">The article you are looking for does not exist or has been moved.</p>
         <Button asChild className="bg-primary hover:bg-primary/80">
           <Link to="/blog">Return to Blog</Link>
         </Button>
@@ -57,21 +57,21 @@ const BlogPost = () => {
   headers.forEach((h) => {
     // Replace the first occurrence of <h2>Header text</h2> with <h2 id="header-id">Header text</h2>
     const searchStr = `<h2>${h.text}</h2>`;
-    const replaceStr = `<h2 id="${h.id}" class="text-2xl font-bold text-white mt-10 mb-4 font-outfit border-b border-white/5 pb-2 scroll-mt-24">${h.text}</h2>`;
+    const replaceStr = `<h2 id="${h.id}" class="text-2xl font-bold text-foreground mt-10 mb-4 font-outfit border-b border-border pb-2 scroll-mt-24">${h.text}</h2>`;
     modifiedContent = modifiedContent.replace(searchStr, replaceStr);
   });
 
   // Inject class styling into code blocks, tables, lists, and paragraphs in article content
   modifiedContent = modifiedContent
-    .replace(/<pre><code>/g, '<pre class="bg-black/45 border border-white/5 p-4 rounded-xl font-mono text-sm overflow-x-auto text-emerald-400/90 my-6 shadow-inner"><code class="block">')
+    .replace(/<pre><code>/g, '<pre class="bg-muted border border-border p-4 rounded-xl font-mono text-sm overflow-x-auto text-primary my-6 shadow-inner"><code class="block">')
     .replace(/<\/code><\/pre>/g, '</code></pre>')
-    .replace(/<p>/g, '<p class="text-gray-300 font-grotesk leading-relaxed text-md mb-6">')
-    .replace(/<ul>/g, '<ul class="list-disc pl-6 space-y-2 mb-6 font-grotesk text-gray-300">')
+    .replace(/<p>/g, '<p class="text-muted-foreground font-grotesk leading-relaxed text-md mb-6">')
+    .replace(/<ul>/g, '<ul class="list-disc pl-6 space-y-2 mb-6 font-grotesk text-muted-foreground">')
     .replace(/<li>/g, '<li class="leading-relaxed">')
-    .replace(/<h3>/g, '<h3 class="text-xl font-bold text-white mt-8 mb-3 font-outfit">')
-    .replace(/<table>/g, '<table class="w-full border-collapse border border-white/10 my-6 font-grotesk text-sm">')
-    .replace(/<th>/g, '<th class="border border-white/10 bg-white/5 p-3 text-left font-semibold text-white">')
-    .replace(/<td>/g, '<td class="border border-white/10 p-3 text-gray-300">');
+    .replace(/<h3>/g, '<h3 class="text-xl font-bold text-foreground mt-8 mb-3 font-outfit">')
+    .replace(/<table>/g, '<table class="w-full border-collapse border border-border my-6 font-grotesk text-sm">')
+    .replace(/<th>/g, '<th class="border border-border bg-muted p-3 text-left font-semibold text-foreground">')
+    .replace(/<td>/g, '<td class="border border-border p-3 text-muted-foreground">');
 
   // Breadcrumb schema
   const breadcrumbSchema = {

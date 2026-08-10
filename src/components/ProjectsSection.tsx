@@ -81,7 +81,7 @@ const projects = [
     icon: Camera,
     iconColor: "text-primary",
     iconBg: "bg-primary/10",
-    isFeatured: true,
+    isFeatured: false,
     techStack: [
       { name: "Python", icon: "🐍" },
       { name: "OpenCV", icon: "📷" },
@@ -116,7 +116,7 @@ const projects = [
     icon: Users,
     iconColor: "text-orange-500",
     iconBg: "bg-orange-500/10",
-    isFeatured: false,
+    isFeatured: true,
     liveBadges: [
       { text: "Live Project", color: "bg-green-500/10 border-green-500/20 text-green-500" },
       { text: "Web Platform", color: "bg-blue-500/10 border-blue-500/20 text-blue-500" }

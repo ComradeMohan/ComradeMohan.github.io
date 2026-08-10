@@ -120,7 +120,7 @@ const AboutSection = () => {
 
             {/* Link to Full Standalone About Biography Page */}
             <div className="pt-2">
-              <Button asChild variant="outline" className="rounded-xl border-primary/20 hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 font-grotesk group">
+              <Button asChild className="rounded-xl border border-primary/30 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-grotesk font-semibold group shadow-sm">
                 <a href="/about">
                   Read Full Biography & Stats 
                   <span className="inline-block transition-transform duration-300 group-hover:translate-x-1 ml-1.5">→</span>

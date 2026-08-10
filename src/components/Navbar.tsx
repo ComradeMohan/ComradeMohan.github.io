@@ -154,7 +154,11 @@ const Navbar = () => {
         />
 
         <div className="relative flex items-center justify-between h-14">
-          <a href="#home" className="font-outfit text-xl font-extrabold tracking-wider">
+          <a 
+            href="/#home" 
+            onClick={(e) => handleNavLinkClick(e, "/#home")}
+            className="font-outfit text-xl font-extrabold tracking-wider cursor-pointer"
+          >
             <span className="text-primary drop-shadow-[0_0_8px_hsl(var(--primary)/0.4)]">COMRADE</span>
             <span className="text-foreground">MOHAN</span>
           </a>
