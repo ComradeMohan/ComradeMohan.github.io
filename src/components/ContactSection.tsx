@@ -1038,7 +1038,7 @@ const ContactSection = () => {
                           disabled={isSubmitting || isUndoPending}
                           required
                           spellCheck={false}
-                          className="w-full bg-transparent border-b border-border/80 pb-2 pt-1 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-orange-500 disabled:opacity-60 transition-colors font-grotesk selection:bg-orange-500 selection:text-white"
+                          className="w-full bg-transparent border-b border-border/80 pb-2 pt-1 text-sm text-foreground placeholder:text-foreground/30 placeholder:opacity-40 focus:outline-none focus:border-orange-500 disabled:opacity-60 transition-colors font-grotesk selection:bg-orange-500 selection:text-white"
                         />
                         <motion.span
                           animate={{ scale: focusedField === "name" || isNameValid ? 1.3 : 1 }}
@@ -1086,7 +1086,7 @@ const ContactSection = () => {
                           disabled={isSubmitting || isUndoPending}
                           required
                           spellCheck={false}
-                          className="w-full bg-transparent border-b border-border/80 pb-2 pt-1 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-orange-500 disabled:opacity-60 transition-colors font-grotesk selection:bg-orange-500 selection:text-white"
+                          className="w-full bg-transparent border-b border-border/80 pb-2 pt-1 text-sm text-foreground placeholder:text-foreground/30 placeholder:opacity-40 focus:outline-none focus:border-orange-500 disabled:opacity-60 transition-colors font-grotesk selection:bg-orange-500 selection:text-white"
                         />
                         <motion.span
                           animate={{ scale: focusedField === "email" || isEmailValid ? 1.3 : 1 }}
@@ -1134,7 +1134,7 @@ const ContactSection = () => {
                           disabled={isSubmitting || isUndoPending}
                           required
                           spellCheck={false}
-                          className="w-full bg-transparent border-b border-border/80 pb-2 pt-1 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-orange-500 disabled:opacity-60 transition-colors font-grotesk selection:bg-orange-500 selection:text-white"
+                          className="w-full bg-transparent border-b border-border/80 pb-2 pt-1 text-sm text-foreground placeholder:text-foreground/30 placeholder:opacity-40 focus:outline-none focus:border-orange-500 disabled:opacity-60 transition-colors font-grotesk selection:bg-orange-500 selection:text-white"
                         />
                         <motion.span
                           animate={{ scale: focusedField === "subject" || isSubjectValid ? 1.3 : 1 }}
@@ -1182,7 +1182,7 @@ const ContactSection = () => {
                           required
                           spellCheck={false}
                           rows={3}
-                          className="w-full bg-transparent border-b border-border/80 pb-2 pt-1 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-orange-500 disabled:opacity-60 transition-colors font-grotesk resize-none selection:bg-orange-500 selection:text-white"
+                          className="w-full bg-transparent border-b border-border/80 pb-2 pt-1 text-sm text-foreground placeholder:text-foreground/30 placeholder:opacity-40 focus:outline-none focus:border-orange-500 disabled:opacity-60 transition-colors font-grotesk resize-none selection:bg-orange-500 selection:text-white"
                         />
                         <motion.span
                           animate={{ scale: focusedField === "message" || isMessageValid ? 1.3 : 1 }}
