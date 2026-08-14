@@ -39,7 +39,7 @@ const focusItems = [
 
 const AboutSection = () => {
   return (
-    <section id="about" className="py-24 relative overflow-hidden">
+    <section id="about" className="pb-12 sm:pb-16 scroll-mt-20 md:scroll-mt-24 relative overflow-hidden">
       {/* Subtle background glow */}
       <div className="absolute top-1/2 left-0 w-72 h-72 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
 
@@ -49,7 +49,7 @@ const AboutSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-20"
+          className="text-center mb-10 sm:mb-12"
         >
           <h2 className="text-4xl font-extrabold mb-3 font-outfit">
             About <span className="text-primary">Me</span>
@@ -75,30 +75,30 @@ const AboutSection = () => {
               </h3>
 
               <p className="text-muted-foreground leading-relaxed font-grotesk">
-  Final-year Computer Science and Engineering student at Saveetha School of
-  Engineering (SIMATS), Chennai, with a{" "}
-  <span className="text-primary font-medium">CGPA of 8.61</span>. My focus
-  is on building functional, real-world software rather than isolated
-  academic exercises.
-</p>
-<p className="text-muted-foreground leading-relaxed font-grotesk">
-  I have independently designed and built two complete products:{" "}
-  <span className="text-primary font-medium">SaveethaHub</span>, an academic
-  platform built with React, Supabase, and Firebase that integrates AI
-  features for students, and{" "}
-  <span className="text-primary font-medium">UniVault</span>, an Android
-  exam-preparation app published on the Google Play Store. Both were built
-  from initial concept through deployment.
-</p>
-<p className="text-muted-foreground leading-relaxed font-grotesk">
-  I hold an{" "}
-  <span className="text-primary font-medium">
-    Oracle Certified Professional: Java SE 17 Developer
-  </span>{" "}
-  certification, and I continue to strengthen my foundation in data
-  structures, algorithms, and full-stack development as I prepare to take
-  on a software engineering role.
-</p>
+                Final-year Computer Science and Engineering student at Saveetha School of
+                Engineering (SIMATS), Chennai, with a{" "}
+                <span className="text-primary font-medium">CGPA of 8.61</span>. My focus
+                is on building functional, real-world software rather than isolated
+                academic exercises.
+              </p>
+              <p className="text-muted-foreground leading-relaxed font-grotesk">
+                I have independently designed and built two complete products:{" "}
+                <span className="text-primary font-medium">SaveethaHub</span>, an academic
+                platform built with React, Supabase, and Firebase that integrates AI
+                features for students, and{" "}
+                <span className="text-primary font-medium">UniVault</span>, an Android
+                exam-preparation app published on the Google Play Store. Both were built
+                from initial concept through deployment.
+              </p>
+              <p className="text-muted-foreground leading-relaxed font-grotesk">
+                I hold an{" "}
+                <span className="text-primary font-medium">
+                  Oracle Certified Professional: Java SE 17 Developer
+                </span>{" "}
+                certification, and I continue to strengthen my foundation in data
+                structures, algorithms, and full-stack development as I prepare to take
+                on a software engineering role.
+              </p>
             </div>
 
             {/* Core Interests */}
@@ -122,7 +122,7 @@ const AboutSection = () => {
             <div className="pt-2">
               <Button asChild className="rounded-xl border border-primary/30 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-grotesk font-semibold group shadow-sm">
                 <a href="/about">
-                  Read Full Biography & Stats 
+                  Read Full Biography & Stats
                   <span className="inline-block transition-transform duration-300 group-hover:translate-x-1 ml-1.5">→</span>
                 </a>
               </Button>
@@ -155,7 +155,7 @@ const AboutSection = () => {
             className="space-y-8"
           >
             <h3 className="text-2xl font-bold font-outfit">Education</h3>
-            
+
             <div className="relative pl-6 border-l-2 border-primary/20 space-y-12">
               {education.map((edu, idx) => (
                 <div key={idx} className="relative">
@@ -163,22 +163,22 @@ const AboutSection = () => {
                   <span className="absolute -left-[31px] top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-background border-2 border-primary">
                     <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
                   </span>
-                  
+
                   {/* Card Content */}
                   <div className="p-6 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-300 shadow-lg relative group overflow-hidden">
                     <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-primary/5 to-accent/5" />
-                    
+
                     <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary mb-3 font-jetbrains">
                       {edu.duration}
                     </span>
-                    
+
                     <h4 className="text-xl font-bold text-foreground font-outfit mb-1 group-hover:text-primary transition-colors">
                       {edu.degree}
                     </h4>
                     <p className="text-md font-medium text-foreground/80 font-grotesk mb-2">
                       {edu.school}
                     </p>
-                    
+
                     <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground mt-4 border-t border-border pt-4">
                       <span className="flex items-center gap-1.5 font-grotesk">
                         <MapPin className="w-4 h-4 text-primary" /> {edu.location}

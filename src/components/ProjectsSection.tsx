@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
+import {
   ExternalLink, Github, Camera, Users, Database, Truck, Activity,
   FileText, MessageSquare, Share2, Calculator, Calendar, Lock, TrendingUp,
   BookOpen, Smartphone, ShieldCheck, Crosshair, GitBranch, Coins, Brain, FileDown,
@@ -367,14 +367,14 @@ const ProjectDetailContent = ({ project }: { project: any }) => {
             <p className="text-xs sm:text-sm text-muted-foreground font-grotesk">{project.desc}</p>
           </div>
         </div>
-        
+
         {/* Platform Badges */}
         {!project.pptLink && project.platformBadges && (
           <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto overflow-x-auto sm:overflow-visible pb-1 sm:pb-0">
             {project.platformBadges?.map((badge) => {
               const BadgeIcon = badge.icon === "globe" ? ExternalLink : Smartphone;
               return (
-                <a 
+                <a
                   key={badge.text}
                   href={badge.url}
                   target="_blank"
@@ -513,7 +513,7 @@ const ProjectDetailContent = ({ project }: { project: any }) => {
 
           {/* Right Phone Mockup */}
           <div className="md:col-span-4 flex justify-center pt-2">
-            <div 
+            <div
               className="relative w-[180px] aspect-[474/1024] rounded-[2.2rem] border-[3.5px] border-slate-800 bg-slate-950 p-1 shadow-2xl overflow-hidden group cursor-pointer"
               onMouseEnter={() => {
                 if (project.videoMockup) {
@@ -535,13 +535,13 @@ const ProjectDetailContent = ({ project }: { project: any }) => {
               </div>
               {/* Screen Image or Video */}
               <div className="w-full h-full rounded-[1.9rem] overflow-hidden bg-white relative">
-                <ProgressiveImage 
-                  src={project.mobileMockup} 
-                  alt="App Mockup" 
+                <ProgressiveImage
+                  src={project.mobileMockup}
+                  alt="App Mockup"
                   className={`w-full h-full object-cover transition-opacity duration-300 ${isHoveringVideo ? 'opacity-0' : 'opacity-100'}`}
                   containerClassName={`w-full h-full absolute inset-0 ${isHoveringVideo ? 'z-0' : 'z-10'}`}
                 />
-                
+
                 {project.videoMockup && isHoveringVideo && (
                   <div className="absolute inset-0 w-full h-full bg-slate-950 flex items-center justify-center z-20">
                     {!isVideoLoaded && (
@@ -549,11 +549,11 @@ const ProjectDetailContent = ({ project }: { project: any }) => {
                         <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
                       </div>
                     )}
-                    <video 
-                      src={project.videoMockup} 
-                      autoPlay 
-                      loop 
-                      muted 
+                    <video
+                      src={project.videoMockup}
+                      autoPlay
+                      loop
+                      muted
                       playsInline
                       onLoadedData={() => setIsVideoLoaded(true)}
                       className={`w-full h-full object-cover transition-opacity duration-300 ${isVideoLoaded ? 'opacity-100' : 'opacity-0'}`}
@@ -591,7 +591,7 @@ const ProjectDetailContent = ({ project }: { project: any }) => {
               <h4 className="text-xs font-semibold text-foreground flex items-center gap-1.5 uppercase tracking-wider mb-4 font-outfit">
                 <TrendingUp className="w-4 h-4 text-primary" /> Live Performance
               </h4>
-              
+
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 {project.stats?.map((stat) => (
                   <div key={stat.label} className="p-3 rounded-lg bg-secondary/80 dark:bg-black/30 border border-border/30 flex flex-col justify-between h-24">
@@ -610,7 +610,7 @@ const ProjectDetailContent = ({ project }: { project: any }) => {
                   </div>
                 ))}
               </div>
-              
+
               {/* <div className="text-[9px] text-muted-foreground mt-4 flex items-center gap-1 border-t border-border/20 pt-3">
                 🛡️ Analytics Data (Google Analytics & Search Console)
               </div> */}
@@ -662,12 +662,12 @@ const ProjectDetailContent = ({ project }: { project: any }) => {
                         <span>{res.value}%</span>
                       </div>
                       <div className="w-full h-1.5 rounded-full bg-black/40 overflow-hidden">
-                        <motion.div 
+                        <motion.div
                           initial={{ width: 0 }}
                           whileInView={{ width: `${res.value}%` }}
                           viewport={{ once: true }}
                           transition={{ duration: 1, ease: "easeOut" }}
-                          className={`h-full ${res.color}`} 
+                          className={`h-full ${res.color}`}
                         />
                       </div>
                     </div>
@@ -810,8 +810,8 @@ const ProjectDetailContent = ({ project }: { project: any }) => {
 
         {/* Case Study Link */}
         {!project.pptLink && project.caseStudyLink && (
-          <Link 
-            to={project.caseStudyLink} 
+          <Link
+            to={project.caseStudyLink}
             onClick={() => trackEvent("click", "case_study", project.title)}
             className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2"
           >
@@ -908,14 +908,14 @@ const ProjectsSection = () => {
   }, []);
 
   return (
-    <section id="projects" className="py-24">
+    <section id="projects" className="pb-12 sm:pb-16 scroll-mt-20 md:scroll-mt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-12"
         >
           <h2 className="text-4xl font-extrabold mb-4 font-outfit">
             My <span className="text-primary">Projects</span>
@@ -972,7 +972,7 @@ const ProjectsSection = () => {
                       )}
                     </div>
                     <p className="text-sm text-muted-foreground line-clamp-3 font-grotesk mb-4">{project.desc}</p>
-                    
+
                     {/* Tech Stack for mobile */}
                     <div className="flex flex-wrap gap-1.5 mb-6">
                       {project.techStack.map((tech) => (
@@ -1002,8 +1002,8 @@ const ProjectsSection = () => {
                     ) : (
                       <>
                         {project.caseStudyLink && (
-                          <Link 
-                            to={project.caseStudyLink} 
+                          <Link
+                            to={project.caseStudyLink}
                             onClick={() => trackEvent("click", "case_study", project.title)}
                             className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2"
                           >
@@ -1070,11 +1070,10 @@ const ProjectsSection = () => {
                   transition={{ delay: i * 0.1 }}
                 >
                   <SpotlightCard
-                    className={`rounded-2xl border cursor-pointer transition-all duration-300 snap-start ${
-                      isActive
-                        ? "border-primary bg-primary/5"
-                        : "border-border hover:border-primary/30 bg-card"
-                    }`}
+                    className={`rounded-2xl border cursor-pointer transition-all duration-300 snap-start ${isActive
+                      ? "border-primary bg-primary/5"
+                      : "border-border hover:border-primary/30 bg-card"
+                      }`}
                     innerClassName={`p-5 flex items-center gap-4 w-full h-full ${isActive ? 'pl-8' : ''}`}
                     onClick={() => {
                       setActiveIndex(i);
@@ -1082,28 +1081,28 @@ const ProjectsSection = () => {
                     }}
                   >
                     {/* Left border active indicator dot */}
-                  {isActive && (
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-primary animate-pulse" />
-                  )}
-
-                  {/* Icon container */}
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 overflow-hidden ${project.logoImg ? "p-1.5" : project.iconBg}`}>
-                    {project.logoImg === "ethereum" ? (
-                      <EthereumLogo className="w-full h-full text-indigo-400" />
-                    ) : project.logoImg ? (
-                      <img src={project.logoImg} alt={project.title} className="w-full h-full object-contain" />
-                    ) : (
-                      <ProjectIcon className={`w-6 h-6 ${project.iconColor}`} />
+                    {isActive && (
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-primary animate-pulse" />
                     )}
-                  </div>
 
-                  <div>
-                    <h3 className="text-lg font-bold text-foreground mb-1 font-outfit">{project.title}</h3>
-                    <p className="text-xs text-muted-foreground line-clamp-2 font-grotesk">{project.desc}</p>
-                  </div>
-                </SpotlightCard>
-              </motion.div>
-            );
+                    {/* Icon container */}
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 overflow-hidden ${project.logoImg ? "p-1.5" : project.iconBg}`}>
+                      {project.logoImg === "ethereum" ? (
+                        <EthereumLogo className="w-full h-full text-indigo-400" />
+                      ) : project.logoImg ? (
+                        <img src={project.logoImg} alt={project.title} className="w-full h-full object-contain" />
+                      ) : (
+                        <ProjectIcon className={`w-6 h-6 ${project.iconColor}`} />
+                      )}
+                    </div>
+
+                    <div>
+                      <h3 className="text-lg font-bold text-foreground mb-1 font-outfit">{project.title}</h3>
+                      <p className="text-xs text-muted-foreground line-clamp-2 font-grotesk">{project.desc}</p>
+                    </div>
+                  </SpotlightCard>
+                </motion.div>
+              );
             })}
           </div>
 
@@ -1124,30 +1123,30 @@ const ProjectsSection = () => {
             </motion.div>
           </div>
         </div>
-        
+
         {/* Mobile Popup Modal */}
         {typeof document !== "undefined" && createPortal(
           <AnimatePresence>
             {isMobileOpen && (
               <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 lg:hidden">
                 {/* Backdrop */}
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   className="absolute inset-0 bg-black/80 backdrop-blur-md"
                   onClick={() => setIsMobileOpen(false)}
                 />
-                
+
                 {/* Modal Card */}
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, scale: 0.95, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: 20 }}
                   className={`relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl bg-card bg-gradient-to-br ${projects[activeIndex].color} border border-border p-6 shadow-2xl z-10 flex flex-col justify-between`}
                 >
                   {/* Close Button */}
-                  <button 
+                  <button
                     onClick={() => setIsMobileOpen(false)}
                     className="absolute top-4 right-4 p-2 rounded-full bg-foreground/5 hover:bg-foreground/10 border border-border/40 text-foreground transition-all duration-200 z-50"
                     aria-label="Close modal"

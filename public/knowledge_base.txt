@@ -1,0 +1,203 @@
+================================================================================
+                    MOHAN REDDY — COMPLETE KNOWLEDGE BASE
+                     Full-Stack Developer & Software Engineer
+================================================================================
+Last Updated: August 2026
+Source: Portfolio & Verified Professional Records (https://mohanreddy.me)
+
+--------------------------------------------------------------------------------
+1. PERSONAL & CONTACT INFORMATION
+--------------------------------------------------------------------------------
+• Full Name: M Mohan Reddy (Mohan Reddy)
+• Professional Title: Full Stack Developer | Software Engineer | Android / Product Developer
+• Email Address: madhiremohanreddy@gmail.com
+• Portfolio Website: https://mohanreddy.me/
+• GitHub Profile: https://github.com/ComradeMohan (username: ComradeMohan)
+• LinkedIn Profile: https://www.linkedin.com/in/mmohanreddy/
+• Instagram: https://www.instagram.com/comrade_mohan666/
+• Location: Chennai, Tamil Nadu, India (Hometown: Guntur, Andhra Pradesh, India)
+• Professional Resume: https://mohanreddy.me/mohan_resume_.pdf
+• Availability: Open to Full-Time Software Engineering Roles, Product Development, and High-Impact Internships (Graduating 2026).
+
+--------------------------------------------------------------------------------
+2. PROFESSIONAL SUMMARY
+--------------------------------------------------------------------------------
+Product-minded Full-Stack Software Engineer and Oracle Certified Professional (Java SE 17) with a proven track record of shipping end-to-end, high-traffic consumer and academic software products. 
+
+Builder of:
+1. SaveethaHub — Academic platform serving 3,800+ monthly active users and 24,700+ organic Google Search clicks.
+2. UniVault — Offline-first Android exam preparation platform published on the Google Play Store with 2,400+ active students, 10,000+ study materials, and 5,000+ completed mock tests.
+
+Strong technical expertise across Java, TypeScript, React, Next.js, Kotlin (Android SDK), Node.js, SQL, and Cloud Infrastructure (OCI/AWS). Deeply focused on system performance, clean architecture, responsive UI/UX, database indexing, and local cryptographic security (AES-256 / PBKDF2).
+
+--------------------------------------------------------------------------------
+3. EDUCATION
+--------------------------------------------------------------------------------
+• Bachelor of Engineering (B.E.) in Computer Science & Engineering
+  - Institution: Saveetha School of Engineering (SIMATS), Chennai, Tamil Nadu
+  - Duration: 2022 – 2026 (Graduating Batch)
+  - Current Cumulative GPA: 8.61 / 10.0
+  - Key Coursework: Data Structures & Algorithms, Object-Oriented Programming (Java/C++), Database Management Systems (DBMS), Operating Systems, Computer Networks, Software Engineering, Cloud Computing, Machine Learning.
+
+• Intermediate (MPC + Computer Science)
+  - Institution: Loyola Public School, Guntur, Andhra Pradesh
+  - Duration: 2020 – 2022
+  - Score / Percentage: 81.6%
+
+--------------------------------------------------------------------------------
+4. INDUSTRY CERTIFICATIONS & CREDENTIALS
+--------------------------------------------------------------------------------
+• Oracle Certified Professional: Java SE 17 Developer (OCP)
+  - Issuing Organization: Oracle University
+  - Credential ID: 102029574OCPJSE17
+  - Issue Date: July 14, 2025
+  - Verified Skills: Core Java, Advanced OOP, Java Collections Framework, Multithreading & Concurrency, Memory Management, Sealed Classes, Pattern Matching, Stream API, Exception Handling.
+
+• Oracle Cloud Infrastructure (OCI) Certified
+  - Issuing Organization: Oracle
+  - Issue Date: August 3, 2024
+  - Verified Skills: OCI Compute, Cloud Architecture, Virtual Cloud Networks (VCN), Identity & Access Management (IAM), Block & Object Storage.
+
+• Frontend Developer (React)
+  - Issuing Organization: HackerRank
+  - Credential ID: d0ed9abff6e9
+  - Issue Date: March 22, 2025
+  - Verified Skills: React.js, JavaScript (ES6+), Component Architecture, Hooks, State Management, DOM Performance.
+
+• Programming in Java
+  - Issuing Organization: NPTEL (National Programme on Technology Enhanced Learning)
+  - Date: 2023
+  - Verified Skills: Java Fundamentals, Inheritance, Polymorphism, Interfaces, Package Architecture, File I/O.
+
+• Software Engineering Job Simulation
+  - Issuing Organization: JPMorgan Chase & Co.
+  - Issue Date: July 22, 2024
+  - Verified Skills: Financial Data Visualizations, Perspective Engine, Interface Optimization, Agile SDLC.
+
+• Python for Data Science
+  - Issuing Organization: Kaggle
+  - Issue Date: August 19, 2023
+  - Verified Skills: Python Data Structures, Pandas, NumPy, Data Analysis, Scripting.
+
+• Data Analytics
+  - Issuing Organization: Cisco Networking Academy
+  - Date: 2024
+  - Verified Skills: Data Modeling, Statistical Analysis, Query Optimization, Visualization.
+
+--------------------------------------------------------------------------------
+5. TECHNICAL SKILL MATRIX
+--------------------------------------------------------------------------------
+• Core Programming Languages:
+  - Java (Java SE 17 OCP Certified), TypeScript, JavaScript (ES6+), Kotlin, Python, SQL, PHP, C / C++, HTML5, CSS3.
+
+• Frontend Technologies & Frameworks:
+  - React.js, Next.js (App Router & SSR), Vite, Tailwind CSS, Framer Motion, Redux Toolkit, Zustand, Shadcn UI, Responsive Web Design, Web Vitals Optimization.
+
+• Mobile App Development:
+  - Native Android (Kotlin), Android SDK, Jetpack Navigation, Android Architecture Components (MVVM), Room Database, Coroutines & Flow, Play Store Deployment.
+
+• Backend & APIs:
+  - Node.js, Express.js, RESTful API Architecture, GraphQL, Supabase (PostgreSQL), Firebase Auth / Firestore / Cloud Storage, PHP REST APIs, JWT, OAuth 2.0.
+
+• Databases & Caching:
+  - PostgreSQL, MySQL, Room DB (SQLite FTS4), MongoDB, Redis, Firebase Realtime Database, Supabase.
+
+• Cloud, DevOps & Tools:
+  - Oracle Cloud Infrastructure (OCI), Amazon Web Services (AWS), Docker, Git / GitHub, CI/CD Workflows, Linux Server Administration, Vercel, Netlify, Postman, Figma.
+
+• Data Science & Machine Learning:
+  - OpenCV, YOLOv8, XGBoost, Scikit-Learn, Pandas, NumPy, Google Colab.
+
+--------------------------------------------------------------------------------
+6. FLAGSHIP PROJECTS & CASE STUDIES
+--------------------------------------------------------------------------------
+
+[PROJECT 1] SaveethaHub — Campus Academic & Community Web Portal
+----------------------------------------------------------------
+• Live Web Application: https://saveetha-hub.netlify.app/
+• GitHub Repository: https://github.com/ComradeMohan/saveetha-companion
+• Case Study: https://mohanreddy.me/case-study/saveethahub
+• Tech Stack: React, Tailwind CSS, Supabase, Firebase Auth, Vite, Netlify.
+• Real-World Metrics:
+  - 24,700+ Google Search Clicks (High organic traffic)
+  - 3,800+ Monthly Active Users
+  - 1,700+ New Registered Students (28-day cohorts)
+  - 50s Average Active Session Engagement
+• Key Features:
+  - Structured Unit Syllabus Vault: Direct download & preview of academic course notes, lab sheets, and exam blueprints.
+  - Interactive CGPA / GPA Calculator: Instant accurate grading forecasts aligned with university credit formulas.
+  - Community Hub: Real-time student discussion boards with filtered tags and moderation.
+  - Event Feeds: Live campus notifications, club event alerts, and academic deadlines.
+• Architecture & Security:
+  - Decoupled React SPA frontend communicating with Firebase Auth and Supabase PostgreSQL.
+  - Row Level Security (RLS) policies protecting user uploads and profile data.
+
+[PROJECT 2] UniVault — Secure Offline-First Exam Prep Mobile Platform
+---------------------------------------------------------------------
+• Google Play Store App: https://play.google.com/store/apps/details?id=com.simats.univault
+• Web Companion Portal: https://web.univault.live/
+• GitHub Repository: https://github.com/ComradeMohan/192210400pdd
+• Case Study: https://mohanreddy.me/case-study/univault
+• Tech Stack: Kotlin (Android SDK), Next.js, Firebase, PHP, SQL, Room DB.
+• Real-World Metrics:
+  - 2,400+ Enrolled University Students
+  - 10,000+ Structured Academic Study Resources Indexed
+  - 5,000+ Practice Mock Tests Graded
+  - 4.9/5.0 User Rating on Google Play Store
+• Key Features:
+  - Automated Mock Test Grading Engine: Self-grading timed question papers with real-time score feedback and review pointers.
+  - Offline-First Sync: Local SQLite/Room DB caching ensures students can study syllabus PDFs and attempt tests in campus basements and dead WiFi zones.
+  - AES-256 + PBKDF2 Encryption: Zero plaintext file storage; client passwords salted with 128-bit random salt over 10,000 iterations.
+  - Coroutine Thread Safety: Dedicated Mutex semaphores on Dispatchers.IO to eliminate ANR UI stuttering and concurrent database write locks.
+
+[PROJECT 3] Ethereum Fraud Detection Using XGBoost
+--------------------------------------------------
+• Presentation & Paper: https://mohanreddy.me/Ethereum%20Fraud%20Detection%20Using%20XGBoost.pptx
+• GitHub: https://github.com/ComradeMohan
+• Tech Stack: Python, Pandas, Scikit-Learn, XGBoost, Google Colab.
+• Overview:
+  - Designed a machine learning pipeline to detect malicious and fraudulent transaction patterns on the Ethereum blockchain.
+  - Solved severe class-imbalance challenges using SMOTE and feature engineering.
+  - Benchmarked proposed XGBoost model against 4 classification algorithms:
+    * XGBoost (Proposed): 94.0% Accuracy
+    * Decision Tree: 88.5% Accuracy
+    * K-Nearest Neighbors (KNN): 82.0% Accuracy
+    * AdaBoost: 77.1% Accuracy
+    * Random Forest: 72.4% Accuracy
+
+[PROJECT 4] Skylink Deliveries — Logistics Dispatch & Tracking Engine
+---------------------------------------------------------------------
+• Live Web Demo: https://skylinkdeliveries.netlify.app/
+• Tech Stack: React, Mapbox API, Node.js, Express, MongoDB.
+• Overview:
+  - Logistics and fleet routing platform with real-time driver tracking, automated dispatch assignment, and ETA calculation.
+
+[PROJECT 5] Real-Time Object Detection in Python
+------------------------------------------------
+• GitHub: https://github.com/ComradeMohan/CSA0810PythonProgramming/tree/main/Various%20Object%20Identification
+• Tech Stack: Python, OpenCV, YOLOv8 (ultralytics), cvzone.
+• Overview:
+  - Computer vision application performing low-latency multi-class object detection and spatial classification on live camera streams.
+
+--------------------------------------------------------------------------------
+7. PUBLISHED ARTICLES & TECHNICAL WRITING
+--------------------------------------------------------------------------------
+• "Advanced State Management in React 18: Beyond Redux"
+  - In-depth architectural comparison between Redux Toolkit, Zustand, Jotai/Recoil, and Signals for modern React frontend rendering optimization.
+  - Read online: https://mohanreddy.me/blog/react-state-management
+
+• "Building Real-Time Web Apps with Cloud Firestore and React"
+  - Best practices for snapshot listeners, offline data persistence, composite indexing, and Security Rules.
+  - Read online: https://mohanreddy.me/blog/firestore-realtime-react
+
+--------------------------------------------------------------------------------
+8. KEY STRENGTHS & VALUE PROPOSITION
+--------------------------------------------------------------------------------
+1. Full Product Lifecycle Ownership: From raw idea and Figma wireframes to backend architecture, database schemas, frontend UI, automated grading algorithms, and Google Play Store publishing.
+2. Verified Enterprise Coding Standards: Rigorous OOP, memory management, and design patterns backed by the Oracle Certified Professional Java SE 17 certification.
+3. High Performance & Scalability: Proven ability to build applications supporting thousands of daily users with fast response times and clean SEO rankings.
+4. Security & Data Integrity: Experienced in implementing modern security practices (AES-256 encryption, PBKDF2 hashing, JWT/OAuth auth flows, RLS database rules).
+
+================================================================================
+END OF KNOWLEDGE BASE — MOHAN REDDY
+================================================================================

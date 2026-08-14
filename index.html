@@ -24,6 +24,23 @@
   <link rel="dns-prefetch" href="https://alfa-leetcode-api.onrender.com" />
 
   <meta name="theme-color" content="hsl(289, 65%, 10%)" />
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem("theme");
+        if (saved === "light") {
+          document.documentElement.classList.add("light");
+          document.documentElement.classList.remove("dark");
+        } else {
+          document.documentElement.classList.add("dark");
+          document.documentElement.classList.remove("light");
+          if (saved && saved !== "dark") {
+            document.documentElement.classList.add(saved);
+          }
+        }
+      } catch(e) {}
+    })();
+  </script>
   <title>Mohan Reddy | Full Stack Developer | Open to Work</title>
   
   <!-- Technical SEO Metas -->

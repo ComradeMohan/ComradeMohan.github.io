@@ -2,10 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { 
   Github, ArrowLeft, MessageSquare, 
-  BookOpen, Calculator, Calendar, Plus, Trash, Sparkles, Star, Rocket
+  BookOpen, Calculator, Calendar, Plus, Trash, Sparkles, Star, Rocket,
+  Sun, Moon
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import SEO from "@/components/SEO";
+import { useTheme } from "@/hooks/useTheme";
 
 // CountUp Component for animating stats on scroll
 const CountUp = ({ end, duration = 1500, suffix = "" }) => {
@@ -77,15 +79,15 @@ const HandDrawnCircle = () => (
 
 const CurvedDivider = () => (
   <div className="w-full flex justify-center py-12 overflow-hidden">
-    <svg className="w-full max-w-4xl h-8 text-orange-200" viewBox="0 0 1200 40" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeDasharray="6 8">
+    <svg className="w-full max-w-4xl h-8 text-orange-200 dark:text-slate-800" viewBox="0 0 1200 40" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeDasharray="6 8">
       <path d="M 0 20 Q 150 5, 300 20 T 600 20 T 900 20 T 1200 20" />
     </svg>
   </div>
 );
 
 const TornPaperDividerTop = () => (
-  <div className="w-full h-8 bg-orange-100/30 overflow-hidden relative">
-    <svg className="absolute bottom-0 w-full h-8 text-[#FAF6EE] fill-current animate-paper-vibrate" viewBox="0 0 1200 120" preserveAspectRatio="none">
+  <div className="w-full h-8 bg-orange-100/30 dark:bg-slate-900/40 overflow-hidden relative">
+    <svg className="absolute bottom-0 w-full h-8 text-[#FCF9F2] dark:text-[#080d1a] fill-current animate-paper-vibrate transition-colors" viewBox="0 0 1200 120" preserveAspectRatio="none">
       <path d="M0,0 L1200,0 L1200,80 L1170,75 L1140,85 L1110,78 L1080,82 L1050,75 L1020,83 L990,77 L960,81 L930,74 L900,85 L870,78 L840,82 L810,75 L780,83 L750,77 L720,81 L690,74 L660,85 L630,78 L600,82 L570,75 L540,83 L510,77 L480,81 L450,74 L420,85 L390,78 L360,82 L330,75 L300,83 L270,77 L240,81 L210,74 L180,85 L150,78 L120,82 L90,75 L60,83 L30,77 L0,81 Z" />
     </svg>
   </div>
@@ -493,6 +495,7 @@ const verifyFirebaseToken = async (req, res, next) => {
 
 export default function SaveethaHubCaseStudy() {
   const navigate = useNavigate();
+  const { isDark, toggleTheme } = useTheme();
   const [stars, setStars] = useState<number | null>(null);
 
   useEffect(() => {
@@ -636,7 +639,7 @@ export default function SaveethaHubCaseStudy() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FCF9F2] text-slate-800 font-outfit relative selection:bg-[#F05323] selection:text-white pb-24 overflow-x-hidden">
+    <div className="min-h-screen bg-[#FCF9F2] dark:bg-[#080d1a] text-slate-800 dark:text-slate-100 font-outfit relative selection:bg-[#F05323] selection:text-white pb-24 overflow-x-hidden transition-colors duration-300">
       <SEO
         title="SaveethaHub Case Study | Mohan Reddy - Full Stack Developer"
         description="Comprehensive architectural overview of SaveethaHub. Built with React, Supabase, and Firebase, featuring AI course aids for Saveetha School of Engineering students."
@@ -645,12 +648,12 @@ export default function SaveethaHubCaseStudy() {
       />
       
       {/* Background grid texture simulating paper */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px]"></div>
+      <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.08] pointer-events-none bg-[radial-gradient(#1e293b_1px,transparent_1px)] dark:bg-[radial-gradient(#94a3b8_1px,transparent_1px)] [background-size:24px_24px]"></div>
 
       {/* Decorative floating sketch stars/dots */}
-      <div className="absolute top-48 left-10 text-orange-300 font-handwritten text-4xl select-none hidden md:block">✦</div>
-      <div className="absolute top-96 right-12 text-blue-300 font-handwritten text-4xl select-none rotate-12 hidden md:block">★</div>
-      <div className="absolute bottom-[20%] left-8 text-orange-200 font-handwritten text-5xl select-none -rotate-12 hidden md:block">✎</div>
+      <div className="absolute top-48 left-10 text-orange-300 dark:text-orange-500/40 font-handwritten text-4xl select-none hidden md:block">✦</div>
+      <div className="absolute top-96 right-12 text-blue-300 dark:text-blue-500/40 font-handwritten text-4xl select-none rotate-12 hidden md:block">★</div>
+      <div className="absolute bottom-[20%] left-8 text-orange-200 dark:text-orange-500/30 font-handwritten text-5xl select-none -rotate-12 hidden md:block">✎</div>
 
       {/* Top Navigation */}
       <header className="max-w-6xl mx-auto px-6 py-8 flex justify-between items-center relative z-20">
@@ -663,17 +666,24 @@ export default function SaveethaHubCaseStudy() {
               navigate("/#projects");
             }
           }}
-          className="group flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors font-medium bg-transparent border-none p-0 cursor-pointer"
+          className="group flex items-center gap-2 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors font-medium bg-transparent border-none p-0 cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span>Back to Portfolio</span>
         </button>
-        <div className="flex gap-4">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={toggleTheme}
+            aria-label={isDark ? "Switch to Light mode" : "Switch to Dark mode"}
+            className="flex items-center justify-center w-8 h-8 rounded-full border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-300 hover:text-[#F05323] dark:hover:text-[#F05323] hover:bg-orange-50 dark:hover:bg-orange-950/40 transition-all cursor-pointer"
+          >
+            {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
+          </button>
           <a 
             href="https://github.com/ComradeMohan/saveetha-companion" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="flex items-center gap-1.5 px-3 py-1.5 text-slate-500 hover:text-[#F05323] hover:bg-orange-50 rounded-full transition-all border border-slate-200 hover:border-orange-200 text-xs font-semibold"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-slate-500 dark:text-slate-300 hover:text-[#F05323] dark:hover:text-[#F05323] hover:bg-orange-50 dark:hover:bg-orange-950/40 rounded-full transition-all border border-slate-200 dark:border-slate-800 text-xs font-semibold"
           >
             <Github className="w-4 h-4" />
             <Star className="w-3.5 h-3.5 fill-current text-yellow-500" />
@@ -683,7 +693,7 @@ export default function SaveethaHubCaseStudy() {
             href="https://saveetha-hub.netlify.app/" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="flex items-center gap-1.5 px-3 py-1.5 text-slate-500 hover:text-[#F05323] hover:bg-orange-50 rounded-full transition-all border border-slate-200 hover:border-orange-200 text-xs font-semibold"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-slate-500 dark:text-slate-300 hover:text-[#F05323] dark:hover:text-[#F05323] hover:bg-orange-50 dark:hover:bg-orange-950/40 rounded-full transition-all border border-slate-200 dark:border-slate-800 text-xs font-semibold"
           >
             <Rocket className="w-4 h-4 text-[#F05323] animate-pulse" />
             <span>Live Project</span>
@@ -697,7 +707,7 @@ export default function SaveethaHubCaseStudy() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="inline-block px-3 py-1 bg-orange-100 text-[#F05323] text-sm font-semibold rounded-full mb-6 border border-orange-200"
+          className="inline-block px-3 py-1 bg-orange-100 dark:bg-orange-950/50 text-[#F05323] text-sm font-semibold rounded-full mb-6 border border-orange-200 dark:border-orange-900/60"
         >
           Live Project · Web Platform
         </motion.div>
@@ -708,7 +718,7 @@ export default function SaveethaHubCaseStudy() {
           transition={{ duration: 0.6, delay: 0.15 }}
           className="relative inline-block mb-6"
         >
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 font-grotesk select-none relative z-10 px-4">
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white font-grotesk select-none relative z-10 px-4">
             SaveethaHub
           </h1>
           <HandDrawnCircle />
@@ -718,7 +728,7 @@ export default function SaveethaHubCaseStudy() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="text-xl md:text-2xl text-slate-600 max-w-2xl mx-auto font-medium mt-4"
+          className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto font-medium mt-4"
         >
           The centralized academic companion for Saveetha University students.
         </motion.p>
@@ -728,27 +738,27 @@ export default function SaveethaHubCaseStudy() {
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.45 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto mt-12 bg-white/60 backdrop-blur-sm rounded-2xl p-6 border-2 border-dashed border-slate-200 shadow-sm"
+          className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto mt-12 bg-white/60 dark:bg-slate-900/70 backdrop-blur-sm rounded-2xl p-6 border-2 border-dashed border-slate-200 dark:border-slate-800 shadow-sm"
         >
           <div>
-            <span className="text-xs text-slate-400 uppercase tracking-wider block font-bold">Role</span>
-            <span className="font-semibold text-slate-700 text-sm md:text-base">Solo Full Stack Dev</span>
+            <span className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider block font-bold">Role</span>
+            <span className="font-semibold text-slate-700 dark:text-slate-200 text-sm md:text-base">Solo Full Stack Dev</span>
           </div>
           <div>
-            <span className="text-xs text-slate-400 uppercase tracking-wider block font-bold">Timeline</span>
-            <span className="font-semibold text-slate-700 text-sm md:text-base">2023 – Present</span>
+            <span className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider block font-bold">Timeline</span>
+            <span className="font-semibold text-slate-700 dark:text-slate-200 text-sm md:text-base">2023 – Present</span>
           </div>
           <div>
-            <span className="text-xs text-slate-400 uppercase tracking-wider block font-bold">Platform</span>
-            <span className="font-semibold text-slate-700 text-sm md:text-base">Web Application</span>
+            <span className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider block font-bold">Platform</span>
+            <span className="font-semibold text-slate-700 dark:text-slate-200 text-sm md:text-base">Web Application</span>
           </div>
           <div>
-            <span className="text-xs text-slate-400 uppercase tracking-wider block font-bold">GitHub Stars</span>
+            <span className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider block font-bold">GitHub Stars</span>
             <a 
               href="https://github.com/ComradeMohan/saveetha-companion" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 font-semibold text-slate-700 hover:text-[#F05323] transition-colors text-sm md:text-base mt-0.5"
+              className="inline-flex items-center gap-1.5 font-semibold text-slate-700 dark:text-slate-200 hover:text-[#F05323] transition-colors text-sm md:text-base mt-0.5"
             >
               <Star className="w-4 h-4 fill-current text-yellow-500" /> {stars !== null ? stars : "21"} Stars
             </a>
@@ -786,7 +796,7 @@ export default function SaveethaHubCaseStudy() {
       <TornPaperDividerTop />
 
       {/* Section 2: The Story */}
-      <section className="bg-orange-100/30 py-16 border-b border-orange-100">
+      <section className="bg-orange-100/30 dark:bg-slate-900/40 py-16 border-b border-orange-100 dark:border-slate-800">
         <motion.div 
           className="max-w-2xl mx-auto px-6 relative"
           initial={{ opacity: 0, y: 35 }}
@@ -794,13 +804,13 @@ export default function SaveethaHubCaseStudy() {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
         >
-          <div className="absolute -left-12 top-0 text-blue-600 opacity-60 hidden lg:block">
+          <div className="absolute -left-12 top-0 text-blue-600 dark:text-blue-400 opacity-60 hidden lg:block">
             <span className="font-handwritten text-4xl">“</span>
           </div>
           
-          <h2 className="text-2xl font-bold uppercase tracking-wider text-slate-400 mb-6 font-grotesk">The Story</h2>
+          <h2 className="text-2xl font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-6 font-grotesk">The Story</h2>
           
-          <div className="text-lg md:text-xl text-slate-700 leading-relaxed space-y-6 font-medium relative">
+          <div className="text-lg md:text-xl text-slate-700 dark:text-slate-200 leading-relaxed space-y-6 font-medium relative">
             <p>
               SaveethaHub is a centralized web platform built for Saveetha University students to access study resources, collaborate on projects, and stay connected with campus life.
             </p>
@@ -809,7 +819,7 @@ export default function SaveethaHubCaseStudy() {
             </p>
             
             {/* Hand-drawn inline note callout */}
-            <span className="font-handwritten text-blue-600 text-xl block mt-8 border-l-4 border-dashed border-blue-300 pl-4 py-1 rotate-1 max-w-md">
+            <span className="font-handwritten text-blue-600 dark:text-blue-400 text-xl block mt-8 border-l-4 border-dashed border-blue-300 dark:border-blue-500/50 pl-4 py-1 rotate-1 max-w-md">
               "I wanted to build something I would actually use daily. It turned out 3.8K other students needed it too."
             </span>
           </div>
@@ -818,7 +828,7 @@ export default function SaveethaHubCaseStudy() {
 
       {/* Section 3: Stat Band */}
       <section className="max-w-5xl mx-auto px-6 py-20 relative">
-        <h2 className="text-3xl font-extrabold text-slate-900 mb-12 text-center font-grotesk relative inline-block left-1/2 -translate-x-1/2">
+        <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-12 text-center font-grotesk relative inline-block left-1/2 -translate-x-1/2">
           Platform Performance
           <HandDrawnUnderline />
         </h2>
@@ -827,23 +837,23 @@ export default function SaveethaHubCaseStudy() {
           {stats.map((stat, idx) => (
             <motion.div 
               key={idx}
-              className="bg-white p-6 rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col justify-between relative"
+              className="bg-white dark:bg-slate-900/90 p-6 rounded-2xl border-2 border-slate-900 dark:border-slate-700 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:shadow-[4px_4px_0px_0px_rgba(240,83,35,0.35)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col justify-between relative"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1, duration: 0.5 }}
             >
               <div>
-                <h3 className="text-slate-400 font-bold text-xs uppercase tracking-wider mb-2">{stat.label}</h3>
-                <div className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight font-grotesk">
+                <h3 className="text-slate-400 dark:text-slate-400 font-bold text-xs uppercase tracking-wider mb-2">{stat.label}</h3>
+                <div className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight font-grotesk">
                   <CountUp end={stat.value} suffix={stat.suffix || ""} />
                 </div>
-                <p className="text-slate-500 text-xs mt-1 font-semibold">{stat.sub}</p>
+                <p className="text-slate-500 dark:text-slate-400 text-xs mt-1 font-semibold">{stat.sub}</p>
               </div>
 
               {/* Annotation labels underneath each stat card */}
-              <div className="mt-6 border-t border-dashed border-slate-100 pt-3">
-                <span className="font-handwritten text-blue-600 text-lg leading-tight block transform -rotate-1">
+              <div className="mt-6 border-t border-dashed border-slate-100 dark:border-slate-800 pt-3">
+                <span className="font-handwritten text-blue-600 dark:text-blue-400 text-lg leading-tight block transform -rotate-1">
                   {stat.note}
                 </span>
               </div>
@@ -851,7 +861,7 @@ export default function SaveethaHubCaseStudy() {
           ))}
         </div>
 
-        <div className="max-w-xl mx-auto text-center mt-12 text-slate-500 font-medium text-sm">
+        <div className="max-w-xl mx-auto text-center mt-12 text-slate-500 dark:text-slate-400 font-medium text-sm">
           * Source: Google Analytics & Search Console. These aren't projected numbers — this is a live platform with organic student traffic.
         </div>
       </section>
@@ -861,11 +871,11 @@ export default function SaveethaHubCaseStudy() {
       {/* Section 4: Why I Built This / Problem & Solution Diagram */}
       <section className="max-w-6xl mx-auto px-6 py-16">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 font-grotesk relative inline-block">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white font-grotesk relative inline-block">
             Why I Built This
             <HandDrawnUnderline />
           </h2>
-          <p className="text-slate-500 text-lg mt-3 max-w-xl mx-auto font-medium">
+          <p className="text-slate-500 dark:text-slate-400 text-lg mt-3 max-w-xl mx-auto font-medium">
             Bridging student frustration with a unified digital ecosystem.
           </p>
         </div>
@@ -874,38 +884,38 @@ export default function SaveethaHubCaseStudy() {
           
           {/* Left: The Problem */}
           <motion.div 
-            className="lg:col-span-5 bg-red-50/50 rounded-3xl p-8 border-2 border-red-100 relative flex flex-col justify-between"
+            className="lg:col-span-5 bg-red-50/50 dark:bg-red-950/20 rounded-3xl p-8 border-2 border-red-100 dark:border-red-900/40 relative flex flex-col justify-between"
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="absolute top-4 right-4 bg-red-100 text-red-700 text-xs font-bold px-3 py-1 rounded-full">
+            <div className="absolute top-4 right-4 bg-red-100 dark:bg-red-950/80 text-red-700 dark:text-red-300 text-xs font-bold px-3 py-1 rounded-full border border-red-200 dark:border-red-900/50">
               BEFORE (The Chaos)
             </div>
 
             <div>
-              <h3 className="text-2xl font-bold text-red-950 font-grotesk mb-6">The Problem</h3>
-              <p className="text-red-900/80 mb-8 font-medium">
+              <h3 className="text-2xl font-bold text-red-950 dark:text-red-200 font-grotesk mb-6">The Problem</h3>
+              <p className="text-red-900/80 dark:text-red-300 mb-8 font-medium">
                 Information was heavily fragmented across the campus. Students spent hours just trying to find essential resources.
               </p>
             </div>
 
             {/* Problem Bubbles Container */}
             <div className="space-y-4">
-              <div className="bg-white p-4 rounded-2xl border border-red-200 shadow-sm max-w-xs transform -rotate-1">
+              <div className="bg-white dark:bg-slate-900/90 p-4 rounded-2xl border border-red-200 dark:border-red-900/60 shadow-sm max-w-xs transform -rotate-1">
                 <span className="font-bold text-xs text-red-500 block mb-1">WhatsApp Groups</span>
-                <p className="text-sm font-medium text-slate-700">"Who has Unit 3 notes?" gets lost in 100+ spammed messages.</p>
+                <p className="text-sm font-medium text-slate-700 dark:text-slate-300">"Who has Unit 3 notes?" gets lost in 100+ spammed messages.</p>
               </div>
 
-              <div className="bg-white p-4 rounded-2xl border border-red-200 shadow-sm max-w-xs ml-auto transform rotate-2">
+              <div className="bg-white dark:bg-slate-900/90 p-4 rounded-2xl border border-red-200 dark:border-red-900/60 shadow-sm max-w-xs ml-auto transform rotate-2">
                 <span className="font-bold text-xs text-red-500 block mb-1">Google Drives</span>
-                <p className="text-sm font-medium text-slate-700">Links constantly expire or files are unorganized.</p>
+                <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Links constantly expire or files are unorganized.</p>
               </div>
 
-              <div className="bg-white p-4 rounded-2xl border border-red-200 shadow-sm max-w-xs transform -rotate-2">
+              <div className="bg-white dark:bg-slate-900/90 p-4 rounded-2xl border border-red-200 dark:border-red-900/60 shadow-sm max-w-xs transform -rotate-2">
                 <span className="font-bold text-xs text-red-500 block mb-1">Notice Boards</span>
-                <p className="text-sm font-medium text-slate-700">Physical paper schedules missed by off-campus students.</p>
+                <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Physical paper schedules missed by off-campus students.</p>
               </div>
             </div>
           </motion.div>
@@ -942,38 +952,38 @@ export default function SaveethaHubCaseStudy() {
 
           {/* Right: The Solution */}
           <motion.div 
-            className="lg:col-span-5 bg-green-50/50 rounded-3xl p-8 border-2 border-green-100 relative flex flex-col justify-between"
+            className="lg:col-span-5 bg-green-50/50 dark:bg-emerald-950/20 rounded-3xl p-8 border-2 border-green-100 dark:border-emerald-900/40 relative flex flex-col justify-between"
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="absolute top-4 right-4 bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">
+            <div className="absolute top-4 right-4 bg-green-100 dark:bg-emerald-950/80 text-green-700 dark:text-emerald-300 text-xs font-bold px-3 py-1 rounded-full border border-green-200 dark:border-emerald-900/50">
               AFTER (The Solution)
             </div>
 
             <div>
-              <h3 className="text-2xl font-bold text-green-950 font-grotesk mb-6">The Solution</h3>
-              <p className="text-green-900/80 mb-8 font-medium">
+              <h3 className="text-2xl font-bold text-green-950 dark:text-emerald-200 font-grotesk mb-6">The Solution</h3>
+              <p className="text-green-900/80 dark:text-emerald-300 mb-8 font-medium">
                 SaveethaHub functions as an all-in-one student portal containing tools tailored specifically to university curriculum.
               </p>
             </div>
 
             {/* Solution Highlights */}
             <div className="space-y-4">
-              <div className="bg-white p-4 rounded-2xl border border-green-200 shadow-sm transform rotate-1">
-                <span className="font-bold text-xs text-green-600 block mb-1">📦 Study Materials Library</span>
-                <p className="text-sm font-medium text-slate-700">Structured repository organized unit-wise for easy access.</p>
+              <div className="bg-white dark:bg-slate-900/90 p-4 rounded-2xl border border-green-200 dark:border-emerald-900/60 shadow-sm transform rotate-1">
+                <span className="font-bold text-xs text-green-600 dark:text-emerald-400 block mb-1">📦 Study Materials Library</span>
+                <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Structured repository organized unit-wise for easy access.</p>
               </div>
 
-              <div className="bg-white p-4 rounded-2xl border border-green-200 shadow-sm transform -rotate-1">
-                <span className="font-bold text-xs text-green-600 block mb-1">💬 Real-time Community Hub</span>
-                <p className="text-sm font-medium text-slate-700">Students communicate and share details instantly.</p>
+              <div className="bg-white dark:bg-slate-900/90 p-4 rounded-2xl border border-green-200 dark:border-emerald-900/60 shadow-sm transform -rotate-1">
+                <span className="font-bold text-xs text-green-600 dark:text-emerald-400 block mb-1">💬 Real-time Community Hub</span>
+                <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Students communicate and share details instantly.</p>
               </div>
 
-              <div className="bg-white p-4 rounded-2xl border border-green-200 shadow-sm transform rotate-2">
-                <span className="font-bold text-xs text-green-600 block mb-1">🧮 Built-in CGPA Calculator</span>
-                <p className="text-sm font-medium text-slate-700">Direct grade conversion mapped to Saveetha grading scheme.</p>
+              <div className="bg-white dark:bg-slate-900/90 p-4 rounded-2xl border border-green-200 dark:border-emerald-900/60 shadow-sm transform rotate-2">
+                <span className="font-bold text-xs text-green-600 dark:text-emerald-400 block mb-1">🧮 Built-in CGPA Calculator</span>
+                <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Direct grade conversion mapped to Saveetha grading scheme.</p>
               </div>
             </div>
           </motion.div>
@@ -982,14 +992,14 @@ export default function SaveethaHubCaseStudy() {
       </section>
 
       {/* Section 5: Tech Stack */}
-      <section className="bg-[#FAF9F5]/40 text-slate-800 py-20 relative overflow-hidden border-y border-dashed border-slate-200">
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px]"></div>
+      <section className="bg-[#FAF9F5]/40 dark:bg-slate-900/30 text-slate-800 dark:text-slate-200 py-20 relative overflow-hidden border-y border-dashed border-slate-200 dark:border-slate-800">
+        <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.08] pointer-events-none bg-[radial-gradient(#1e293b_1px,transparent_1px)] dark:bg-[radial-gradient(#94a3b8_1px,transparent_1px)] [background-size:16px_16px]"></div>
         
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-extrabold font-grotesk tracking-tight text-slate-900 mb-4">
+          <h2 className="text-3xl font-extrabold font-grotesk tracking-tight text-slate-900 dark:text-white mb-4">
             The Tech Stack Choice
           </h2>
-          <p className="text-slate-500 text-base max-w-xl mx-auto mb-12 font-medium">
+          <p className="text-slate-500 dark:text-slate-400 text-base max-w-xl mx-auto mb-12 font-medium">
             Since I was building and shipping this project solo, developer velocity and real-time synchronization were my highest priorities.
           </p>
 
@@ -1001,12 +1011,12 @@ export default function SaveethaHubCaseStudy() {
               whileInView={{ opacity: 1, y: 0, rotate: 2 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform -translate-y-2 shadow-sm"
+              className="px-6 py-4 bg-white dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex items-center gap-3 transform -translate-y-2 shadow-sm"
             >
               <span className="text-3xl">⚛️</span>
               <div className="text-left">
-                <span className="font-bold block text-sm text-slate-800">React</span>
-                <span className="text-xs text-slate-500 font-semibold">Fast Frontend VDOM</span>
+                <span className="font-bold block text-sm text-slate-800 dark:text-slate-100">React</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">Fast Frontend VDOM</span>
               </div>
             </motion.div>
 
@@ -1015,12 +1025,12 @@ export default function SaveethaHubCaseStudy() {
               whileInView={{ opacity: 1, y: 0, rotate: -3 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform translate-y-3 shadow-sm"
+              className="px-6 py-4 bg-white dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex items-center gap-3 transform translate-y-3 shadow-sm"
             >
               <span className="text-3xl">🎨</span>
               <div className="text-left">
-                <span className="font-bold block text-sm text-slate-800">Tailwind CSS</span>
-                <span className="text-xs text-slate-500 font-semibold">Rapid UI Styling</span>
+                <span className="font-bold block text-sm text-slate-800 dark:text-slate-100">Tailwind CSS</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">Rapid UI Styling</span>
               </div>
             </motion.div>
 
@@ -1029,12 +1039,12 @@ export default function SaveethaHubCaseStudy() {
               whileInView={{ opacity: 1, y: 0, rotate: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform -translate-y-3 shadow-sm"
+              className="px-6 py-4 bg-white dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex items-center gap-3 transform -translate-y-3 shadow-sm"
             >
               <span className="text-3xl">🔥</span>
               <div className="text-left">
-                <span className="font-bold block text-sm text-slate-800">Firebase</span>
-                <span className="text-xs text-slate-500 font-semibold">Real-time DB & Auth</span>
+                <span className="font-bold block text-sm text-slate-800 dark:text-slate-100">Firebase</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">Real-time DB & Auth</span>
               </div>
             </motion.div>
 
@@ -1043,18 +1053,18 @@ export default function SaveethaHubCaseStudy() {
               whileInView={{ opacity: 1, y: 0, rotate: -1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.4 }}
-              className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform translate-y-1 shadow-sm"
+              className="px-6 py-4 bg-white dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex items-center gap-3 transform translate-y-1 shadow-sm"
             >
               <span className="text-3xl">⚡</span>
               <div className="text-left">
-                <span className="font-bold block text-sm text-slate-800">Vite</span>
-                <span className="text-xs text-slate-500 font-semibold">Instant HMR builds</span>
+                <span className="font-bold block text-sm text-slate-800 dark:text-slate-100">Vite</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">Instant HMR builds</span>
               </div>
             </motion.div>
 
           </div>
 
-          <div className="mt-12 max-w-md mx-auto text-slate-600 text-sm leading-relaxed">
+          <div className="mt-12 max-w-md mx-auto text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
             <span className="font-handwritten text-[#F05323] text-xl block mb-2">why Firebase?</span>
             Firestore dynamic streams allowed real-time chats and materials indexing without writing a custom WebSocket layer.
           </div>
@@ -1062,7 +1072,7 @@ export default function SaveethaHubCaseStudy() {
       </section>
 
       {/* Section 5.5: System Architecture Explorer */}
-      <section className="bg-slate-50 py-20 border-y border-slate-200">
+      <section className="bg-slate-50 dark:bg-slate-950/60 py-20 border-y border-slate-200 dark:border-slate-800">
         <div className="max-w-4xl mx-auto px-6">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -1072,10 +1082,10 @@ export default function SaveethaHubCaseStudy() {
             className="text-center mb-12"
           >
             <span className="font-handwritten text-[#F05323] text-2xl block mb-2">interactive blueprints</span>
-            <h2 className="text-3xl md:text-5xl font-black text-slate-900 font-grotesk tracking-tight">
+            <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white font-grotesk tracking-tight">
               System Architecture Explorer
             </h2>
-            <p className="text-slate-500 font-medium text-sm md:text-base mt-3 max-w-xl mx-auto">
+            <p className="text-slate-500 dark:text-slate-400 font-medium text-sm md:text-base mt-3 max-w-xl mx-auto">
               Click on components in the interactive blueprint below to inspect database schemas, token validation logic, and real-time streaming flows.
             </p>
           </motion.div>
@@ -1087,7 +1097,7 @@ export default function SaveethaHubCaseStudy() {
       {/* Section 6: My Role */}
       <section className="max-w-4xl mx-auto px-6 py-20">
         <motion.div 
-          className="bg-white rounded-3xl p-8 md:p-12 border-2 border-slate-900 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] relative"
+          className="bg-white dark:bg-slate-900/90 rounded-3xl p-8 md:p-12 border-2 border-slate-900 dark:border-slate-700 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] dark:shadow-[8px_8px_0px_0px_rgba(240,83,35,0.35)] relative"
           initial={{ opacity: 0, y: 35 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -1098,7 +1108,7 @@ export default function SaveethaHubCaseStudy() {
             End-To-End Execution
           </div>
 
-          <h2 className="text-3xl font-extrabold text-slate-900 mb-8 font-grotesk">My Role & Responsibilities</h2>
+          <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-8 font-grotesk">My Role & Responsibilities</h2>
 
           <div className="space-y-6">
             <motion.div 
@@ -1110,8 +1120,8 @@ export default function SaveethaHubCaseStudy() {
             >
               <HandDrawnCheck />
               <div>
-                <h3 className="font-bold text-lg text-slate-800">Firestore Schema Design</h3>
-                <p className="text-slate-600 text-sm mt-1">Designed scalable data collections for real-time community threads, comment sub-collections, and structured academic study files.</p>
+                <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100">Firestore Schema Design</h3>
+                <p className="text-slate-600 dark:text-slate-300 text-sm mt-1">Designed scalable data collections for real-time community threads, comment sub-collections, and structured academic study files.</p>
               </div>
             </motion.div>
 
@@ -1124,8 +1134,8 @@ export default function SaveethaHubCaseStudy() {
             >
               <HandDrawnCheck />
               <div>
-                <h3 className="font-bold text-lg text-slate-800">Authentication & Security Rules</h3>
-                <p className="text-slate-600 text-sm mt-1">Configured Firebase Security Rules to enforce university email domains, protecting academic resources from public access.</p>
+                <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100">Authentication & Security Rules</h3>
+                <p className="text-slate-600 dark:text-slate-300 text-sm mt-1">Configured Firebase Security Rules to enforce university email domains, protecting academic resources from public access.</p>
               </div>
             </motion.div>
 
@@ -1138,8 +1148,8 @@ export default function SaveethaHubCaseStudy() {
             >
               <HandDrawnCheck />
               <div>
-                <h3 className="font-bold text-lg text-slate-800">Grading System Algorithm</h3>
-                <p className="text-slate-600 text-sm mt-1">Translated Saveetha University's official grading scale (O, A+, A, B+, B, C, F) into a custom calculator algorithm mapping grade points to weighted credits.</p>
+                <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100">Grading System Algorithm</h3>
+                <p className="text-slate-600 dark:text-slate-300 text-sm mt-1">Translated Saveetha University's official grading scale (O, A+, A, B+, B, C, F) into a custom calculator algorithm mapping grade points to weighted credits.</p>
               </div>
             </motion.div>
 
@@ -1152,8 +1162,8 @@ export default function SaveethaHubCaseStudy() {
             >
               <HandDrawnCheck />
               <div>
-                <h3 className="font-bold text-lg text-slate-800">SEO & Deployment Maintenance</h3>
-                <p className="text-slate-600 text-sm mt-1">Handled build compilation, deployed live via Netlify, registered pages with Google Search Console, and configured Google Analytics events.</p>
+                <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100">SEO & Deployment Maintenance</h3>
+                <p className="text-slate-600 dark:text-slate-300 text-sm mt-1">Handled build compilation, deployed live via Netlify, registered pages with Google Search Console, and configured Google Analytics events.</p>
               </div>
             </motion.div>
           </div>
@@ -1162,15 +1172,15 @@ export default function SaveethaHubCaseStudy() {
       </section>
 
       {/* Section 7: Polaroid Screenshot & Interactive Widget Gallery */}
-      <section className="bg-orange-50/40 py-20 border-y border-dashed border-orange-200 relative">
+      <section className="bg-orange-50/40 dark:bg-slate-900/20 py-20 border-y border-dashed border-orange-200 dark:border-slate-800 relative">
         <div className="max-w-6xl mx-auto px-6">
           
           <div className="text-center mb-16 relative">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 font-grotesk relative inline-block">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white font-grotesk relative inline-block">
               Interactive Blueprint Gallery
               <HandDrawnCircle />
             </h2>
-            <p className="text-slate-500 text-sm font-semibold mt-4">
+            <p className="text-slate-500 dark:text-slate-400 text-sm font-semibold mt-4">
               Real screenshots and actual live-coded mini features built for you to test!
             </p>
           </div>
@@ -1183,10 +1193,10 @@ export default function SaveethaHubCaseStudy() {
               whileInView={{ opacity: 1, x: 0, rotate: -3 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="bg-white p-4 pb-8 rounded-lg shadow-xl border border-slate-200 transform -rotate-3 hover:rotate-0 transition-transform relative hover:z-20"
+              className="bg-white dark:bg-slate-900 p-4 pb-8 rounded-lg shadow-xl border border-slate-200 dark:border-slate-800 transform -rotate-3 hover:rotate-0 transition-transform relative hover:z-20"
             >
               <HandDrawnPin />
-              <div className="aspect-[4/3] bg-slate-100 rounded overflow-hidden relative group">
+              <div className="aspect-[4/3] bg-slate-100 dark:bg-slate-800 rounded overflow-hidden relative group">
                 <figure className="w-full h-full">
                   <img 
                     src="/saveetha_hub_screenshot.webp" 
@@ -1209,10 +1219,10 @@ export default function SaveethaHubCaseStudy() {
                 </div>
               </div>
               <div className="mt-4 text-center">
-                <p className="font-handwritten text-blue-700 text-2xl rotate-1">
+                <p className="font-handwritten text-blue-700 dark:text-blue-400 text-2xl rotate-1">
                   landing dashboard UI 🖥️
                 </p>
-                <p className="text-slate-400 text-xs font-bold mt-1">Clean. Fast. Responsive.</p>
+                <p className="text-slate-400 dark:text-slate-500 text-xs font-bold mt-1">Clean. Fast. Responsive.</p>
               </div>
             </motion.div>
 
@@ -1222,12 +1232,12 @@ export default function SaveethaHubCaseStudy() {
               whileInView={{ opacity: 1, y: 0, rotate: 2 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.15 }}
-              className="bg-white p-4 pb-8 rounded-lg shadow-xl border border-slate-200 transform rotate-2 hover:rotate-0 transition-transform relative hover:z-20"
+              className="bg-white dark:bg-slate-900 p-4 pb-8 rounded-lg shadow-xl border border-slate-200 dark:border-slate-800 transform rotate-2 hover:rotate-0 transition-transform relative hover:z-20"
             >
               <HandDrawnPin />
               
               {/* Actual Mini calculator app */}
-              <div className="p-4 bg-[#FAF9F5] border border-dashed border-slate-200 rounded min-h-[300px] flex flex-col justify-between">
+              <div className="p-4 bg-[#FAF9F5] dark:bg-slate-950/80 border border-dashed border-slate-200 dark:border-slate-800 rounded min-h-[300px] flex flex-col justify-between">
                 <div>
                   <div className="flex justify-between items-center mb-3">
                     <span className="text-xs font-extrabold uppercase tracking-wide text-[#F05323] flex items-center gap-1">
@@ -1235,7 +1245,7 @@ export default function SaveethaHubCaseStudy() {
                     </span>
                     <button 
                       onClick={addCourse}
-                      className="px-2 py-0.5 text-[10px] bg-slate-950 text-white font-bold rounded hover:bg-orange-600 transition-colors flex items-center gap-0.5"
+                      className="px-2 py-0.5 text-[10px] bg-slate-950 dark:bg-primary text-white font-bold rounded hover:bg-orange-600 transition-colors flex items-center gap-0.5"
                     >
                       <Plus className="w-3 h-3" /> Course
                     </button>
@@ -1243,18 +1253,18 @@ export default function SaveethaHubCaseStudy() {
 
                   <div className="space-y-2 max-h-[180px] overflow-y-auto pr-1">
                     {courses.map(c => (
-                      <div key={c.id} className="flex gap-1.5 items-center bg-white p-1.5 rounded border border-slate-100 shadow-sm text-xs">
+                      <div key={c.id} className="flex gap-1.5 items-center bg-white dark:bg-slate-900 p-1.5 rounded border border-slate-100 dark:border-slate-800 shadow-sm text-xs">
                         <input 
                           type="text" 
                           value={c.name}
                           onChange={(e) => updateCourse(c.id, "name", e.target.value)}
-                          className="w-full bg-slate-50 border-none focus:ring-1 focus:ring-orange-200 rounded px-1 text-[11px] font-semibold"
+                          className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 focus:ring-1 focus:ring-orange-200 rounded px-1 text-[11px] font-semibold"
                         />
                         
                         <select 
                           value={c.grade}
                           onChange={(e) => updateCourse(c.id, "grade", e.target.value)}
-                          className="bg-slate-50 border border-slate-200 text-[10px] py-0.5 font-bold rounded"
+                          className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-[10px] py-0.5 font-bold rounded"
                         >
                           {Object.keys(gradePoints).map(g => (
                             <option key={g} value={g}>{g}</option>
@@ -1264,7 +1274,7 @@ export default function SaveethaHubCaseStudy() {
                         <select 
                           value={c.credits}
                           onChange={(e) => updateCourse(c.id, "credits", parseInt(e.target.value))}
-                          className="bg-slate-50 border border-slate-200 text-[10px] py-0.5 font-bold rounded"
+                          className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-[10px] py-0.5 font-bold rounded"
                         >
                           {[1, 2, 3, 4].map(cr => (
                             <option key={cr} value={cr}>{cr} Cr</option>
@@ -1282,19 +1292,19 @@ export default function SaveethaHubCaseStudy() {
                   </div>
                 </div>
 
-                <div className="border-t border-slate-200 pt-3 mt-4 flex justify-between items-center">
-                  <span className="text-xs font-bold text-slate-500">Calculated CGPA:</span>
-                  <span className="text-2xl font-black text-slate-900 tracking-tight font-grotesk bg-orange-100/50 px-2.5 py-0.5 rounded border border-orange-200">
+                <div className="border-t border-slate-200 dark:border-slate-800 pt-3 mt-4 flex justify-between items-center">
+                  <span className="text-xs font-bold text-slate-500 dark:text-slate-400">Calculated CGPA:</span>
+                  <span className="text-2xl font-black text-slate-900 dark:text-white tracking-tight font-grotesk bg-orange-100/50 dark:bg-orange-950/50 px-2.5 py-0.5 rounded border border-orange-200 dark:border-orange-900">
                     {calculateCGPA()}
                   </span>
                 </div>
               </div>
 
               <div className="mt-4 text-center">
-                <p className="font-handwritten text-blue-700 text-2xl -rotate-1">
+                <p className="font-handwritten text-blue-700 dark:text-blue-400 text-2xl -rotate-1">
                   interactive CGPA tool! 🧮
                 </p>
-                <p className="text-slate-400 text-xs font-bold mt-1">Try adding and changing courses above.</p>
+                <p className="text-slate-400 dark:text-slate-500 text-xs font-bold mt-1">Try adding and changing courses above.</p>
               </div>
             </motion.div>
 
@@ -1304,37 +1314,37 @@ export default function SaveethaHubCaseStudy() {
               whileInView={{ opacity: 1, x: 0, rotate: -1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="bg-white p-4 pb-8 rounded-lg shadow-xl border border-slate-200 transform -rotate-1 hover:rotate-0 transition-transform relative hover:z-20"
+              className="bg-white dark:bg-slate-900 p-4 pb-8 rounded-lg shadow-xl border border-slate-200 dark:border-slate-800 transform -rotate-1 hover:rotate-0 transition-transform relative hover:z-20"
             >
               <HandDrawnPin />
               
               {/* Forum Feed Simulator */}
-              <div className="p-4 bg-[#FAF9F5] border border-dashed border-slate-200 rounded min-h-[300px] flex flex-col justify-between text-xs">
+              <div className="p-4 bg-[#FAF9F5] dark:bg-slate-950/80 border border-dashed border-slate-200 dark:border-slate-800 rounded min-h-[300px] flex flex-col justify-between text-xs">
                 <div>
-                  <span className="text-xs font-extrabold uppercase tracking-wide text-blue-600 block mb-3 flex items-center gap-1">
+                  <span className="text-xs font-extrabold uppercase tracking-wide text-blue-600 dark:text-blue-400 block mb-3 flex items-center gap-1">
                     <MessageSquare className="w-3.5 h-3.5" /> Community Thread Sim
                   </span>
 
                   <div className="space-y-2 max-h-[170px] overflow-y-auto pr-1">
                     {threads.map(t => (
-                      <div key={t.id} className="bg-white p-2 rounded border border-slate-100 shadow-xs">
+                      <div key={t.id} className="bg-white dark:bg-slate-900 p-2 rounded border border-slate-100 dark:border-slate-800 shadow-xs">
                         <div className="flex justify-between items-center mb-1">
-                          <span className="font-bold text-slate-700 text-[10px]">{t.author}</span>
-                          <span className="text-[9px] bg-slate-100 text-slate-600 px-1.5 py-0.2 rounded font-semibold">{t.tag}</span>
+                          <span className="font-bold text-slate-700 dark:text-slate-200 text-[10px]">{t.author}</span>
+                          <span className="text-[9px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-1.5 py-0.2 rounded font-semibold">{t.tag}</span>
                         </div>
-                        <p className="text-slate-600 text-[10px] leading-tight font-medium">{t.content}</p>
+                        <p className="text-slate-600 dark:text-slate-300 text-[10px] leading-tight font-medium">{t.content}</p>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <form onSubmit={handlePostThread} className="mt-3 pt-3 border-t border-slate-200 flex gap-1">
+                <form onSubmit={handlePostThread} className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-800 flex gap-1">
                   <input 
                     type="text" 
                     placeholder="Ask standard query..." 
                     value={newThreadContent}
                     onChange={(e) => setNewThreadContent(e.target.value)}
-                    className="w-full bg-white border border-slate-200 text-[10px] rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-300"
+                    className="w-full bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-[10px] rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-300 dark:focus:ring-blue-500 bg-slate-50 dark:bg-slate-900"
                   />
                   <button 
                     type="submit" 
@@ -1346,10 +1356,10 @@ export default function SaveethaHubCaseStudy() {
               </div>
 
               <div className="mt-4 text-center">
-                <p className="font-handwritten text-blue-700 text-2xl rotate-1">
+                <p className="font-handwritten text-blue-700 dark:text-blue-400 text-2xl rotate-1">
                   community live feed 💬
                 </p>
-                <p className="text-slate-400 text-xs font-bold mt-1">Simulated real-time db sync.</p>
+                <p className="text-slate-400 dark:text-slate-500 text-xs font-bold mt-1">Simulated real-time db sync.</p>
               </div>
             </motion.div>
 
@@ -1361,11 +1371,11 @@ export default function SaveethaHubCaseStudy() {
       {/* Section: Technical Challenges & Solutions */}
       <section className="max-w-6xl mx-auto px-6 py-12 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 font-grotesk relative inline-block">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white font-grotesk relative inline-block">
             Technical Challenges & Solutions
             <HandDrawnUnderline />
           </h2>
-          <p className="text-slate-500 text-sm mt-3 max-w-xl mx-auto font-medium font-outfit">
+          <p className="text-slate-500 dark:text-slate-400 text-sm mt-3 max-w-xl mx-auto font-medium font-outfit">
             How I addressed core NoSQL database performance issues, websocket scale constraints, and cross-origin security wallings.
           </p>
         </div>
@@ -1374,7 +1384,7 @@ export default function SaveethaHubCaseStudy() {
           
           {/* Card 1: Query Scale */}
           <motion.div 
-            className="bg-white p-6 rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col justify-between relative"
+            className="bg-white dark:bg-slate-900/90 p-6 rounded-2xl border-2 border-slate-900 dark:border-slate-700 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:shadow-[4px_4px_0px_0px_rgba(240,83,35,0.35)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col justify-between relative"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -1382,21 +1392,21 @@ export default function SaveethaHubCaseStudy() {
           >
             <div>
               <div className="flex items-center justify-between mb-4">
-                <span className="text-[9px] font-bold px-2 py-0.5 bg-red-50 text-red-600 border border-red-150 rounded-full font-grotesk uppercase tracking-wider">
+                <span className="text-[9px] font-bold px-2 py-0.5 bg-red-50 dark:bg-red-950/50 text-red-600 dark:text-red-400 border border-red-150 dark:border-red-900/50 rounded-full font-grotesk uppercase tracking-wider">
                   Database Bottleneck
                 </span>
                 <span className="text-lg">📈</span>
               </div>
-              <h3 className="text-lg font-bold text-slate-900 font-grotesk mb-2">NoSQL Query Indexing & Scale</h3>
-              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white font-grotesk mb-2">NoSQL Query Indexing & Scale</h3>
+              <p className="text-slate-600 dark:text-slate-300 text-xs font-medium leading-relaxed font-outfit">
                 <strong>The Challenge:</strong> Querying large collections of academic guides and student threads sequentially causes major read overheads and freezes client UI threads as data grows.
               </p>
-              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit mt-2">
+              <p className="text-slate-600 dark:text-slate-300 text-xs font-medium leading-relaxed font-outfit mt-2">
                 <strong>The Solution:</strong> Allocated composite indexing (`createdAt DESC`, `tag ASC`) on Firestore to execute sorts directly on Google Cloud nodes, and implemented cursor-based limits (`limit(15)`).
               </p>
             </div>
-            <div className="mt-6 border-t border-dashed border-slate-100 pt-3">
-              <span className="font-handwritten text-[#b45309] text-lg leading-tight block transform -rotate-1 font-bold">
+            <div className="mt-6 border-t border-dashed border-slate-100 dark:border-slate-800 pt-3">
+              <span className="font-handwritten text-[#b45309] dark:text-orange-400 text-lg leading-tight block transform -rotate-1 font-bold">
                 under 80ms render speeds! 🚀
               </span>
             </div>
@@ -1404,7 +1414,7 @@ export default function SaveethaHubCaseStudy() {
 
           {/* Card 2: Websocket Concurrency */}
           <motion.div 
-            className="bg-white p-6 rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col justify-between relative"
+            className="bg-white dark:bg-slate-900/90 p-6 rounded-2xl border-2 border-slate-900 dark:border-slate-700 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:shadow-[4px_4px_0px_0px_rgba(240,83,35,0.35)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col justify-between relative"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -1412,21 +1422,21 @@ export default function SaveethaHubCaseStudy() {
           >
             <div>
               <div className="flex items-center justify-between mb-4">
-                <span className="text-[9px] font-bold px-2 py-0.5 bg-red-50 text-red-600 border border-red-150 rounded-full font-grotesk uppercase tracking-wider">
+                <span className="text-[9px] font-bold px-2 py-0.5 bg-red-50 dark:bg-red-950/50 text-red-600 dark:text-red-400 border border-red-150 dark:border-red-900/50 rounded-full font-grotesk uppercase tracking-wider">
                   Concurrency Limit
                 </span>
                 <span className="text-lg">💬</span>
               </div>
-              <h3 className="text-lg font-bold text-slate-900 font-grotesk mb-2">Websocket Connection Scaling</h3>
-              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white font-grotesk mb-2">Websocket Connection Scaling</h3>
+              <p className="text-slate-600 dark:text-slate-300 text-xs font-medium leading-relaxed font-outfit">
                 <strong>The Challenge:</strong> Keeping real-time web socket snapshot listeners open for 2,000+ simultaneous students exceeds database connection caps and drains mobile battery.
               </p>
-              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit mt-2">
+              <p className="text-slate-600 dark:text-slate-300 text-xs font-medium leading-relaxed font-outfit mt-2">
                 <strong>The Solution:</strong> Implemented query throttling and lifecycle-bound tearing. Real-time queries run only when the feed is in view, immediately unsubscribing on page swap.
               </p>
             </div>
-            <div className="mt-6 border-t border-dashed border-slate-100 pt-3">
-              <span className="font-handwritten text-[#b45309] text-lg leading-tight block transform rotate-1 font-bold">
+            <div className="mt-6 border-t border-dashed border-slate-100 dark:border-slate-800 pt-3">
+              <span className="font-handwritten text-[#b45309] dark:text-orange-400 text-lg leading-tight block transform rotate-1 font-bold">
                 efficient network load! 📶
               </span>
             </div>
@@ -1434,7 +1444,7 @@ export default function SaveethaHubCaseStudy() {
 
           {/* Card 3: Database Security Firewall */}
           <motion.div 
-            className="bg-white p-6 rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col justify-between relative"
+            className="bg-white dark:bg-slate-900/90 p-6 rounded-2xl border-2 border-slate-900 dark:border-slate-700 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:shadow-[4px_4px_0px_0px_rgba(240,83,35,0.35)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col justify-between relative"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -1442,21 +1452,21 @@ export default function SaveethaHubCaseStudy() {
           >
             <div>
               <div className="flex items-center justify-between mb-4">
-                <span className="text-[9px] font-bold px-2 py-0.5 bg-red-50 text-red-600 border border-red-150 rounded-full font-grotesk uppercase tracking-wider">
+                <span className="text-[9px] font-bold px-2 py-0.5 bg-red-50 dark:bg-red-950/50 text-red-600 dark:text-red-400 border border-red-150 dark:border-red-900/50 rounded-full font-grotesk uppercase tracking-wider">
                   Security Vulnerability
                 </span>
                 <span className="text-lg">🛡️</span>
               </div>
-              <h3 className="text-lg font-bold text-slate-900 font-grotesk mb-2">Domain-Locked Security Firewall</h3>
-              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white font-grotesk mb-2">Domain-Locked Security Firewall</h3>
+              <p className="text-slate-600 dark:text-slate-300 text-xs font-medium leading-relaxed font-outfit">
                 <strong>The Challenge:</strong> Anyone on the internet could query the database and scrape private student emails or post unauthorized academic material.
               </p>
-              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit mt-2">
+              <p className="text-slate-600 dark:text-slate-300 text-xs font-medium leading-relaxed font-outfit mt-2">
                 <strong>The Solution:</strong> Structured strict regular expression security rules enforced at the database layer. Database operations are restricted to verified student emails matching `@saveetha.com`.
               </p>
             </div>
-            <div className="mt-6 border-t border-dashed border-slate-100 pt-3">
-              <span className="font-handwritten text-[#b45309] text-lg leading-tight block transform -rotate-1 font-bold">
+            <div className="mt-6 border-t border-dashed border-slate-100 dark:border-slate-800 pt-3">
+              <span className="font-handwritten text-[#b45309] dark:text-orange-400 text-lg leading-tight block transform -rotate-1 font-bold">
                 100% data access safety! 🔐
               </span>
             </div>
@@ -1470,7 +1480,7 @@ export default function SaveethaHubCaseStudy() {
         
         {/* Sticky Note Box */}
         <motion.div 
-          className="bg-[#FEF9C3] p-8 md:p-12 rounded-3xl border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] transform -rotate-1 relative overflow-hidden"
+          className="bg-[#FEF9C3] dark:bg-[#1a1f10] p-8 md:p-12 rounded-3xl border-2 border-slate-900 dark:border-yellow-700/50 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] dark:shadow-[6px_6px_0px_0px_rgba(234,179,8,0.25)] transform -rotate-1 relative overflow-hidden"
           initial={{ opacity: 0, scale: 0.95, rotate: -3 }}
           whileInView={{ opacity: 1, scale: 1, rotate: -1 }}
           viewport={{ once: true }}
@@ -1478,13 +1488,13 @@ export default function SaveethaHubCaseStudy() {
         >
           
           {/* Subtle tape effect at top */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-slate-200/50 backdrop-blur-xs border-x border-b border-slate-300 transform -translate-y-2"></div>
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-slate-200/50 dark:bg-slate-700/40 backdrop-blur-xs border-x border-b border-slate-300 dark:border-slate-600 transform -translate-y-2"></div>
           
-          <h2 className="text-3xl font-extrabold text-slate-900 mb-6 font-grotesk flex items-center gap-2">
+          <h2 className="text-3xl font-extrabold text-slate-900 dark:text-yellow-200 mb-6 font-grotesk flex items-center gap-2">
             What I'd Improve Next
           </h2>
 
-          <ul className="space-y-4 font-medium text-slate-700">
+          <ul className="space-y-4 font-medium text-slate-700 dark:text-amber-100/90">
             <li className="flex items-start gap-2.5">
               <span className="text-[#F05323] text-lg select-none">📌</span>
               <span>
@@ -1505,7 +1515,7 @@ export default function SaveethaHubCaseStudy() {
             </li>
           </ul>
 
-          <span className="font-handwritten text-[#b45309] text-xl absolute right-8 bottom-4 rotate-6 hidden sm:block">
+          <span className="font-handwritten text-[#b45309] dark:text-yellow-400 text-xl absolute right-8 bottom-4 rotate-6 hidden sm:block">
             always iterating! 🔄
           </span>
         </motion.div>
@@ -1519,15 +1529,15 @@ export default function SaveethaHubCaseStudy() {
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        <h2 className="text-3xl md:text-5xl font-black text-slate-900 font-grotesk tracking-tight mb-4">
+        <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white font-grotesk tracking-tight mb-4">
           Explore SaveethaHub
         </h2>
-        <p className="text-slate-500 font-medium text-lg mb-10 max-w-lg mx-auto">
+        <p className="text-slate-500 dark:text-slate-400 font-medium text-lg mb-10 max-w-lg mx-auto">
           Take a look at the live web portal or inspect the codebase configuration details on GitHub.
         </p>
 
         {/* Hand-drawn arrow pointing to buttons */}
-        <div className="absolute top-0 right-1/4 text-blue-600 hidden md:block select-none transform rotate-12">
+        <div className="absolute top-0 right-1/4 text-blue-600 dark:text-blue-400 hidden md:block select-none transform rotate-12">
           <svg className="w-16 h-16 animate-doodle-vibrate" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
             <motion.path 
               d="M10,80 Q30,30 80,20" 
@@ -1555,7 +1565,7 @@ export default function SaveethaHubCaseStudy() {
             href="https://saveetha-hub.netlify.app/" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="w-full sm:w-auto px-8 py-4 bg-[#F05323] hover:bg-orange-600 text-white font-bold rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center gap-2 text-lg"
+            className="w-full sm:w-auto px-8 py-4 bg-[#F05323] hover:bg-orange-600 text-white font-bold rounded-2xl border-2 border-slate-900 dark:border-orange-500 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:shadow-[4px_4px_0px_0px_rgba(240,83,35,0.4)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center gap-2 text-lg"
           >
             <Rocket className="w-5 h-5" />
             <span>Visit Live Portal</span>
@@ -1565,7 +1575,7 @@ export default function SaveethaHubCaseStudy() {
             href="https://github.com/ComradeMohan/saveetha-companion" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-slate-50 text-slate-900 font-bold rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center gap-2 text-lg"
+            className="w-full sm:w-auto px-8 py-4 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-900 dark:text-white font-bold rounded-2xl border-2 border-slate-900 dark:border-slate-700 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:shadow-[4px_4px_0px_0px_rgba(240,83,35,0.35)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center gap-2 text-lg"
           >
             <Github className="w-5 h-5" />
             <span>Source Code ({stars !== null ? `★ ${stars}` : "★ 21"})</span>

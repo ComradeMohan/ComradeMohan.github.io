@@ -15,8 +15,13 @@ export default function ThemePanel({ open, onClose }: { open: boolean; onClose: 
 
   const apply = (t: Theme) => {
     localStorage.setItem("theme", t);
-    document.documentElement.classList.remove("light", "midnight", "violet");
-    if (t !== "dark") document.documentElement.classList.add(t);
+    document.documentElement.classList.remove("light", "midnight", "violet", "dark");
+    if (t === "light") {
+      document.documentElement.classList.add("light");
+    } else {
+      document.documentElement.classList.add("dark");
+      if (t !== "dark") document.documentElement.classList.add(t);
+    }
     const meta = document.querySelector("meta[name='theme-color']");
     const map: Record<Theme, string> = {
       dark: "hsl(289, 65%, 10%)",
@@ -25,6 +30,7 @@ export default function ThemePanel({ open, onClose }: { open: boolean; onClose: 
       violet: "hsl(286, 80%, 12%)",
     };
     meta?.setAttribute("content", map[t]);
+    window.dispatchEvent(new Event("local-storage"));
     onClose();
   };
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Mail, Sun, Moon, FileDown, Search } from "lucide-react";
+import { Menu, X, Mail, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MagneticButton } from "./MagneticButton";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -70,10 +70,12 @@ const Navbar = () => {
       if (saved === "light") {
         setIsDark(false);
         document.documentElement.classList.add("light");
+        document.documentElement.classList.remove("dark");
         metaThemeColor?.setAttribute("content", "hsla(12, 65%, 88%, 1.00)");
       } else {
         setIsDark(true);
         document.documentElement.classList.remove("light");
+        document.documentElement.classList.add("dark");
         metaThemeColor?.setAttribute("content", "hsl(289, 65%, 10%)");
       }
     };
@@ -93,10 +95,12 @@ const Navbar = () => {
       const metaThemeColor = document.querySelector("meta[name='theme-color']");
       if (next) {
         document.documentElement.classList.remove("light");
+        document.documentElement.classList.add("dark");
         localStorage.setItem("theme", "dark");
         metaThemeColor?.setAttribute("content", "hsl(289, 65%, 10%)");
       } else {
         document.documentElement.classList.add("light");
+        document.documentElement.classList.remove("dark");
         localStorage.setItem("theme", "light");
         metaThemeColor?.setAttribute("content", "hsl(289, 65%, 95%)");
       }
@@ -162,8 +166,6 @@ const Navbar = () => {
             <span className="text-primary drop-shadow-[0_0_8px_hsl(var(--primary)/0.4)]">COMRADE</span>
             <span className="text-foreground">MOHAN</span>
           </a>
-
-
 
           <div className="hidden md:flex items-center gap-5">
             {navLinks.map((link) => {

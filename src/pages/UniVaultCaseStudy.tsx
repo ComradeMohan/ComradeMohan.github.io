@@ -2,10 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { 
   Github, ArrowLeft, Smartphone, Play, 
-  BookOpen, Calculator, Calendar, Plus, Trash, Sparkles, Check, Info, Star, Rocket
+  BookOpen, Calculator, Calendar, Plus, Trash, Sparkles, Check, Info, Star, Rocket,
+  Sun, Moon
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import SEO from "@/components/SEO";
+import { useTheme } from "@/hooks/useTheme";
 
 // CountUp Component for animating stats on scroll
 const CountUp = ({ end, duration = 1500, suffix = "" }) => {
@@ -77,15 +79,15 @@ const HandDrawnCircle = () => (
 
 const CurvedDivider = () => (
   <div className="w-full flex justify-center py-12 overflow-hidden">
-    <svg className="w-full max-w-4xl h-8 text-orange-200" viewBox="0 0 1200 40" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeDasharray="6 8">
+    <svg className="w-full max-w-4xl h-8 text-orange-200 dark:text-slate-800" viewBox="0 0 1200 40" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeDasharray="6 8">
       <path d="M 0 20 Q 150 5, 300 20 T 600 20 T 900 20 T 1200 20" />
     </svg>
   </div>
 );
 
 const TornPaperDividerTop = () => (
-  <div className="w-full h-8 bg-orange-100/30 overflow-hidden relative">
-    <svg className="absolute bottom-0 w-full h-8 text-[#FAF6EE] fill-current animate-paper-vibrate" viewBox="0 0 1200 120" preserveAspectRatio="none">
+  <div className="w-full h-8 bg-orange-100/30 dark:bg-slate-900/40 overflow-hidden relative">
+    <svg className="absolute bottom-0 w-full h-8 text-[#FCF9F2] dark:text-[#080d1a] fill-current animate-paper-vibrate transition-colors" viewBox="0 0 1200 120" preserveAspectRatio="none">
       <path d="M0,0 L1200,0 L1200,80 L1170,75 L1140,85 L1110,78 L1080,82 L1050,75 L1020,83 L990,77 L960,81 L930,74 L900,85 L870,78 L840,82 L810,75 L780,83 L750,77 L720,81 L690,74 L660,85 L630,78 L600,82 L570,75 L540,83 L510,77 L480,81 L450,74 L420,85 L390,78 L360,82 L330,75 L300,83 L270,77 L240,81 L210,74 L180,85 L150,78 L120,82 L90,75 L60,83 L30,77 L0,81 Z" />
     </svg>
   </div>
@@ -122,7 +124,7 @@ const HandDrawnPin = () => (
 );
 
 // Phone Mockup wrapper component
-const PhoneFrame = ({ children, className = "" }) => (
+const PhoneFrame = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <div className={`w-[260px] h-[520px] bg-slate-950 rounded-[40px] p-3 shadow-2xl border-4 border-slate-800 relative flex flex-col ${className}`}>
     {/* Speaker / Notch */}
     <div className="w-24 h-4 bg-slate-800 rounded-b-xl absolute top-0 left-1/2 -translate-x-1/2 flex justify-center items-center gap-1 z-25">
@@ -131,7 +133,7 @@ const PhoneFrame = ({ children, className = "" }) => (
     </div>
     
     {/* Screen Container */}
-    <div className="w-full h-full bg-[#FAF9F5] rounded-[28px] overflow-hidden relative flex flex-col pt-3 z-10">
+    <div className="w-full h-full bg-[#FAF9F5] dark:bg-slate-950 rounded-[28px] overflow-hidden relative flex flex-col pt-3 z-10">
       {children}
     </div>
   </div>
@@ -503,7 +505,7 @@ CREATE TABLE student_attempts (
 
 export default function UniVaultCaseStudy() {
   const navigate = useNavigate();
-
+  const { isDark, toggleTheme } = useTheme();
 
   // Stats Section Data
   const stats = [
@@ -584,7 +586,7 @@ export default function UniVaultCaseStudy() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FCF9F2] text-slate-800 font-outfit relative selection:bg-[#F05323] selection:text-white pb-24 overflow-x-hidden">
+    <div className="min-h-screen bg-[#FCF9F2] dark:bg-[#080d1a] text-slate-800 dark:text-slate-100 font-outfit relative selection:bg-[#F05323] selection:text-white pb-24 overflow-x-hidden transition-colors duration-300">
       <SEO
         title="UniVault Case Study | Mohan Reddy - Android & Kotlin Developer"
         description="Comprehensive architectural overview of UniVault. A secure offline-first Android app built with Kotlin and Room DB, protecting exam resources with AES-256."
@@ -593,12 +595,12 @@ export default function UniVaultCaseStudy() {
       />
       
       {/* Background grid texture simulating paper */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px]"></div>
+      <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.08] pointer-events-none bg-[radial-gradient(#1e293b_1px,transparent_1px)] dark:bg-[radial-gradient(#94a3b8_1px,transparent_1px)] [background-size:24px_24px]"></div>
 
       {/* Decorative floating sketch stars/dots */}
-      <div className="absolute top-48 left-10 text-orange-300 font-handwritten text-4xl select-none hidden md:block">✦</div>
-      <div className="absolute top-96 right-12 text-blue-300 font-handwritten text-4xl select-none rotate-12 hidden md:block">★</div>
-      <div className="absolute bottom-[20%] left-8 text-orange-200 font-handwritten text-5xl select-none -rotate-12 hidden md:block">📱</div>
+      <div className="absolute top-48 left-10 text-orange-300 dark:text-orange-500/40 font-handwritten text-4xl select-none hidden md:block">✦</div>
+      <div className="absolute top-96 right-12 text-blue-300 dark:text-blue-500/40 font-handwritten text-4xl select-none rotate-12 hidden md:block">★</div>
+      <div className="absolute bottom-[20%] left-8 text-orange-200 dark:text-orange-500/30 font-handwritten text-5xl select-none -rotate-12 hidden md:block">📱</div>
 
       {/* Top Navigation */}
       <header className="max-w-6xl mx-auto px-6 py-8 flex justify-between items-center relative z-20">
@@ -611,17 +613,24 @@ export default function UniVaultCaseStudy() {
               navigate("/#projects");
             }
           }}
-          className="group flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors font-medium bg-transparent border-none p-0 cursor-pointer"
+          className="group flex items-center gap-2 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors font-medium bg-transparent border-none p-0 cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span>Back to Portfolio</span>
         </button>
-        <div className="flex gap-4">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={toggleTheme}
+            aria-label={isDark ? "Switch to Light mode" : "Switch to Dark mode"}
+            className="flex items-center justify-center w-8 h-8 rounded-full border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-300 hover:text-[#6366f1] dark:hover:text-[#6366f1] hover:bg-indigo-50 dark:hover:bg-indigo-950/40 transition-all cursor-pointer"
+          >
+            {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
+          </button>
           <a 
             href="https://github.com/ComradeMohan/192210400pdd" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="flex items-center gap-1.5 px-3 py-1.5 text-slate-500 hover:text-[#6366f1] hover:bg-indigo-50 rounded-full transition-all border border-slate-200 hover:border-indigo-200 text-xs font-semibold"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-slate-500 dark:text-slate-300 hover:text-[#6366f1] dark:hover:text-[#6366f1] hover:bg-indigo-50 dark:hover:bg-indigo-950/40 rounded-full transition-all border border-slate-200 dark:border-slate-800 text-xs font-semibold"
           >
             <Github className="w-4 h-4" />
             <span>GitHub</span>
@@ -630,7 +639,7 @@ export default function UniVaultCaseStudy() {
             href="https://web.univault.live/" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="flex items-center gap-1.5 px-3 py-1.5 text-slate-500 hover:text-[#6366f1] hover:bg-indigo-50 rounded-full transition-all border border-slate-200 hover:border-indigo-200 text-xs font-semibold"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-slate-500 dark:text-slate-300 hover:text-[#6366f1] dark:hover:text-[#6366f1] hover:bg-indigo-50 dark:hover:bg-indigo-950/40 rounded-full transition-all border border-slate-200 dark:border-slate-800 text-xs font-semibold"
           >
             <Rocket className="w-4 h-4 text-[#6366f1] animate-pulse" />
             <span>Live Project</span>
@@ -638,7 +647,6 @@ export default function UniVaultCaseStudy() {
         </div>
       </header>
 
-      {/* Section 1: Hero Block */}
       {/* Section 1: Hero Block */}
       <section className="max-w-5xl mx-auto px-6 pt-8 pb-20 relative">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -650,18 +658,18 @@ export default function UniVaultCaseStudy() {
             transition={{ duration: 0.6 }}
             className="lg:col-span-7 text-left"
           >
-            <div className="inline-block px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full mb-6 border border-blue-200">
+            <div className="inline-block px-3 py-1 bg-blue-100 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 text-xs font-semibold rounded-full mb-6 border border-blue-200 dark:border-blue-900/60">
               Exam Preparation Platform · Live on Play Store
             </div>
             
             <div className="relative inline-block mb-6">
-              <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 font-grotesk select-none relative z-10">
+              <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white font-grotesk select-none relative z-10">
                 UniVault
               </h1>
               <HandDrawnCircle />
             </div>
             
-            <p className="text-xl md:text-2xl text-slate-600 max-w-xl font-medium mt-4 leading-relaxed">
+            <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 max-w-xl font-medium mt-4 leading-relaxed">
               A mobile-first academic platform helping university students prepare for exams systematically.
             </p>
 
@@ -671,7 +679,7 @@ export default function UniVaultCaseStudy() {
                 href="https://web.univault.live/" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl border border-slate-900 shadow-[3px_3px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all text-sm flex items-center gap-1.5"
+                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl border border-slate-900 dark:border-blue-500 shadow-[3px_3px_0px_0px_rgba(15,23,42,1)] dark:shadow-[3px_3px_0px_0px_rgba(59,130,246,0.4)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all text-sm flex items-center gap-1.5"
               >
                 <Rocket className="w-4 h-4" />
                 <span>Website</span>
@@ -680,7 +688,7 @@ export default function UniVaultCaseStudy() {
                 href="https://play.google.com/store/apps/details?id=com.simats.univault" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="px-5 py-2.5 bg-[#F05323] hover:bg-orange-600 text-white font-bold rounded-xl border border-slate-900 shadow-[3px_3px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all text-sm flex items-center gap-1.5"
+                className="px-5 py-2.5 bg-[#F05323] hover:bg-orange-600 text-white font-bold rounded-xl border border-slate-900 dark:border-orange-500 shadow-[3px_3px_0px_0px_rgba(15,23,42,1)] dark:shadow-[3px_3px_0px_0px_rgba(240,83,35,0.4)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all text-sm flex items-center gap-1.5"
               >
                 <Play className="w-4 h-4 fill-white" />
                 <span>Play Store</span>
@@ -689,7 +697,7 @@ export default function UniVaultCaseStudy() {
                 href="https://github.com/ComradeMohan/192210400pdd" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="px-5 py-2.5 bg-white hover:bg-slate-50 text-slate-950 font-bold rounded-xl border border-slate-900 shadow-[3px_3px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all text-sm flex items-center gap-1.5"
+                className="px-5 py-2.5 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-950 dark:text-white font-bold rounded-xl border border-slate-900 dark:border-slate-700 shadow-[3px_3px_0px_0px_rgba(15,23,42,1)] dark:shadow-[3px_3px_0px_0px_rgba(99,102,241,0.35)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all text-sm flex items-center gap-1.5"
               >
                 <Github className="w-4 h-4" />
                 <span>GitHub</span>
@@ -697,18 +705,18 @@ export default function UniVaultCaseStudy() {
             </div>
 
             {/* Hero Metadata */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mt-12 bg-white/60 backdrop-blur-sm rounded-2xl p-6 border-2 border-dashed border-slate-200 shadow-sm max-w-xl">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mt-12 bg-white/60 dark:bg-slate-900/70 backdrop-blur-sm rounded-2xl p-6 border-2 border-dashed border-slate-200 dark:border-slate-800 shadow-sm max-w-xl">
               <div>
-                <span className="text-xs text-slate-400 uppercase tracking-wider block font-bold">Role</span>
-                <span className="font-semibold text-slate-700 text-sm">Solo Developer</span>
+                <span className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider block font-bold">Role</span>
+                <span className="font-semibold text-slate-700 dark:text-slate-200 text-sm">Solo Developer</span>
               </div>
               <div>
-                <span className="text-xs text-slate-400 uppercase tracking-wider block font-bold">Timeline</span>
-                <span className="font-semibold text-slate-700 text-sm">2025 – Present</span>
+                <span className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider block font-bold">Timeline</span>
+                <span className="font-semibold text-slate-700 dark:text-slate-200 text-sm">2025 – Present</span>
               </div>
               <div className="col-span-2 md:col-span-1">
-                <span className="text-xs text-slate-400 uppercase tracking-wider block font-bold">Scope</span>
-                <span className="font-semibold text-slate-700 text-sm">Mobile + API Backend</span>
+                <span className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider block font-bold">Scope</span>
+                <span className="font-semibold text-slate-700 dark:text-slate-200 text-sm">Mobile + API Backend</span>
               </div>
             </div>
           </motion.div>
@@ -723,38 +731,38 @@ export default function UniVaultCaseStudy() {
             <div className="transform rotate-3 hover:rotate-0 transition-transform duration-300 relative z-10 cursor-pointer">
               <PhoneFrame>
                 {/* Simulated Screen Homepage */}
-                <div className="p-4 flex flex-col justify-between h-full bg-[#FAF9F5]">
-                  <div className="flex justify-between items-center pb-3 border-b border-slate-200/60">
+                <div className="p-4 flex flex-col justify-between h-full bg-[#FAF9F5] dark:bg-slate-950">
+                  <div className="flex justify-between items-center pb-3 border-b border-slate-200/60 dark:border-slate-800">
                     <div className="flex items-center gap-1.5">
                       <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white text-[10px] font-black">U</div>
-                      <span className="font-black text-slate-800 text-sm tracking-tight">UniVault</span>
+                      <span className="font-black text-slate-800 dark:text-white text-sm tracking-tight">UniVault</span>
                     </div>
-                    <span className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full font-bold">Connected</span>
+                    <span className="text-[10px] bg-green-100 dark:bg-emerald-950/80 text-green-700 dark:text-emerald-300 px-1.5 py-0.5 rounded-full font-bold">Connected</span>
                   </div>
 
                   <div className="my-auto space-y-4">
-                    <div className="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-xs">
-                      <span className="text-[9px] uppercase tracking-wide text-blue-500 font-bold block mb-1">Study materials</span>
-                      <h4 className="font-extrabold text-xs text-slate-900">Structured Unit Syllabus</h4>
-                      <p className="text-[10px] text-slate-500 mt-1 leading-snug">Unit-wise notes, handbooks & lectures synced offline.</p>
+                    <div className="bg-white dark:bg-slate-900 p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
+                      <span className="text-[9px] uppercase tracking-wide text-blue-500 dark:text-blue-400 font-bold block mb-1">Study materials</span>
+                      <h4 className="font-extrabold text-xs text-slate-900 dark:text-white">Structured Unit Syllabus</h4>
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 leading-snug">Unit-wise notes, handbooks & lectures synced offline.</p>
                     </div>
 
-                    <div className="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-xs">
+                    <div className="bg-white dark:bg-slate-900 p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
                       <span className="text-[9px] uppercase tracking-wide text-[#F05323] font-bold block mb-1">practice assessments</span>
-                      <h4 className="font-extrabold text-xs text-slate-900">Self-Grading Mock Tests</h4>
-                      <p className="text-[10px] text-slate-500 mt-1 leading-snug">Instant diagnostic grading on past year topics.</p>
+                      <h4 className="font-extrabold text-xs text-slate-900 dark:text-white">Self-Grading Mock Tests</h4>
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 leading-snug">Instant diagnostic grading on past year topics.</p>
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-slate-200/60 text-center">
-                    <span className="text-[9px] text-slate-400 font-bold">Exam Preparation Companion</span>
+                  <div className="pt-3 border-t border-slate-200/60 dark:border-slate-800 text-center">
+                    <span className="text-[9px] text-slate-400 dark:text-slate-500 font-bold">Exam Preparation Companion</span>
                   </div>
                 </div>
               </PhoneFrame>
             </div>
 
             {/* Handwritten callout pointing at phone mockup */}
-            <div className="absolute -left-12 bottom-6 text-blue-600 font-handwritten text-lg rotate-[-6deg] max-w-[140px] text-center pointer-events-none hidden sm:block">
+            <div className="absolute -left-12 bottom-6 text-blue-600 dark:text-blue-400 font-handwritten text-lg rotate-[-6deg] max-w-[140px] text-center pointer-events-none hidden sm:block">
               <svg className="w-10 h-10 mx-auto transform -rotate-12 mb-1" fill="none" viewBox="0 0 100 100" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                 <path d="M 80 20 Q 40 40 10 90" />
                 <path d="M 25 90 L 10 90 L 15 75" />
@@ -770,7 +778,7 @@ export default function UniVaultCaseStudy() {
       <TornPaperDividerTop />
 
       {/* Section 2: The Story */}
-      <section className="bg-orange-100/30 py-16 border-b border-orange-100">
+      <section className="bg-orange-100/30 dark:bg-slate-900/40 py-16 border-b border-orange-100 dark:border-slate-800">
         <motion.div 
           className="max-w-2xl mx-auto px-6 relative"
           initial={{ opacity: 0, y: 35 }}
@@ -778,13 +786,13 @@ export default function UniVaultCaseStudy() {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
         >
-          <div className="absolute -left-12 top-0 text-blue-600 opacity-60 hidden lg:block">
+          <div className="absolute -left-12 top-0 text-blue-600 dark:text-blue-400 opacity-60 hidden lg:block">
             <span className="font-handwritten text-4xl">“</span>
           </div>
           
-          <h2 className="text-2xl font-bold uppercase tracking-wider text-slate-400 mb-6 font-grotesk">The Story</h2>
+          <h2 className="text-2xl font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-6 font-grotesk">The Story</h2>
           
-          <div className="text-lg md:text-xl text-slate-700 leading-relaxed space-y-6 font-medium relative">
+          <div className="text-lg md:text-xl text-slate-700 dark:text-slate-200 leading-relaxed space-y-6 font-medium relative">
             <p>
               UniVault is a multi-platform academic companion that helps university students prepare for exams systematically via its Next.js website and native Kotlin Android application.
             </p>
@@ -793,7 +801,7 @@ export default function UniVaultCaseStudy() {
             </p>
             
             {/* Hand-drawn inline note callout */}
-            <span className="font-handwritten text-blue-600 text-xl block mt-8 border-l-4 border-dashed border-blue-300 pl-4 py-1 rotate-1 max-w-md">
+            <span className="font-handwritten text-blue-600 dark:text-blue-400 text-xl block mt-8 border-l-4 border-dashed border-blue-300 dark:border-blue-500/50 pl-4 py-1 rotate-1 max-w-md">
               "Students cram using phones on the commute. Building a native Kotlin Android experience was the only option that made sense."
             </span>
           </div>
@@ -802,7 +810,7 @@ export default function UniVaultCaseStudy() {
 
       {/* Section 3: Stat Band */}
       <section className="max-w-4xl mx-auto px-6 py-20 relative">
-        <h2 className="text-3xl font-extrabold text-slate-900 mb-12 text-center font-grotesk relative inline-block left-1/2 -translate-x-1/2">
+        <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-12 text-center font-grotesk relative inline-block left-1/2 -translate-x-1/2">
           Academic Reach
           <HandDrawnUnderline />
         </h2>
@@ -811,22 +819,22 @@ export default function UniVaultCaseStudy() {
           {stats.map((stat, idx) => (
             <motion.div 
               key={idx}
-              className="bg-white p-6 rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col justify-between relative"
+              className="bg-white dark:bg-slate-900/90 p-6 rounded-2xl border-2 border-slate-900 dark:border-slate-700 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:shadow-[4px_4px_0px_0px_rgba(99,102,241,0.35)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col justify-between relative"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1, duration: 0.5 }}
             >
               <div>
-                <h3 className="text-slate-400 font-bold text-xs uppercase tracking-wider mb-2">{stat.label}</h3>
-                <div className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight font-grotesk">
+                <h3 className="text-slate-400 dark:text-slate-400 font-bold text-xs uppercase tracking-wider mb-2">{stat.label}</h3>
+                <div className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight font-grotesk">
                   <CountUp end={stat.value} suffix={stat.suffix || ""} />
                 </div>
               </div>
 
               {/* Annotation labels underneath each stat card */}
-              <div className="mt-6 border-t border-dashed border-slate-100 pt-3">
-                <span className="font-handwritten text-blue-600 text-lg leading-tight block transform -rotate-1">
+              <div className="mt-6 border-t border-dashed border-slate-100 dark:border-slate-800 pt-3">
+                <span className="font-handwritten text-blue-600 dark:text-blue-400 text-lg leading-tight block transform -rotate-1">
                   {stat.note}
                 </span>
               </div>
@@ -840,11 +848,11 @@ export default function UniVaultCaseStudy() {
       {/* Section 4: Problem -> Solution Diagram */}
       <section className="max-w-6xl mx-auto px-6 py-16">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 font-grotesk relative inline-block">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white font-grotesk relative inline-block">
             Structuring the Cram Cycle
             <HandDrawnUnderline />
           </h2>
-          <p className="text-slate-500 text-lg mt-3 max-w-xl mx-auto font-medium">
+          <p className="text-slate-500 dark:text-slate-400 text-lg mt-3 max-w-xl mx-auto font-medium">
             Turning disorganized PDFs into a structured self-assessment pipeline.
           </p>
         </div>
@@ -853,46 +861,46 @@ export default function UniVaultCaseStudy() {
           
           {/* Left Side: Fragmented Content */}
           <motion.div 
-            className="lg:col-span-5 bg-red-50/50 rounded-3xl p-8 border-2 border-red-100 relative flex flex-col justify-between"
+            className="lg:col-span-5 bg-red-50/50 dark:bg-red-950/20 rounded-3xl p-8 border-2 border-red-100 dark:border-red-900/40 relative flex flex-col justify-between"
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="absolute top-4 right-4 bg-red-100 text-red-700 text-xs font-bold px-3 py-1 rounded-full">
+            <div className="absolute top-4 right-4 bg-red-100 dark:bg-red-950/80 text-red-700 dark:text-red-300 text-xs font-bold px-3 py-1 rounded-full border border-red-200 dark:border-red-900/50">
               CHAOTIC PREPARATION
             </div>
 
             <div>
-              <h3 className="text-2xl font-bold text-red-950 font-grotesk mb-6 font-semibold">The Problem</h3>
-              <p className="text-red-900/80 mb-8 font-medium">
+              <h3 className="text-2xl font-bold text-red-950 dark:text-red-200 font-grotesk mb-6 font-semibold">The Problem</h3>
+              <p className="text-red-900/80 dark:text-red-300 mb-8 font-medium">
                 Syllabuses are structured, but preparation content is a disorganized mess.
               </p>
             </div>
 
             {/* Scattered Icons */}
             <div className="space-y-4">
-              <div className="bg-white p-4 rounded-2xl border border-red-200 shadow-sm max-w-xs transform -rotate-1 flex gap-3 items-center">
+              <div className="bg-white dark:bg-slate-900/90 p-4 rounded-2xl border border-red-200 dark:border-red-900/60 shadow-sm max-w-xs transform -rotate-1 flex gap-3 items-center">
                 <span className="text-2xl">📁</span>
                 <div>
                   <span className="font-bold text-xs text-red-500 block">Scattered Senior PDFs</span>
-                  <p className="text-xs text-slate-600 leading-snug">"Download notes from this drive link before it goes offline."</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 leading-snug">"Download notes from this drive link before it goes offline."</p>
                 </div>
               </div>
 
-              <div className="bg-white p-4 rounded-2xl border border-red-200 shadow-sm max-w-xs ml-auto transform rotate-2 flex gap-3 items-center">
+              <div className="bg-white dark:bg-slate-900/90 p-4 rounded-2xl border border-red-200 dark:border-red-900/60 shadow-sm max-w-xs ml-auto transform rotate-2 flex gap-3 items-center">
                 <span className="text-2xl">💬</span>
                 <div>
                   <span className="font-bold text-xs text-red-500 block">WhatsApp Cramming</span>
-                  <p className="text-xs text-slate-600 leading-snug">"Who has solved the 2023 question bank paper?"</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 leading-snug">"Who has solved the 2023 question bank paper?"</p>
                 </div>
               </div>
 
-              <div className="bg-white p-4 rounded-2xl border border-red-200 shadow-sm max-w-xs transform -rotate-2 flex gap-3 items-center">
+              <div className="bg-white dark:bg-slate-900/90 p-4 rounded-2xl border border-red-200 dark:border-red-900/60 shadow-sm max-w-xs transform -rotate-2 flex gap-3 items-center">
                 <span className="text-2xl">⚠️</span>
                 <div>
                   <span className="font-bold text-xs text-red-500 block">No Way to Self-Assess</span>
-                  <p className="text-xs text-slate-600 leading-snug">Students walk into final exams without attempting mock papers.</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 leading-snug">Students walk into final exams without attempting mock papers.</p>
                 </div>
               </div>
             </div>
@@ -930,44 +938,44 @@ export default function UniVaultCaseStudy() {
 
           {/* Right Side: Structured Repository */}
           <motion.div 
-            className="lg:col-span-5 bg-green-50/50 rounded-3xl p-8 border-2 border-green-100 relative flex flex-col justify-between"
+            className="lg:col-span-5 bg-green-50/50 dark:bg-emerald-950/20 rounded-3xl p-8 border-2 border-green-100 dark:border-emerald-900/40 relative flex flex-col justify-between"
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="absolute top-4 right-4 bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">
+            <div className="absolute top-4 right-4 bg-green-100 dark:bg-emerald-950/80 text-green-700 dark:text-emerald-300 text-xs font-bold px-3 py-1 rounded-full border border-green-200 dark:border-emerald-900/50">
               STRUCTURED PORTAL
             </div>
 
             <div className="mb-6">
-              <h3 className="text-2xl font-bold text-green-950 font-grotesk mb-4 font-semibold">The Solution</h3>
-              <p className="text-green-900/80 font-medium">
+              <h3 className="text-2xl font-bold text-green-950 dark:text-emerald-200 font-grotesk mb-4 font-semibold">The Solution</h3>
+              <p className="text-green-900/80 dark:text-emerald-300 font-medium">
                 UniVault bundles resources inside a clean application schema.
               </p>
             </div>
 
-            <div className="flex flex-col items-center py-6 bg-white border border-green-200 rounded-2xl shadow-sm relative">
+            <div className="flex flex-col items-center py-6 bg-white dark:bg-slate-900 border border-green-200 dark:border-emerald-900/60 rounded-2xl shadow-sm relative">
               <div className="w-16 h-16 bg-blue-600 text-white rounded-3xl flex items-center justify-center text-4xl font-black shadow-md border-2 border-blue-700 relative z-10">
                 U
               </div>
-              <h4 className="font-black text-slate-800 text-xl mt-3 tracking-tight">UniVault App</h4>
-              <p className="text-xs text-slate-400 font-bold mt-1 uppercase tracking-wider">central vault</p>
+              <h4 className="font-black text-slate-800 dark:text-slate-100 text-xl mt-3 tracking-tight">UniVault App</h4>
+              <p className="text-xs text-slate-400 dark:text-slate-500 font-bold mt-1 uppercase tracking-wider">central vault</p>
 
               {/* Hand-drawn note inside solution box */}
-              <span className="font-handwritten text-blue-600 text-lg absolute -bottom-4 rotate-3 bg-yellow-100 px-2 py-0.5 border border-dashed border-yellow-300 rounded">
+              <span className="font-handwritten text-blue-600 dark:text-blue-400 text-lg absolute -bottom-4 rotate-3 bg-yellow-100 dark:bg-yellow-950/80 px-2 py-0.5 border border-dashed border-yellow-300 dark:border-yellow-700 rounded">
                 Syllabus-aligned preparation! 💯
               </span>
             </div>
 
             <div className="space-y-2 mt-6">
-              <div className="flex gap-2 items-center bg-white/60 p-2 rounded-xl border border-green-100/50 text-xs">
-                <span className="text-green-600">✓</span>
-                <span className="font-bold text-slate-700">Unit Study Guides</span>
+              <div className="flex gap-2 items-center bg-white/60 dark:bg-slate-900/60 p-2 rounded-xl border border-green-100/50 dark:border-emerald-900/40 text-xs">
+                <span className="text-green-600 dark:text-emerald-400">✓</span>
+                <span className="font-bold text-slate-700 dark:text-slate-200">Unit Study Guides</span>
               </div>
-              <div className="flex gap-2 items-center bg-white/60 p-2 rounded-xl border border-green-100/50 text-xs">
-                <span className="text-green-600">✓</span>
-                <span className="font-bold text-slate-700">Mock Assessments</span>
+              <div className="flex gap-2 items-center bg-white/60 dark:bg-slate-900/60 p-2 rounded-xl border border-green-100/50 dark:border-emerald-900/40 text-xs">
+                <span className="text-green-600 dark:text-emerald-400">✓</span>
+                <span className="font-bold text-slate-700 dark:text-slate-200">Mock Assessments</span>
               </div>
             </div>
           </motion.div>
@@ -976,14 +984,14 @@ export default function UniVaultCaseStudy() {
       </section>
 
       {/* Section 5: Tech Stack */}
-      <section className="bg-[#FAF9F5]/40 text-slate-800 py-20 relative overflow-hidden border-y border-dashed border-slate-200">
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px]"></div>
+      <section className="bg-[#FAF9F5]/40 dark:bg-slate-900/30 text-slate-800 dark:text-slate-200 py-20 relative overflow-hidden border-y border-dashed border-slate-200 dark:border-slate-800">
+        <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.08] pointer-events-none bg-[radial-gradient(#1e293b_1px,transparent_1px)] dark:bg-[radial-gradient(#94a3b8_1px,transparent_1px)] [background-size:16px_16px]"></div>
         
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-extrabold font-grotesk tracking-tight text-slate-900 mb-4">
+          <h2 className="text-3xl font-extrabold font-grotesk tracking-tight text-slate-900 dark:text-white mb-4">
             The Tech Stack Choice
           </h2>
-          <p className="text-slate-500 text-base max-w-xl mx-auto mb-12 font-medium">
+          <p className="text-slate-500 dark:text-slate-400 text-base max-w-xl mx-auto mb-12 font-medium">
             Since I was building and shipping this project solo, developer velocity and real-time synchronization were my highest priorities.
           </p>
 
@@ -995,12 +1003,12 @@ export default function UniVaultCaseStudy() {
               whileInView={{ opacity: 1, y: 0, rotate: 2 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform -translate-y-2 shadow-sm"
+              className="px-6 py-4 bg-white dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex items-center gap-3 transform -translate-y-2 shadow-sm"
             >
               <span className="text-3xl">⚛️</span>
               <div className="text-left">
-                <span className="font-bold block text-sm text-slate-800">Next.js</span>
-                <span className="text-xs text-slate-500 font-semibold">Website Frontend</span>
+                <span className="font-bold block text-sm text-slate-800 dark:text-slate-100">Next.js</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">Website Frontend</span>
               </div>
             </motion.div>
 
@@ -1009,12 +1017,12 @@ export default function UniVaultCaseStudy() {
               whileInView={{ opacity: 1, y: 0, rotate: -3 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform translate-y-3 shadow-sm"
+              className="px-6 py-4 bg-white dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex items-center gap-3 transform translate-y-3 shadow-sm"
             >
               <span className="text-3xl">🤖</span>
               <div className="text-left">
-                <span className="font-bold block text-sm text-slate-800">Kotlin</span>
-                <span className="text-xs text-slate-500 font-semibold">Native Android App</span>
+                <span className="font-bold block text-sm text-slate-800 dark:text-slate-100">Kotlin</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">Native Android App</span>
               </div>
             </motion.div>
 
@@ -1023,12 +1031,12 @@ export default function UniVaultCaseStudy() {
               whileInView={{ opacity: 1, y: 0, rotate: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform -translate-y-3 shadow-sm"
+              className="px-6 py-4 bg-white dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex items-center gap-3 transform -translate-y-3 shadow-sm"
             >
               <span className="text-3xl">🐘</span>
               <div className="text-left">
-                <span className="font-bold block text-sm text-slate-800">PHP</span>
-                <span className="text-xs text-slate-500 font-semibold">Backend REST API</span>
+                <span className="font-bold block text-sm text-slate-800 dark:text-slate-100">PHP</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">Backend REST API</span>
               </div>
             </motion.div>
 
@@ -1037,12 +1045,12 @@ export default function UniVaultCaseStudy() {
               whileInView={{ opacity: 1, y: 0, rotate: -1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.4 }}
-              className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform translate-y-1 shadow-sm"
+              className="px-6 py-4 bg-white dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex items-center gap-3 transform translate-y-1 shadow-sm"
             >
               <span className="text-3xl">🛢️</span>
               <div className="text-left">
-                <span className="font-bold block text-sm text-slate-800">SQL</span>
-                <span className="text-xs text-slate-500 font-semibold">Relational Database</span>
+                <span className="font-bold block text-sm text-slate-800 dark:text-slate-100">SQL</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">Relational Database</span>
               </div>
             </motion.div>
 
@@ -1051,18 +1059,18 @@ export default function UniVaultCaseStudy() {
               whileInView={{ opacity: 1, y: 0, rotate: 3 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.5 }}
-              className="px-6 py-4 bg-white border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-3 transform -translate-y-1 shadow-sm"
+              className="px-6 py-4 bg-white dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex items-center gap-3 transform -translate-y-1 shadow-sm"
             >
               <span className="text-3xl">🔥</span>
               <div className="text-left">
-                <span className="font-bold block text-sm text-slate-800">Firebase</span>
-                <span className="text-xs text-slate-500 font-semibold">Authentication & Sync</span>
+                <span className="font-bold block text-sm text-slate-800 dark:text-slate-100">Firebase</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">Authentication & Sync</span>
               </div>
             </motion.div>
 
           </div>
 
-          <div className="mt-12 max-w-md mx-auto text-slate-600 text-sm leading-relaxed">
+          <div className="mt-12 max-w-md mx-auto text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
             <span className="font-handwritten text-[#F05323] text-xl block mb-2">why Kotlin & PHP?</span>
             Kotlin delivers a high-performance native Android experience for students on-the-go, backed by a stable PHP/SQL relational database API.
           </div>
@@ -1070,7 +1078,7 @@ export default function UniVaultCaseStudy() {
       </section>
 
       {/* Section 5.5: System Architecture Explorer */}
-      <section className="bg-slate-50 py-20 border-y border-slate-200">
+      <section className="bg-slate-50 dark:bg-slate-950/60 py-20 border-y border-slate-200 dark:border-slate-800">
         <div className="max-w-4xl mx-auto px-6">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -1080,10 +1088,10 @@ export default function UniVaultCaseStudy() {
             className="text-center mb-12"
           >
             <span className="font-handwritten text-[#6366f1] text-2xl block mb-2">interactive blueprints</span>
-            <h2 className="text-3xl md:text-5xl font-black text-slate-900 font-grotesk tracking-tight">
+            <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white font-grotesk tracking-tight">
               System Architecture Explorer
             </h2>
-            <p className="text-slate-500 font-medium text-sm md:text-base mt-3 max-w-xl mx-auto">
+            <p className="text-slate-500 dark:text-slate-400 font-medium text-sm md:text-base mt-3 max-w-xl mx-auto">
               Click on components in the interactive blueprint below to inspect database schemas, token validation logic, and server endpoints.
             </p>
           </motion.div>
@@ -1095,7 +1103,7 @@ export default function UniVaultCaseStudy() {
       {/* Section 6: My Role */}
       <section className="max-w-4xl mx-auto px-6 py-20">
         <motion.div 
-          className="bg-white rounded-3xl p-8 md:p-12 border-2 border-slate-900 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] relative"
+          className="bg-white dark:bg-slate-900/90 rounded-3xl p-8 md:p-12 border-2 border-slate-900 dark:border-slate-700 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] dark:shadow-[8px_8px_0px_0px_rgba(99,102,241,0.35)] relative"
           initial={{ opacity: 0, y: 35 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -1106,7 +1114,7 @@ export default function UniVaultCaseStudy() {
             End-To-End Execution
           </div>
 
-          <h2 className="text-3xl font-extrabold text-slate-900 mb-8 font-grotesk">My Role & Responsibilities</h2>
+          <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-8 font-grotesk">My Role & Responsibilities</h2>
 
           <div className="space-y-6">
             <motion.div 
@@ -1118,8 +1126,8 @@ export default function UniVaultCaseStudy() {
             >
               <HandDrawnCheck />
               <div>
-                <h3 className="font-bold text-lg text-slate-800">Kotlin Android App Development</h3>
-                <p className="text-slate-600 text-sm mt-1">Built the native Android app using Kotlin, implementing screen navigation, offline study caching, and practice test grading modules.</p>
+                <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100">Kotlin Android App Development</h3>
+                <p className="text-slate-600 dark:text-slate-300 text-sm mt-1">Built the native Android app using Kotlin, implementing screen navigation, offline study caching, and practice test grading modules.</p>
               </div>
             </motion.div>
 
@@ -1132,8 +1140,8 @@ export default function UniVaultCaseStudy() {
             >
               <HandDrawnCheck />
               <div>
-                <h3 className="font-bold text-lg text-slate-800">PHP & SQL Backend API</h3>
-                <p className="text-slate-600 text-sm mt-1">Designed relational database schemas in SQL and deployed PHP endpoints for structured academic content delivery and test submission tracking.</p>
+                <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100">PHP & SQL Backend API</h3>
+                <p className="text-slate-600 dark:text-slate-300 text-sm mt-1">Designed relational database schemas in SQL and deployed PHP endpoints for structured academic content delivery and test submission tracking.</p>
               </div>
             </motion.div>
 
@@ -1146,8 +1154,8 @@ export default function UniVaultCaseStudy() {
             >
               <HandDrawnCheck />
               <div>
-                <h3 className="font-bold text-lg text-slate-800">Firebase User State Synchronization</h3>
-                <p className="text-slate-600 text-sm mt-1">Integrated Firebase authentication and data sync listeners to sync user progress, bookmarks, and test history across multiple devices.</p>
+                <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100">Firebase User State Synchronization</h3>
+                <p className="text-slate-600 dark:text-slate-300 text-sm mt-1">Integrated Firebase authentication and data sync listeners to sync user progress, bookmarks, and test history across multiple devices.</p>
               </div>
             </motion.div>
 
@@ -1160,8 +1168,8 @@ export default function UniVaultCaseStudy() {
             >
               <HandDrawnCheck />
               <div>
-                <h3 className="font-bold text-lg text-slate-800">App Store Publishing & Web Companion</h3>
-                <p className="text-slate-600 text-sm mt-1">Managed Google Play Console assets, configured release bundles, and deployed a marketing landing page (web.univault.live) to drive discoverability.</p>
+                <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100">App Store Publishing & Web Companion</h3>
+                <p className="text-slate-600 dark:text-slate-300 text-sm mt-1">Managed Google Play Console assets, configured release bundles, and deployed a marketing landing page (web.univault.live) to drive discoverability.</p>
               </div>
             </motion.div>
           </div>
@@ -1170,15 +1178,15 @@ export default function UniVaultCaseStudy() {
       </section>
 
       {/* Section 7: App Screenshot Gallery (Tilted Phone Polaroids) */}
-      <section className="bg-orange-50/40 py-20 border-y border-dashed border-orange-200 relative">
+      <section className="bg-orange-50/40 dark:bg-slate-900/20 py-20 border-y border-dashed border-orange-200 dark:border-slate-800 relative">
         <div className="max-w-6xl mx-auto px-6">
           
           <div className="text-center mb-16 relative">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 font-grotesk relative inline-block">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white font-grotesk relative inline-block">
               Interactive Screen Vault
               <HandDrawnCircle />
             </h2>
-            <p className="text-slate-500 text-sm font-semibold mt-4">
+            <p className="text-slate-500 dark:text-slate-400 text-sm font-semibold mt-4">
               Explore the mobile interfaces and try out the test grading simulator.
             </p>
           </div>
@@ -1186,28 +1194,28 @@ export default function UniVaultCaseStudy() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 justify-items-center">
             
             {/* Polaroid 1: Unit-wise study materials */}
-            <div className="bg-white p-4 pb-8 rounded-lg shadow-xl border border-slate-200 transform -rotate-2 hover:rotate-0 transition-transform relative hover:z-20">
+            <div className="bg-white dark:bg-slate-900 p-4 pb-8 rounded-lg shadow-xl border border-slate-200 dark:border-slate-800 transform -rotate-2 hover:rotate-0 transition-transform relative hover:z-20">
               <HandDrawnPin />
               <PhoneFrame>
-                <div className="p-4 flex flex-col justify-between h-full bg-[#FAF9F5] text-xs">
+                <div className="p-4 flex flex-col justify-between h-full bg-[#FAF9F5] dark:bg-slate-950 text-xs">
                   <div>
-                    <h4 className="font-black text-slate-800 mb-4 text-center">Structured Study Vault</h4>
+                    <h4 className="font-black text-slate-800 dark:text-white mb-4 text-center">Structured Study Vault</h4>
                     
                     <div className="space-y-3">
                       {syllabusData.map(u => (
-                        <div key={u.unit} className="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-xs">
+                        <div key={u.unit} className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
                           <button 
                             onClick={() => setActiveUnit(activeUnit === u.unit ? null : u.unit)}
-                            className="w-full text-left p-2.5 bg-slate-50 hover:bg-slate-100 flex justify-between items-center text-[10px] font-bold text-slate-700"
+                            className="w-full text-left p-2.5 bg-slate-50 dark:bg-slate-850 hover:bg-slate-100 dark:hover:bg-slate-800 flex justify-between items-center text-[10px] font-bold text-slate-700 dark:text-slate-200"
                           >
                             <span>{u.title}</span>
                             <span>{activeUnit === u.unit ? "▲" : "▼"}</span>
                           </button>
 
                           {activeUnit === u.unit && (
-                            <div className="p-2 border-t border-slate-100 space-y-1.5">
+                            <div className="p-2 border-t border-slate-100 dark:border-slate-800 space-y-1.5">
                               {u.files.map((f, fi) => (
-                                <div key={fi} className="flex items-center gap-1.5 text-[9px] text-slate-600 font-semibold p-1 hover:bg-slate-50 rounded">
+                                <div key={fi} className="flex items-center gap-1.5 text-[9px] text-slate-600 dark:text-slate-300 font-semibold p-1 hover:bg-slate-50 dark:hover:bg-slate-800 rounded">
                                   <span>📄</span>
                                   <span>{f}</span>
                                 </div>
@@ -1219,45 +1227,45 @@ export default function UniVaultCaseStudy() {
                     </div>
                   </div>
 
-                  <div className="text-[9px] text-slate-400 text-center font-bold">
+                  <div className="text-[9px] text-slate-400 dark:text-slate-500 text-center font-bold">
                     tap unit titles to toggle files
                   </div>
                 </div>
               </PhoneFrame>
               <div className="mt-4 text-center">
-                <p className="font-handwritten text-blue-700 text-2xl rotate-1">
+                <p className="font-handwritten text-blue-700 dark:text-blue-400 text-2xl rotate-1">
                   syllabus file library 📂
                 </p>
               </div>
             </div>
 
             {/* Polaroid 2: Practice & Model Tests (Interactive Quiz) */}
-            <div className="bg-white p-4 pb-8 rounded-lg shadow-xl border border-slate-200 transform rotate-3 hover:rotate-0 transition-transform relative hover:z-20">
+            <div className="bg-white dark:bg-slate-900 p-4 pb-8 rounded-lg shadow-xl border border-slate-200 dark:border-slate-800 transform rotate-3 hover:rotate-0 transition-transform relative hover:z-20">
               <HandDrawnPin />
               <PhoneFrame>
-                <div className="p-4 flex flex-col justify-between h-full bg-[#FAF9F5] text-xs">
+                <div className="p-4 flex flex-col justify-between h-full bg-[#FAF9F5] dark:bg-slate-950 text-xs">
                   <div>
                     <div className="flex justify-between items-center mb-3">
-                      <span className="text-[10px] text-slate-400 font-bold">Assessments</span>
-                      <span className="text-[10px] bg-blue-100 text-blue-700 px-1.5 py-0.2 rounded font-bold">Question 4</span>
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold">Assessments</span>
+                      <span className="text-[10px] bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 px-1.5 py-0.2 rounded font-bold">Question 4</span>
                     </div>
 
-                    <div className="bg-white p-3 rounded-xl border border-slate-200 mb-4 shadow-xs">
-                      <h4 className="font-extrabold text-[10px] text-slate-800 leading-snug">
+                    <div className="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 mb-4 shadow-xs">
+                      <h4 className="font-extrabold text-[10px] text-slate-800 dark:text-white leading-snug">
                         How does React Native compile custom JavaScript code?
                       </h4>
                     </div>
 
                     <div className="space-y-2">
                       {quizOptions.map(opt => {
-                        let btnStyle = "border-slate-200 bg-white text-slate-700";
+                        let btnStyle = "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200";
                         if (selectedOption !== null) {
                           if (opt.id === selectedOption) {
                             btnStyle = opt.isCorrect 
-                              ? "border-green-500 bg-green-50 text-green-700 font-bold" 
-                              : "border-red-500 bg-red-50 text-red-700 font-bold";
+                              ? "border-green-500 bg-green-50 dark:bg-emerald-950/50 text-green-700 dark:text-emerald-300 font-bold" 
+                              : "border-red-500 bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 font-bold";
                           } else if (opt.isCorrect) {
-                            btnStyle = "border-green-500 bg-green-50 text-green-700 font-bold";
+                            btnStyle = "border-green-500 bg-green-50 dark:bg-emerald-950/50 text-green-700 dark:text-emerald-300 font-bold";
                           }
                         }
                         
@@ -1275,12 +1283,12 @@ export default function UniVaultCaseStudy() {
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-center pt-3 border-t border-slate-200/60">
-                    <span className="text-[9px] text-slate-400 font-bold">Self-Grading engine</span>
+                  <div className="flex justify-between items-center pt-3 border-t border-slate-200/60 dark:border-slate-800">
+                    <span className="text-[9px] text-slate-400 dark:text-slate-500 font-bold">Self-Grading engine</span>
                     {selectedOption !== null && (
                       <button 
                         onClick={() => setSelectedOption(null)}
-                        className="text-[9px] text-blue-600 font-bold hover:underline"
+                        className="text-[9px] text-blue-600 dark:text-blue-400 font-bold hover:underline"
                       >
                         Reset Quiz
                       </button>
@@ -1290,7 +1298,7 @@ export default function UniVaultCaseStudy() {
               </PhoneFrame>
 
               {/* Hand-drawn arrow pointing at the quiz screen */}
-              <div className="absolute -right-16 top-1/3 text-blue-600 hidden lg:block select-none pointer-events-none">
+              <div className="absolute -right-16 top-1/3 text-blue-600 dark:text-blue-400 hidden lg:block select-none pointer-events-none">
                 <svg className="w-16 h-12 animate-doodle-vibrate" viewBox="0 0 100 50" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                   <motion.path 
                     d="M10,10 Q50,40 85,20" 
@@ -1313,21 +1321,21 @@ export default function UniVaultCaseStudy() {
               </div>
 
               <div className="mt-4 text-center">
-                <p className="font-handwritten text-blue-700 text-2xl -rotate-1">
+                <p className="font-handwritten text-blue-700 dark:text-blue-400 text-2xl -rotate-1">
                   diagnostic quiz UI 📝
                 </p>
               </div>
             </div>
 
             {/* Polaroid 3: Offline Mode Simulator */}
-            <div className="bg-white p-4 pb-8 rounded-lg shadow-xl border border-slate-200 transform -rotate-1 hover:rotate-0 transition-transform relative hover:z-20">
+            <div className="bg-white dark:bg-slate-900 p-4 pb-8 rounded-lg shadow-xl border border-slate-200 dark:border-slate-800 transform -rotate-1 hover:rotate-0 transition-transform relative hover:z-20">
               <HandDrawnPin />
               <PhoneFrame>
-                <div className="p-4 flex flex-col justify-between h-full bg-[#FAF9F5] text-xs">
+                <div className="p-4 flex flex-col justify-between h-full bg-[#FAF9F5] dark:bg-slate-950 text-xs">
                   <div>
-                    <h4 className="font-black text-slate-800 mb-4 text-center">Offline Sync Vault</h4>
+                    <h4 className="font-black text-slate-800 dark:text-white mb-4 text-center">Offline Sync Vault</h4>
 
-                    <div className="bg-white p-4 rounded-2xl border border-slate-200 text-center shadow-xs space-y-4">
+                    <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 text-center shadow-xs space-y-4">
                       <div className="flex justify-center">
                         <span className={`text-4xl transition-all ${isOffline ? "grayscale-xs opacity-65" : "text-green-500"}`}>
                           {isOffline ? "📡" : "📶"}
@@ -1335,13 +1343,13 @@ export default function UniVaultCaseStudy() {
                       </div>
                       
                       <div>
-                        <h5 className="font-bold text-slate-800 text-[11px]">
+                        <h5 className="font-bold text-slate-800 dark:text-slate-100 text-[11px]">
                           {isOffline ? "Offline Caching Mode" : "Realtime Database Sync"}
                         </h5>
-                        <p className="text-[9px] text-slate-500 mt-1 leading-normal">
+                        <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-1 leading-normal">
                           {isOffline 
-                            ? "Loading study files from AsyncStorage caching layers..." 
-                            : "Reading active material indices dynamically from Firebase servers."}
+                            ? "Loading study files from local Room caching layers..." 
+                            : "Reading active material indices dynamically from SQL endpoints."}
                         </p>
                       </div>
                     </div>
@@ -1358,7 +1366,7 @@ export default function UniVaultCaseStudy() {
                 </div>
               </PhoneFrame>
               <div className="mt-4 text-center">
-                <p className="font-handwritten text-blue-700 text-2xl rotate-1">
+                <p className="font-handwritten text-blue-700 dark:text-blue-400 text-2xl rotate-1">
                   offline-first fallback! 📶
                 </p>
               </div>
@@ -1372,11 +1380,11 @@ export default function UniVaultCaseStudy() {
       {/* Section: Technical Challenges & Solutions */}
       <section className="max-w-6xl mx-auto px-6 py-12 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 font-grotesk relative inline-block">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white font-grotesk relative inline-block">
             Technical Challenges & Solutions
             <HandDrawnUnderline />
           </h2>
-          <p className="text-slate-500 text-sm mt-3 max-w-xl mx-auto font-medium font-outfit">
+          <p className="text-slate-500 dark:text-slate-400 text-sm mt-3 max-w-xl mx-auto font-medium font-outfit">
             How I addressed key cryptographic bottlenecks, database concurrency issues, and offline storage limitations.
           </p>
         </div>
@@ -1385,7 +1393,7 @@ export default function UniVaultCaseStudy() {
           
           {/* Card 1: Key Derivation */}
           <motion.div 
-            className="bg-white p-6 rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col justify-between relative"
+            className="bg-white dark:bg-slate-900/90 p-6 rounded-2xl border-2 border-slate-900 dark:border-slate-700 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:shadow-[4px_4px_0px_0px_rgba(99,102,241,0.35)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col justify-between relative"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -1393,21 +1401,21 @@ export default function UniVaultCaseStudy() {
           >
             <div>
               <div className="flex items-center justify-between mb-4">
-                <span className="text-[9px] font-bold px-2 py-0.5 bg-red-50 text-red-600 border border-red-150 rounded-full font-grotesk uppercase tracking-wider">
+                <span className="text-[9px] font-bold px-2 py-0.5 bg-red-50 dark:bg-red-950/50 text-red-600 dark:text-red-400 border border-red-150 dark:border-red-900/50 rounded-full font-grotesk uppercase tracking-wider">
                   Security Bottleneck
                 </span>
                 <span className="text-lg">🔐</span>
               </div>
-              <h3 className="text-lg font-bold text-slate-900 font-grotesk mb-2">Cryptographic Key Derivation</h3>
-              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white font-grotesk mb-2">Cryptographic Key Derivation</h3>
+              <p className="text-slate-600 dark:text-slate-300 text-xs font-medium leading-relaxed font-outfit">
                 <strong>The Challenge:</strong> Short user-entered passwords are vulnerable to dictionary attacks and cannot be used directly as safe encryption keys.
               </p>
-              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit mt-2">
+              <p className="text-slate-600 dark:text-slate-300 text-xs font-medium leading-relaxed font-outfit mt-2">
                 <strong>The Solution:</strong> Implemented a PBKDF2 (Password-Based Key Derivation Function 2) pipeline. The app derives a 256-bit key by hashing passwords with a 128-bit random salt over 10,000 HMAC-SHA-256 iterations before passing it to the AES-256 GCM cipher.
               </p>
             </div>
-            <div className="mt-6 border-t border-dashed border-slate-100 pt-3">
-              <span className="font-handwritten text-[#b45309] text-lg leading-tight block transform -rotate-1 font-bold">
+            <div className="mt-6 border-t border-dashed border-slate-100 dark:border-slate-800 pt-3">
+              <span className="font-handwritten text-[#b45309] dark:text-orange-400 text-lg leading-tight block transform -rotate-1 font-bold">
                 zero plain-text storage! 🛡️
               </span>
             </div>
@@ -1415,7 +1423,7 @@ export default function UniVaultCaseStudy() {
 
           {/* Card 2: Database Locking */}
           <motion.div 
-            className="bg-white p-6 rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col justify-between relative"
+            className="bg-white dark:bg-slate-900/90 p-6 rounded-2xl border-2 border-slate-900 dark:border-slate-700 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:shadow-[4px_4px_0px_0px_rgba(99,102,241,0.35)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col justify-between relative"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -1423,21 +1431,21 @@ export default function UniVaultCaseStudy() {
           >
             <div>
               <div className="flex items-center justify-between mb-4">
-                <span className="text-[9px] font-bold px-2 py-0.5 bg-red-50 text-red-600 border border-red-150 rounded-full font-grotesk uppercase tracking-wider">
+                <span className="text-[9px] font-bold px-2 py-0.5 bg-red-50 dark:bg-red-950/50 text-red-600 dark:text-red-400 border border-red-150 dark:border-red-900/50 rounded-full font-grotesk uppercase tracking-wider">
                   Concurrency Issue
                 </span>
                 <span className="text-lg">🔀</span>
               </div>
-              <h3 className="text-lg font-bold text-slate-900 font-grotesk mb-2">Database Locking & Threading</h3>
-              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white font-grotesk mb-2">Database Locking & Threading</h3>
+              <p className="text-slate-600 dark:text-slate-300 text-xs font-medium leading-relaxed font-outfit">
                 <strong>The Challenge:</strong> Running heavy file parsing and crypto updates on the main thread causes UI stuttering (ANR warnings), while concurrent async writes cause SQLite lock collisions.
               </p>
-              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit mt-2">
+              <p className="text-slate-600 dark:text-slate-300 text-xs font-medium leading-relaxed font-outfit mt-2">
                 <strong>The Solution:</strong> Built a Coroutine-backed Room Database pipeline. All database transactions are restricted to a single-threaded background execution pool (`Dispatchers.IO` mediated by a Mutex semaphore), avoiding write collisions.
               </p>
             </div>
-            <div className="mt-6 border-t border-dashed border-slate-100 pt-3">
-              <span className="font-handwritten text-[#b45309] text-lg leading-tight block transform rotate-1 font-bold">
+            <div className="mt-6 border-t border-dashed border-slate-100 dark:border-slate-800 pt-3">
+              <span className="font-handwritten text-[#b45309] dark:text-orange-400 text-lg leading-tight block transform rotate-1 font-bold">
                 smooth 60 FPS UI rendering! ⚡
               </span>
             </div>
@@ -1445,7 +1453,7 @@ export default function UniVaultCaseStudy() {
 
           {/* Card 3: Memory Leaks */}
           <motion.div 
-            className="bg-white p-6 rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col justify-between relative"
+            className="bg-white dark:bg-slate-900/90 p-6 rounded-2xl border-2 border-slate-900 dark:border-slate-700 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:shadow-[4px_4px_0px_0px_rgba(99,102,241,0.35)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col justify-between relative"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -1453,21 +1461,21 @@ export default function UniVaultCaseStudy() {
           >
             <div>
               <div className="flex items-center justify-between mb-4">
-                <span className="text-[9px] font-bold px-2 py-0.5 bg-red-50 text-red-600 border border-red-150 rounded-full font-grotesk uppercase tracking-wider">
+                <span className="text-[9px] font-bold px-2 py-0.5 bg-red-50 dark:bg-red-950/50 text-red-600 dark:text-red-400 border border-red-150 dark:border-red-900/50 rounded-full font-grotesk uppercase tracking-wider">
                   Resource Constraint
                 </span>
                 <span className="text-lg">💾</span>
               </div>
-              <h3 className="text-lg font-bold text-slate-900 font-grotesk mb-2">Offline Document Caching</h3>
-              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white font-grotesk mb-2">Offline Document Caching</h3>
+              <p className="text-slate-600 dark:text-slate-300 text-xs font-medium leading-relaxed font-outfit">
                 <strong>The Challenge:</strong> Caching large academic syllabus and question bank PDF files directly in Android system RAM causes memory leaks and device-wide crash-loops.
               </p>
-              <p className="text-slate-600 text-xs font-medium leading-relaxed font-outfit mt-2">
+              <p className="text-slate-600 dark:text-slate-300 text-xs font-medium leading-relaxed font-outfit mt-2">
                 <strong>The Solution:</strong> Designed a chunked local storage stream. PDFs are downloaded in background chunks, saved directly to the device's isolated storage directory (`context.cacheDir`), and indexed in a lightweight SQLite metadata manifest.
               </p>
             </div>
-            <div className="mt-6 border-t border-dashed border-slate-100 pt-3">
-              <span className="font-handwritten text-[#b45309] text-lg leading-tight block transform -rotate-1 font-bold">
+            <div className="mt-6 border-t border-dashed border-slate-100 dark:border-slate-800 pt-3">
+              <span className="font-handwritten text-[#b45309] dark:text-orange-400 text-lg leading-tight block transform -rotate-1 font-bold">
                 near-zero memory leaks! 🗃️
               </span>
             </div>
@@ -1481,7 +1489,7 @@ export default function UniVaultCaseStudy() {
         
         {/* Sticky Note Box */}
         <motion.div 
-          className="bg-[#FEF9C3] p-8 md:p-12 rounded-3xl border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] transform -rotate-1 relative overflow-hidden"
+          className="bg-[#FEF9C3] dark:bg-[#1a1f10] p-8 md:p-12 rounded-3xl border-2 border-slate-900 dark:border-yellow-700/50 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] dark:shadow-[6px_6px_0px_0px_rgba(234,179,8,0.25)] transform -rotate-1 relative overflow-hidden"
           initial={{ opacity: 0, scale: 0.95, rotate: -3 }}
           whileInView={{ opacity: 1, scale: 1, rotate: -1 }}
           viewport={{ once: true }}
@@ -1489,13 +1497,13 @@ export default function UniVaultCaseStudy() {
         >
           
           {/* Subtle tape effect at top */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-slate-200/50 backdrop-blur-xs border-x border-b border-slate-300 transform -translate-y-2"></div>
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-slate-200/50 dark:bg-slate-700/40 backdrop-blur-xs border-x border-b border-slate-300 dark:border-slate-600 transform -translate-y-2"></div>
           
-          <h2 className="text-3xl font-extrabold text-slate-900 mb-6 font-grotesk flex items-center gap-2">
+          <h2 className="text-3xl font-extrabold text-slate-900 dark:text-yellow-200 mb-6 font-grotesk flex items-center gap-2">
             What I'd Improve Next
           </h2>
 
-          <ul className="space-y-4 font-medium text-slate-700">
+          <ul className="space-y-4 font-medium text-slate-700 dark:text-amber-100/90">
             <li className="flex items-start gap-2.5">
               <span className="text-[#F05323] text-lg select-none">📌</span>
               <span>
@@ -1516,7 +1524,7 @@ export default function UniVaultCaseStudy() {
             </li>
           </ul>
 
-          <span className="font-handwritten text-[#b45309] text-xl absolute right-8 bottom-4 rotate-6 hidden sm:block">
+          <span className="font-handwritten text-[#b45309] dark:text-yellow-400 text-xl absolute right-8 bottom-4 rotate-6 hidden sm:block">
             scaling fast! 🚀
           </span>
         </motion.div>
@@ -1530,15 +1538,15 @@ export default function UniVaultCaseStudy() {
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        <h2 className="text-3xl md:text-5xl font-black text-slate-900 font-grotesk tracking-tight mb-4">
+        <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white font-grotesk tracking-tight mb-4">
           Get UniVault App
         </h2>
-        <p className="text-slate-500 font-medium text-lg mb-10 max-w-lg mx-auto">
+        <p className="text-slate-500 dark:text-slate-400 font-medium text-lg mb-10 max-w-lg mx-auto">
           Explore the web preview portal, install the app on Android, or inspect the project repository details on GitHub.
         </p>
 
         {/* Hand-drawn arrow pointing to buttons */}
-        <div className="absolute top-0 right-1/4 text-blue-600 hidden md:block select-none transform rotate-12">
+        <div className="absolute top-0 right-1/4 text-blue-600 dark:text-blue-400 hidden md:block select-none transform rotate-12">
           <svg className="w-16 h-16 animate-doodle-vibrate" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
             <motion.path 
               d="M10,80 Q30,30 80,20" 
@@ -1566,7 +1574,7 @@ export default function UniVaultCaseStudy() {
             href="https://web.univault.live/" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center gap-2 text-lg"
+            className="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl border-2 border-slate-900 dark:border-blue-500 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:shadow-[4px_4px_0px_0px_rgba(59,130,246,0.4)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center gap-2 text-lg"
           >
             <Rocket className="w-5 h-5" />
             <span>Visit Web Portal</span>
@@ -1576,7 +1584,7 @@ export default function UniVaultCaseStudy() {
             href="https://play.google.com/store/apps/details?id=com.simats.univault" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="w-full sm:w-auto px-8 py-4 bg-[#F05323] hover:bg-orange-600 text-white font-bold rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center gap-2 text-lg"
+            className="w-full sm:w-auto px-8 py-4 bg-[#F05323] hover:bg-orange-600 text-white font-bold rounded-2xl border-2 border-slate-900 dark:border-orange-500 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:shadow-[4px_4px_0px_0px_rgba(240,83,35,0.4)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center gap-2 text-lg"
           >
             <Play className="w-5 h-5 fill-white" />
             <span>Install Play Store</span>
@@ -1586,7 +1594,7 @@ export default function UniVaultCaseStudy() {
             href="https://github.com/ComradeMohan/192210400pdd" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-slate-50 text-slate-900 font-bold rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center gap-2 text-lg"
+            className="w-full sm:w-auto px-8 py-4 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-900 dark:text-white font-bold rounded-2xl border-2 border-slate-900 dark:border-slate-700 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:shadow-[4px_4px_0px_0px_rgba(99,102,241,0.35)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center gap-2 text-lg"
           >
             <Github className="w-5 h-5" />
             <span>Source Code</span>

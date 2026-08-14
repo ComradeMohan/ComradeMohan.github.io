@@ -91,7 +91,53 @@
   }
 
   ::selection {
-    @apply bg-primary text-primary-foreground;
+    background-color: #f97316 !important;
+    color: #ffffff !important;
+  }
+
+  input::selection,
+  textarea::selection {
+    background-color: #f97316 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+
+  /* Force input text color in light & dark mode to prevent browser spellcheck & user-agent styles from turning text black */
+  input,
+  textarea,
+  input:focus,
+  textarea:focus,
+  input:invalid,
+  textarea:invalid,
+  ::spelling-error,
+  ::-webkit-spelling-error,
+  ::grammar-error,
+  ::-webkit-grammar-error {
+    -webkit-text-fill-color: currentColor;
+  }
+
+  .dark input,
+  .dark textarea,
+  .dark input:focus,
+  .dark textarea:focus,
+  .dark input:invalid,
+  .dark textarea:invalid,
+  .dark ::spelling-error,
+  .dark ::-webkit-spelling-error {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+
+  .light input,
+  .light textarea,
+  .light input:focus,
+  .light textarea:focus,
+  .light input:invalid,
+  .light textarea:invalid,
+  .light ::spelling-error,
+  .light ::-webkit-spelling-error {
+    color: #0f172a !important;
+    -webkit-text-fill-color: #0f172a !important;
   }
 
   html {
@@ -99,10 +145,50 @@
     overflow-x: hidden;
   }
 
+  section[id],
+  [id] {
+    scroll-margin-top: 5rem;
+  }
+
+  @media (min-width: 768px) {
+    section[id],
+    [id] {
+      scroll-margin-top: 5.5rem;
+    }
+  }
+
   body {
     @apply bg-background text-foreground;
     font-family: 'Outfit', sans-serif;
     overflow-x: hidden;
+  }
+
+  /* Prevent browser autofill from breaking input/textarea background and text colors */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus,
+  textarea:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px hsl(var(--card)) inset !important;
+    -webkit-text-fill-color: hsl(var(--foreground)) !important;
+    caret-color: hsl(var(--foreground)) !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  .dark input:-webkit-autofill,
+  .dark input:-webkit-autofill:hover, 
+  .dark input:-webkit-autofill:focus,
+  .dark input:-webkit-autofill:active,
+  .dark textarea:-webkit-autofill,
+  .dark textarea:-webkit-autofill:hover,
+  .dark textarea:-webkit-autofill:focus,
+  .dark textarea:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px #090C15 inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+    caret-color: #ffffff !important;
   }
 }
 
@@ -149,6 +235,19 @@
 
 .animate-marquee {
   animation: marquee 30s linear infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2.5s infinite;
 }
 
 /* Sleek custom glassmorphic scrollbar for premium desktop styling */
