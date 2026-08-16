@@ -36,7 +36,7 @@ Strong technical expertise across Java, TypeScript, React, Next.js, Kotlin (Andr
 • Bachelor of Engineering (B.E.) in Computer Science & Engineering
   - Institution: Saveetha School of Engineering (SIMATS), Chennai, Tamil Nadu
   - Duration: 2022 – 2026 (Graduating Batch)
-  - Current Cumulative GPA: 8.61 / 10.0
+  - Current Cumulative GPA: 8.646 / 10.0
   - Key Coursework: Data Structures & Algorithms, Object-Oriented Programming (Java/C++), Database Management Systems (DBMS), Operating Systems, Computer Networks, Software Engineering, Cloud Computing, Machine Learning.
 
 • Intermediate (MPC + Computer Science)

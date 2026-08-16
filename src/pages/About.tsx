@@ -121,7 +121,7 @@ const About = () => {
         <Navbar />
 
         <main className="flex-grow pt-28 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-          
+
           {/* Top Breadcrumb */}
           <nav className="mb-6" aria-label="Breadcrumb">
             <ol className="flex items-center gap-2 text-xs text-muted-foreground font-grotesk">
@@ -132,16 +132,16 @@ const About = () => {
           </nav>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
+
             {/* Left Column (Profile Info Card & stats) */}
             <div className="lg:col-span-4 space-y-6">
-              
+
               {/* Profile Photo Section (Optimized Image representation) */}
               <figure className="bg-card rounded-2xl border border-border overflow-hidden shadow-xl">
                 <div className="h-64 w-full bg-gradient-to-b from-primary/10 to-card relative">
-                  <img 
-                    src={avatarUrl} 
-                    alt="Mohan Reddy, Full Stack Developer and Android engineer" 
+                  <img
+                    src={avatarUrl}
+                    alt="Mohan Reddy, Full Stack Developer and Android engineer"
                     title="Mohan Reddy Profile Photo"
                     width="400"
                     height="400"
@@ -150,7 +150,7 @@ const About = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
                 </div>
-                
+
                 <figcaption className="p-6 relative -mt-12 z-10">
                   <div className="flex items-center gap-2 mb-1">
                     <h1 className="text-2xl font-bold text-foreground tracking-tight">Mohan Reddy</h1>
@@ -159,11 +159,11 @@ const About = () => {
                     </span>
                   </div>
                   <p className="text-sm text-muted-foreground mb-4 font-grotesk">Full Stack Developer • Software Engineer</p>
-                  
+
                   <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6 font-grotesk">
                     <MapPin className="w-4 h-4 text-primary" /> <span>India</span>
                   </div>
-                  
+
                   <div className="w-full py-2.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-sm font-medium flex items-center justify-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                     Available for Job Roles & Internships
@@ -191,7 +191,7 @@ const About = () => {
                     <div className="text-xs text-muted-foreground font-grotesk">Repositories</div>
                   </div>
                 </div>
-                <a 
+                <a
                   href="https://github.com/ComradeMohan"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -244,7 +244,7 @@ const About = () => {
 
             {/* Right Column (Long-form details) */}
             <div className="lg:col-span-8 space-y-8">
-              
+
               {/* Biography Section */}
               <section className="bg-card rounded-2xl border border-border p-6 sm:p-8 shadow-xl space-y-6">
                 <h2 className="text-2xl font-bold font-outfit border-b border-border pb-2 text-foreground flex items-center gap-2">
@@ -268,13 +268,13 @@ const About = () => {
                 <h2 className="text-2xl font-bold font-outfit border-b border-border pb-2 text-foreground flex items-center gap-2">
                   <GraduationCap className="w-5 h-5 text-primary" /> Academic History
                 </h2>
-                
+
                 <div className="space-y-6">
                   <div className="border-l-2 border-primary/20 pl-4 space-y-2">
                     <span className="text-xs font-bold text-primary font-jetbrains bg-primary/10 px-2.5 py-0.5 rounded border border-primary/20">2022 - 2026</span>
                     <h3 className="text-lg font-bold text-foreground font-outfit">B.E. Computer Science & Engineering</h3>
                     <p className="text-sm font-medium text-foreground font-grotesk">Saveetha School of Engineering (SIMATS) — Chennai, India</p>
-                    <p className="text-xs text-muted-foreground font-grotesk">Focus on Data Structures, Algorithms, Database Management Systems, and Web Application Architectures. Achieved a CGPA of <strong>8.61 / 10</strong>.</p>
+                    <p className="text-xs text-muted-foreground font-grotesk">Focus on Data Structures, Algorithms, Database Management Systems, and Web Application Architectures. Achieved a CGPA of <strong>8.646 / 10</strong>.</p>
                   </div>
 
                   <div className="border-l-2 border-primary/20 pl-4 space-y-2">

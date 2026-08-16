@@ -730,33 +730,199 @@ export default function UniVaultCaseStudy() {
           >
             <div className="transform rotate-3 hover:rotate-0 transition-transform duration-300 relative z-10 cursor-pointer">
               <PhoneFrame>
-                {/* Simulated Screen Homepage */}
-                <div className="p-4 flex flex-col justify-between h-full bg-[#FAF9F5] dark:bg-slate-950">
-                  <div className="flex justify-between items-center pb-3 border-b border-slate-200/60 dark:border-slate-800">
+                {/* Simulated Screen Homepage: UniVault App Dashboard (Theme-Aware) */}
+                <div className="px-3 py-3 flex flex-col h-full overflow-hidden bg-[#FAF9F5] dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-300">
+
+                  {/* UniVault Header */}
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-200/80 dark:border-slate-800 shrink-0">
                     <div className="flex items-center gap-1.5">
-                      <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white text-[10px] font-black">U</div>
-                      <span className="font-black text-slate-800 dark:text-white text-sm tracking-tight">UniVault</span>
+                      <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-xs">
+                        <span className="text-white text-[11px] font-black font-outfit">U</span>
+                      </div>
+
+                      <div>
+                        <div className="font-black text-slate-900 dark:text-white text-[12px] leading-none font-outfit">
+                          UniVault
+                        </div>
+                        <div className="text-[7px] text-slate-500 dark:text-slate-400 mt-0.5 font-grotesk">
+                          Your University. Organized.
+                        </div>
+                      </div>
                     </div>
-                    <span className="text-[10px] bg-green-100 dark:bg-emerald-950/80 text-green-700 dark:text-emerald-300 px-1.5 py-0.5 rounded-full font-bold">Connected</span>
+
+                    <div className="w-6 h-6 rounded-full border border-slate-300 dark:border-slate-700 bg-white/60 dark:bg-transparent flex items-center justify-center shadow-2xs">
+                      <span className="text-[9px] text-slate-500 dark:text-slate-400 font-bold">♧</span>
+                    </div>
                   </div>
 
-                  <div className="my-auto space-y-4">
-                    <div className="bg-white dark:bg-slate-900 p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
-                      <span className="text-[9px] uppercase tracking-wide text-blue-500 dark:text-blue-400 font-bold block mb-1">Study materials</span>
-                      <h4 className="font-extrabold text-xs text-slate-900 dark:text-white">Structured Unit Syllabus</h4>
-                      <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 leading-snug">Unit-wise notes, handbooks & lectures synced offline.</p>
+                  {/* Quick Features */}
+                  <div className="flex gap-1.5 py-2 overflow-hidden shrink-0">
+                    <div className="px-2 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-2xs whitespace-nowrap">
+                      <span className="text-[7px] text-blue-600 dark:text-blue-400 font-bold font-grotesk">⌂ Smart</span>
                     </div>
-
-                    <div className="bg-white dark:bg-slate-900 p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
-                      <span className="text-[9px] uppercase tracking-wide text-[#F05323] font-bold block mb-1">practice assessments</span>
-                      <h4 className="font-extrabold text-xs text-slate-900 dark:text-white">Self-Grading Mock Tests</h4>
-                      <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 leading-snug">Instant diagnostic grading on past year topics.</p>
+                    <div className="px-2 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-2xs whitespace-nowrap">
+                      <span className="text-[7px] text-blue-600 dark:text-blue-400 font-bold font-grotesk">✎ AI Notes</span>
+                    </div>
+                    <div className="px-2 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-2xs whitespace-nowrap">
+                      <span className="text-[7px] text-blue-600 dark:text-blue-400 font-bold font-grotesk">? MCQ</span>
+                    </div>
+                    <div className="px-2 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-2xs whitespace-nowrap">
+                      <span className="text-[7px] text-blue-600 dark:text-blue-400 font-bold font-grotesk">▥ Progress</span>
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-slate-200/60 dark:border-slate-800 text-center">
-                    <span className="text-[9px] text-slate-400 dark:text-slate-500 font-bold">Exam Preparation Companion</span>
+                  {/* Dashboard */}
+                  <div className="flex-1 overflow-y-auto space-y-2 pr-0.5">
+
+                    {/* Welcome Card */}
+                    <div className="rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-2.5 shadow-xs">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <p className="text-[7px] text-slate-500 dark:text-slate-400 font-grotesk">
+                            Good Evening,
+                          </p>
+                          <h3 className="text-[11px] font-black text-slate-900 dark:text-white font-outfit">
+                            M MOHAN REDDY
+                          </h3>
+                        </div>
+                        <span className="text-[11px] text-slate-400 dark:text-slate-500">
+                          ♧
+                        </span>
+                      </div>
+
+                      <div className="mt-2 rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 dark:from-blue-700 dark:to-blue-500 p-2 shadow-xs">
+                        <p className="text-[7px] text-blue-50 dark:text-blue-100 font-bold uppercase font-outfit">
+                          Welcome to UniVault
+                        </p>
+                        <p className="text-[7px] text-blue-50 dark:text-blue-100 mt-0.5 leading-tight font-grotesk opacity-95">
+                          Hi there! Welcome to univault. Test the app and give us feedback.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Degree Progress */}
+                    <div className="rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-2.5 shadow-xs">
+                      <div className="flex justify-between items-center">
+                        <span className="text-[8px] text-slate-900 dark:text-white font-bold font-outfit">
+                          Degree Progress
+                        </span>
+                        <span className="text-[8px] text-slate-500 dark:text-slate-400 font-grotesk font-semibold">
+                          18%
+                        </span>
+                      </div>
+
+                      <div className="h-1 bg-slate-100 dark:bg-slate-800 rounded-full mt-1 overflow-hidden">
+                        <div className="h-1 w-[18%] bg-blue-500 rounded-full"></div>
+                      </div>
+
+                      <div className="flex justify-between mt-1.5">
+                        <span className="text-[7px] text-slate-500 dark:text-slate-400 font-grotesk">
+                          CGPA: <b className="text-slate-900 dark:text-white">8.00</b>
+                        </span>
+                        <span className="text-[7px] text-slate-500 dark:text-slate-400 font-grotesk">
+                          Predicted: <b className="text-slate-900 dark:text-white">8.00</b>
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Continue Studying */}
+                    <div className="rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-2.5 shadow-xs">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 rounded-lg bg-blue-500/10 dark:bg-blue-500/15 border border-blue-500/20 dark:border-blue-500/30 flex items-center justify-center">
+                            <span className="text-blue-600 dark:text-blue-400 text-[11px]">◷</span>
+                          </div>
+                          <div>
+                            <p className="text-[8px] text-slate-900 dark:text-white font-bold font-outfit">
+                              Artificial Intelligence
+                            </p>
+                            <p className="text-[7px] text-slate-500 dark:text-slate-400 font-grotesk">
+                              PASS Mode · 60% Topics
+                            </p>
+                          </div>
+                        </div>
+                        <span className="text-slate-400 dark:text-slate-500 text-[10px]">
+                          ›
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Study Statistics */}
+                    <div>
+                      <p className="text-[8px] font-bold text-slate-900 dark:text-white mb-1.5 font-outfit">
+                        Study Statistics
+                      </p>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-2 text-center shadow-xs">
+                          <div className="text-blue-600 dark:text-blue-400 text-[13px]">◷</div>
+                          <p className="text-[10px] text-slate-900 dark:text-white font-bold font-outfit">1m</p>
+                          <p className="text-[6px] text-slate-500 dark:text-slate-400 font-grotesk">Time Spent</p>
+                        </div>
+                        <div className="rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-2 text-center shadow-xs">
+                          <div className="text-blue-600 dark:text-blue-400 text-[13px]">♢</div>
+                          <p className="text-[10px] text-slate-900 dark:text-white font-bold font-outfit">5</p>
+                          <p className="text-[6px] text-slate-500 dark:text-slate-400 font-grotesk">Total Courses</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Courses */}
+                    <div className="rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-2.5 shadow-xs">
+                      <div className="flex justify-between items-center mb-1.5">
+                        <span className="text-[9px] text-cyan-600 dark:text-cyan-400 font-bold font-outfit">
+                          Courses
+                        </span>
+                        <span className="text-[7px] text-blue-600 dark:text-blue-400 font-grotesk font-semibold">
+                          View all
+                        </span>
+                      </div>
+                      <div className="space-y-1">
+                        <div className="flex justify-between items-center rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200/70 dark:border-slate-800 px-2 py-1.5">
+                          <div>
+                            <p className="text-[6px] text-slate-400 dark:text-slate-500 font-grotesk font-mono">CS317</p>
+                            <p className="text-[7px] text-slate-800 dark:text-white font-semibold font-outfit">Artificial Intelligence</p>
+                          </div>
+                          <span className="text-slate-400 dark:text-slate-500 text-[9px]">›</span>
+                        </div>
+                        <div className="flex justify-between items-center rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200/70 dark:border-slate-800 px-2 py-1.5">
+                          <div>
+                            <p className="text-[6px] text-slate-400 dark:text-slate-500 font-grotesk font-mono">CS407</p>
+                            <p className="text-[7px] text-slate-800 dark:text-white font-semibold font-outfit">Fundamentals of Computing</p>
+                          </div>
+                          <span className="text-slate-400 dark:text-slate-500 text-[9px]">›</span>
+                        </div>
+                        <div className="flex justify-between items-center rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200/70 dark:border-slate-800 px-2 py-1.5">
+                          <div>
+                            <p className="text-[6px] text-slate-400 dark:text-slate-500 font-grotesk font-mono">CS313</p>
+                            <p className="text-[7px] text-slate-800 dark:text-white font-semibold font-outfit">Theory of Computation</p>
+                          </div>
+                          <span className="text-slate-400 dark:text-slate-500 text-[9px]">›</span>
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
+
+                  {/* Bottom Navigation */}
+                  <div className="mt-2 pt-2 border-t border-slate-200/80 dark:border-slate-800 flex justify-around shrink-0">
+                    <div className="text-center">
+                      <div className="text-blue-600 dark:text-blue-400 text-[11px]">⌂</div>
+                      <span className="text-[6px] text-blue-600 dark:text-blue-400 font-grotesk font-bold">Home</span>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-slate-400 dark:text-slate-500 text-[11px]">▤</div>
+                      <span className="text-[6px] text-slate-500 dark:text-slate-400 font-grotesk">Courses</span>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-slate-400 dark:text-slate-500 text-[11px]">□</div>
+                      <span className="text-[6px] text-slate-500 dark:text-slate-400 font-grotesk">Calendar</span>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-slate-400 dark:text-slate-500 text-[11px]">◯</div>
+                      <span className="text-[6px] text-slate-500 dark:text-slate-400 font-grotesk">Profile</span>
+                    </div>
+                  </div>
+
                 </div>
               </PhoneFrame>
             </div>

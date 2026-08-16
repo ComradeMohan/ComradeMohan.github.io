@@ -3,11 +3,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Mail, Send, Github, Linkedin, FileText, ArrowRight, ShieldCheck, Loader2,
   Copy, Check, ExternalLink, Download, Eye, MapPin, Briefcase, BookOpen, Clock,
-  User, Pencil, MessageSquare, Rocket, X, Undo2, Zap, RotateCcw, Sparkles
+  User, Pencil, MessageSquare, Rocket, X, Undo2, Zap, RotateCcw, Sparkles, Phone,
+  Trophy, Code2, Flame, Award
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { trackEvent } from "@/lib/analytics";
+import { useLeetcodeStats } from "@/hooks/useDeveloperStats";
 
 // Fallback GitHub data
 const githubFallback = {
@@ -41,6 +43,21 @@ const linkedinInfo = {
   skills: ["React", "TypeScript", "Android/Kotlin", "Java", "Firebase", "SQL"]
 };
 
+// LeetCode Information
+const leetcodeInfo = {
+  handle: "Comrademohan",
+  profileUrl: "https://leetcode.com/u/Comrademohan",
+  headline: "Problem Solving & Algorithmic Thinking in Java, C++ & TypeScript",
+  topics: ["Data Structures", "Algorithms", "Dynamic Programming", "Trees & Graphs"],
+  solvedCount: "100+ Solved"
+};
+
+const LeetCodeIcon = ({ className = "w-5 h-5" }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .066-.523 2.545 2.545 0 0 1 .619-1.164L9.13 8.114c1.058-1.134 3.204-1.27 4.43-.278l3.501 2.831c.593.48 1.461.387 1.94-.207a1.384 1.384 0 0 0-.207-1.943l-3.5-2.831c-.8-.647-1.766-1.045-2.774-1.202l2.015-2.158A1.384 1.384 0 0 0 13.483 0zm-2.866 12.815a1.38 1.38 0 0 0-1.38 1.382 1.38 1.38 0 0 0 1.38 1.382H20.79a1.38 1.38 0 0 0 1.38-1.382 1.38 1.38 0 0 0-1.38-1.382z" />
+  </svg>
+);
+
 // Resume Information
 const resumeInfo = {
   education: "B.E. Computer Science & Engineering",
@@ -55,6 +72,38 @@ const emailInfo = {
   address: "madhiremohanreddy@gmail.com",
   preferredMethod: "Email (Direct response within 24 hours)",
   availability: "Available for technical discussions and inquiries."
+};
+
+// Auto-format phone number to international E.164 standard (defaults 10-digit numbers to +91 India)
+const formatToE164 = (phone: string): string => {
+  let cleaned = phone.trim().replace(/[\s\-().]/g, "");
+  if (!cleaned) return "";
+
+  if (cleaned.startsWith("+")) {
+    return "+" + cleaned.slice(1).replace(/\D/g, "");
+  }
+
+  if (cleaned.startsWith("00")) {
+    return "+" + cleaned.slice(2).replace(/\D/g, "");
+  }
+
+  // 11 digits starting with 0 (e.g. 06281359314)
+  if (cleaned.startsWith("0") && cleaned.length === 11) {
+    cleaned = cleaned.slice(1);
+  }
+
+  // 10 digits (Standard Indian Mobile e.g. 6281359314 or 9876543210)
+  if (cleaned.length === 10) {
+    return `+91${cleaned}`;
+  }
+
+  // 12 digits starting with 91 (e.g. 916281359314)
+  if (cleaned.startsWith("91") && cleaned.length === 12) {
+    return `+${cleaned}`;
+  }
+
+  // Any other international number without '+'
+  return `+${cleaned.replace(/\D/g, "")}`;
 };
 
 // Component to dynamically load the official LinkedIn Badge
@@ -108,12 +157,14 @@ const LinkedInBadge = ({ theme }: { theme: "light" | "dark" }) => {
 
 const ContactSection = () => {
   const { toast } = useToast();
-  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
+  const [honeypot, setHoneypot] = useState("");
   const [focusedField, setFocusedField] = useState<string | null>(null);
 
   // Field completion & progress line metrics
   const isNameValid = form.name.trim().length > 0;
   const isEmailValid = form.email.trim().length > 0 && form.email.includes("@");
+  const isPhoneProvided = form.phone.trim().length > 0;
   const isSubjectValid = form.subject.trim().length > 0;
   const isMessageValid = form.message.trim().length > 0;
 
@@ -121,10 +172,11 @@ const ContactSection = () => {
 
   let timelineLineHeight = "0%";
   if (isMessageValid) timelineLineHeight = "100%";
-  else if (isSubjectValid || focusedField === "message") timelineLineHeight = "76%";
-  else if (isEmailValid || focusedField === "subject") timelineLineHeight = "51%";
-  else if (isNameValid || focusedField === "email") timelineLineHeight = "26%";
-  else if (focusedField === "name") timelineLineHeight = "8%";
+  else if (isSubjectValid || focusedField === "message") timelineLineHeight = "80%";
+  else if (focusedField === "subject" || isPhoneProvided) timelineLineHeight = "60%";
+  else if (isEmailValid || focusedField === "phone") timelineLineHeight = "40%";
+  else if (isNameValid || focusedField === "email") timelineLineHeight = "20%";
+  else if (focusedField === "name") timelineLineHeight = "6%";
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSent, setIsSent] = useState(false);
@@ -135,7 +187,7 @@ const ContactSection = () => {
   const [isUndoPending, setIsUndoPending] = useState<boolean>(false);
   const undoTimerRef = useRef<NodeJS.Timeout | null>(null);
   const undoIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const pendingFormRef = useRef<{ name: string; email: string; subject: string; message: string } | null>(null);
+  const pendingFormRef = useRef<{ name: string; email: string; phone?: string; subject: string; message: string } | null>(null);
 
   // Interaction States
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
@@ -148,6 +200,15 @@ const ContactSection = () => {
   // Refs for tracking hover tunnel bridging
   const isHoveringPopoverRef = useRef(false);
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Live LeetCode Stats hook (Single source of truth)
+  const { data: leetcodeData, isLoading: isLeetcodeLoading } = useLeetcodeStats("contact");
+  const lcTotalSolved = leetcodeData?.profile?.solvedProblem ?? 467;
+  const lcEasySolved = leetcodeData?.profile?.easySolved ?? 178;
+  const lcMediumSolved = leetcodeData?.profile?.mediumSolved ?? 254;
+  const lcHardSolved = leetcodeData?.profile?.hardSolved ?? 35;
+  const lcContestRating = Math.round(leetcodeData?.contest?.contestRating ?? 1512);
+  const lcTopPercentage = leetcodeData?.contest?.contestTopPercentage ? `${Number(leetcodeData.contest.contestTopPercentage).toFixed(1)}%` : "32.4%";
 
   // GitHub API state
   const [githubData, setGithubData] = useState<any>(null);
@@ -298,66 +359,62 @@ const ContactSection = () => {
     setIsUndoPending(false);
     setIsSubmitting(true);
 
-    const isLocalhost = typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
-
     try {
-      let success = false;
+      // FormInit official API payload
+      const formData = new FormData();
+      formData.append("fi-sender-fullName", dataToSend.name);
+      formData.append("fi-sender-email", dataToSend.email);
+      if (dataToSend.phone && dataToSend.phone.trim().length > 0) {
+        formData.append("fi-sender-phone", formatToE164(dataToSend.phone));
+      }
+      formData.append("fi-text-subject", dataToSend.subject);
+      formData.append("fi-text-message", dataToSend.message);
 
-      if (isLocalhost) {
-        // Local Dev: Simulated timer-based test submission without calling FormInit API
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        success = true;
-      } else {
-        // Production: Real FormInit API endpoint form posting
-        const formData = new FormData();
-        formData.append("fi-sender-fullName", dataToSend.name);
-        formData.append("fi-sender-email", dataToSend.email);
-        formData.append("fi-text-subject", dataToSend.subject);
-        formData.append("fi-text-message", dataToSend.message);
-
-        const searchParams = new URLSearchParams(window.location.search);
-        const trackingParams = {
-          utm_source: "utmSource",
-          utm_medium: "utmMedium",
-          utm_campaign: "utmCampaign",
-          utm_term: "utmTerm",
-          utm_content: "utmContent",
-          gclid: "gclid",
-          wbraid: "wbraid",
-          gbraid: "gbraid",
-          fbclid: "fbclid",
-          msclkid: "msclkid",
-          ttclid: "ttclid",
-          twclid: "twclid",
-          li_fat_id: "li_fat_id",
-          amzclid: "amzclid",
-          mc_cid: "mc_cid",
-          mc_eid: "mc_eid"
-        };
-
-        Object.entries(trackingParams).forEach(([urlKey, formKey]) => {
-          const val = searchParams.get(urlKey);
-          if (val) {
-            formData.append(`fi-tracking-${formKey}`, val);
-          }
-        });
-
-        const response = await fetch("https://forminit.com/f/t6libcvtapx", {
-          method: "POST",
-          headers: {
-            "FormInit-SDK-Version": "0.2.3",
-            "Accept": "application/json"
-          },
-          body: formData
-        });
-
-        const resJson = await response.json();
-        if (response.ok && resJson.success !== false) {
-          success = true;
-        }
+      // Official FormInit Honeypot field (must remain empty for legitimate users)
+      if (honeypot) {
+        formData.append("fi-honeypot", honeypot);
       }
 
-      if (success) {
+      const searchParams = new URLSearchParams(window.location.search);
+      const trackingParams = {
+        utm_source: "utmSource",
+        utm_medium: "utmMedium",
+        utm_campaign: "utmCampaign",
+        utm_term: "utmTerm",
+        utm_content: "utmContent",
+        gclid: "gclid",
+        wbraid: "wbraid",
+        gbraid: "gbraid",
+        fbclid: "fbclid",
+        msclkid: "msclkid",
+        ttclid: "ttclid",
+        twclid: "twclid",
+        li_fat_id: "li_fat_id",
+        amzclid: "amzclid",
+        mc_cid: "mc_cid",
+        mc_eid: "mc_eid"
+      };
+
+      Object.entries(trackingParams).forEach(([urlKey, formKey]) => {
+        const val = searchParams.get(urlKey);
+        if (val) {
+          formData.append(`fi-tracking-${formKey}`, val);
+        }
+      });
+
+      const response = await fetch("https://forminit.com/f/t6libcvtapx", {
+        method: "POST",
+        headers: {
+          "FormInit-SDK-Version": "0.2.3",
+          "Accept": "application/json"
+        },
+        body: formData
+      });
+
+      const resJson = await response.json();
+      console.log("FormInit response:", resJson);
+
+      if (response.ok && resJson.success !== false) {
         localStorage.setItem("form_last_submission", Date.now().toString());
         trackEvent("submit", "contact", "contact_form_success");
 
@@ -365,19 +422,21 @@ const ContactSection = () => {
         setTimeout(() => setIsSent(false), 3800);
 
         toast({
-          title: isLocalhost ? "Test Message Sent (Local Mode)" : "Message sent!",
-          description: isLocalhost ? "Form submission simulated locally. Real emails will be sent in production." : "Thank you for reaching out. I'll get back to you soon."
+          title: "Message sent!",
+          description: "Thank you for reaching out. I'll get back to you soon."
         });
-        setForm({ name: "", email: "", subject: "", message: "" });
+        setForm({ name: "", email: "", phone: "", subject: "", message: "" });
+        setHoneypot("");
         pendingFormRef.current = null;
       } else {
         toast({
           title: "Submission failed",
-          description: "Something went wrong. Please try again.",
+          description: resJson?.error?.message || resJson?.message || "Something went wrong. Please try again.",
           variant: "destructive"
         });
       }
     } catch (err) {
+      console.error("Form submission error:", err);
       toast({
         title: "Connection failed",
         description: "Could not reach the server. Please check your internet connection.",
@@ -392,7 +451,26 @@ const ContactSection = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!form.name.trim() || !form.email.trim() || !form.subject.trim() || !form.message.trim()) {
+    // 1. Honeypot Bot Trap: If hidden bot fields are filled, fake success and DO NOT hit FormInit API
+    if (honeypot.trim().length > 0) {
+      setIsSent(true);
+      setTimeout(() => setIsSent(false), 3800);
+      toast({
+        title: "Message sent!",
+        description: "Thank you for reaching out. I'll get back to you soon."
+      });
+      setForm({ name: "", email: "", phone: "", subject: "", message: "" });
+      setHoneypot("");
+      return;
+    }
+
+    const trimmedName = form.name.trim();
+    const trimmedEmail = form.email.trim();
+    const trimmedSubject = form.subject.trim();
+    const trimmedMessage = form.message.trim();
+
+    // 2. Field Completion & Quality Validation
+    if (!trimmedName || !trimmedEmail || !trimmedSubject || !trimmedMessage) {
       toast({
         title: "Incomplete form",
         description: "Please fill out all fields before sending.",
@@ -401,12 +479,82 @@ const ContactSection = () => {
       return;
     }
 
+    if (trimmedName.length < 2) {
+      toast({
+        title: "Invalid Name",
+        description: "Please enter your full name (at least 2 characters).",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // 3. Stricter Email Format Validation (blocks garbage emails like jsjsj@je.dj or test@hd.djdk)
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,10}$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      toast({
+        title: "Invalid Email",
+        description: "Please provide a valid email address.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // 4. Optional Phone Number Format Validation (auto-formats 10 digits to Indian +91 or validates international)
+    const trimmedPhone = form.phone.trim();
+    if (trimmedPhone.length > 0) {
+      const e164Phone = formatToE164(trimmedPhone);
+      const e164Regex = /^\+[1-9]\d{6,14}$/;
+      if (!e164Regex.test(e164Phone)) {
+        toast({
+          title: "Invalid Phone Number",
+          description: "Please enter a valid 10-digit mobile number or international number with country code.",
+          variant: "destructive"
+        });
+        return;
+      }
+    }
+
+    // 4. Content Length Check (blocks single letter spam like 'C', 'N', 'B')
+    if (trimmedSubject.length < 3) {
+      toast({
+        title: "Subject too short",
+        description: "Please write a meaningful subject (at least 3 characters).",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (trimmedMessage.length < 8) {
+      toast({
+        title: "Message too short",
+        description: "Please write a descriptive message (at least 8 characters).",
+        variant: "destructive"
+      });
+      return;
+    }
+
     const isLocalhost = typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
 
-    // Security Cooldown rate limiting (5s on localhost, 30s in production)
-    const lastSub = localStorage.getItem("form_last_submission");
-    if (lastSub) {
-      const elapsed = Date.now() - parseInt(lastSub, 10);
+    // 5. Duplicate Submission Suppressor (Blocks repeat spam like 5x 'Mm / cc@gmail.com')
+    const submissionKey = `${trimmedEmail.toLowerCase()}_${trimmedSubject.toLowerCase()}`;
+    const lastSubmissionKey = localStorage.getItem("form_last_submission_key");
+    const lastSubTime = localStorage.getItem("form_last_submission");
+
+    if (lastSubmissionKey === submissionKey && lastSubTime) {
+      const elapsed = Date.now() - parseInt(lastSubTime, 10);
+      if (elapsed < 600000) { // 10 minutes duplicate window
+        toast({
+          title: "Duplicate Message Detected",
+          description: "We already received your message. I'll get back to you shortly!",
+          variant: "destructive"
+        });
+        return;
+      }
+    }
+
+    // 6. Security Cooldown rate limiting (5s on localhost, 30s in production)
+    if (lastSubTime) {
+      const elapsed = Date.now() - parseInt(lastSubTime, 10);
       const cooldown = isLocalhost ? 5000 : 30000;
       if (elapsed < cooldown) {
         const remaining = Math.ceil((cooldown - elapsed) / 1000);
@@ -418,6 +566,8 @@ const ContactSection = () => {
         return;
       }
     }
+
+    localStorage.setItem("form_last_submission_key", submissionKey);
 
     const currentSnapshot = { ...form };
     pendingFormRef.current = currentSnapshot;
@@ -511,6 +661,17 @@ const ContactSection = () => {
       arrowClass: "text-emerald-600 dark:text-emerald-400 border-emerald-500/30 bg-emerald-500/10 group-hover:bg-emerald-500 group-hover:text-white dark:group-hover:text-black group-hover:border-emerald-500",
       href: "/mohan_resume_.pdf",
       trackType: "resume_contact"
+    },
+    {
+      id: "leetcode",
+      label: "LeetCode",
+      value: `${lcTotalSolved}+ Solved • Rating ${lcContestRating}`,
+      icon: <LeetCodeIcon className="w-5 h-5 text-amber-500 dark:text-amber-400" />,
+      iconBoxClass: "bg-amber-500/10 border-amber-500/30 text-amber-500 dark:bg-[#1E1912] dark:text-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.15)]",
+      arrowClass: "text-amber-500 dark:text-amber-400 border-amber-500/30 bg-amber-500/10 group-hover:bg-amber-500 group-hover:text-white dark:group-hover:text-black group-hover:border-amber-500",
+      href: "https://leetcode.com/u/Comrademohan",
+      trackType: "leetcode_contact",
+      mobileOnly: true
     }
   ];
 
@@ -589,7 +750,7 @@ const ContactSection = () => {
           </div>
         )}
 
-        <Button asChild variant="outline" className="w-full rounded-xl text-xs py-2.5 h-auto font-grotesk border-purple-500/40 bg-purple-500/10 text-purple-600 dark:text-purple-300 hover:bg-purple-500/20">
+        <Button asChild variant="outline" className="w-full rounded-xl text-xs py-2.5 h-auto font-grotesk border-purple-500/40 bg-purple-500/10 text-purple-600 dark:text-purple-300 hover:bg-purple-500/20 hover:text-purple-700 dark:hover:text-purple-200 shadow-2xs">
           <a href={user.htmlUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1.5">
             View Github Profile <ExternalLink className="w-3.5 h-3.5" />
           </a>
@@ -645,7 +806,7 @@ const ContactSection = () => {
         </div>
 
         <div className="grid grid-cols-2 gap-2 font-grotesk">
-          <Button onClick={handleCopyEmail} variant="outline" className="rounded-xl text-xs py-2.5 h-auto flex items-center justify-center gap-1.5 border-orange-500/40 bg-orange-500/10 text-orange-600 dark:text-orange-300 hover:bg-orange-500/20">
+          <Button onClick={handleCopyEmail} variant="outline" className="rounded-xl text-xs py-2.5 h-auto flex items-center justify-center gap-1.5 border-orange-500/40 bg-orange-500/10 text-orange-600 dark:text-orange-300 hover:bg-orange-500/20 hover:text-orange-700 dark:hover:text-orange-200 shadow-2xs">
             {copied ? (
               <>
                 <Check className="w-3.5 h-3.5 text-emerald-500" /> Copied!
@@ -714,7 +875,7 @@ const ContactSection = () => {
         </div>
 
         <div className="grid grid-cols-2 gap-2 font-grotesk">
-          <Button asChild variant="outline" className="rounded-xl text-xs py-2.5 h-auto flex items-center justify-center gap-1.5 border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 hover:bg-emerald-500/20">
+          <Button asChild variant="outline" className="rounded-xl text-xs py-2.5 h-auto flex items-center justify-center gap-1.5 border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 hover:bg-emerald-500/20 hover:text-emerald-700 dark:hover:text-emerald-200 shadow-2xs">
             <a href={resumeInfo.previewUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1.5">
               <Eye className="w-3.5 h-3.5" /> Preview PDF
             </a>
@@ -725,6 +886,127 @@ const ContactSection = () => {
             </a>
           </Button>
         </div>
+      </div>
+    );
+  };
+
+  const renderLeetcodeContent = () => {
+    return (
+      <div className="w-full text-left space-y-4 font-outfit text-foreground">
+        {/* Profile Card Header */}
+        <div className="flex items-center justify-between pb-3 border-b border-border/80">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/35 flex items-center justify-center text-amber-500 dark:text-amber-400 shrink-0 shadow-[0_0_20px_rgba(245,158,11,0.2)]">
+              <LeetCodeIcon className="w-7 h-7" />
+            </div>
+            <div>
+              <div className="flex items-center gap-1.5">
+                <h4 className="text-sm font-extrabold text-foreground leading-tight">Mohan Reddy</h4>
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" title="Active Solver" />
+              </div>
+              <p className="text-xs text-amber-600 dark:text-amber-400 font-grotesk mt-0.5 leading-none font-bold">@ComradeMohan</p>
+              <span className="text-[10px] text-muted-foreground flex items-center gap-1 mt-1 font-grotesk">
+                LeetCode Problem Solver
+              </span>
+            </div>
+          </div>
+          <div className="text-right">
+            <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-grotesk inline-flex items-center gap-1 shadow-xs">
+              <Flame className="w-3 h-3 text-amber-500 fill-amber-500" />
+              {isLeetcodeLoading ? (
+                <Loader2 className="w-3 h-3 animate-spin text-amber-500" />
+              ) : (
+                `${lcTotalSolved} Solved`
+              )}
+            </span>
+          </div>
+        </div>
+
+        {/* Problem Breakdown Stats Grid */}
+        <div className="grid grid-cols-3 gap-2.5 text-center font-grotesk">
+          <div className="p-3 rounded-2xl bg-emerald-500/10 dark:bg-emerald-950/20 border border-emerald-500/25 shadow-xs">
+            <span className="block text-base font-extrabold text-emerald-700 dark:text-emerald-400">
+              {isLeetcodeLoading ? "-" : lcEasySolved}
+            </span>
+            <span className="text-[10px] text-emerald-700/80 dark:text-emerald-400/80 uppercase font-bold tracking-wider">
+              Easy
+            </span>
+          </div>
+          <div className="p-3 rounded-2xl bg-amber-500/10 dark:bg-amber-950/20 border border-amber-500/25 shadow-xs">
+            <span className="block text-base font-extrabold text-amber-700 dark:text-amber-400">
+              {isLeetcodeLoading ? "-" : lcMediumSolved}
+            </span>
+            <span className="text-[10px] text-amber-700/80 dark:text-amber-400/80 uppercase font-bold tracking-wider">
+              Medium
+            </span>
+          </div>
+          <div className="p-3 rounded-2xl bg-rose-500/10 dark:bg-rose-950/20 border border-rose-500/25 shadow-xs">
+            <span className="block text-base font-extrabold text-rose-700 dark:text-rose-400">
+              {isLeetcodeLoading ? "-" : lcHardSolved}
+            </span>
+            <span className="text-[10px] text-rose-700/80 dark:text-rose-400/80 uppercase font-bold tracking-wider">
+              Hard
+            </span>
+          </div>
+        </div>
+
+        {/* Contest & Language Highlights */}
+        <div className="grid grid-cols-2 gap-2.5 text-xs font-grotesk">
+          <div className="p-3 rounded-2xl bg-secondary/50 dark:bg-black/30 border border-border/70 space-y-1">
+            <div className="flex items-center gap-1.5 text-muted-foreground">
+              <Trophy className="w-3.5 h-3.5 text-yellow-500" />
+              <span className="text-[10px] uppercase font-bold tracking-wider">Contest Rating</span>
+            </div>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-sm font-extrabold text-foreground">{lcContestRating}</span>
+              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">Top {lcTopPercentage}</span>
+            </div>
+          </div>
+          <div className="p-3 rounded-2xl bg-secondary/50 dark:bg-black/30 border border-border/70 space-y-1">
+            <div className="flex items-center gap-1.5 text-muted-foreground">
+              <Code2 className="w-3.5 h-3.5 text-orange-500" />
+              <span className="text-[10px] uppercase font-bold tracking-wider">Primary Stack</span>
+            </div>
+            <span className="text-xs font-bold text-foreground block truncate">
+              Java (413) • SQL (40)
+            </span>
+          </div>
+        </div>
+
+        {/* Focus topics tags */}
+        <div className="space-y-1.5">
+          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block font-grotesk">
+            Key Focus Areas
+          </span>
+          <div className="flex flex-wrap gap-1.5">
+            {leetcodeInfo.topics.map(t => (
+              <span key={t} className="text-[10px] font-semibold px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/25 font-grotesk">
+                {t}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Action Button - High Contrast & Clean in both Light & Dark Theme */}
+        <Button
+          asChild
+          className="w-full rounded-2xl text-xs py-3.5 h-auto font-outfit font-extrabold bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-[0_4px_20px_rgba(249,115,22,0.35)] hover:shadow-[0_6px_25px_rgba(249,115,22,0.5)] transition-all duration-300 group/btn cursor-pointer border border-orange-400/30"
+        >
+          <a
+            href={leetcodeInfo.profileUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2.5"
+          >
+            <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
+              <LeetCodeIcon className="w-4 h-4 text-white transition-transform group-hover/btn:scale-110" />
+            </div>
+            <span className="tracking-wide text-[13px] font-bold text-white">
+              Open LeetCode Profile
+            </span>
+            <ExternalLink className="w-3.5 h-3.5 text-white/90 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+          </a>
+        </Button>
       </div>
     );
   };
@@ -799,6 +1081,7 @@ const ContactSection = () => {
       case "linkedin": return { width: 310, height: 340 };
       case "email": return { width: 290, height: 200 };
       case "resume": return { width: 320, height: 310 };
+      case "leetcode": return { width: 310, height: 320 };
       default: return { width: 300, height: 300 };
     }
   };
@@ -915,7 +1198,7 @@ const ContactSection = () => {
                     target={method.id !== "email" ? "_blank" : undefined}
                     rel={method.id !== "email" ? "noopener noreferrer" : undefined}
                     data-contact-card={method.id}
-                    className="p-3.5 rounded-2xl border border-border/60 bg-secondary/30 dark:bg-black/20 hover:border-orange-500/40 hover:bg-secondary/60 transition-all duration-300 flex items-center justify-between group cursor-pointer select-none"
+                    className={`p-3.5 rounded-2xl border border-border/60 bg-secondary/30 dark:bg-black/20 hover:border-orange-500/40 hover:bg-secondary/60 transition-all duration-300 flex items-center justify-between group cursor-pointer select-none ${method.mobileOnly ? "sm:hidden" : ""}`}
                     onClick={(e) => handleCardClick(e, method)}
                     onMouseEnter={(e) => handleCardInteractionStart(e, method.id)}
                     onMouseLeave={handleCardInteractionEnd}
@@ -973,7 +1256,7 @@ const ContactSection = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="flex flex-col justify-between text-left space-y-8"
+              className="flex flex-col justify-between text-left gap-4"
             >
               {/* Form Title Header */}
               <div className="flex items-center justify-between">
@@ -992,7 +1275,7 @@ const ContactSection = () => {
               </div>
 
               {/* Connected Timeline Form Fields */}
-              <form onSubmit={handleSubmit} className="flex-1 flex flex-col space-y-8">
+              <form onSubmit={handleSubmit} className="flex-1 flex flex-col space-y-5 !mt-0">
                 <div className="relative space-y-7">
                   {/* Base Inactive Vertical Timeline Guide Line */}
                   <div className="absolute left-[19px] top-6 bottom-6 w-[2px] bg-border/60 rounded-full pointer-events-none z-0" />
@@ -1101,7 +1384,59 @@ const ContactSection = () => {
                     </div>
                   </div>
 
-                  {/* Field 3: Subject */}
+                  {/* Field 3: Phone (Optional) */}
+                  <div className="relative flex items-start gap-4 z-10">
+                    <motion.div
+                      animate={{
+                        scale: focusedField === "phone" || isPhoneProvided ? 1.08 : 1,
+                      }}
+                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                      className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${isPhoneProvided
+                        ? "bg-emerald-500/15 border-2 border-emerald-500 text-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.4)]"
+                        : focusedField === "phone"
+                          ? "bg-orange-500/20 border-2 border-orange-500 text-orange-500 shadow-[0_0_20px_rgba(249,115,22,0.6)]"
+                          : "bg-secondary/70 border border-border/80 text-muted-foreground"
+                        }`}
+                    >
+                      {isPhoneProvided ? <Check className="w-4 h-4 text-emerald-500 stroke-[3]" /> : <Phone className="w-4 h-4" />}
+                    </motion.div>
+                    <div className="flex-1 relative">
+                      <div className="flex items-center justify-between mb-1">
+                        <label className={`block text-xs font-semibold font-outfit transition-colors ${focusedField === "phone" ? "text-orange-500" : isPhoneProvided ? "text-emerald-500" : "text-foreground"
+                          }`}>
+                          Phone Number
+                        </label>
+                        <span className="text-[10px] text-muted-foreground font-grotesk">
+                          Optional
+                        </span>
+                      </div>
+                      <div className="relative">
+                        <input
+                          type="tel"
+                          name="fi-sender-phone"
+                          placeholder="e.g. +91 98765 43210"
+                          value={form.phone}
+                          onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                          onFocus={() => setFocusedField("phone")}
+                          onBlur={() => setFocusedField(null)}
+                          disabled={isSubmitting || isUndoPending}
+                          spellCheck={false}
+                          className="w-full bg-transparent border-b border-border/80 pb-2 pt-1 text-sm text-foreground placeholder:text-foreground/30 placeholder:opacity-40 focus:outline-none focus:border-orange-500 disabled:opacity-60 transition-colors font-grotesk selection:bg-orange-500 selection:text-white"
+                        />
+                        <motion.span
+                          animate={{ scale: focusedField === "phone" || isPhoneProvided ? 1.3 : 1 }}
+                          className={`absolute right-0 bottom-0 translate-y-1/2 rounded-full transition-all duration-300 ${isPhoneProvided
+                            ? "w-2.5 h-2.5 bg-emerald-500 shadow-[0_0_10px_#10b981]"
+                            : focusedField === "phone"
+                              ? "w-2.5 h-2.5 bg-orange-500 shadow-[0_0_12px_#f97316]"
+                              : "w-2 h-2 bg-orange-500/40"
+                            }`}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Field 4: Subject */}
                   <div className="relative flex items-start gap-4 z-10">
                     <motion.div
                       animate={{
@@ -1196,69 +1531,86 @@ const ContactSection = () => {
                       </div>
                     </div>
                   </div>
+
+                  {/* Invisible Honeypot field to trap spam bots */}
+                  {/* Invisible FormInit Honeypot field to trap spam bots */}
+                  <div className="opacity-0 absolute -z-50 pointer-events-none h-0 w-0 overflow-hidden" aria-hidden="true">
+                    <label htmlFor="fi-honeypot">Leave this field blank</label>
+                    <input
+                      type="text"
+                      id="fi-honeypot"
+                      name="fi-honeypot"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={honeypot}
+                      onChange={(e) => setHoneypot(e.target.value)}
+                    />
+                  </div>
                 </div>
 
                 {/* Form Footer & Send Button / 20s Undo Buffer HUD */}
-                <div className="pt-4 border-t border-border/60">
+                <div className="pt-3 border-t border-border/60">
                   <AnimatePresence mode="wait">
                     {isUndoPending ? (
                       <motion.div
                         key="undo-hud"
-                        initial={{ opacity: 0, y: 12, scale: 0.96 }}
+                        initial={{ opacity: 0, y: 8, scale: 0.98 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -12, scale: 0.96 }}
-                        transition={{ duration: 0.25, ease: "easeOut" }}
-                        className="rounded-2xl border-2 border-orange-500/60 bg-card/95 dark:bg-[#120D08]/95 p-4 sm:p-5 shadow-[0_0_35px_rgba(249,115,22,0.25)] backdrop-blur-xl relative overflow-hidden space-y-3.5"
+                        exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                        transition={{ duration: 0.2, ease: "easeOut" }}
+                        className="rounded-xl border border-orange-500/50 bg-card/95 dark:bg-[#120D08]/95 p-2.5 sm:p-3 shadow-[0_0_25px_rgba(249,115,22,0.2)] backdrop-blur-xl relative overflow-hidden"
                       >
                         {/* Glowing Animated Progress Bar */}
-                        <div className="absolute top-0 left-0 right-0 h-1.5 bg-secondary/80 overflow-hidden">
+                        <div className="absolute top-0 left-0 right-0 h-1 bg-secondary/80 overflow-hidden">
                           <motion.div
-                            className="h-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-400 shadow-[0_0_12px_#f97316]"
+                            className="h-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-400 shadow-[0_0_10px_#f97316]"
                             style={{ width: `${(undoCountdown / 20) * 100}%` }}
                             transition={{ ease: "linear", duration: 0.15 }}
                           />
                         </div>
 
-                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-1">
+                        <div className="flex flex-col min-[480px]:flex-row items-stretch min-[480px]:items-center justify-between gap-2.5 pt-0.5">
                           {/* Left: Countdown Timer & Status */}
-                          <div className="flex items-center gap-3.5">
+                          <div className="flex items-center gap-2.5 min-w-0">
                             <div className="relative flex items-center justify-center shrink-0">
-                              <div className="w-11 h-11 rounded-full border border-orange-500/40 bg-orange-500/15 flex items-center justify-center shadow-[0_0_15px_rgba(249,115,22,0.35)]">
+                              <div className="w-8 h-8 rounded-full border border-orange-500/50 bg-orange-500/15 flex items-center justify-center shadow-[0_0_10px_rgba(249,115,22,0.3)]">
                                 <span className="text-xs font-black text-orange-500 font-outfit">{undoCountdown}s</span>
                               </div>
-                              <span className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-orange-500 animate-ping opacity-75" />
+                              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-orange-500 animate-ping opacity-75" />
                             </div>
-                            <div className="space-y-0.5">
-                              <div className="flex items-center gap-2 flex-wrap">
-                                <span className="text-xs sm:text-sm font-bold text-foreground font-outfit tracking-wide">
-                                  Message queued to send
+                            <div className="min-w-0">
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-xs font-bold text-foreground font-outfit truncate">
+                                  Message queued
                                 </span>
-                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-grotesk font-semibold">
-                                  Dispatching in {undoCountdown}s
+                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-400 border border-orange-500/30 font-grotesk font-semibold shrink-0">
+                                  {undoCountdown}s
                                 </span>
                               </div>
-                              <p className="text-[11px] text-muted-foreground font-grotesk">
-                                Need changes? Click Undo or press <kbd className="px-1.5 py-0.5 text-[9px] bg-secondary border border-border/80 rounded font-mono text-foreground">Esc</kbd> to edit.
+                              <p className="text-[10px] text-muted-foreground font-grotesk truncate">
+                                Click Undo or press <kbd className="px-1 py-0.5 text-[8px] bg-secondary border border-border/80 rounded font-mono text-foreground">Esc</kbd> to edit
                               </p>
                             </div>
                           </div>
 
                           {/* Right: Actions (Undo & Send Immediately) */}
-                          <div className="flex items-center gap-2.5 shrink-0">
+                          <div className="flex items-center gap-2 shrink-0 justify-end">
                             <Button
                               type="button"
                               onClick={handleCancelAndUndo}
                               variant="outline"
-                              className="flex-1 sm:flex-initial h-10 px-4 rounded-xl border-orange-500/60 bg-card hover:bg-orange-500/10 text-orange-500 hover:text-orange-400 font-outfit font-bold text-xs flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(249,115,22,0.15)] cursor-pointer"
+                              size="sm"
+                              className="flex-1 min-[480px]:flex-initial h-8 px-2.5 sm:px-3 rounded-lg border-orange-500/50 bg-card hover:bg-orange-500/10 text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 font-outfit font-bold text-xs flex items-center justify-center gap-1 cursor-pointer"
                             >
-                              <Undo2 className="w-4 h-4" />
-                              <span>Undo & Edit</span>
+                              <Undo2 className="w-3.5 h-3.5" />
+                              <span>Undo</span>
                             </Button>
 
                             <Button
                               type="button"
                               onClick={handleSendImmediately}
-                              className="flex-1 sm:flex-initial h-10 px-4 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-outfit font-bold text-xs flex items-center justify-center gap-1.5 shadow-[0_0_20px_rgba(249,115,22,0.4)] cursor-pointer"
+                              size="sm"
+                              className="flex-1 min-[480px]:flex-initial h-8 px-3 sm:px-3.5 rounded-lg bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-outfit font-bold text-xs flex items-center justify-center gap-1 shadow-[0_0_15px_rgba(249,115,22,0.35)] cursor-pointer"
                             >
                               <Zap className="w-3.5 h-3.5 fill-current" />
                               <span>Send Now</span>
@@ -1315,6 +1667,7 @@ const ContactSection = () => {
             {activeId === "linkedin" && renderLinkedinContent()}
             {activeId === "email" && renderEmailContent()}
             {activeId === "resume" && renderResumeContent()}
+            {activeId === "leetcode" && renderLeetcodeContent()}
           </motion.div>
         )}
       </AnimatePresence>
@@ -1358,6 +1711,7 @@ const ContactSection = () => {
                     {activeBottomSheet === "linkedin" && "LinkedIn Profile Preview"}
                     {activeBottomSheet === "email" && "Email Quick Actions"}
                     {activeBottomSheet === "resume" && "Resume & Experience"}
+                    {activeBottomSheet === "leetcode" && "LeetCode Profile Preview"}
                   </h3>
                   <p className="text-[10px] text-muted-foreground font-grotesk mt-0.5">
                     Swipe down to close
@@ -1378,6 +1732,7 @@ const ContactSection = () => {
                 {activeBottomSheet === "linkedin" && renderLinkedinContent()}
                 {activeBottomSheet === "email" && renderEmailContent()}
                 {activeBottomSheet === "resume" && renderResumeContent()}
+                {activeBottomSheet === "leetcode" && renderLeetcodeContent()}
               </div>
 
               <Button
@@ -1420,7 +1775,7 @@ const LiquidWaveButton = ({
       onClick={handleButtonClick}
       whileTap={{ scale: 0.96 }}
       className={`relative overflow-hidden group min-w-[210px] sm:min-w-[240px] h-[54px] rounded-full border-2 px-8 font-outfit font-extrabold text-sm transition-all duration-500 flex items-center justify-center gap-3 select-none cursor-pointer focus:outline-none ${isSent
-        ? "border-emerald-500 bg-emerald-950/30 text-emerald-400 shadow-[0_0_30px_rgba(16,185,129,0.45)]"
+        ? "border-emerald-600 dark:border-emerald-500 bg-emerald-500/15 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 shadow-[0_0_30px_rgba(16,185,129,0.35)]"
         : isSubmitting
           ? "border-orange-500 bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 text-white shadow-[0_0_35px_rgba(249,115,22,0.6)]"
           : "border-orange-500/70 bg-card/90 dark:bg-[#0E121E]/90 text-foreground hover:border-orange-500 hover:bg-orange-500/5 shadow-[0_0_20px_rgba(249,115,22,0.25)] hover:shadow-[0_0_35px_rgba(249,115,22,0.45)]"
@@ -1476,10 +1831,10 @@ const LiquidWaveButton = ({
             initial={{ opacity: 0, y: 10, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.9 }}
-            className="flex items-center gap-2.5 z-10 text-emerald-400 font-bold"
+            className="flex items-center gap-2.5 z-10 text-emerald-800 dark:text-emerald-300 font-bold"
           >
-            <div className="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500 flex items-center justify-center">
-              <Check className="w-4 h-4 text-emerald-400 stroke-[3]" />
+            <div className="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-600 dark:border-emerald-400 flex items-center justify-center">
+              <Check className="w-4 h-4 text-emerald-700 dark:text-emerald-300 stroke-[3]" />
             </div>
             <span className="text-base tracking-tight font-extrabold">Message Sent!</span>
             {/* Success Celebration Sparkles */}

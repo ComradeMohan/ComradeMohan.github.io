@@ -513,7 +513,7 @@ export default function CertificationsSection() {
           {/* ========================================================= */}
           {/* OTHER CERTIFICATIONS SECTION (MATCHING USER DEMO DESIGNS)  */}
           {/* ========================================================= */}
-          <div className="mb-20">
+          <div className="">
 
             {/* Header Title & Subtitle */}
             <div className="mb-6 text-left">
@@ -574,8 +574,8 @@ export default function CertificationsSection() {
                     onClick={() => setViewMode("grid")}
                     title="Grid View"
                     className={`p-1.5 rounded-lg text-xs font-medium transition-all ${viewMode === "grid"
-                        ? "bg-primary/20 text-primary border border-primary/30 shadow-xs"
-                        : "text-muted-foreground hover:text-foreground hover:bg-accent/30"
+                      ? "bg-primary/20 text-primary border border-primary/30 shadow-xs"
+                      : "text-muted-foreground hover:text-foreground hover:bg-accent/30"
                       }`}
                   >
                     <LayoutGrid className="w-4 h-4" />
@@ -584,8 +584,8 @@ export default function CertificationsSection() {
                     onClick={() => setViewMode("list")}
                     title="List View"
                     className={`p-1.5 rounded-lg text-xs font-medium transition-all ${viewMode === "list"
-                        ? "bg-primary/20 text-primary border border-primary/30 shadow-xs"
-                        : "text-muted-foreground hover:text-foreground hover:bg-accent/30"
+                      ? "bg-primary/20 text-primary border border-primary/30 shadow-xs"
+                      : "text-muted-foreground hover:text-foreground hover:bg-accent/30"
                       }`}
                   >
                     <List className="w-4 h-4" />

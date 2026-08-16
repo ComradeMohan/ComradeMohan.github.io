@@ -1,17 +1,19 @@
 import { motion } from "framer-motion";
 import { BadgeCheck, MapPin, Github, Trophy, ArrowRight, Code2, GraduationCap, Loader2, CheckCircle2, AlertCircle, Flame } from "lucide-react";
-import { useGithubStats, useLeetcodeStats, deriveLanguageStats } from "@/hooks/useDeveloperStats";
+import { useGithubStats, useGithubContributions, useLeetcodeStats, deriveLanguageStats } from "@/hooks/useDeveloperStats";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 
 const DeveloperProfile = () => {
   const { data: githubData, isLoading: isGithubLoading } = useGithubStats("developer");
+  const { data: contribData, isLoading: isContribLoading } = useGithubContributions("developer");
   const { data: leetcodeData, isLoading: isLeetcodeLoading } = useLeetcodeStats("developer");
 
   // Dynamic Fallbacks for GitHub
   const githubFollowers = githubData?.followers ?? 428;
   const githubRepos = githubData?.public_repos ?? 99;
+  const githubContributions = contribData?.totalLifetime ?? 4532;
   const avatarUrl = githubData?.avatar_url ?? "/comrademohan.webp";
 
   // Dynamic Fallbacks for LeetCode
@@ -97,19 +99,23 @@ const DeveloperProfile = () => {
                   <Github className="w-5 h-5" /> GitHub
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 mb-6 text-center divide-x divide-border relative">
-                  {isGithubLoading && (
+                <div className="grid grid-cols-3 gap-2 mb-6 text-center divide-x divide-border relative">
+                  {(isGithubLoading || isContribLoading) && (
                     <div className="absolute inset-0 bg-card/80 flex items-center justify-center backdrop-blur-sm z-10 rounded-lg">
                       <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
                     </div>
                   )}
                   <div>
-                    <div className="text-3xl font-bold text-foreground mb-1">{githubFollowers}</div>
-                    <div className="text-xs text-muted-foreground font-grotesk">Followers</div>
+                    <div className="text-2xl font-bold text-foreground mb-1">{githubFollowers}</div>
+                    <div className="text-[11px] text-muted-foreground font-grotesk">Followers</div>
                   </div>
                   <div>
-                    <div className="text-3xl font-bold text-foreground mb-1">{githubRepos}</div>
-                    <div className="text-xs text-muted-foreground font-grotesk">Repositories</div>
+                    <div className="text-2xl font-bold text-foreground mb-1">{githubRepos}</div>
+                    <div className="text-[11px] text-muted-foreground font-grotesk">Repositories</div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-foreground mb-1">{githubContributions.toLocaleString()}+</div>
+                    <div className="text-[11px] text-muted-foreground font-grotesk">Commits</div>
                   </div>
                 </div>
 

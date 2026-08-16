@@ -23,23 +23,51 @@ const Navbar = () => {
   const [isDark, setIsDark] = useState(true);
 
   const handleNavLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
     if (href.startsWith("/#")) {
       const hash = href.substring(1);
+      const id = hash.replace("#", "");
       if (location.pathname === "/") {
-        e.preventDefault();
-        const id = hash.replace("#", "");
-        const element = document.getElementById(id);
-        if (element) {
-          element.scrollIntoView({ behavior: "smooth", block: "start" });
-          window.history.pushState(null, "", href);
+        if (id === "home") {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          window.history.pushState(null, "", "/");
+          setActiveSection("#home");
+        } else {
+          const element = document.getElementById(id);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth", block: "start" });
+            window.history.pushState(null, "", href);
+          }
         }
       } else {
-        e.preventDefault();
         navigate(href);
+        setTimeout(() => {
+          if (id === "home") {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          } else {
+            const element = document.getElementById(id);
+            if (element) {
+              element.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+          }
+        }, 150);
       }
     } else {
-      e.preventDefault();
       navigate(href);
+    }
+  };
+
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    if (location.pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.history.pushState(null, "", "/");
+      setActiveSection("#home");
+    } else {
+      navigate("/");
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 100);
     }
   };
 
@@ -48,12 +76,6 @@ const Navbar = () => {
       const hash = href.substring(1);
       if (location.pathname === "/") {
         return activeSection === hash;
-      }
-      if (hash === "#about" && location.pathname === "/about") {
-        return true;
-      }
-      if (hash === "#home" && location.pathname === "/") {
-        return true;
       }
       return false;
     }
@@ -159,9 +181,9 @@ const Navbar = () => {
 
         <div className="relative flex items-center justify-between h-14">
           <a 
-            href="/#home" 
-            onClick={(e) => handleNavLinkClick(e, "/#home")}
-            className="font-outfit text-xl font-extrabold tracking-wider cursor-pointer"
+            href="/" 
+            onClick={handleLogoClick}
+            className="font-outfit text-xl font-extrabold tracking-wider cursor-pointer select-none"
           >
             <span className="text-primary drop-shadow-[0_0_8px_hsl(var(--primary)/0.4)]">COMRADE</span>
             <span className="text-foreground">MOHAN</span>

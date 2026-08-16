@@ -8,7 +8,7 @@ const education = [
     school: "Saveetha School of Engineering (SIMATS)",
     duration: "2022 – 2026",
     location: "Chennai, Tamil Nadu",
-    grade: "CGPA: 8.61 / 10",
+    grade: "CGPA: 8.646 / 10",
   },
   {
     degree: "Intermediate (MPC + Computer Science)",
@@ -77,7 +77,7 @@ const AboutSection = () => {
               <p className="text-muted-foreground leading-relaxed font-grotesk">
                 Final-year Computer Science and Engineering student at Saveetha School of
                 Engineering (SIMATS), Chennai, with a{" "}
-                <span className="text-primary font-medium">CGPA of 8.61</span>. My focus
+                <span className="text-primary font-medium">CGPA of 8.646</span>. My focus
                 is on building functional, real-world software rather than isolated
                 academic exercises.
               </p>

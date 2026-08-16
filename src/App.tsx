@@ -18,6 +18,7 @@ const DeveloperProfile = lazy(() => import("./pages/DeveloperProfile"));
 const About = lazy(() => import("./pages/About"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
+const Resume = lazy(() => import("./pages/Resume"));
 
 const queryClient = new QueryClient();
 
@@ -26,11 +27,23 @@ const ScrollToTop = () => {
   const navType = useNavigationType();
 
   useEffect(() => {
-    if (navType !== "POP" && !hash) {
+    if (!hash) {
       // Small timeout allows framer-motion's IntersectionObserver (whileInView) to register the correct viewport after route transition
       setTimeout(() => {
         window.scrollTo(0, 0);
       }, 50);
+    } else {
+      const id = hash.replace("#", "");
+      setTimeout(() => {
+        if (id === "home") {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+          const el = document.getElementById(id);
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }
+      }, 120);
     }
 
     if (typeof window !== "undefined" && (window as any).gtag) {
@@ -70,6 +83,7 @@ const AnimatedRoutes = () => {
       <Route path="/case-study/univault" element={<PageWrapper><UniVaultCaseStudy /></PageWrapper>} />
       <Route path="/developer" element={<PageWrapper><DeveloperProfile /></PageWrapper>} />
       <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
+      <Route path="/resume" element={<PageWrapper><Resume /></PageWrapper>} />
       <Route path="/blog" element={<PageWrapper><Blog /></PageWrapper>} />
       <Route path="/blog/:slug" element={<PageWrapper><BlogPost /></PageWrapper>} />
       <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />

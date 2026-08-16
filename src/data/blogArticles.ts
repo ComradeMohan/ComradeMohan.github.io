@@ -193,7 +193,7 @@ interface Student {
 
 const lockedStudent: ReadOnlyCustom&lt;Student&gt; = {
   name: "Mohan Reddy",
-  cgpa: 8.61,
+  cgpa: 8.646,
 };
 // lockedStudent.cgpa = 9.0; // Error: Cannot assign to 'cgpa' because it is a read-only property</code></pre>
 
@@ -237,9 +237,9 @@ type MarginProperty = \`margin-\${Direction}\`;
 public record Student(String name, double cgpa, String school) {}
 
 // Usage
-Student s = new Student("Mohan Reddy", 8.61, "Saveetha School of Engineering");
+Student s = new Student("Mohan Reddy", 8.646, "Saveetha School of Engineering");
 System.out.println(s.name()); // "Mohan Reddy"
-System.out.println(s); // prints: Student[name=Mohan Reddy, cgpa=8.61, school=Saveetha...]</code></pre>
+System.out.println(s); // prints: Student[name=Mohan Reddy, cgpa=8.646, school=Saveetha...]</code></pre>
 
       <h3>2. Sealed Classes</h3>
       <p>Sealed classes allow superclasses to restrict which subclasses can extend or implement them. This is incredibly helpful for domain modeling and compiler-enforced pattern validation:</p>
