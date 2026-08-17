@@ -6,6 +6,7 @@ import { trackEvent } from "@/lib/analytics";
 import { MagneticButton } from "./MagneticButton";
 import { CyberHUD } from "./CyberHUD";
 import { useGithubContributions } from "@/hooks/useDeveloperStats";
+import { AnimatedCounter } from "@/components/AnimatedCounter";
 
 const roles = ["Software Developer", "Freelancer", "Problem Solver", "Cyber Expert"];
 
@@ -117,16 +118,16 @@ const HeroSection = () => {
 
                 {/* Social Icons row */}
                 <div className="flex items-center gap-2 md:gap-3">
-                  <Button asChild variant="outline" size="icon" className="w-8 h-8 md:w-9 md:h-9 rounded-full border-border/80 hover:border-white hover:text-white hover:bg-white/10 transition-colors" onClick={() => trackEvent("click", "social", "github_hero")}>
+                  <Button asChild variant="outline" size="icon" className="w-8 h-8 md:w-9 md:h-9 rounded-full border-border/80 text-foreground hover:border-foreground hover:text-foreground hover:bg-foreground/10 dark:hover:border-white dark:hover:text-white dark:hover:bg-white/10 transition-colors" onClick={() => trackEvent("click", "social", "github_hero")}>
                     <a href="https://github.com/comrademohan" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile"><Github className="w-3.5 h-3.5 md:w-4 md:h-4" /></a>
                   </Button>
-                  <Button asChild variant="outline" size="icon" className="w-8 h-8 md:w-9 md:h-9 rounded-full border-border/80 hover:border-[#0077b5] hover:text-[#0077b5] hover:bg-[#0077b5]/10 transition-colors" onClick={() => trackEvent("click", "social", "linkedin_hero")}>
+                  <Button asChild variant="outline" size="icon" className="w-8 h-8 md:w-9 md:h-9 rounded-full border-border/80 text-foreground hover:border-[#0077b5] hover:text-[#0077b5] hover:bg-[#0077b5]/10 transition-colors" onClick={() => trackEvent("click", "social", "linkedin_hero")}>
                     <a href="https://www.linkedin.com/in/mmohanreddy" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile"><Linkedin className="w-3.5 h-3.5 md:w-4 md:h-4" /></a>
                   </Button>
-                  <Button asChild variant="outline" size="icon" className="w-8 h-8 md:w-9 md:h-9 rounded-full border-border/80 hover:border-[#E1306C] hover:text-[#E1306C] hover:bg-[#E1306C]/10 transition-colors" onClick={() => trackEvent("click", "social", "instagram_hero")}>
+                  <Button asChild variant="outline" size="icon" className="w-8 h-8 md:w-9 md:h-9 rounded-full border-border/80 text-foreground hover:border-[#E1306C] hover:text-[#E1306C] hover:bg-[#E1306C]/10 transition-colors" onClick={() => trackEvent("click", "social", "instagram_hero")}>
                     <a href="https://www.instagram.com/comrade_mohan666/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Profile"><Instagram className="w-3.5 h-3.5 md:w-4 md:h-4" /></a>
                   </Button>
-                  <Button asChild variant="outline" size="icon" className="w-8 h-8 md:w-9 md:h-9 rounded-full border-border/80 hover:border-[#FFA116] hover:text-[#FFA116] hover:bg-[#FFA116]/10 transition-colors" onClick={() => trackEvent("click", "social", "leetcode_hero")}>
+                  <Button asChild variant="outline" size="icon" className="w-8 h-8 md:w-9 md:h-9 rounded-full border-border/80 text-foreground hover:border-[#FFA116] hover:text-[#FFA116] hover:bg-[#FFA116]/10 transition-colors" onClick={() => trackEvent("click", "social", "leetcode_hero")}>
                     <a href="https://leetcode.com/u/Comrademohan" target="_blank" rel="noopener noreferrer" aria-label="LeetCode Profile">
                       <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 md:w-4 md:h-4">
                         <path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .066-.523 2.545 2.545 0 0 1 .619-1.164L9.13 8.114c1.058-1.134 3.204-1.27 4.43-.278l3.501 2.831c.593.48 1.461.387 1.94-.207a1.384 1.384 0 0 0-.207-1.943l-3.5-2.831c-.8-.647-1.766-1.045-2.774-1.202l2.015-2.158A1.384 1.384 0 0 0 13.483 0zm-2.866 12.815a1.38 1.38 0 0 0-1.38 1.382 1.38 1.38 0 0 0 1.38 1.382H20.79a1.38 1.38 0 0 0 1.38-1.382 1.38 1.38 0 0 0-1.38-1.382z" />
@@ -177,7 +178,7 @@ const HeroSection = () => {
                   </div>
                   <div className="min-w-0">
                     <div className="text-[clamp(1.05rem,2.5svh,1.45rem)] md:text-xl font-extrabold text-primary font-outfit leading-tight truncate">
-                      {stat.value}
+                      <AnimatedCounter value={stat.value} />
                     </div>
                     <div className="text-[10px] sm:text-xs text-muted-foreground font-grotesk truncate">
                       {stat.label}
@@ -263,18 +264,27 @@ const HeroSection = () => {
             {/* Social & Resume Action Row */}
             <div className="flex flex-wrap gap-3 items-center pt-1">
               <MagneticButton>
-                <Button asChild variant="outline" size="icon" className="rounded-full border-border hover:border-white hover:text-white hover:bg-white/10 transition-colors w-10 h-10" onClick={() => trackEvent("click", "social", "github_hero")}>
+                <Button asChild variant="outline" size="icon" className="rounded-full border-border text-foreground hover:border-foreground hover:text-foreground hover:bg-foreground/10 dark:hover:border-white dark:hover:text-white dark:hover:bg-white/10 transition-colors w-10 h-10" onClick={() => trackEvent("click", "social", "github_hero")}>
                   <a href="https://github.com/comrademohan" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile"><Github className="w-5 h-5" /></a>
                 </Button>
               </MagneticButton>
               <MagneticButton>
-                <Button asChild variant="outline" size="icon" className="rounded-full border-border hover:border-[#0077b5] hover:text-[#0077b5] hover:bg-[#0077b5]/10 transition-colors w-10 h-10" onClick={() => trackEvent("click", "social", "linkedin_hero")}>
+                <Button asChild variant="outline" size="icon" className="rounded-full border-border text-foreground hover:border-[#0077b5] hover:text-[#0077b5] hover:bg-[#0077b5]/10 transition-colors w-10 h-10" onClick={() => trackEvent("click", "social", "linkedin_hero")}>
                   <a href="https://www.linkedin.com/in/mmohanreddy" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile"><Linkedin className="w-5 h-5" /></a>
                 </Button>
               </MagneticButton>
               <MagneticButton>
-                <Button asChild variant="outline" size="icon" className="rounded-full border-border hover:border-[#E1306C] hover:text-[#E1306C] hover:bg-[#E1306C]/10 transition-colors w-10 h-10" onClick={() => trackEvent("click", "social", "instagram_hero")}>
+                <Button asChild variant="outline" size="icon" className="rounded-full border-border text-foreground hover:border-[#E1306C] hover:text-[#E1306C] hover:bg-[#E1306C]/10 transition-colors w-10 h-10" onClick={() => trackEvent("click", "social", "instagram_hero")}>
                   <a href="https://www.instagram.com/comrade_mohan666/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Profile"><Instagram className="w-5 h-5" /></a>
+                </Button>
+              </MagneticButton>
+              <MagneticButton>
+                <Button asChild variant="outline" size="icon" className="rounded-full border-border text-foreground hover:border-[#FFA116] hover:text-[#FFA116] hover:bg-[#FFA116]/10 transition-colors w-10 h-10" onClick={() => trackEvent("click", "social", "leetcode_hero")}>
+                  <a href="https://leetcode.com/u/Comrademohan" target="_blank" rel="noopener noreferrer" aria-label="LeetCode Profile">
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                      <path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .066-.523 2.545 2.545 0 0 1 .619-1.164L9.13 8.114c1.058-1.134 3.204-1.27 4.43-.278l3.501 2.831c.593.48 1.461.387 1.94-.207a1.384 1.384 0 0 0-.207-1.943l-3.5-2.831c-.8-.647-1.766-1.045-2.774-1.202l2.015-2.158A1.384 1.384 0 0 0 13.483 0zm-2.866 12.815a1.38 1.38 0 0 0-1.38 1.382 1.38 1.38 0 0 0 1.38 1.382H20.79a1.38 1.38 0 0 0 1.38-1.382 1.38 1.38 0 0 0-1.38-1.382z" />
+                    </svg>
+                  </a>
                 </Button>
               </MagneticButton>
               <MagneticButton className="ml-2">
@@ -296,7 +306,9 @@ const HeroSection = () => {
                   transition={{ delay: 0.5 + i * 0.15 }}
                   className="text-center p-3 rounded-xl bg-card/60 border border-border/50 backdrop-blur-xs shadow-2xs"
                 >
-                  <div className="text-2xl lg:text-3xl font-extrabold text-primary font-outfit leading-tight">{stat.value}</div>
+                  <div className="text-2xl lg:text-3xl font-extrabold text-primary font-outfit leading-tight">
+                    <AnimatedCounter value={stat.value} />
+                  </div>
                   <div className="text-xs text-muted-foreground mt-1 font-grotesk">{stat.label}</div>
                 </motion.div>
               ))}

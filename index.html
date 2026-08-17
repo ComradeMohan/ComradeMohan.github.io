@@ -117,6 +117,7 @@
       },
       "sameAs": [
         "https://github.com/ComradeMohan",
+        "https://leetcode.com/u/ComradeMohan/",
         "https://www.linkedin.com/in/mmohanreddy/",
         "https://www.instagram.com/comrade_mohan666/"
       ],
@@ -160,10 +161,12 @@
       ],
       "knowsAbout": [
         "Software Engineering",
+        "Android Development",
         "React",
         "Next.js",
         "Kotlin",
         "Java",
+        "Spring Boot",
         "Python",
         "SQL",
         "PostgreSQL",
@@ -172,7 +175,7 @@
         "XGBoost",
         "Machine Learning",
         "OpenCV",
-        "Data Analytics",
+        "Data Structures & Algorithms",
         "Frontend Development",
         "Backend Development",
         "TypeScript",
@@ -181,11 +184,75 @@
       ]
     }
   </script>
+  
+  <!-- WebSite & SoftwareApplication Schema for Google Rich Results -->
+  <script type="application/ld+json">
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Mohan Reddy Portfolio",
+        "url": "https://mohanreddy.me/",
+        "author": {
+          "@type": "Person",
+          "name": "Mohan Reddy"
+        },
+        "description": "Professional engineering portfolio, live LeetCode/GitHub dashboard, and case studies of Mohan Reddy."
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "SaveethaHub",
+        "operatingSystem": "Web, Android",
+        "applicationCategory": "EducationalApplication",
+        "author": {
+          "@type": "Person",
+          "name": "Mohan Reddy"
+        },
+        "description": "All-in-one unified student and faculty portal servicing Saveetha University with real-time academic records and seamless resource access.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "UniVault",
+        "operatingSystem": "Android",
+        "applicationCategory": "ProductivityApplication",
+        "author": {
+          "@type": "Person",
+          "name": "Mohan Reddy"
+        },
+        "description": "Offline-first Android academic resource repository and document vault built with Room Database and Kotlin.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    ]
+  </script>
 </head>
 
 <body>
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
+  
+  <!-- Progressive Web App Service Worker Registration -->
+  <script>
+    if ("serviceWorker" in navigator && window.location.protocol === "https:" || window.location.hostname === "localhost") {
+      window.addEventListener("load", function() {
+        navigator.serviceWorker.register("/sw.js").then(function(reg) {
+          console.log("PWA Service Worker registered successfully:", reg.scope);
+        }).catch(function(err) {
+          console.log("PWA Service Worker registration failed:", err);
+        });
+      });
+    }
+  </script>
 </body>
 
 </html>

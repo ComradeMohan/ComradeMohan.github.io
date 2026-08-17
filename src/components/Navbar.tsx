@@ -15,6 +15,12 @@ const navLinks = [
   { label: "Contact", href: "/#contact" },
 ];
 
+export const HIRE_ME_MAILTO = `mailto:madhiremohanreddy@gmail.com?subject=${encodeURIComponent(
+  "Hiring Inquiry / SDE Opportunity for Mohan Reddy"
+)}&body=${encodeURIComponent(
+  `Hi Mohan,\n\nWe came across your portfolio and would like to discuss an engineering opportunity with you.\n\nOpportunity Overview:\n- Company / Organization: \n- Role / Position: (e.g. SDE Intern / Full-Stack Engineer)\n- Employment Type: (Full-time / Internship / Contract)\n- Location / Work Mode: (Remote / Hybrid / On-site)\n- Estimated Timeline / Start Date: \n\nPlease let us know your availability for a brief introductory conversation.\n\nBest regards,\n[Your Name / Title]\n[Company / LinkedIn]`
+)}`;
+
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -229,7 +235,7 @@ const Navbar = () => {
             </button>
             <MagneticButton>
               <Button asChild size="sm" className="rounded-full bg-primary hover:bg-primary/80 shadow-[0_0_16px_hsl(var(--primary)/0.3)]">
-                <a href="mailto:madhiremohanreddy@gmail.com">
+                <a href={HIRE_ME_MAILTO}>
                   <Mail className="w-4 h-4 mr-1" /> Hire Me
                 </a>
               </Button>
@@ -329,7 +335,7 @@ const Navbar = () => {
                 );
               })}
               <Button asChild className="mt-2 rounded-full bg-primary hover:bg-primary/80 shadow-[0_0_16px_hsl(var(--primary)/0.3)]">
-                <a href="mailto:madhiremohanreddy@gmail.com">
+                <a href={HIRE_ME_MAILTO}>
                   <Mail className="w-4 h-4 mr-1" /> Hire Me
                 </a>
               </Button>

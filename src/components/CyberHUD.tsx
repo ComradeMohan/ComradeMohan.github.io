@@ -29,7 +29,7 @@ const hudData = [
   {
     id: "solved",
     iconSrc: "/icons/leetcode-orange.svg",
-    value: "308",
+    value: "477",
     label: "Solved",
     path: "M 50 50 L 35 50 L 35 80 L 10 80",
     node: { cx: 10, cy: 80 },
@@ -38,7 +38,7 @@ const hudData = [
   {
     id: "rating",
     iconSrc: "/icons/leetcode-orange.svg",
-    value: "1724",
+    value: "1673",
     label: "Rating",
     path: "M 50 50 L 70 50 L 70 15 L 95 15",
     node: { cx: 95, cy: 15 },
@@ -47,7 +47,7 @@ const hudData = [
   {
     id: "rank",
     iconSrc: "/icons/leetcode-orange.svg",
-    value: "Top 11.98%",
+    value: "Top 16.1%",
     label: "Contest Rank",
     path: "M 50 50 L 80 50 L 80 75 L 105 75",
     node: { cx: 105, cy: 75 },

@@ -4,7 +4,7 @@ import {
   Mail, Send, Github, Linkedin, FileText, ArrowRight, ShieldCheck, Loader2,
   Copy, Check, ExternalLink, Download, Eye, MapPin, Briefcase, BookOpen, Clock,
   User, Pencil, MessageSquare, Rocket, X, Undo2, Zap, RotateCcw, Sparkles, Phone,
-  Trophy, Code2, Flame, Award
+  Trophy, Code2, Flame, Award, Users, GraduationCap, BadgeCheck
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -13,13 +13,13 @@ import { useLeetcodeStats } from "@/hooks/useDeveloperStats";
 
 // Fallback GitHub data
 const githubFallback = {
-  avatar: "https://avatars.githubusercontent.com/u/108343711?v=4",
+  avatar: "https://avatars.githubusercontent.com/u/129178102?v=4",
   name: "Mohan Reddy",
   bio: "Full Stack Developer specializing in React, TypeScript, Java, and Kotlin. Builder of UniVault & SaveethaHub.",
-  followers: 12,
-  following: 15,
-  publicRepos: 18,
-  location: "India",
+  followers: 13,
+  streak: "229 Days",
+  publicRepos: 99,
+  location: "Chennai, India",
   company: "Saveetha School of Engineering",
   website: "https://mohanreddy.me",
   htmlUrl: "https://github.com/ComradeMohan",
@@ -203,12 +203,14 @@ const ContactSection = () => {
 
   // Live LeetCode Stats hook (Single source of truth)
   const { data: leetcodeData, isLoading: isLeetcodeLoading } = useLeetcodeStats("contact");
-  const lcTotalSolved = leetcodeData?.profile?.solvedProblem ?? 467;
-  const lcEasySolved = leetcodeData?.profile?.easySolved ?? 178;
-  const lcMediumSolved = leetcodeData?.profile?.mediumSolved ?? 254;
-  const lcHardSolved = leetcodeData?.profile?.hardSolved ?? 35;
-  const lcContestRating = Math.round(leetcodeData?.contest?.contestRating ?? 1512);
-  const lcTopPercentage = leetcodeData?.contest?.contestTopPercentage ? `${Number(leetcodeData.contest.contestTopPercentage).toFixed(1)}%` : "32.4%";
+  const lcTotalSolved = leetcodeData?.profile?.solvedProblem ?? 477;
+  const lcEasySolved = leetcodeData?.profile?.easySolved ?? 158;
+  const lcMediumSolved = leetcodeData?.profile?.mediumSolved ?? 247;
+  const lcHardSolved = leetcodeData?.profile?.hardSolved ?? 72;
+  const lcContestRating = Math.round(leetcodeData?.contest?.contestRating ?? 1673);
+  const lcTopPercentage = leetcodeData?.contest?.contestTopPercentage ? `${Number(leetcodeData.contest.contestTopPercentage).toFixed(1)}%` : "16.1%";
+  const lcAvatar = leetcodeData?.baseProfile?.userAvatar || "https://assets.leetcode.com/users/ComradeMohan/avatar_1784641288.png";
+  const lcName = leetcodeData?.baseProfile?.realName || "Mohan Reddy";
 
   // GitHub API state
   const [githubData, setGithubData] = useState<any>(null);
@@ -233,6 +235,17 @@ const ContactSection = () => {
     const observer = new MutationObserver(checkTheme);
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
     return () => observer.disconnect();
+  }, []);
+
+  // Preload LinkedIn CDN Avatar, fallback safely to local WebP if loading or offline
+  const [linkedinAvatar, setLinkedinAvatar] = useState<string>("/mohan-reddy-full-stack-developer.webp");
+  useEffect(() => {
+    const remoteUrl = "https://media.licdn.com/dms/image/v2/D4D03AQGTQJPkQH3_ag/profile-displayphoto-scale_400_400/B4DZ8OHCXzKYAg-/0/1782648154909?e=1788393600&v=beta&t=gl5WrAKTfI5vJFHnCHgQ9X1584GbUezNvH1pVBJkdB8";
+    const img = new Image();
+    img.src = remoteUrl;
+    img.onload = () => {
+      setLinkedinAvatar(remoteUrl);
+    };
   }, []);
 
   // Escape key handler
@@ -321,13 +334,35 @@ const ContactSection = () => {
         }
       }
 
+      let calculatedStreak = "229 Days";
+      try {
+        const contribRes = await fetch("https://github-contributions-api.jogruber.de/v4/ComradeMohan");
+        if (contribRes.ok) {
+          const contribData = await contribRes.json();
+          const list = (contribData.contributions || []).filter((c: any) => new Date(c.date) <= new Date());
+          let maxStreak = 0;
+          let temp = 0;
+          for (let i = 0; i < list.length; i++) {
+            if (list[i].count > 0) {
+              temp++;
+              if (temp > maxStreak) maxStreak = temp;
+            } else {
+              temp = 0;
+            }
+          }
+          if (maxStreak > 0) calculatedStreak = `${maxStreak} Days`;
+        }
+      } catch {
+        calculatedStreak = "229 Days";
+      }
+
       setGithubData({
         avatar: userData.avatar_url,
         name: userData.name || "Mohan Reddy",
         bio: userData.bio || "Full Stack Developer",
-        followers: userData.followers,
-        following: userData.following,
-        publicRepos: userData.public_repos,
+        followers: userData.followers ?? 13,
+        streak: calculatedStreak,
+        publicRepos: userData.public_repos ?? 99,
         location: userData.location || "India",
         company: userData.company || "SIMATS",
         website: userData.blog || "https://mohanreddy.me",
@@ -621,6 +656,14 @@ const ContactSection = () => {
     }
   };
 
+  const generateMailtoUrl = (customSubject?: string, customBody?: string) => {
+    const subject = customSubject || (form.subject.trim() ? form.subject.trim() : "Project Collaboration / Career Opportunity - Mohan Reddy");
+    const body = customBody || (form.message.trim()
+      ? `Hi Mohan,\n\n${form.message.trim()}\n\nBest regards,\n${form.name.trim() || "[Your Name]"}\n${form.email.trim() || ""}`
+      : `Hi Mohan,\n\nI came across your portfolio and would like to connect regarding an opportunity / project collaboration.\n\nProject / Role Details:\n- Company / Organization: \n- Role / Project Scope: \n- Location / Work Mode (Remote / Hybrid / Onsite): \n- Timeline / Expected Start: \n\nPlease let me know your availability for a brief discussion.\n\nBest regards,\n${form.name.trim() || "[Your Name]"}\n${form.email.trim() || ""}`);
+    return `mailto:${emailInfo.address}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
   const contactMethods = [
     {
       id: "email",
@@ -629,7 +672,7 @@ const ContactSection = () => {
       icon: <Mail className="w-5 h-5 text-orange-500 dark:text-orange-400" />,
       iconBoxClass: "bg-orange-500/10 border-orange-500/30 text-orange-500 dark:bg-[#1E1714] dark:text-orange-400 shadow-[0_0_15px_rgba(249,115,22,0.15)]",
       arrowClass: "text-orange-500 border-orange-500/30 bg-orange-500/10 group-hover:bg-orange-500 group-hover:text-white dark:group-hover:text-black group-hover:border-orange-500",
-      href: "mailto:madhiremohanreddy@gmail.com",
+      href: generateMailtoUrl(),
       trackType: "email_contact"
     },
     {
@@ -666,7 +709,7 @@ const ContactSection = () => {
       id: "leetcode",
       label: "LeetCode",
       value: `${lcTotalSolved}+ Solved • Rating ${lcContestRating}`,
-      icon: <LeetCodeIcon className="w-5 h-5 text-amber-500 dark:text-amber-400" />,
+      icon: <img src="/icons/leetcode-orange.svg" alt="LeetCode" className="w-5 h-5 object-contain" />,
       iconBoxClass: "bg-amber-500/10 border-amber-500/30 text-amber-500 dark:bg-[#1E1912] dark:text-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.15)]",
       arrowClass: "text-amber-500 dark:text-amber-400 border-amber-500/30 bg-amber-500/10 group-hover:bg-amber-500 group-hover:text-white dark:group-hover:text-black group-hover:border-amber-500",
       href: "https://leetcode.com/u/Comrademohan",
@@ -723,16 +766,18 @@ const ContactSection = () => {
 
         <div className="grid grid-cols-3 gap-2 py-2 border-y border-border text-center font-grotesk">
           <div>
-            <span className="block text-xs font-bold text-foreground">{user.publicRepos}</span>
+            <span className="block text-xs font-bold text-foreground">{user.publicRepos ?? 99}</span>
             <span className="text-[9px] text-muted-foreground uppercase tracking-wider">Repos</span>
           </div>
           <div>
-            <span className="block text-xs font-bold text-foreground">{user.followers}</span>
+            <span className="block text-xs font-bold text-foreground">{user.followers ?? 13}</span>
             <span className="text-[9px] text-muted-foreground uppercase tracking-wider">Followers</span>
           </div>
           <div>
-            <span className="block text-xs font-bold text-foreground">{user.following}</span>
-            <span className="text-[9px] text-muted-foreground uppercase tracking-wider">Following</span>
+            <span className="block text-xs font-bold text-orange-500 dark:text-orange-400">
+              {user.streak || "229 Days"}
+            </span>
+            <span className="text-[9px] text-muted-foreground uppercase tracking-wider">Streak</span>
           </div>
         </div>
 
@@ -761,27 +806,98 @@ const ContactSection = () => {
 
   const renderLinkedinContent = () => {
     return (
-      <div className="w-full text-left space-y-4 font-outfit text-foreground">
-        <LinkedInBadge theme={isDark ? "dark" : "light"} />
-
-        <div className="space-y-2 text-xs text-muted-foreground font-grotesk leading-normal border-t border-border pt-3">
-          <div className="flex items-start gap-2">
-            <Briefcase className="w-3.5 h-3.5 text-sky-500 shrink-0 mt-0.5" />
-            <span>{linkedinInfo.title}</span>
+      <div className="w-full text-left space-y-3.5 font-outfit text-foreground select-none">
+        {/* Top Profile Header */}
+        <div className="flex items-center gap-3.5">
+          {/* Avatar with Glowing Ring */}
+          <div className="relative shrink-0">
+            <img
+              src={linkedinAvatar}
+              alt="Mohan Reddy LinkedIn Avatar"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = "/mohan-reddy-full-stack-developer.webp";
+              }}
+              className="w-16 h-16 rounded-full border-2 border-orange-500/80 shadow-[0_0_15px_rgba(249,115,22,0.4)] object-cover bg-slate-100 dark:bg-[#181a20] p-0.5"
+            />
           </div>
-          <div className="flex items-start gap-2">
-            <BookOpen className="w-3.5 h-3.5 text-sky-500 shrink-0 mt-0.5" />
-            <span>{linkedinInfo.education}</span>
+
+          {/* Name & Title */}
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-1.5">
+              <h4 className="text-base font-extrabold text-foreground tracking-tight truncate">
+                Mohan Reddy
+              </h4>
+              <ShieldCheck className="w-4 h-4 text-amber-500 shrink-0" />
+            </div>
+            <p className="text-xs text-muted-foreground font-grotesk leading-tight mt-0.5 truncate">
+              Full Stack Developer &amp; Software Engineer
+            </p>
+            <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground font-grotesk mt-1.5">
+              <span className="font-semibold text-foreground">React</span>
+              <span>•</span>
+              <span className="font-semibold text-foreground">Node.js</span>
+              <span>•</span>
+              <span className="font-semibold text-foreground">AWS</span>
+            </div>
           </div>
         </div>
 
-        <p className="text-xs text-muted-foreground font-grotesk leading-snug bg-sky-500/10 p-3 rounded-xl border border-sky-500/30">
-          "{linkedinInfo.headline}"
-        </p>
+        {/* Divider */}
+        <div className="border-t border-border/80 my-1" />
 
-        <Button asChild className="w-full rounded-xl text-xs py-2.5 h-auto font-grotesk bg-[#0077b5] hover:bg-[#0077b5]/90 text-white shadow-md">
-          <a href={linkedinInfo.profileUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1.5">
-            View Full Profile <ExternalLink className="w-3.5 h-3.5" />
+        {/* Details List */}
+        <div className="space-y-2 text-xs text-foreground font-grotesk">
+          <div className="flex items-center gap-2.5">
+            <Briefcase className="w-4 h-4 text-sky-500 dark:text-sky-400 shrink-0" />
+            <span className="truncate">Saveetha School of Engineering (SIMATS)</span>
+          </div>
+          <div className="flex items-center gap-2.5">
+            <GraduationCap className="w-4 h-4 text-sky-500 dark:text-sky-400 shrink-0" />
+            <span>B.Tech CSE • 2026</span>
+          </div>
+          <div className="flex items-center gap-2.5">
+            <MapPin className="w-4 h-4 text-sky-500 dark:text-sky-400 shrink-0" />
+            <span className="truncate">Chennai, Tamil Nadu, India</span>
+          </div>
+          <div className="flex items-center gap-2.5">
+            <Users className="w-4 h-4 text-sky-500 dark:text-sky-400 shrink-0" />
+            <span>153 connections</span>
+          </div>
+        </div>
+
+        {/* Open to Opportunities Banner Card (Polished Light & Dark themes) */}
+        <div className="p-3 rounded-2xl bg-sky-50/90 dark:bg-[#0c1524] border border-sky-200 dark:border-sky-500/25 flex items-center gap-3 shadow-xs transition-colors">
+          <div className="w-9 h-9 rounded-xl bg-sky-100 dark:bg-sky-500/15 border border-sky-200 dark:border-sky-500/30 flex items-center justify-center shrink-0 text-sky-600 dark:text-sky-400">
+            <Briefcase className="w-4 h-4" />
+          </div>
+          <div className="min-w-0">
+            <div className="text-xs font-bold text-sky-700 dark:text-sky-400 font-outfit leading-tight">
+              Open to Opportunities
+            </div>
+            <div className="text-[11px] text-slate-600 dark:text-muted-foreground font-grotesk leading-tight mt-0.5 truncate">
+              SDE Internships &amp; Fresher Roles
+            </div>
+          </div>
+        </div>
+
+        {/* Action Button: Show Full Profile with permanent white text across all themes */}
+        <Button
+          asChild
+          className="w-full rounded-2xl text-xs py-3.5 h-auto font-outfit font-extrabold bg-[#0a66c2] hover:bg-[#004182] !text-white text-white shadow-[0_4px_18px_rgba(10,102,194,0.45)] hover:shadow-[0_6px_25px_rgba(10,102,194,0.65)] flex items-center justify-center gap-2 transition-all duration-300 border border-blue-400/40 group cursor-pointer"
+        >
+          <a
+            href={linkedinInfo.profileUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 !text-white text-white"
+          >
+            <svg className="w-4 h-4 fill-white text-white shrink-0" viewBox="0 0 24 24">
+              <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.63 1.63 0 1 0 0-3.26 1.63 1.63 0 0 0 0 3.26m1.39 9.74V10.13H5.07v8.37h2.78z" />
+            </svg>
+            <span className="!text-white text-white tracking-wide text-[13px] font-bold">
+              Show Full Profile
+            </span>
+            <ExternalLink className="w-3.5 h-3.5 !text-white text-white shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </a>
         </Button>
       </div>
@@ -789,6 +905,7 @@ const ContactSection = () => {
   };
 
   const renderEmailContent = () => {
+    const mailtoLink = generateMailtoUrl();
     return (
       <div className="w-full text-left space-y-4 font-outfit text-foreground">
         <div className="space-y-1">
@@ -806,7 +923,7 @@ const ContactSection = () => {
         </div>
 
         <div className="grid grid-cols-2 gap-2 font-grotesk">
-          <Button onClick={handleCopyEmail} variant="outline" className="rounded-xl text-xs py-2.5 h-auto flex items-center justify-center gap-1.5 border-orange-500/40 bg-orange-500/10 text-orange-600 dark:text-orange-300 hover:bg-orange-500/20 hover:text-orange-700 dark:hover:text-orange-200 shadow-2xs">
+          <Button onClick={handleCopyEmail} variant="outline" className="rounded-xl text-xs py-2.5 h-auto flex items-center justify-center gap-1.5 border-orange-500/40 bg-orange-500/10 text-orange-600 dark:text-orange-300 hover:bg-orange-500/20 hover:text-orange-700 dark:hover:text-orange-200 shadow-2xs cursor-pointer">
             {copied ? (
               <>
                 <Check className="w-3.5 h-3.5 text-emerald-500" /> Copied!
@@ -817,9 +934,9 @@ const ContactSection = () => {
               </>
             )}
           </Button>
-          <Button asChild className="rounded-xl text-xs py-2.5 h-auto bg-orange-500 hover:bg-orange-600 text-white font-bold shadow-md">
-            <a href={`mailto:${emailInfo.address}`} className="flex items-center justify-center gap-1.5">
-              <Mail className="w-3.5 h-3.5" /> Open Mail
+          <Button asChild className="rounded-xl text-xs py-2.5 h-auto bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 !text-white text-white font-bold shadow-md cursor-pointer">
+            <a href={mailtoLink} className="flex items-center justify-center gap-1.5 !text-white text-white">
+              <Mail className="w-3.5 h-3.5 !text-white text-white" /> Open Mail
             </a>
           </Button>
         </div>
@@ -830,20 +947,45 @@ const ContactSection = () => {
   const renderResumeContent = () => {
     return (
       <div className="w-full text-left space-y-4 font-outfit text-foreground">
-        <div className="flex gap-4">
-          <div className="w-20 h-28 bg-emerald-500/10 rounded-xl border border-emerald-500/30 shrink-0 p-2 flex flex-col justify-between select-none">
-            <div className="space-y-1">
-              <div className="w-8 h-2 bg-emerald-500/40 rounded" />
-              <div className="w-full h-1 bg-border rounded" />
-              <div className="w-4/5 h-1 bg-border rounded" />
-              <div className="w-full h-1 bg-border rounded" />
-              <div className="w-2/3 h-1 bg-border rounded" />
+        <div className="flex gap-4 items-start">
+          {/* Realistic White Paper Resume PDF Document Thumbnail */}
+          <div className="w-[88px] h-[116px] bg-white rounded-lg border border-slate-200 dark:border-slate-700 shadow-[0_4px_12px_rgba(0,0,0,0.15)] shrink-0 p-2 flex flex-col justify-between select-none relative overflow-hidden">
+            {/* Top Red PDF Tag */}
+            <div className="absolute top-0 right-0 bg-red-600 text-white text-[6px] font-extrabold px-1.5 py-0.5 rounded-bl shadow-xs font-mono uppercase tracking-wider">
+              PDF
             </div>
-            <div className="flex items-center justify-between">
-              <div className="w-4 h-4 bg-emerald-500/20 rounded flex items-center justify-center">
-                <Check className="w-2.5 h-2.5 text-emerald-500" />
+
+            {/* Document Header */}
+            <div>
+              <div className="text-[7.5px] font-extrabold text-slate-900 leading-tight tracking-tight">
+                MOHAN REDDY
               </div>
-              <span className="text-[7px] text-muted-foreground font-grotesk">PDF</span>
+              <div className="text-[5.5px] font-medium text-slate-500 leading-none mt-0.5">
+                Full Stack Developer
+              </div>
+              <div className="w-full h-[1px] bg-slate-300 my-1" />
+            </div>
+
+            {/* Document Simulated Sections */}
+            <div className="space-y-1 my-auto">
+              <div>
+                <div className="text-[5px] font-bold text-slate-800 uppercase tracking-wide">Education</div>
+                <div className="w-full h-[2.5px] bg-slate-200 rounded-[1px] mt-0.5" />
+                <div className="w-4/5 h-[2px] bg-slate-200 rounded-[1px] mt-0.5" />
+              </div>
+              <div>
+                <div className="text-[5px] font-bold text-slate-800 uppercase tracking-wide">Experience &amp; Projects</div>
+                <div className="w-full h-[2.5px] bg-slate-300 rounded-[1px] mt-0.5" />
+                <div className="w-3/4 h-[2px] bg-slate-200 rounded-[1px] mt-0.5" />
+              </div>
+            </div>
+
+            {/* Document Footer */}
+            <div className="pt-1 border-t border-slate-200 flex items-center justify-between text-[6px] text-slate-500 font-mono">
+              <span className="font-semibold text-slate-700">1 Page</span>
+              <div className="w-3 h-3 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center">
+                <Check className="w-2 h-2 text-emerald-600 stroke-[3]" />
+              </div>
             </div>
           </div>
 
@@ -896,12 +1038,22 @@ const ContactSection = () => {
         {/* Profile Card Header */}
         <div className="flex items-center justify-between pb-3 border-b border-border/80">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/35 flex items-center justify-center text-amber-500 dark:text-amber-400 shrink-0 shadow-[0_0_20px_rgba(245,158,11,0.2)]">
-              <LeetCodeIcon className="w-7 h-7" />
+            <div className="relative shrink-0">
+              <img
+                src={lcAvatar}
+                alt={`${lcName} LeetCode Avatar`}
+                className="w-12 h-12 rounded-2xl border border-amber-500/40 object-cover shadow-[0_0_15px_rgba(245,158,11,0.25)] bg-white dark:bg-[#181a20]"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = "/mohan-reddy-full-stack-developer.webp";
+                }}
+              />
+              <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-md bg-white dark:bg-[#181a20] border border-amber-500/40 flex items-center justify-center p-0.5 shadow-sm">
+                <img src="/icons/leetcode-orange.svg" alt="LC" className="w-3.5 h-3.5 object-contain" />
+              </div>
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <h4 className="text-sm font-extrabold text-foreground leading-tight">Mohan Reddy</h4>
+                <h4 className="text-sm font-extrabold text-foreground leading-tight">{lcName}</h4>
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" title="Active Solver" />
               </div>
               <p className="text-xs text-amber-600 dark:text-amber-400 font-grotesk mt-0.5 leading-none font-bold">@ComradeMohan</p>
@@ -968,7 +1120,7 @@ const ContactSection = () => {
               <span className="text-[10px] uppercase font-bold tracking-wider">Primary Stack</span>
             </div>
             <span className="text-xs font-bold text-foreground block truncate">
-              Java (413) • SQL (40)
+              Java (419) • MySQL (40) • Python (14)
             </span>
           </div>
         </div>
@@ -990,21 +1142,21 @@ const ContactSection = () => {
         {/* Action Button - High Contrast & Clean in both Light & Dark Theme */}
         <Button
           asChild
-          className="w-full rounded-2xl text-xs py-3.5 h-auto font-outfit font-extrabold bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-[0_4px_20px_rgba(249,115,22,0.35)] hover:shadow-[0_6px_25px_rgba(249,115,22,0.5)] transition-all duration-300 group/btn cursor-pointer border border-orange-400/30"
+          className="w-full rounded-2xl text-xs py-3.5 h-auto font-outfit font-extrabold bg-gradient-to-r from-[#FFA116] via-[#FF7A00] to-[#FFA116] hover:from-[#FF7A00] hover:to-[#E56800] !text-white text-white shadow-[0_4px_18px_rgba(255,140,0,0.38)] hover:shadow-[0_6px_25px_rgba(255,140,0,0.58)] transition-all duration-300 group/btn cursor-pointer border border-amber-300/40"
         >
           <a
             href={leetcodeInfo.profileUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2.5"
+            className="flex items-center justify-center gap-2.5 !text-white text-white"
           >
-            <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
+            <div className="w-6 h-6 rounded-lg bg-black/20 dark:bg-black/30 border border-white/25 flex items-center justify-center shrink-0">
               <LeetCodeIcon className="w-4 h-4 text-white transition-transform group-hover/btn:scale-110" />
             </div>
-            <span className="tracking-wide text-[13px] font-bold text-white">
+            <span className="tracking-wide text-[13px] font-bold !text-white text-white">
               Open LeetCode Profile
             </span>
-            <ExternalLink className="w-3.5 h-3.5 text-white/90 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+            <ExternalLink className="w-3.5 h-3.5 !text-white text-white transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
           </a>
         </Button>
       </div>
@@ -1078,7 +1230,7 @@ const ContactSection = () => {
   const getPopoverDimensions = (id: string) => {
     switch (id) {
       case "github": return { width: 320, height: 390 };
-      case "linkedin": return { width: 310, height: 340 };
+      case "linkedin": return { width: 340, height: 420 };
       case "email": return { width: 290, height: 200 };
       case "resume": return { width: 320, height: 310 };
       case "leetcode": return { width: 310, height: 320 };

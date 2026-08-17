@@ -1,24 +1,181 @@
 import { useQuery } from "@tanstack/react-query";
+import fallbackData from "@/data/developerProfileFallback.json";
 
 // Single source of truth for the usernames these stat widgets pull from.
 const GITHUB_USERNAME = "ComradeMohan";
 const LEETCODE_USERNAME = "ComradeMohan";
-const LEETCODE_API_BASE = "https://alfa-leetcode-api.onrender.com";
+const LEETCODE_PIED_API_BASE = "https://leetcode-api-pied.vercel.app/user";
+const LEETCODE_FALLBACK_API_BASE = "https://alfa-leetcode-api.onrender.com";
+
+// Cache Keys for persistent client-side storage
+const CACHE_KEYS = {
+  LEETCODE_STATS: "dev_lc_stats_v4",
+  LEETCODE_DETAILS: "dev_lc_details_v4",
+  GITHUB_STATS: "dev_gh_stats_v4",
+  GITHUB_CONTRIBS: "dev_gh_contrib_v4",
+};
+
+export interface LeetcodeSubmission {
+  id: string;
+  title: string;
+  titleSlug: string;
+  timestamp: string;
+  statusDisplay: string;
+  langName: string;
+  runtime?: string;
+  memory?: string;
+}
+
+export interface LeetcodeContestItem {
+  attended: boolean;
+  problemsSolved: number;
+  totalProblems: number;
+  rating: number;
+  ranking: number;
+  contest: {
+    title: string;
+    startTime: number;
+  };
+}
+
+// Extract parsed fallback data from bundled developerProfileFallback.json
+const acStats = fallbackData.profile?.submitStats?.acSubmissionNum || [];
+const getFallbackCount = (diff: string) => acStats.find((x: any) => x.difficulty === diff)?.count;
+
+export const DEFAULT_LEETCODE_STATS = {
+  baseProfile: {
+    realName: fallbackData.profile?.profile?.realName || "M Mohan Reddy",
+    userAvatar: fallbackData.profile?.profile?.userAvatar || "https://assets.leetcode.com/users/ComradeMohan/avatar_1784641288.png",
+    ranking: fallbackData.profile?.profile?.ranking || 225675,
+  },
+  profile: {
+    solvedProblem: getFallbackCount("All") ?? 477,
+    easySolved: getFallbackCount("Easy") ?? 158,
+    mediumSolved: getFallbackCount("Medium") ?? 247,
+    hardSolved: getFallbackCount("Hard") ?? 72,
+  },
+  contest: {
+    contestRating: fallbackData.contests?.userContestRanking?.rating || 1673.33,
+    contestTopPercentage: fallbackData.contests?.userContestRanking?.topPercentage || 16.1,
+    contestGlobalRanking: fallbackData.contests?.userContestRanking?.globalRanking || 138957,
+    contestAttend: fallbackData.contests?.userContestRanking?.attendedContestsCount || 15,
+  },
+  skill: fallbackData.skills || null,
+};
+
+export const DEFAULT_SUBMISSIONS: LeetcodeSubmission[] = Array.isArray(fallbackData.submissions)
+  ? (fallbackData.submissions as LeetcodeSubmission[]).slice(0, 6)
+  : [
+      { id: "1", title: "Stone Game IX", titleSlug: "stone-game-ix", timestamp: "1786874502", statusDisplay: "Accepted", langName: "Java", runtime: "4 ms", memory: "114 MB" },
+      { id: "2", title: "Longest Subsequence With Non-Zero Bitwise XOR", titleSlug: "longest-subsequence-with-non-zero-bitwise-xor", timestamp: "1786763579", statusDisplay: "Accepted", langName: "Java", runtime: "2 ms", memory: "133 MB" },
+      { id: "3", title: "Maximum Length Substring With Two Occurrences", titleSlug: "maximum-length-substring-with-two-occurrences", timestamp: "1786716065", statusDisplay: "Accepted", langName: "Java", runtime: "1 ms", memory: "43 MB" },
+      { id: "4", title: "Longest Substring of One Repeating Character", titleSlug: "longest-substring-of-one-repeating-character", timestamp: "1786612516", statusDisplay: "Accepted", langName: "Java", runtime: "18 ms", memory: "58 MB" },
+      { id: "5", title: "Combine Two Tables (SQL)", titleSlug: "combine-two-tables", timestamp: "1786020185", statusDisplay: "Accepted", langName: "MySQL", runtime: "320 ms", memory: "0 MB" },
+    ];
+
+export const DEFAULT_CONTEST_HISTORY: LeetcodeContestItem[] = Array.isArray(fallbackData.contests?.userContestRankingHistory)
+  ? (fallbackData.contests.userContestRankingHistory as any[]).filter((x) => x.attended).slice(-4).reverse()
+  : [
+      { attended: true, problemsSolved: 2, totalProblems: 4, rating: 1766.3, ranking: 6093, contest: { title: "Weekly Contest 427", startTime: 1733625000 } },
+      { attended: true, problemsSolved: 1, totalProblems: 4, rating: 1724.1, ranking: 13055, contest: { title: "Weekly Contest 429", startTime: 1734834600 } },
+      { attended: true, problemsSolved: 2, totalProblems: 4, rating: 1673.3, ranking: 20960, contest: { title: "Biweekly Contest 186", startTime: 1783175400 } },
+    ];
+
+const rawSkillsCombined = [
+  ...(fallbackData.skills?.fundamental || []),
+  ...(fallbackData.skills?.intermediate || []),
+  ...(fallbackData.skills?.advanced || []),
+];
+export const DEFAULT_SKILLS = rawSkillsCombined.length > 0
+  ? rawSkillsCombined.sort((a, b) => b.problemsSolved - a.problemsSolved)
+  : [
+      { tagName: "Array", problemsSolved: 248 },
+      { tagName: "String", problemsSolved: 115 },
+      { tagName: "Hash Table", problemsSolved: 84 },
+      { tagName: "Sorting", problemsSolved: 74 },
+      { tagName: "Math", problemsSolved: 72 },
+      { tagName: "Dynamic Programming", problemsSolved: 53 },
+      { tagName: "Two Pointers", problemsSolved: 47 },
+      { tagName: "Binary Search", problemsSolved: 46 },
+      { tagName: "Greedy", problemsSolved: 45 },
+      { tagName: "Matrix", problemsSolved: 41 },
+      { tagName: "Database", problemsSolved: 40 },
+      { tagName: "Bit Manipulation", problemsSolved: 36 },
+      { tagName: "Depth-First Search", problemsSolved: 33 },
+      { tagName: "Sliding Window", problemsSolved: 29 },
+      { tagName: "Breadth-First Search", problemsSolved: 27 },
+      { tagName: "Tree", problemsSolved: 26 },
+      { tagName: "Graph Theory", problemsSolved: 26 },
+      { tagName: "Binary Tree", problemsSolved: 24 },
+      { tagName: "Stack", problemsSolved: 21 },
+      { tagName: "Recursion", problemsSolved: 17 },
+      { tagName: "Backtracking", problemsSolved: 16 },
+    ];
+
+export const DEFAULT_CALENDAR = fallbackData.calendar || {
+  totalActiveDays: 102,
+  streak: 30,
+  submissionCalendar: {},
+};
+
+export const DEFAULT_LEETCODE_DETAILS = {
+  submissions: DEFAULT_SUBMISSIONS,
+  calendar: DEFAULT_CALENDAR,
+  contestHistory: DEFAULT_CONTEST_HISTORY,
+  skills: DEFAULT_SKILLS,
+};
+
+export const DEFAULT_GITHUB_STATS = {
+  followers: 13,
+  public_repos: 99,
+  avatar_url: "https://avatars.githubusercontent.com/u/129178102?v=4",
+  login: GITHUB_USERNAME,
+};
+
+// Safe LocalStorage helpers
+function getCachedData<T>(key: string, fallback: T): T {
+  if (typeof window === "undefined") return fallback;
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return fallback;
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" ? parsed : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function setCachedData<T>(key: string, data: T): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(key, JSON.stringify(data));
+  } catch {
+    // quota exceeded or private mode
+  }
+}
 
 /**
  * Fetches live GitHub profile stats (followers, public repos, avatar).
- * `queryKeyPrefix` keeps react-query caches distinct per page (e.g. "about", "developer")
- * without duplicating the fetch logic itself.
+ * Instantly initialized from LocalStorage cache or fallback, and immediately re-syncs with the live API.
  */
-export function useGithubStats(queryKeyPrefix: string) {
+export function useGithubStats(queryKeyPrefix: string = "global") {
   return useQuery({
     queryKey: [queryKeyPrefix, "githubStats", GITHUB_USERNAME],
+    initialData: () => getCachedData(CACHE_KEYS.GITHUB_STATS, DEFAULT_GITHUB_STATS),
+    initialDataUpdatedAt: 0, // Signals React Query to fetch fresh data immediately on mount
+    refetchOnMount: "always",
     queryFn: async () => {
-      const res = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}`);
-      if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
-      return res.json();
+      try {
+        const res = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}`);
+        if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
+        const data = await res.json();
+        setCachedData(CACHE_KEYS.GITHUB_STATS, data);
+        return data;
+      } catch (err) {
+        return getCachedData(CACHE_KEYS.GITHUB_STATS, DEFAULT_GITHUB_STATS);
+      }
     },
-    staleTime: 1000 * 60 * 60, // 1 hour
+    staleTime: 1000 * 60 * 5, // 5 mins
   });
 }
 
@@ -29,115 +186,211 @@ export interface GithubContributionsData {
   contributions: Array<{ date: string; count: number; level: number }>;
 }
 
+const DEFAULT_GITHUB_CONTRIBS: GithubContributionsData = {
+  total: { "2023": 128, "2024": 353, "2025": 1663, "2026": 2393 },
+  totalLifetime: 4537,
+  totalThisYear: 2393,
+  contributions: [],
+};
+
 /**
  * Fetches live GitHub contribution calendar and calculates total lifetime & this-year commit stats.
- * Uses cached contributions endpoint with 1-hour staleTime to prevent rate limiting.
+ * Instantly initialized from LocalStorage cache or fallback, and immediately re-syncs with the live API.
  */
 export function useGithubContributions(queryKeyPrefix: string = "global") {
   return useQuery<GithubContributionsData>({
     queryKey: [queryKeyPrefix, "githubContributions", GITHUB_USERNAME],
+    initialData: () => getCachedData(CACHE_KEYS.GITHUB_CONTRIBS, DEFAULT_GITHUB_CONTRIBS),
+    initialDataUpdatedAt: 0, // Signals React Query to fetch fresh data immediately on mount
+    refetchOnMount: "always",
     queryFn: async () => {
-      const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${GITHUB_USERNAME}`);
-      if (!res.ok) throw new Error(`GitHub contributions API error: ${res.status}`);
-      const data = await res.json();
+      try {
+        const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${GITHUB_USERNAME}`);
+        if (!res.ok) throw new Error(`GitHub contributions API error: ${res.status}`);
+        const data = await res.json();
 
-      const totalMap: Record<string, number> = data.total || {};
-      const totalLifetime = Object.values(totalMap).reduce((acc: number, val: any) => acc + (typeof val === "number" ? val : 0), 0);
-      const currentYear = new Date().getFullYear().toString();
-      const totalThisYear = totalMap[currentYear] || Object.values(totalMap)[Object.values(totalMap).length - 1] || 2388;
+        const totalMap: Record<string, number> = data.total || {};
+        const totalLifetime = Object.values(totalMap).reduce((acc: number, val: any) => acc + (typeof val === "number" ? val : 0), 0);
+        const currentYear = new Date().getFullYear().toString();
+        const totalThisYear = totalMap[currentYear] || Object.values(totalMap)[Object.values(totalMap).length - 1] || 2393;
 
-      return {
-        total: totalMap,
-        totalLifetime: totalLifetime > 0 ? totalLifetime : 4532,
-        totalThisYear: totalThisYear > 0 ? totalThisYear : 2388,
-        contributions: data.contributions || [],
-      };
+        const result: GithubContributionsData = {
+          total: totalMap,
+          totalLifetime: totalLifetime > 0 ? totalLifetime : 4537,
+          totalThisYear: totalThisYear > 0 ? totalThisYear : 2393,
+          contributions: data.contributions || [],
+        };
+        setCachedData(CACHE_KEYS.GITHUB_CONTRIBS, result);
+        return result;
+      } catch (err) {
+        return getCachedData(CACHE_KEYS.GITHUB_CONTRIBS, DEFAULT_GITHUB_CONTRIBS);
+      }
     },
-    staleTime: 1000 * 60 * 60, // 1 hour
+    staleTime: 1000 * 60 * 5, // 5 mins
   });
 }
 
 /**
- * Fetches live LeetCode profile, solved-count, contest, and language stats with fallback support.
+ * Fetches live LeetCode profile, solved-count, contest, and language stats with multi-provider fallback.
+ * Instantly initialized from LocalStorage cache or rich fallback snapshot, and immediately re-syncs with the live API.
  */
-export function useLeetcodeStats(queryKeyPrefix: string) {
+export function useLeetcodeStats(queryKeyPrefix: string = "global") {
   return useQuery({
     queryKey: [queryKeyPrefix, "leetcodeStats", LEETCODE_USERNAME],
+    initialData: () => getCachedData(CACHE_KEYS.LEETCODE_STATS, DEFAULT_LEETCODE_STATS),
+    initialDataUpdatedAt: 0, // Signals React Query to fetch fresh data immediately on mount
+    refetchOnMount: "always",
     queryFn: async () => {
       try {
-        const [baseProfileRes, profileRes, contestRes, skillRes] = await Promise.all([
-          fetch(`${LEETCODE_API_BASE}/${LEETCODE_USERNAME}`).catch(() => null),
-          fetch(`${LEETCODE_API_BASE}/${LEETCODE_USERNAME}/solved`).catch(() => null),
-          fetch(`${LEETCODE_API_BASE}/${LEETCODE_USERNAME}/contest`).catch(() => null),
-          fetch(`${LEETCODE_API_BASE}/${LEETCODE_USERNAME}/language`).catch(() => null),
+        const [profileRes, contestRes, skillRes] = await Promise.all([
+          fetch(`${LEETCODE_PIED_API_BASE}/${LEETCODE_USERNAME}`).catch(() => null),
+          fetch(`${LEETCODE_PIED_API_BASE}/${LEETCODE_USERNAME}/contests`).catch(() => null),
+          fetch(`${LEETCODE_PIED_API_BASE}/${LEETCODE_USERNAME}/skills`).catch(() => null),
         ]);
 
-        const [baseProfile, profile, contest, skill] = await Promise.all([
-          baseProfileRes?.ok ? baseProfileRes.json() : null,
+        const [profileData, contestData, skillData] = await Promise.all([
           profileRes?.ok ? profileRes.json() : null,
           contestRes?.ok ? contestRes.json() : null,
           skillRes?.ok ? skillRes.json() : null,
         ]);
 
-        if (profile) {
-          return { baseProfile, profile, contest, skill };
-        }
+        if (profileData && profileData.submitStats) {
+          const acList = profileData.submitStats.acSubmissionNum || [];
+          const getCount = (diff: string) => acList.find((x: any) => x.difficulty === diff)?.count;
 
-        // Direct fallback to leetcode-stats-api
-        const fallbackRes = await fetch(`https://leetcode-stats-api.herokuapp.com/${LEETCODE_USERNAME}`).catch(() => null);
-        if (fallbackRes?.ok) {
-          const fb = await fallbackRes.json();
-          return {
-            baseProfile: { realName: "Mohan Reddy", userAvatar: "" },
+          const result = {
+            baseProfile: {
+              realName: profileData.profile?.realName || DEFAULT_LEETCODE_STATS.baseProfile.realName,
+              userAvatar: profileData.profile?.userAvatar || DEFAULT_LEETCODE_STATS.baseProfile.userAvatar,
+              ranking: profileData.profile?.ranking || DEFAULT_LEETCODE_STATS.baseProfile.ranking,
+            },
             profile: {
-              solvedProblem: fb.totalSolved || 467,
-              easySolved: fb.easySolved || 178,
-              mediumSolved: fb.mediumSolved || 254,
-              hardSolved: fb.hardSolved || 35,
+              solvedProblem: getCount("All") ?? DEFAULT_LEETCODE_STATS.profile.solvedProblem,
+              easySolved: getCount("Easy") ?? DEFAULT_LEETCODE_STATS.profile.easySolved,
+              mediumSolved: getCount("Medium") ?? DEFAULT_LEETCODE_STATS.profile.mediumSolved,
+              hardSolved: getCount("Hard") ?? DEFAULT_LEETCODE_STATS.profile.hardSolved,
             },
             contest: {
-              contestRating: 1512,
-              contestTopPercentage: 32.4,
+              contestRating: contestData?.userContestRanking?.rating || DEFAULT_LEETCODE_STATS.contest.contestRating,
+              contestTopPercentage: contestData?.userContestRanking?.topPercentage || DEFAULT_LEETCODE_STATS.contest.contestTopPercentage,
+              contestGlobalRanking: contestData?.userContestRanking?.globalRanking || DEFAULT_LEETCODE_STATS.contest.contestGlobalRanking,
+              contestAttend: contestData?.userContestRanking?.attendedContestsCount || DEFAULT_LEETCODE_STATS.contest.contestAttend,
             },
-            skill: null,
+            skill: skillData || DEFAULT_LEETCODE_STATS.skill,
           };
+          setCachedData(CACHE_KEYS.LEETCODE_STATS, result);
+          return result;
         }
 
-        return {
-          baseProfile: null,
-          profile: { solvedProblem: 467, easySolved: 178, mediumSolved: 254, hardSolved: 35 },
-          contest: { contestRating: 1512, contestTopPercentage: 32.4 },
-          skill: null,
-        };
+        // Secondary fallback to alfa-leetcode-api
+        const [baseProfileRes, alfaSolvedRes, alfaContestRes, alfaSkillRes] = await Promise.all([
+          fetch(`${LEETCODE_FALLBACK_API_BASE}/${LEETCODE_USERNAME}`).catch(() => null),
+          fetch(`${LEETCODE_FALLBACK_API_BASE}/${LEETCODE_USERNAME}/solved`).catch(() => null),
+          fetch(`${LEETCODE_FALLBACK_API_BASE}/${LEETCODE_USERNAME}/contest`).catch(() => null),
+          fetch(`${LEETCODE_FALLBACK_API_BASE}/${LEETCODE_USERNAME}/language`).catch(() => null),
+        ]);
+
+        const [baseProfile, profile, contest, skill] = await Promise.all([
+          baseProfileRes?.ok ? baseProfileRes.json() : null,
+          alfaSolvedRes?.ok ? alfaSolvedRes.json() : null,
+          alfaContestRes?.ok ? alfaContestRes.json() : null,
+          alfaSkillRes?.ok ? alfaSkillRes.json() : null,
+        ]);
+
+        if (profile) {
+          const result = { baseProfile, profile, contest, skill };
+          setCachedData(CACHE_KEYS.LEETCODE_STATS, result);
+          return result;
+        }
+
+        return getCachedData(CACHE_KEYS.LEETCODE_STATS, DEFAULT_LEETCODE_STATS);
       } catch {
-        return {
-          baseProfile: null,
-          profile: { solvedProblem: 467, easySolved: 178, mediumSolved: 254, hardSolved: 35 },
-          contest: { contestRating: 1512, contestTopPercentage: 32.4 },
-          skill: null,
-        };
+        return getCachedData(CACHE_KEYS.LEETCODE_STATS, DEFAULT_LEETCODE_STATS);
       }
     },
-    staleTime: 1000 * 60 * 60, // 1 hour
+    staleTime: 1000 * 60 * 5, // 5 mins
+  });
+}
+
+/**
+ * Fetches full LeetCode details (submissions, calendar heatmap, contest history, skills).
+ * Instantly initialized from LocalStorage cache or rich fallback snapshot, and immediately re-syncs with the live API.
+ */
+export function useLeetcodeDetails(queryKeyPrefix: string = "details") {
+  return useQuery({
+    queryKey: [queryKeyPrefix, "leetcodeDetails", LEETCODE_USERNAME],
+    initialData: () => getCachedData(CACHE_KEYS.LEETCODE_DETAILS, DEFAULT_LEETCODE_DETAILS),
+    initialDataUpdatedAt: 0, // Signals React Query to fetch fresh data immediately on mount
+    refetchOnMount: "always",
+    queryFn: async () => {
+      try {
+        const [subsRes, calRes, contestRes, skillsRes] = await Promise.all([
+          fetch(`${LEETCODE_PIED_API_BASE}/${LEETCODE_USERNAME}/submissions`).catch(() => null),
+          fetch(`${LEETCODE_PIED_API_BASE}/${LEETCODE_USERNAME}/calendar`).catch(() => null),
+          fetch(`${LEETCODE_PIED_API_BASE}/${LEETCODE_USERNAME}/contests`).catch(() => null),
+          fetch(`${LEETCODE_PIED_API_BASE}/${LEETCODE_USERNAME}/skills`).catch(() => null),
+        ]);
+
+        const [submissionsData, calendarData, contestData, skillsData] = await Promise.all([
+          subsRes?.ok ? subsRes.json() : null,
+          calRes?.ok ? calRes.json() : null,
+          contestRes?.ok ? contestRes.json() : null,
+          skillsRes?.ok ? skillsRes.json() : null,
+        ]);
+
+        const submissions: LeetcodeSubmission[] = Array.isArray(submissionsData)
+          ? submissionsData.slice(0, 6)
+          : DEFAULT_SUBMISSIONS;
+
+        const contestHistory: LeetcodeContestItem[] = Array.isArray(contestData?.userContestRankingHistory)
+          ? contestData.userContestRankingHistory.filter((x: any) => x.attended).slice(-4).reverse()
+          : DEFAULT_CONTEST_HISTORY;
+
+        let allSkills = DEFAULT_SKILLS;
+        if (skillsData) {
+          const combined = [
+            ...(skillsData.fundamental || []),
+            ...(skillsData.intermediate || []),
+            ...(skillsData.advanced || []),
+          ];
+          if (combined.length > 0) {
+            allSkills = combined.sort((a: any, b: any) => b.problemsSolved - a.problemsSolved);
+          }
+        }
+
+        const result = {
+          submissions,
+          calendar: calendarData && Object.keys(calendarData.submissionCalendar || {}).length > 0
+            ? calendarData
+            : DEFAULT_CALENDAR,
+          contestHistory,
+          skills: allSkills,
+        };
+
+        setCachedData(CACHE_KEYS.LEETCODE_DETAILS, result);
+        return result;
+      } catch {
+        return getCachedData(CACHE_KEYS.LEETCODE_DETAILS, DEFAULT_LEETCODE_DETAILS);
+      }
+    },
+    staleTime: 1000 * 60 * 5, // 5 mins
   });
 }
 
 const LANGUAGE_DEFAULTS = [
-  { name: "Java", color: "bg-orange-500", defaultCount: 413 },
+  { name: "Java", color: "bg-orange-500", defaultCount: 419 },
   { name: "MySQL", color: "bg-blue-400", defaultCount: 40 },
   { name: "Python3", color: "bg-emerald-500", defaultCount: 14 },
 ];
 
 /**
  * Derives the Java/MySQL/Python3 solved-problem breakdown (count + percent of total)
- * from raw LeetCode API data, falling back to last-known-good numbers while loading
- * or if the API is unavailable.
  */
 export function deriveLanguageStats(leetcodeData: any, totalSolved: number) {
   const rawLangData = leetcodeData?.skill?.languageProblemCount;
   return LANGUAGE_DEFAULTS.map((lang) => {
     const count = rawLangData
-      ? rawLangData.find((l: any) => l.languageName === lang.name)?.problemsSolved ?? 0
+      ? rawLangData.find((l: any) => l.languageName === lang.name)?.problemsSolved ?? lang.defaultCount
       : lang.defaultCount;
     const percent = totalSolved > 0 ? `${Math.round((count / totalSolved) * 100)}%` : "0%";
     return { name: lang.name, color: lang.color, count, percent };

@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { trackEvent } from "@/lib/analytics";
 import { useGithubContributions, useLeetcodeStats } from "@/hooks/useDeveloperStats";
+import { HIRE_ME_MAILTO } from "@/components/Navbar";
 
 type RoleFilter = "all" | "fullstack" | "android" | "backend";
 
@@ -57,9 +58,9 @@ FEATURED PROJECTS
 ================================================================================
 CODING & PROBLEM SOLVING
 ================================================================================
-- LeetCode: 467+ Problems Solved (178 Easy, 254 Medium, 35 Hard) | Contest Rating: 1512 (Top 32%)
+- LeetCode: 477+ Problems Solved (158 Easy, 247 Medium, 72 Hard) | Contest Rating: 1673 (Top 16.1%)
 - GitHub: 4,532+ Lifetime Contributions across 98+ repositories
-- Primary Languages: Java (413+ solved), SQL, Python, TypeScript
+- Primary Languages: Java (419+ solved), SQL, Python, TypeScript
 
 ================================================================================
 CERTIFICATIONS
@@ -80,8 +81,9 @@ const Resume = () => {
   const { data: leetcodeData } = useLeetcodeStats("resume");
 
   const totalCommits = contribData?.totalLifetime ? `${contribData.totalLifetime.toLocaleString()}+` : "4,532+";
-  const totalSolved = leetcodeData?.profile?.solvedProblem ?? 467;
-  const contestRating = Math.round(leetcodeData?.contest?.contestRating ?? 1512);
+  const totalSolved = leetcodeData?.profile?.solvedProblem ?? 477;
+  const contestRating = Math.round(leetcodeData?.contest?.contestRating ?? 1673);
+  const topPercentage = leetcodeData?.contest?.contestTopPercentage ? `${leetcodeData.contest.contestTopPercentage}%` : "16.1%";
 
   const handleCopyText = () => {
     navigator.clipboard.writeText(plainTextResume);
@@ -293,7 +295,7 @@ const Resume = () => {
                   {/* Contact Badges */}
                   <div className="flex flex-col gap-2.5 text-xs font-grotesk shrink-0 w-full md:w-auto">
                     <a
-                      href="mailto:madhiremohanreddy@gmail.com"
+                      href={HIRE_ME_MAILTO}
                       className="flex items-center gap-2 p-2.5 rounded-xl bg-secondary/50 hover:bg-secondary border border-border/70 transition-colors text-foreground"
                     >
                       <Mail className="w-4 h-4 text-orange-500" />
@@ -357,7 +359,7 @@ const Resume = () => {
                     <span className="text-base sm:text-lg font-extrabold text-amber-500 font-outfit mt-0.5 block">
                       {totalSolved}+ Solved
                     </span>
-                    <span className="text-[10px] text-muted-foreground font-grotesk">Rating {contestRating} (Top 32%)</span>
+                    <span className="text-[10px] text-muted-foreground font-grotesk">Rating {contestRating} (Top {topPercentage})</span>
                   </div>
 
                   <div className="p-3 rounded-2xl bg-secondary/30 border border-border/60">
@@ -620,7 +622,7 @@ const Resume = () => {
                 </div>
                 <div className="flex items-center gap-3">
                   <Button asChild className="rounded-xl font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20">
-                    <a href="mailto:madhiremohanreddy@gmail.com">
+                    <a href={HIRE_ME_MAILTO}>
                       <Mail className="w-4 h-4 mr-1.5" /> Get in Touch
                     </a>
                   </Button>

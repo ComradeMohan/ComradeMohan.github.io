@@ -1,0 +1,1020 @@
+{
+  "profile": {
+    "username": "ComradeMohan",
+    "githubUrl": "https://github.com/ComradeMohan",
+    "twitterUrl": null,
+    "linkedinUrl": "https://linkedin.com/in/mmohanreddy",
+    "profile": {
+      "userAvatar": "https://assets.leetcode.com/users/ComradeMohan/avatar_1784641288.png",
+      "realName": "M Mohan Reddy",
+      "websites": [
+        "https://mohanreddy.me"
+      ],
+      "countryName": "India",
+      "company": null,
+      "jobTitle": null,
+      "skillTags": [],
+      "school": null,
+      "aboutMe": "Product-Minded Developer crafting digital experiences with modern technologies. Turning ideas into elegant, functional solutions.",
+      "postViewCount": 0,
+      "postViewCountDiff": 0,
+      "reputation": 0,
+      "ranking": 225675,
+      "reputationDiff": 0,
+      "solutionCount": 0,
+      "solutionCountDiff": 0,
+      "categoryDiscussCount": 0,
+      "categoryDiscussCountDiff": 0,
+      "certificationLevel": "NORMAL"
+    },
+    "submitStats": {
+      "acSubmissionNum": [
+        {
+          "difficulty": "All",
+          "count": 477,
+          "submissions": 560
+        },
+        {
+          "difficulty": "Easy",
+          "count": 158,
+          "submissions": 217
+        },
+        {
+          "difficulty": "Medium",
+          "count": 247,
+          "submissions": 270
+        },
+        {
+          "difficulty": "Hard",
+          "count": 72,
+          "submissions": 73
+        }
+      ],
+      "totalSubmissionNum": [
+        {
+          "difficulty": "All",
+          "count": 500,
+          "submissions": 832
+        },
+        {
+          "difficulty": "Easy",
+          "count": 164,
+          "submissions": 308
+        },
+        {
+          "difficulty": "Medium",
+          "count": 252,
+          "submissions": 391
+        },
+        {
+          "difficulty": "Hard",
+          "count": 84,
+          "submissions": 133
+        }
+      ]
+    },
+    "contestBadge": null
+  },
+  "calendar": {
+    "activeYears": [
+      2023,
+      2024,
+      2025,
+      2026
+    ],
+    "streak": 30,
+    "totalActiveDays": 102,
+    "dccBadges": [
+      {
+        "timestamp": 1769904000,
+        "badge": {
+          "name": "Daily Coding Challenge",
+          "icon": "/static/images/badges/dcc-2026-2.png"
+        }
+      },
+      {
+        "timestamp": 1782864000,
+        "badge": {
+          "name": "Daily Coding Challenge",
+          "icon": "/static/images/badges/dcc-2026-7.png"
+        }
+      }
+    ],
+    "submissionCalendar": {
+      "1756166400": 4,
+      "1757030400": 13,
+      "1758067200": 17,
+      "1758153600": 24,
+      "1759276800": 6,
+      "1759363200": 3,
+      "1759449600": 1,
+      "1759536000": 3,
+      "1766880000": 9,
+      "1767830400": 1,
+      "1769817600": 1,
+      "1769904000": 1,
+      "1769990400": 1,
+      "1770076800": 1,
+      "1770163200": 1,
+      "1770249600": 1,
+      "1770336000": 2,
+      "1770422400": 1,
+      "1770508800": 1,
+      "1770595200": 1,
+      "1770681600": 1,
+      "1770768000": 2,
+      "1770854400": 1,
+      "1770940800": 1,
+      "1771027200": 1,
+      "1771113600": 1,
+      "1771200000": 1,
+      "1771286400": 1,
+      "1771372800": 3,
+      "1771459200": 1,
+      "1771545600": 1,
+      "1771632000": 1,
+      "1771718400": 1,
+      "1771804800": 1,
+      "1771891200": 1,
+      "1771977600": 1,
+      "1772064000": 1,
+      "1772150400": 1,
+      "1772236800": 1,
+      "1772323200": 1,
+      "1772496000": 2,
+      "1772582400": 1,
+      "1772668800": 1,
+      "1772755200": 1,
+      "1772841600": 1,
+      "1772928000": 1,
+      "1773014400": 1,
+      "1773100800": 2,
+      "1773187200": 1,
+      "1773273600": 1,
+      "1775088000": 4,
+      "1775174400": 1,
+      "1775260800": 3,
+      "1775347200": 1,
+      "1775433600": 1,
+      "1775520000": 1,
+      "1775692800": 10,
+      "1782864000": 1,
+      "1782950400": 1,
+      "1783036800": 1,
+      "1783123200": 5,
+      "1783209600": 1,
+      "1783296000": 1,
+      "1783382400": 2,
+      "1783468800": 2,
+      "1783555200": 1,
+      "1783728000": 2,
+      "1783814400": 1,
+      "1783900800": 1,
+      "1783987200": 1,
+      "1784073600": 1,
+      "1784160000": 1,
+      "1784246400": 1,
+      "1784332800": 1,
+      "1784419200": 1,
+      "1784505600": 1,
+      "1784592000": 1,
+      "1784678400": 1,
+      "1784764800": 1,
+      "1784851200": 1,
+      "1784937600": 1,
+      "1785024000": 2,
+      "1785110400": 1,
+      "1785196800": 1,
+      "1785283200": 1,
+      "1785369600": 1,
+      "1785456000": 1,
+      "1785542400": 1,
+      "1785628800": 1,
+      "1785715200": 1,
+      "1785801600": 1,
+      "1785888000": 1,
+      "1785974400": 3,
+      "1786147200": 3,
+      "1786233600": 1,
+      "1786320000": 1,
+      "1786406400": 1,
+      "1786492800": 2,
+      "1786579200": 1,
+      "1786665600": 1,
+      "1786752000": 1,
+      "1786838400": 1
+    }
+  },
+  "submissions": [
+    {
+      "id": "2108822762",
+      "title": "Stone Game IX",
+      "titleSlug": "stone-game-ix",
+      "timestamp": "1786874502",
+      "status": 10,
+      "statusDisplay": "Accepted",
+      "lang": "java",
+      "url": "/submissions/detail/2108822762/",
+      "langName": "Java",
+      "runtime": "4 ms",
+      "isPending": "Not Pending",
+      "memory": "114.7 MB",
+      "hasNotes": false,
+      "notes": "",
+      "flagType": "WHITE",
+      "frontendId": 206,
+      "topicTags": []
+    },
+    {
+      "id": "2107164599",
+      "title": "Longest Subsequence With Non-Zero Bitwise XOR",
+      "titleSlug": "longest-subsequence-with-non-zero-bitwise-xor",
+      "timestamp": "1786763579",
+      "status": 10,
+      "statusDisplay": "Accepted",
+      "lang": "java",
+      "url": "/submissions/detail/2107164599/",
+      "langName": "Java",
+      "runtime": "2 ms",
+      "isPending": "Not Pending",
+      "memory": "133 MB",
+      "hasNotes": false,
+      "notes": "",
+      "flagType": "WHITE",
+      "frontendId": 205,
+      "topicTags": []
+    },
+    {
+      "id": "2106663191",
+      "title": "Maximum Length Substring With Two Occurrences",
+      "titleSlug": "maximum-length-substring-with-two-occurrences",
+      "timestamp": "1786716065",
+      "status": 10,
+      "statusDisplay": "Accepted",
+      "lang": "java",
+      "url": "/submissions/detail/2106663191/",
+      "langName": "Java",
+      "runtime": "1 ms",
+      "isPending": "Not Pending",
+      "memory": "43.6 MB",
+      "hasNotes": false,
+      "notes": "",
+      "flagType": "WHITE",
+      "frontendId": 204,
+      "topicTags": []
+    },
+    {
+      "id": "2105226615",
+      "title": "Longest Substring of One Repeating Character",
+      "titleSlug": "longest-substring-of-one-repeating-character",
+      "timestamp": "1786612516",
+      "status": 10,
+      "statusDisplay": "Accepted",
+      "lang": "java",
+      "url": "/submissions/detail/2105226615/",
+      "langName": "Java",
+      "runtime": "126 ms",
+      "isPending": "Not Pending",
+      "memory": "157.5 MB",
+      "hasNotes": false,
+      "notes": "",
+      "flagType": "WHITE",
+      "frontendId": 203,
+      "topicTags": []
+    },
+    {
+      "id": "2103629172",
+      "title": "Length of Longest Subarray With at Most K Frequency",
+      "titleSlug": "length-of-longest-subarray-with-at-most-k-frequency",
+      "timestamp": "1786507873",
+      "status": 10,
+      "statusDisplay": "Accepted",
+      "lang": "java",
+      "url": "/submissions/detail/2103629172/",
+      "langName": "Java",
+      "runtime": "61 ms",
+      "isPending": "Not Pending",
+      "memory": "114.5 MB",
+      "hasNotes": false,
+      "notes": "",
+      "flagType": "WHITE",
+      "frontendId": 202,
+      "topicTags": []
+    },
+    {
+      "id": "2103628492",
+      "title": "Length of Longest Subarray With at Most K Frequency",
+      "titleSlug": "length-of-longest-subarray-with-at-most-k-frequency",
+      "timestamp": "1786507832",
+      "status": 14,
+      "statusDisplay": "Time Limit Exceeded",
+      "lang": "java",
+      "url": "/submissions/detail/2103628492/",
+      "langName": "Java",
+      "runtime": "N/A",
+      "isPending": "Not Pending",
+      "memory": "N/A",
+      "hasNotes": false,
+      "notes": "",
+      "flagType": "WHITE",
+      "frontendId": 201,
+      "topicTags": []
+    },
+    {
+      "id": "2102193198",
+      "title": "Smallest Missing Integer Greater Than Sequential Prefix Sum",
+      "titleSlug": "smallest-missing-integer-greater-than-sequential-prefix-sum",
+      "timestamp": "1786416373",
+      "status": 10,
+      "statusDisplay": "Accepted",
+      "lang": "java",
+      "url": "/submissions/detail/2102193198/",
+      "langName": "Java",
+      "runtime": "3 ms",
+      "isPending": "Not Pending",
+      "memory": "44 MB",
+      "hasNotes": false,
+      "notes": "",
+      "flagType": "WHITE",
+      "frontendId": 200,
+      "topicTags": []
+    },
+    {
+      "id": "2101139711",
+      "title": "Stone Game IV",
+      "titleSlug": "stone-game-iv",
+      "timestamp": "1786342353",
+      "status": 10,
+      "statusDisplay": "Accepted",
+      "lang": "python3",
+      "url": "/submissions/detail/2101139711/",
+      "langName": "Python3",
+      "runtime": "1152 ms",
+      "isPending": "Not Pending",
+      "memory": "161.5 MB",
+      "hasNotes": false,
+      "notes": "",
+      "flagType": "WHITE",
+      "frontendId": 199,
+      "topicTags": []
+    },
+    {
+      "id": "2100450065",
+      "title": "Stone Game II",
+      "titleSlug": "stone-game-ii",
+      "timestamp": "1786285524",
+      "status": 10,
+      "statusDisplay": "Accepted",
+      "lang": "java",
+      "url": "/submissions/detail/2100450065/",
+      "langName": "Java",
+      "runtime": "4 ms",
+      "isPending": "Not Pending",
+      "memory": "43.7 MB",
+      "hasNotes": false,
+      "notes": "",
+      "flagType": "WHITE",
+      "frontendId": 198,
+      "topicTags": []
+    },
+    {
+      "id": "2098569155",
+      "title": "Find the Lexicographically Smallest Valid Sequence",
+      "titleSlug": "find-the-lexicographically-smallest-valid-sequence",
+      "timestamp": "1786158237",
+      "status": 10,
+      "statusDisplay": "Accepted",
+      "lang": "java",
+      "url": "/submissions/detail/2098569155/",
+      "langName": "Java",
+      "runtime": "224 ms",
+      "isPending": "Not Pending",
+      "memory": "200.2 MB",
+      "hasNotes": false,
+      "notes": "",
+      "flagType": "WHITE",
+      "frontendId": 197,
+      "topicTags": []
+    },
+    {
+      "id": "2098568649",
+      "title": "Smallest Divisible Digit Product II",
+      "titleSlug": "smallest-divisible-digit-product-ii",
+      "timestamp": "1786158159",
+      "status": 10,
+      "statusDisplay": "Accepted",
+      "lang": "java",
+      "url": "/submissions/detail/2098568649/",
+      "langName": "Java",
+      "runtime": "14 ms",
+      "isPending": "Not Pending",
+      "memory": "48.1 MB",
+      "hasNotes": false,
+      "notes": "",
+      "flagType": "WHITE",
+      "frontendId": 196,
+      "topicTags": []
+    },
+    {
+      "id": "2098568408",
+      "title": "Smallest Divisible Digit Product II",
+      "titleSlug": "smallest-divisible-digit-product-ii",
+      "timestamp": "1786158124",
+      "status": 14,
+      "statusDisplay": "Time Limit Exceeded",
+      "lang": "java",
+      "url": "/submissions/detail/2098568408/",
+      "langName": "Java",
+      "runtime": "N/A",
+      "isPending": "Not Pending",
+      "memory": "N/A",
+      "hasNotes": false,
+      "notes": "",
+      "flagType": "WHITE",
+      "frontendId": 195,
+      "topicTags": []
+    },
+    {
+      "id": "2096665835",
+      "title": "Smallest Divisible Digit Product I",
+      "titleSlug": "smallest-divisible-digit-product-i",
+      "timestamp": "1786020185",
+      "status": 10,
+      "statusDisplay": "Accepted",
+      "lang": "java",
+      "url": "/submissions/detail/2096665835/",
+      "langName": "Java",
+      "runtime": "1 ms",
+      "isPending": "Not Pending",
+      "memory": "42.5 MB",
+      "hasNotes": false,
+      "notes": "",
+      "flagType": "WHITE",
+      "frontendId": 194,
+      "topicTags": []
+    },
+    {
+      "id": "2096665183",
+      "title": "Smallest Divisible Digit Product I",
+      "titleSlug": "smallest-divisible-digit-product-i",
+      "timestamp": "1786020152",
+      "status": 10,
+      "statusDisplay": "Accepted",
+      "lang": "java",
+      "url": "/submissions/detail/2096665183/",
+      "langName": "Java",
+      "runtime": "1 ms",
+      "isPending": "Not Pending",
+      "memory": "42.7 MB",
+      "hasNotes": false,
+      "notes": "",
+      "flagType": "WHITE",
+      "frontendId": 193,
+      "topicTags": []
+    },
+    {
+      "id": "2096664464",
+      "title": "Smallest Divisible Digit Product I",
+      "titleSlug": "smallest-divisible-digit-product-i",
+      "timestamp": "1786020113",
+      "status": 10,
+      "statusDisplay": "Accepted",
+      "lang": "java",
+      "url": "/submissions/detail/2096664464/",
+      "langName": "Java",
+      "runtime": "1 ms",
+      "isPending": "Not Pending",
+      "memory": "42.8 MB",
+      "hasNotes": false,
+      "notes": "",
+      "flagType": "WHITE",
+      "frontendId": 192,
+      "topicTags": []
+    },
+    {
+      "id": "2094718328",
+      "title": "Remove Methods From Project",
+      "titleSlug": "remove-methods-from-project",
+      "timestamp": "1785898515",
+      "status": 10,
+      "statusDisplay": "Accepted",
+      "lang": "java",
+      "url": "/submissions/detail/2094718328/",
+      "langName": "Java",
+      "runtime": "127 ms",
+      "isPending": "Not Pending",
+      "memory": "288 MB",
+      "hasNotes": false,
+      "notes": "",
+      "flagType": "WHITE",
+      "frontendId": 191,
+      "topicTags": []
+    },
+    {
+      "id": "2093612959",
+      "title": "Find Missing Elements",
+      "titleSlug": "find-missing-elements",
+      "timestamp": "1785827199",
+      "status": 10,
+      "statusDisplay": "Accepted",
+      "lang": "java",
+      "url": "/submissions/detail/2093612959/",
+      "langName": "Java",
+      "runtime": "7 ms",
+      "isPending": "Not Pending",
+      "memory": "47.1 MB",
+      "hasNotes": false,
+      "notes": "",
+      "flagType": "WHITE",
+      "frontendId": 190,
+      "topicTags": []
+    },
+    {
+      "id": "2092245931",
+      "title": "Stone Game III",
+      "titleSlug": "stone-game-iii",
+      "timestamp": "1785740203",
+      "status": 10,
+      "statusDisplay": "Accepted",
+      "lang": "java",
+      "url": "/submissions/detail/2092245931/",
+      "langName": "Java",
+      "runtime": "7 ms",
+      "isPending": "Not Pending",
+      "memory": "85.5 MB",
+      "hasNotes": false,
+      "notes": "",
+      "flagType": "WHITE",
+      "frontendId": 189,
+      "topicTags": []
+    },
+    {
+      "id": "2091551404",
+      "title": "Stone Game",
+      "titleSlug": "stone-game",
+      "timestamp": "1785685114",
+      "status": 10,
+      "statusDisplay": "Accepted",
+      "lang": "java",
+      "url": "/submissions/detail/2091551404/",
+      "langName": "Java",
+      "runtime": "0 ms",
+      "isPending": "Not Pending",
+      "memory": "42.8 MB",
+      "hasNotes": false,
+      "notes": "",
+      "flagType": "WHITE",
+      "frontendId": 188,
+      "topicTags": []
+    },
+    {
+      "id": "2089957147",
+      "title": "Predict the Winner",
+      "titleSlug": "predict-the-winner",
+      "timestamp": "1785588835",
+      "status": 10,
+      "statusDisplay": "Accepted",
+      "lang": "java",
+      "url": "/submissions/detail/2089957147/",
+      "langName": "Java",
+      "runtime": "0 ms",
+      "isPending": "Not Pending",
+      "memory": "42.7 MB",
+      "hasNotes": false,
+      "notes": "",
+      "flagType": "WHITE",
+      "frontendId": 187,
+      "topicTags": []
+    }
+  ],
+  "contests": {
+    "userContestRanking": {
+      "attendedContestsCount": 15,
+      "rating": 1673.332,
+      "globalRanking": 138957,
+      "totalParticipants": 878139,
+      "topPercentage": 16.1,
+      "badge": null
+    },
+    "userContestRankingHistory": [
+      {
+        "attended": true,
+        "trendDirection": "DOWN",
+        "problemsSolved": 0,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 0,
+        "rating": 1412.23,
+        "ranking": 17469,
+        "contest": {
+          "title": "Weekly Contest 404",
+          "startTime": 1719714600
+        }
+      },
+      {
+        "attended": true,
+        "trendDirection": "UP",
+        "problemsSolved": 2,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 3937,
+        "rating": 1454.831,
+        "ranking": 10702,
+        "contest": {
+          "title": "Weekly Contest 410",
+          "startTime": 1723343400
+        }
+      },
+      {
+        "attended": true,
+        "trendDirection": "UP",
+        "problemsSolved": 2,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 6581,
+        "rating": 1485.398,
+        "ranking": 10194,
+        "contest": {
+          "title": "Weekly Contest 412",
+          "startTime": 1724553000
+        }
+      },
+      {
+        "attended": true,
+        "trendDirection": "UP",
+        "problemsSolved": 2,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 1400,
+        "rating": 1507.476,
+        "ranking": 10938,
+        "contest": {
+          "title": "Biweekly Contest 138",
+          "startTime": 1725114600
+        }
+      },
+      {
+        "attended": true,
+        "trendDirection": "UP",
+        "problemsSolved": 3,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 1565,
+        "rating": 1668.327,
+        "ranking": 311,
+        "contest": {
+          "title": "Weekly Contest 413",
+          "startTime": 1725157800
+        }
+      },
+      {
+        "attended": true,
+        "trendDirection": "UP",
+        "problemsSolved": 3,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 8082,
+        "rating": 1696.175,
+        "ranking": 5028,
+        "contest": {
+          "title": "Weekly Contest 414",
+          "startTime": 1725762600
+        }
+      },
+      {
+        "attended": true,
+        "trendDirection": "UP",
+        "problemsSolved": 4,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 6964,
+        "rating": 1727.534,
+        "ranking": 3950,
+        "contest": {
+          "title": "Weekly Contest 416",
+          "startTime": 1726972200
+        }
+      },
+      {
+        "attended": true,
+        "trendDirection": "UP",
+        "problemsSolved": 2,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 295,
+        "rating": 1798.458,
+        "ranking": 966,
+        "contest": {
+          "title": "Biweekly Contest 140",
+          "startTime": 1727533800
+        }
+      },
+      {
+        "attended": true,
+        "trendDirection": "UP",
+        "problemsSolved": 2,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 612,
+        "rating": 1830.067,
+        "ranking": 2464,
+        "contest": {
+          "title": "Weekly Contest 417",
+          "startTime": 1727577000
+        }
+      },
+      {
+        "attended": true,
+        "trendDirection": "DOWN",
+        "problemsSolved": 2,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 4608,
+        "rating": 1819.512,
+        "ranking": 6961,
+        "contest": {
+          "title": "Weekly Contest 418",
+          "startTime": 1728181800
+        }
+      },
+      {
+        "attended": true,
+        "trendDirection": "DOWN",
+        "problemsSolved": 2,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 5467,
+        "rating": 1793.483,
+        "ranking": 9430,
+        "contest": {
+          "title": "Weekly Contest 419",
+          "startTime": 1728786600
+        }
+      },
+      {
+        "attended": true,
+        "trendDirection": "DOWN",
+        "problemsSolved": 2,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 3907,
+        "rating": 1776.679,
+        "ranking": 6434,
+        "contest": {
+          "title": "Biweekly Contest 144",
+          "startTime": 1732372200
+        }
+      },
+      {
+        "attended": true,
+        "trendDirection": "DOWN",
+        "problemsSolved": 2,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 5372,
+        "rating": 1766.348,
+        "ranking": 6093,
+        "contest": {
+          "title": "Weekly Contest 427",
+          "startTime": 1733625000
+        }
+      },
+      {
+        "attended": true,
+        "trendDirection": "DOWN",
+        "problemsSolved": 1,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 3984,
+        "rating": 1724.082,
+        "ranking": 13055,
+        "contest": {
+          "title": "Weekly Contest 429",
+          "startTime": 1734834600
+        }
+      },
+      {
+        "attended": true,
+        "trendDirection": "DOWN",
+        "problemsSolved": 0,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 0,
+        "rating": 1673.332,
+        "ranking": 20960,
+        "contest": {
+          "title": "Biweekly Contest 186",
+          "startTime": 1783175400
+        }
+      }
+    ]
+  },
+  "skills": {
+    "advanced": [
+      {
+        "tagName": "Data Stream",
+        "tagSlug": "data-stream",
+        "problemsSolved": 1
+      },
+      {
+        "tagName": "Game Theory",
+        "tagSlug": "game-theory",
+        "problemsSolved": 6
+      },
+      {
+        "tagName": "Rolling Hash",
+        "tagSlug": "rolling-hash",
+        "problemsSolved": 2
+      },
+      {
+        "tagName": "Sweep Line",
+        "tagSlug": "sweep-line",
+        "problemsSolved": 2
+      },
+      {
+        "tagName": "Backtracking",
+        "tagSlug": "backtracking",
+        "problemsSolved": 16
+      },
+      {
+        "tagName": "Bitmask",
+        "tagSlug": "bitmask",
+        "problemsSolved": 1
+      },
+      {
+        "tagName": "Quickselect",
+        "tagSlug": "quickselect",
+        "problemsSolved": 1
+      },
+      {
+        "tagName": "Dynamic Programming",
+        "tagSlug": "dynamic-programming",
+        "problemsSolved": 53
+      },
+      {
+        "tagName": "Divide and Conquer",
+        "tagSlug": "divide-and-conquer",
+        "problemsSolved": 13
+      },
+      {
+        "tagName": "Trie",
+        "tagSlug": "trie",
+        "problemsSolved": 7
+      },
+      {
+        "tagName": "Union-Find",
+        "tagSlug": "union-find",
+        "problemsSolved": 12
+      },
+      {
+        "tagName": "Binary Indexed Tree",
+        "tagSlug": "binary-indexed-tree",
+        "problemsSolved": 3
+      },
+      {
+        "tagName": "Segment Tree",
+        "tagSlug": "segment-tree",
+        "problemsSolved": 9
+      },
+      {
+        "tagName": "Monotonic Stack",
+        "tagSlug": "monotonic-stack",
+        "problemsSolved": 4
+      },
+      {
+        "tagName": "Monotonic Queue",
+        "tagSlug": "monotonic-queue",
+        "problemsSolved": 4
+      },
+      {
+        "tagName": "Topological Sort",
+        "tagSlug": "topological-sort",
+        "problemsSolved": 4
+      },
+      {
+        "tagName": "Shortest Path",
+        "tagSlug": "shortest-path",
+        "problemsSolved": 9
+      }
+    ],
+    "intermediate": [
+      {
+        "tagName": "Tree",
+        "tagSlug": "tree",
+        "problemsSolved": 26
+      },
+      {
+        "tagName": "Binary Tree",
+        "tagSlug": "binary-tree",
+        "problemsSolved": 24
+      },
+      {
+        "tagName": "Hash Table",
+        "tagSlug": "hash-table",
+        "problemsSolved": 84
+      },
+      {
+        "tagName": "Ordered Set",
+        "tagSlug": "ordered-set",
+        "problemsSolved": 7
+      },
+      {
+        "tagName": "Graph Theory",
+        "tagSlug": "graph",
+        "problemsSolved": 26
+      },
+      {
+        "tagName": "Greedy",
+        "tagSlug": "greedy",
+        "problemsSolved": 45
+      },
+      {
+        "tagName": "Binary Search",
+        "tagSlug": "binary-search",
+        "problemsSolved": 46
+      },
+      {
+        "tagName": "Depth-First Search",
+        "tagSlug": "depth-first-search",
+        "problemsSolved": 33
+      },
+      {
+        "tagName": "Breadth-First Search",
+        "tagSlug": "breadth-first-search",
+        "problemsSolved": 27
+      },
+      {
+        "tagName": "Recursion",
+        "tagSlug": "recursion",
+        "problemsSolved": 17
+      },
+      {
+        "tagName": "Sliding Window",
+        "tagSlug": "sliding-window",
+        "problemsSolved": 29
+      },
+      {
+        "tagName": "Bit Manipulation",
+        "tagSlug": "bit-manipulation",
+        "problemsSolved": 36
+      },
+      {
+        "tagName": "Math",
+        "tagSlug": "math",
+        "problemsSolved": 72
+      },
+      {
+        "tagName": "Design",
+        "tagSlug": "design",
+        "problemsSolved": 8
+      },
+      {
+        "tagName": "Brainteaser",
+        "tagSlug": "brainteaser",
+        "problemsSolved": 1
+      },
+      {
+        "tagName": "Database",
+        "tagSlug": "database",
+        "problemsSolved": 40
+      }
+    ],
+    "fundamental": [
+      {
+        "tagName": "Array",
+        "tagSlug": "array",
+        "problemsSolved": 248
+      },
+      {
+        "tagName": "Matrix",
+        "tagSlug": "matrix",
+        "problemsSolved": 41
+      },
+      {
+        "tagName": "String",
+        "tagSlug": "string",
+        "problemsSolved": 115
+      },
+      {
+        "tagName": "Simulation",
+        "tagSlug": "simulation",
+        "problemsSolved": 38
+      },
+      {
+        "tagName": "Enumeration",
+        "tagSlug": "enumeration",
+        "problemsSolved": 10
+      },
+      {
+        "tagName": "Sorting",
+        "tagSlug": "sorting",
+        "problemsSolved": 74
+      },
+      {
+        "tagName": "Stack",
+        "tagSlug": "stack",
+        "problemsSolved": 21
+      },
+      {
+        "tagName": "Queue",
+        "tagSlug": "queue",
+        "problemsSolved": 8
+      },
+      {
+        "tagName": "Linked List",
+        "tagSlug": "linked-list",
+        "problemsSolved": 21
+      },
+      {
+        "tagName": "Two Pointers",
+        "tagSlug": "two-pointers",
+        "problemsSolved": 47
+      }
+    ]
+  }
+}

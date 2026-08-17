@@ -15,18 +15,18 @@ const About = () => {
   const githubFollowers = githubData?.followers ?? 428;
   const githubRepos = githubData?.public_repos ?? 98;
   const avatarUrl = githubData?.avatar_url ?? "/mohan-reddy-full-stack-developer.webp";
-  const totalSolved = leetcodeData?.profile?.solvedProblem ?? 471;
+  const totalSolved = leetcodeData?.profile?.solvedProblem ?? 477;
   const languageStats = deriveLanguageStats(leetcodeData, totalSolved);
 
-  const contestRating = leetcodeData?.contest?.contestRating ? Math.round(leetcodeData.contest.contestRating).toLocaleString() : "1,724";
-  const topPercentage = leetcodeData?.contest?.contestTopPercentage ? `${leetcodeData.contest.contestTopPercentage}%` : "25.52%";
-  const contestRank = leetcodeData?.contest?.contestGlobalRanking ? `#${leetcodeData.contest.contestGlobalRanking.toLocaleString()}` : "#102,683";
-  const profileRank = leetcodeData?.baseProfile?.ranking ? `#${leetcodeData.baseProfile.ranking.toLocaleString()}` : "#262,841";
+  const contestRating = leetcodeData?.contest?.contestRating ? Math.round(leetcodeData.contest.contestRating).toLocaleString() : "1,673";
+  const topPercentage = leetcodeData?.contest?.contestTopPercentage ? `${leetcodeData.contest.contestTopPercentage}%` : "16.1%";
+  const contestRank = leetcodeData?.contest?.contestGlobalRanking ? `#${leetcodeData.contest.contestGlobalRanking.toLocaleString()}` : "#138,957";
+  const profileRank = leetcodeData?.baseProfile?.ranking ? `#${leetcodeData.baseProfile.ranking.toLocaleString()}` : "#225,675";
 
-  const easySolved = leetcodeData?.profile?.easySolved ?? 156;
-  const mediumSolved = leetcodeData?.profile?.mediumSolved ?? 244;
-  const hardSolved = leetcodeData?.profile?.hardSolved ?? 71;
-  const contestsAttended = leetcodeData?.contest?.contestAttend ?? 14;
+  const easySolved = leetcodeData?.profile?.easySolved ?? 158;
+  const mediumSolved = leetcodeData?.profile?.mediumSolved ?? 247;
+  const hardSolved = leetcodeData?.profile?.hardSolved ?? 72;
+  const contestsAttended = leetcodeData?.contest?.contestAttend ?? 15;
 
   const quickStats = [
     { title: "Easy", desc: "Easy problems", icon: CheckCircle2, value: easySolved, color: "text-emerald-400" },
@@ -208,8 +208,9 @@ const About = () => {
                     <Loader2 className="w-5 h-5 text-primary animate-spin" />
                   </div>
                 )}
-                <div className="flex items-center gap-2 text-foreground mb-6 font-medium">
-                  <Trophy className="w-5 h-5 text-orange-500" /> <h2>LeetCode Standing</h2>
+                <div className="flex items-center gap-2.5 text-foreground mb-6 font-semibold">
+                  <img src="/icons/leetcode-orange.svg" alt="LeetCode" className="w-5 h-5 object-contain shrink-0" />
+                  <h2 className="text-base font-bold font-outfit">LeetCode Standing</h2>
                 </div>
                 <div className="text-center mb-6">
                   <div className="text-4xl font-extrabold text-foreground mb-1">{totalSolved}</div>
