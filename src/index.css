@@ -309,3 +309,17 @@
 
 .hide-in-light { display: block !important; }
 .light .hide-in-light { display: none !important; }
+
+/* India Border Single Beam Walking Animation */
+@keyframes singleBeamWalk {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -100;
+  }
+}
+
+.animate-single-beam {
+  animation: singleBeamWalk 4s linear infinite;
+}

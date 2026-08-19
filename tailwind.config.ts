@@ -17,6 +17,8 @@ export default {
         outfit: ["Outfit", "sans-serif"],
         grotesk: ["Space Grotesk", "sans-serif"],
         mono: ["JetBrains Mono", "monospace"],
+        signature: ["'Dancing Script'", "'Caveat'", "cursive"],
+        script: ["'Caveat'", "'Dancing Script'", "cursive"],
       },
       colors: {
         border: "hsl(var(--border) / <alpha-value>)",
