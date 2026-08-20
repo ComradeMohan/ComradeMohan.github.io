@@ -19,7 +19,7 @@
       "postViewCount": 0,
       "postViewCountDiff": 0,
       "reputation": 0,
-      "ranking": 225675,
+      "ranking": 223450,
       "reputationDiff": 0,
       "solutionCount": 0,
       "solutionCountDiff": 0,
@@ -31,74 +31,61 @@
       "acSubmissionNum": [
         {
           "difficulty": "All",
-          "count": 477,
-          "submissions": 560
+          "count": 481,
+          "submissions": 565
         },
         {
           "difficulty": "Easy",
-          "count": 158,
-          "submissions": 217
+          "count": 160,
+          "submissions": 220
         },
         {
           "difficulty": "Medium",
-          "count": 247,
-          "submissions": 270
+          "count": 248,
+          "submissions": 272
         },
         {
           "difficulty": "Hard",
-          "count": 72,
+          "count": 73,
           "submissions": 73
         }
       ],
       "totalSubmissionNum": [
         {
           "difficulty": "All",
-          "count": 500,
-          "submissions": 832
+          "count": 504,
+          "submissions": 837
         },
         {
           "difficulty": "Easy",
-          "count": 164,
-          "submissions": 308
+          "count": 166,
+          "submissions": 311
         },
         {
           "difficulty": "Medium",
-          "count": 252,
-          "submissions": 391
+          "count": 253,
+          "submissions": 392
         },
         {
           "difficulty": "Hard",
-          "count": 84,
-          "submissions": 133
+          "count": 85,
+          "submissions": 134
         }
       ]
     },
     "contestBadge": null
   },
   "calendar": {
+    "streak": 51,
+    "currentStreak": 51,
+    "maxStreak": 30,
+    "totalSubmissions": 211,
+    "totalActiveDays": 106,
     "activeYears": [
       2023,
       2024,
       2025,
       2026
-    ],
-    "streak": 30,
-    "totalActiveDays": 102,
-    "dccBadges": [
-      {
-        "timestamp": 1769904000,
-        "badge": {
-          "name": "Daily Coding Challenge",
-          "icon": "/static/images/badges/dcc-2026-2.png"
-        }
-      },
-      {
-        "timestamp": 1782864000,
-        "badge": {
-          "name": "Daily Coding Challenge",
-          "icon": "/static/images/badges/dcc-2026-7.png"
-        }
-      }
     ],
     "submissionCalendar": {
       "1756166400": 4,
@@ -202,7 +189,11 @@
       "1786579200": 1,
       "1786665600": 1,
       "1786752000": 1,
-      "1786838400": 1
+      "1786838400": 1,
+      "1786924800": 1,
+      "1787011200": 1,
+      "1787097600": 1,
+      "1787184000": 2
     }
   },
   "submissions": [
@@ -804,7 +795,7 @@
       {
         "tagName": "Game Theory",
         "tagSlug": "game-theory",
-        "problemsSolved": 6
+        "problemsSolved": 7
       },
       {
         "tagName": "Rolling Hash",
@@ -834,7 +825,7 @@
       {
         "tagName": "Dynamic Programming",
         "tagSlug": "dynamic-programming",
-        "problemsSolved": 53
+        "problemsSolved": 56
       },
       {
         "tagName": "Divide and Conquer",
@@ -896,7 +887,7 @@
       {
         "tagName": "Hash Table",
         "tagSlug": "hash-table",
-        "problemsSolved": 84
+        "problemsSolved": 86
       },
       {
         "tagName": "Ordered Set",
@@ -911,7 +902,7 @@
       {
         "tagName": "Greedy",
         "tagSlug": "greedy",
-        "problemsSolved": 45
+        "problemsSolved": 47
       },
       {
         "tagName": "Binary Search",
@@ -941,12 +932,12 @@
       {
         "tagName": "Bit Manipulation",
         "tagSlug": "bit-manipulation",
-        "problemsSolved": 36
+        "problemsSolved": 37
       },
       {
         "tagName": "Math",
         "tagSlug": "math",
-        "problemsSolved": 72
+        "problemsSolved": 73
       },
       {
         "tagName": "Design",
@@ -968,7 +959,7 @@
       {
         "tagName": "Array",
         "tagSlug": "array",
-        "problemsSolved": 248
+        "problemsSolved": 254
       },
       {
         "tagName": "Matrix",
@@ -978,17 +969,17 @@
       {
         "tagName": "String",
         "tagSlug": "string",
-        "problemsSolved": 115
+        "problemsSolved": 117
       },
       {
         "tagName": "Simulation",
         "tagSlug": "simulation",
-        "problemsSolved": 38
+        "problemsSolved": 39
       },
       {
         "tagName": "Enumeration",
         "tagSlug": "enumeration",
-        "problemsSolved": 10
+        "problemsSolved": 11
       },
       {
         "tagName": "Sorting",

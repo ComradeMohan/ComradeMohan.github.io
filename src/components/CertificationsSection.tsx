@@ -341,20 +341,18 @@ export default function CertificationsSection() {
   }, []);
 
   const handleOpenCert = (cert: Certification | OtherCertItem) => {
-    if (cert.pdf || cert.previewUrl) {
-      setSelectedCert({
-        title: cert.title,
-        org: cert.org,
-        pdf: cert.pdf,
-        previewUrl: cert.previewUrl,
-        credentialId: cert.credentialId,
-        date: cert.date,
-        category: cert.category,
-      });
-      setIsModalOpen(true);
-    } else if (cert.link && cert.link !== "#") {
-      window.open(cert.link, "_blank", "noopener,noreferrer");
-    }
+    setSelectedCert({
+      title: cert.title,
+      org: cert.org,
+      pdf: cert.pdf,
+      previewUrl: cert.previewUrl,
+      credentialId: cert.credentialId,
+      date: cert.date,
+      category: cert.category,
+      skills: cert.skills,
+      link: cert.link,
+    });
+    setIsModalOpen(true);
   };
 
   const filteredCerts = selectedCategory === "All"
@@ -798,34 +796,6 @@ export default function CertificationsSection() {
               </div>
             )}
 
-            {/* Verified & Trusted Banner (Bottom Card) */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2, duration: 0.4 }}
-              className="mt-6 p-4 md:p-5 rounded-2xl bg-card/80 border border-border/60 backdrop-blur-md flex items-center justify-between gap-4 shadow-sm text-left"
-            >
-              <div className="flex items-center gap-3.5">
-                <div className="w-10 h-10 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0">
-                  <ShieldCheck className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-bold font-outfit text-foreground leading-tight">
-                    Verified & Trusted
-                  </h4>
-                  <p className="text-xs text-muted-foreground font-grotesk mt-0.5">
-                    {viewMode === "list"
-                      ? "These are verified certifications from trusted platforms. Tap on Preview to view credential details."
-                      : "All certifications are verified from trusted platforms and organizations."}
-                  </p>
-                </div>
-              </div>
-
-              {/* Decorative Ribbon Icon */}
-              <Award className="w-7 h-7 text-muted-foreground/30 shrink-0 hidden sm:block" />
-            </motion.div>
-
           </div>
 
           {/* Stats Row */}
@@ -869,7 +839,7 @@ export default function CertificationsSection() {
               </div>
               <div className="flex flex-col text-left">
                 <span className="text-2xl font-extrabold font-outfit text-foreground tracking-tight">
-                  <TypewriterText text="2023 - 2026" />
+                  <TypewriterText text="2022 - 2026" />
                 </span>
                 <span className="text-xs font-semibold text-muted-foreground font-grotesk tracking-wide uppercase mt-0.5">Active Learning Period</span>
               </div>
@@ -892,7 +862,7 @@ export default function CertificationsSection() {
         </div>
 
         {/* Lazy loaded PDF viewer modal with Suspense fallback */}
-        {isModalOpen && selectedCert && (selectedCert.pdf || selectedCert.previewUrl) && (
+        {isModalOpen && selectedCert && (
           <Suspense fallback={null}>
             <PdfViewerModal
               isOpen={isModalOpen}
@@ -900,12 +870,15 @@ export default function CertificationsSection() {
                 setIsModalOpen(false);
                 setSelectedCert(null);
               }}
-              pdfUrl={selectedCert.pdf || ""}
+              pdfUrl={selectedCert.pdf || selectedCert.link || ""}
               previewUrl={selectedCert.previewUrl}
               title={selectedCert.title}
               org={selectedCert.org}
               credentialId={selectedCert.credentialId}
               date={selectedCert.date}
+              category={selectedCert.category}
+              skills={selectedCert.skills}
+              verifyUrl={selectedCert.link}
             />
           </Suspense>
         )}

@@ -253,13 +253,10 @@ const About = () => {
                 </h2>
                 <div className="font-grotesk text-muted-foreground leading-relaxed space-y-4 text-sm sm:text-base">
                   <p>
-                    I am a final-year <strong>Computer Science & Engineering student</strong> at the <strong>Saveetha School of Engineering (SIMATS)</strong>, Chennai, India. Driven by a passion for backend logic, web interfaces, and security pipelines, I focus on building complete digital products that solve academic and structural problems.
+                    Final-year <strong>Computer Science and Engineering student</strong> at <strong>Saveetha School of Engineering (SIMATS)</strong>, Chennai, with a <span className="text-primary font-medium">CGPA of 8.646</span>. I enjoy building practical software that solves real problems and can be used beyond the classroom.
                   </p>
                   <p>
-                    Over my academic journey, I have completed two full scale applications: <strong>SaveethaHub</strong>, an academic collaboration web platform integrating AI functionalities, and <strong>UniVault</strong>, a secure, offline-first exam preparation Android application published on the Google Play Store. My technical proficiency covers languages like <strong>Java, Python, Kotlin, TypeScript, and SQL</strong>.
-                  </p>
-                  <p>
-                    <strong>Career Goals:</strong> I aim to secure a Software Engineering role where I can build scalable architectures, optimize web application loading latency, and enforce high standards of database safety. I am committed to continuous learning, which is demonstrated by my certifications including <strong>Oracle Certified Professional: Java SE 17 Developer</strong>.
+                    I have independently built <strong className="text-foreground">SaveethaHub</strong>, an academic platform using React, Supabase, Firebase, and AI features, and <strong className="text-foreground">UniVault</strong>, an Android exam-preparation app published on the Google Play Store. I also hold the <span className="text-primary font-medium">Oracle Certified Professional: Java SE 17 Developer</span> certification and am strengthening my skills in data structures, algorithms, and full-stack development.
                   </p>
                 </div>
               </section>

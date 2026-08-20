@@ -121,7 +121,7 @@ const DeveloperProfile = () => {
 
   // Submissions, Calendar, Contests, Skills
   const submissions = detailsData?.submissions ?? [];
-  const calendar = detailsData?.calendar ?? { totalActiveDays: 102, streak: 30, submissionCalendar: {} };
+  const calendar = detailsData?.calendar ?? { totalActiveDays: 106, streak: 51, currentStreak: 51, maxStreak: 30, totalSubmissions: 211, submissionCalendar: {} };
   const contestHistory = detailsData?.contestHistory ?? [];
   const allSkills = detailsData?.skills ?? [];
 

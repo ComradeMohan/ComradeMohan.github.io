@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { trackEvent } from "@/lib/analytics";
-import { useLeetcodeStats } from "@/hooks/useDeveloperStats";
+import { useLeetcodeStats, useLeetcodeDetails } from "@/hooks/useDeveloperStats";
 
 // Fallback GitHub data
 const githubFallback = {
@@ -155,7 +155,7 @@ const LinkedInBadge = ({ theme }: { theme: "light" | "dark" }) => {
   );
 };
 
-const ContactSection = () => {
+export const ContactSection = () => {
   const { toast } = useToast();
   const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
   const [honeypot, setHoneypot] = useState("");
@@ -203,14 +203,17 @@ const ContactSection = () => {
 
   // Live LeetCode Stats hook (Single source of truth)
   const { data: leetcodeData, isLoading: isLeetcodeLoading } = useLeetcodeStats("contact");
-  const lcTotalSolved = leetcodeData?.profile?.solvedProblem ?? 477;
-  const lcEasySolved = leetcodeData?.profile?.easySolved ?? 158;
-  const lcMediumSolved = leetcodeData?.profile?.mediumSolved ?? 247;
-  const lcHardSolved = leetcodeData?.profile?.hardSolved ?? 72;
+  const { data: leetcodeDetails } = useLeetcodeDetails("contact");
+  const lcTotalSolved = leetcodeData?.profile?.solvedProblem ?? 481;
+  const lcEasySolved = leetcodeData?.profile?.easySolved ?? 160;
+  const lcMediumSolved = leetcodeData?.profile?.mediumSolved ?? 248;
+  const lcHardSolved = leetcodeData?.profile?.hardSolved ?? 73;
   const lcContestRating = Math.round(leetcodeData?.contest?.contestRating ?? 1673);
   const lcTopPercentage = leetcodeData?.contest?.contestTopPercentage ? `${Number(leetcodeData.contest.contestTopPercentage).toFixed(1)}%` : "16.1%";
   const lcAvatar = leetcodeData?.baseProfile?.userAvatar || "https://assets.leetcode.com/users/ComradeMohan/avatar_1784641288.png";
-  const lcName = leetcodeData?.baseProfile?.realName || "Mohan Reddy";
+  const lcName = leetcodeData?.baseProfile?.realName || "M Mohan Reddy";
+  const lcStreak = leetcodeDetails?.calendar?.streak ?? 51;
+  const lcActiveDays = leetcodeDetails?.calendar?.totalActiveDays ?? 106;
 
   // GitHub API state
   const [githubData, setGithubData] = useState<any>(null);
@@ -1062,7 +1065,7 @@ const ContactSection = () => {
               </span>
             </div>
           </div>
-          <div className="text-right">
+          <div className="text-right flex flex-col items-end gap-1.5">
             <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-grotesk inline-flex items-center gap-1 shadow-xs">
               <Flame className="w-3 h-3 text-amber-500 fill-amber-500" />
               {isLeetcodeLoading ? (
@@ -1070,6 +1073,10 @@ const ContactSection = () => {
               ) : (
                 `${lcTotalSolved} Solved`
               )}
+            </span>
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-orange-500/15 text-orange-600 dark:text-orange-400 border border-orange-500/30 font-grotesk inline-flex items-center gap-1 shadow-xs">
+              <Flame className="w-2.5 h-2.5 text-orange-500 fill-orange-500 animate-pulse" />
+              {lcStreak} Days Streak
             </span>
           </div>
         </div>
@@ -1233,7 +1240,7 @@ const ContactSection = () => {
       case "linkedin": return { width: 340, height: 420 };
       case "email": return { width: 290, height: 200 };
       case "resume": return { width: 320, height: 310 };
-      case "leetcode": return { width: 310, height: 320 };
+      case "leetcode": return { width: 310, height: 330 };
       default: return { width: 300, height: 300 };
     }
   };

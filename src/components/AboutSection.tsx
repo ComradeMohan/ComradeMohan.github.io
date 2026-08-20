@@ -24,18 +24,25 @@ const interests = [
   "☕ Java & Software Engineering",
   "🗄️ Database Management",
   "🚀 Web Application Development",
-  "📚 Problem Solving & DSA",
-  "☁️ Cloud & Modern Technologies"
 ];
 
-const focusItems = [
-  "🎯 Software Engineering Roles",
-  "🎯 Full Stack Development",
-  "🎯 Data Structures & Algorithms",
-  "🎯 Internship Opportunities",
-  "🎯 Product Development",
-  "🎯 Continuous Learning"
-];
+const StaggeredHighlight = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
+  <motion.span
+    initial={{ 
+      color: "hsl(var(--muted-foreground))",
+      textShadow: "0 0 0px transparent"
+    }}
+    whileInView={{ 
+      color: "hsl(var(--primary))",
+      textShadow: "0 0 14px hsl(var(--primary) / 0.45)"
+    }}
+    viewport={{ once: true, amount: 0.3 }}
+    transition={{ duration: 0.65, delay, ease: "easeOut" }}
+    className="font-medium inline transition-colors"
+  >
+    {children}
+  </motion.span>
+);
 
 const AboutSection = () => {
   return (
@@ -49,12 +56,12 @@ const AboutSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-10 sm:mb-12"
+          className="text-center mb-4 sm:mb-6"
         >
-          <h2 className="text-4xl font-extrabold mb-3 font-outfit">
+          <h2 className="text-4xl font-extrabold mb-2 font-outfit">
             About <span className="text-primary">Me</span>
           </h2>
-          <div className="w-20 h-1 bg-primary mx-auto rounded-full mb-6" />
+          <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-16 items-start">
@@ -75,29 +82,15 @@ const AboutSection = () => {
               </h3>
 
               <p className="text-muted-foreground leading-relaxed font-grotesk">
-                Final-year Computer Science and Engineering student at Saveetha School of
-                Engineering (SIMATS), Chennai, with a{" "}
-                <span className="text-primary font-medium">CGPA of 8.646</span>. My focus
-                is on building functional, real-world software rather than isolated
-                academic exercises.
+                Final-year Computer Science and Engineering student at Saveetha School of Engineering (SIMATS), Chennai, with a{" "}
+                <StaggeredHighlight delay={0.3}>CGPA of 8.646</StaggeredHighlight>. I enjoy building practical software that solves real problems and can be used beyond the classroom.
               </p>
               <p className="text-muted-foreground leading-relaxed font-grotesk">
-                I have independently designed and built two complete products:{" "}
-                <span className="text-primary font-medium">SaveethaHub</span>, an academic
-                platform built with React, Supabase, and Firebase that integrates AI
-                features for students, and{" "}
-                <span className="text-primary font-medium">UniVault</span>, an Android
-                exam-preparation app published on the Google Play Store. Both were built
-                from initial concept through deployment.
-              </p>
-              <p className="text-muted-foreground leading-relaxed font-grotesk">
-                I hold an{" "}
-                <span className="text-primary font-medium">
-                  Oracle Certified Professional: Java SE 17 Developer
-                </span>{" "}
-                certification, and I continue to strengthen my foundation in data
-                structures, algorithms, and full-stack development as I prepare to take
-                on a software engineering role.
+                I have independently built{" "}
+                <StaggeredHighlight delay={0.75}>SaveethaHub</StaggeredHighlight>, an academic platform using React, Supabase, Firebase, and AI features, and{" "}
+                <StaggeredHighlight delay={1.2}>UniVault</StaggeredHighlight>, an Android exam-preparation app published on the Google Play Store. I also hold the{" "}
+                <StaggeredHighlight delay={1.65}>Oracle Certified Professional: Java SE 17 Developer</StaggeredHighlight>{" "}
+                certification and am strengthening my skills in data structures, algorithms, and full-stack development.
               </p>
             </div>
 
@@ -119,7 +112,7 @@ const AboutSection = () => {
             </div>
 
             {/* Link to Full Standalone About Biography Page */}
-            <div className="pt-2">
+            <div className="!mt-4 pt-0">
               <Button asChild className="rounded-xl border border-primary/30 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-grotesk font-semibold group shadow-sm">
                 <a href="/about">
                   Read Full Biography & Stats
@@ -127,23 +120,6 @@ const AboutSection = () => {
                 </a>
               </Button>
             </div>
-
-            {/* Career Focus */}
-            {/* <div>
-              <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4 font-outfit">
-                Career Focus
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {focusItems.map((focus) => (
-                  <span
-                    key={focus}
-                    className="px-3.5 py-2 rounded-xl bg-primary/10 border border-primary/20 text-sm text-primary font-grotesk flex items-center transition-colors duration-300 hover:bg-primary/20"
-                  >
-                    {focus}
-                  </span>
-                ))}
-              </div>
-            </div> */}
           </motion.div>
 
           {/* Right Column: Education Timeline */}
@@ -156,19 +132,48 @@ const AboutSection = () => {
           >
             <h3 className="text-2xl font-bold font-outfit">Education</h3>
 
-            <div className="relative pl-6 border-l-2 border-primary/20 space-y-12">
+            <div className="relative pl-8 space-y-10 sm:space-y-12">
+              {/* Timeline Track & Animated Line (starts exactly at the top circle node) */}
+              <div className="absolute left-0 top-7 bottom-6 w-4 flex justify-center pointer-events-none z-0">
+                {/* Static background timeline track */}
+                <div className="w-0.5 h-full bg-border/60 rounded-full" />
+
+                {/* Glowing animated line that draws downward starting from the top circle */}
+                <motion.div
+                  className="absolute top-0 w-0.5 h-full bg-gradient-to-b from-primary via-accent to-primary rounded-full shadow-[0_0_10px_hsl(var(--primary)/0.8)]"
+                  style={{ originY: 0 }}
+                  initial={{ scaleY: 0 }}
+                  whileInView={{ scaleY: 1 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+                />
+              </div>
+
               {education.map((edu, idx) => (
-                <div key={idx} className="relative">
-                  {/* Circle on timeline */}
-                  <span className="absolute -left-[31px] top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-background border-2 border-primary">
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 30, x: 20 }}
+                  whileInView={{ opacity: 1, y: 0, x: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.55, delay: 0.15 + idx * 0.2, ease: "easeOut" }}
+                  className="relative"
+                >
+                  {/* Circle on timeline with spring pop-in - centered on the timeline line */}
+                  <motion.span
+                    initial={{ scale: 0, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: 0.25 + idx * 0.2, type: "spring", stiffness: 350, damping: 15 }}
+                    className="absolute -left-8 top-5 flex h-4 w-4 items-center justify-center rounded-full bg-background border-2 border-primary shadow-[0_0_12px_hsl(var(--primary)/0.6)] z-10"
+                  >
                     <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-                  </span>
+                  </motion.span>
 
                   {/* Card Content */}
-                  <div className="p-6 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-300 shadow-lg relative group overflow-hidden">
+                  <div className="p-6 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-300 shadow-lg relative group overflow-hidden hover:shadow-primary/5 hover:-translate-y-0.5">
                     <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-primary/5 to-accent/5" />
 
-                    <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary mb-3 font-jetbrains">
+                    <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary mb-3 font-jetbrains border border-primary/20">
                       {edu.duration}
                     </span>
 
@@ -188,7 +193,7 @@ const AboutSection = () => {
                       </span>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </motion.div>
