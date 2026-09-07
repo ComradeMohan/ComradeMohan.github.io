@@ -147,44 +147,16 @@
 ## 🏆 Research & Deep Dives
 
 <div align="center">
-  <table border="0" width="100%">
-    <tr>
-      <td width="50%" valign="top">
-        <h3 align="center">📱 SaveethaHub Ecosystem</h3>
-        <p align="center">
-          <a href="https://mohanreddy.me/case-study/saveethahub">
-            <img src="./public/saveethahub_ecosystem.svg" alt="SaveethaHub Ecosystem" width="85%" style="border-radius: 8px;" />
-          </a>
-        </p>
-        <p align="left">
-          <strong>Academic &amp; Student Productivity Platform</strong><br/>
-          Full-stack web application serving 1000+ SIMATS students with past papers, curriculum tools, and Gemini AI-powered study assistance.
-        </p>
-        <p align="center">
-          <a href="https://mohanreddy.me/case-study/saveethahub">
-            <img src="https://img.shields.io/badge/Read_Case_Study-EA431B?style=flat-square" alt="Case Study"/>
-          </a>
-        </p>
-      </td>
-      <td width="50%" valign="top">
-        <h3 align="center">🤖 AI Detection &amp; Machine Learning</h3>
-        <p align="center">
-          <a href="https://mohanreddy.me/">
-            <img src="./public/object_detection_comparison.webp" alt="Object Detection Benchmark" width="85%" style="border-radius: 8px;" />
-          </a>
-        </p>
-        <p align="left">
-          <strong>Machine Learning Models &amp; Benchmark Systems</strong><br/>
-          Empirical comparison and real-time benchmarking of deep learning object detectors and XGBoost-based financial fraud detection algorithms.
-        </p>
-        <p align="center">
-          <a href="https://mohanreddy.me/">
-            <img src="https://img.shields.io/badge/Explore_Research-C054DC?style=flat-square" alt="Research"/>
-          </a>
-        </p>
-      </td>
-    </tr>
-  </table>
+
+  <!-- Responsive Research Showcase (SaveethaHub & AI Detection in 1 SVG with Auto Light/Dark Switch) -->
+  <a href="https://mohanreddy.me/">
+    <picture>
+      <source media="(max-width: 768px)" srcset="./public/research-deep-dives-mobile.svg">
+      <source media="(min-width: 769px)" srcset="./public/research-deep-dives-laptop.svg">
+      <img src="./public/research-deep-dives-laptop.svg" alt="Research & Deep Dives" width="100%">
+    </picture>
+  </a>
+
 </div>
 
 ---

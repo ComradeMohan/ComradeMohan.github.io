@@ -23,6 +23,34 @@ dist-ssr
 *.sln
 *.sw?
 
+# Operating System Files
+[Dd]esktop.ini
+desktop.ini
+[Tt]humbs.db
+thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+$RECYCLE.BIN/
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Temporary, scratch and notes text files
+*.tmp
+*.temp
+*.bak
+scratch/
+notes.txt
+todo.txt
+temp.txt
+scratch.txt
+draft.txt
+*.notes.txt
+*.temp.txt
+*.scratch.txt
+
 # Playwright
 playwright-report/
 blob-report/
@@ -33,8 +61,6 @@ tests/
 playwright.config.ts
 .github/workflows/playwright.yml
 
-# Windows system files
-desktop.ini
-
-
+# Static HTML build / standalone folder
+static/
 

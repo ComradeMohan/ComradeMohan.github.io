@@ -3,6 +3,7 @@ import fallbackData from "@/data/developerProfileFallback.json";
 
 // Single source of truth for the usernames these stat widgets pull from.
 const GITHUB_USERNAME = "ComradeMohan";
+const GITHUB_PORTFOLIO_REPO = "ComradeMohan/ComradeMohan.github.io";
 const LEETCODE_USERNAME = "ComradeMohan";
 const LEETCODE_PIED_API_BASE = "https://leetcode-api-pied.vercel.app/user";
 const LEETCODE_FALLBACK_API_BASE = "https://alfa-leetcode-api.onrender.com";
@@ -13,6 +14,7 @@ const CACHE_KEYS = {
   LEETCODE_DETAILS: "dev_lc_details_v4",
   GITHUB_STATS: "dev_gh_stats_v4",
   GITHUB_CONTRIBS: "dev_gh_contrib_v4",
+  LATEST_COMMIT: "dev_latest_commit_v1",
 };
 
 export interface LeetcodeSubmission {
@@ -176,6 +178,49 @@ export function useGithubStats(queryKeyPrefix: string = "global") {
         return data;
       } catch (err) {
         return getCachedData(CACHE_KEYS.GITHUB_STATS, DEFAULT_GITHUB_STATS);
+      }
+    },
+    staleTime: 1000 * 60 * 5, // 5 mins
+  });
+}
+
+export interface LatestCommit {
+  sha: string;
+  shortSha: string;
+  message: string;
+  committedAt: string;
+  htmlUrl: string;
+}
+
+/**
+ * Fetches the latest commit of the portfolio repo (ComradeMohan.github.io) shown in the footer.
+ * Instantly initialized from LocalStorage cache and immediately re-syncs with the live GitHub API.
+ */
+export function useLatestCommit(queryKeyPrefix: string = "footer") {
+  return useQuery<LatestCommit | null>({
+    queryKey: [queryKeyPrefix, "latestCommit", GITHUB_PORTFOLIO_REPO],
+    initialData: () => getCachedData<LatestCommit | null>(CACHE_KEYS.LATEST_COMMIT, null),
+    initialDataUpdatedAt: 0, // Signals React Query to fetch fresh data immediately on mount
+    refetchOnMount: "always",
+    queryFn: async () => {
+      try {
+        const res = await fetch(`https://api.github.com/repos/${GITHUB_PORTFOLIO_REPO}/commits?per_page=1`);
+        if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
+        const data = await res.json();
+        const commit = Array.isArray(data) ? data[0] : null;
+        if (!commit?.sha) throw new Error("No commits found");
+
+        const result: LatestCommit = {
+          sha: commit.sha,
+          shortSha: commit.sha.slice(0, 7),
+          message: commit.commit?.message?.split("\n")[0] || "Latest commit",
+          committedAt: commit.commit?.committer?.date || commit.commit?.author?.date,
+          htmlUrl: commit.html_url,
+        };
+        setCachedData(CACHE_KEYS.LATEST_COMMIT, result);
+        return result;
+      } catch {
+        return getCachedData<LatestCommit | null>(CACHE_KEYS.LATEST_COMMIT, null);
       }
     },
     staleTime: 1000 * 60 * 5, // 5 mins
