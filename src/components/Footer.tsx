@@ -805,7 +805,7 @@ const TechOrb = () => {
 };
 
 const Footer = () => {
-  const { data: latestCommit } = useLatestCommit();
+  const { data: latestCommit, isError } = useLatestCommit();
 
   return (
     <footer className="relative w-full border-t border-border/70 bg-background overflow-hidden pt-3 pb-3 sm:pt-4 sm:pb-4 transition-colors duration-300">
@@ -900,6 +900,24 @@ const Footer = () => {
                     </div>
                     <p className="text-[10px] sm:text-[11px] text-muted-foreground font-grotesk mt-0.5 leading-snug truncate group-hover/commit:text-foreground transition-colors">
                       {latestCommit.message}
+                    </p>
+                  </a>
+                ) : isError ? (
+                  <a
+                    href="https://github.com/ComradeMohan/ComradeMohan.github.io/commits"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="View commits on GitHub"
+                    className="block group/commit min-w-0"
+                  >
+                    <div className="flex items-center gap-1.5 leading-snug">
+                      <GitCommitHorizontal className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-muted-foreground flex-shrink-0 group-hover/commit:scale-110 transition-transform" />
+                      <span className="font-mono text-[10px] sm:text-[11px] text-muted-foreground group-hover/commit:text-foreground transition-colors">
+                        latest commit
+                      </span>
+                    </div>
+                    <p className="text-[10px] sm:text-[11px] text-muted-foreground font-grotesk mt-0.5 leading-snug group-hover/commit:text-foreground transition-colors">
+                      view on GitHub
                     </p>
                   </a>
                 ) : (

@@ -200,8 +200,10 @@ export function useLatestCommit(queryKeyPrefix: string = "footer") {
   return useQuery<LatestCommit | null>({
     queryKey: [queryKeyPrefix, "latestCommit", GITHUB_PORTFOLIO_REPO],
     initialData: () => getCachedData<LatestCommit | null>(CACHE_KEYS.LATEST_COMMIT, null),
-    initialDataUpdatedAt: 0, // Signals React Query to fetch fresh data immediately on mount
+    initialDataUpdatedAt: 0,
     refetchOnMount: "always",
+    retry: 2,
+    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 5000),
     queryFn: async () => {
       try {
         const res = await fetch(`https://api.github.com/repos/${GITHUB_PORTFOLIO_REPO}/commits?per_page=1`);
@@ -220,6 +222,8 @@ export function useLatestCommit(queryKeyPrefix: string = "footer") {
         setCachedData(CACHE_KEYS.LATEST_COMMIT, result);
         return result;
       } catch {
+        // On any failure, return cached data so the footer always shows
+        // the last known commit instead of being stuck in a loading state.
         return getCachedData<LatestCommit | null>(CACHE_KEYS.LATEST_COMMIT, null);
       }
     },
