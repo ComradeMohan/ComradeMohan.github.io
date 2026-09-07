@@ -14,7 +14,7 @@
   <!-- Quick Action & Social Badges -->
   <p align="center">
     <a href="https://mohanreddy.me/">
-      <img src="https://img.shields.io/badge/🌐_Live_Portfolio-131828?style=for-the-badge&logo=google-chrome&logoColor=f97316" alt="Live Portfolio"/>
+      <img src="https://img.shields.io/badge/_Live_Portfolio-131828?style=for-the-badge&logo=google-chrome&logoColor=f97316" alt="Live Portfolio"/>
     </a>
     <a href="https://www.linkedin.com/in/mmohanreddy/">
       <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn Profile"/>
