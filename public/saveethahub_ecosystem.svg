@@ -1,0 +1,281 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap');
+
+      /* ============ THEME TOKENS (Auto Light/Dark) ============ */
+      :root {
+        --bg-card: #FFFFFF;
+        --border-1: #E2E8F0;
+        --border-2: #EDF2F7;
+        --grid-line: #E2E8F0;
+
+        --accent: #EA431B;
+        --accent-purple: #9333EA;
+        --accent-soft: rgba(234, 67, 27, 0.10);
+        --accent-soft-purple: rgba(147, 51, 234, 0.10);
+        --pill-bg: #FFF5F2;
+
+        --title: #111827;
+        --text: #4B5563;
+        --text-muted: #64748B;
+
+        --chip-bg: #F8FAFC;
+        --chip-border: #E2E8F0;
+        --card-inner: #FFFFFF;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg-card: #131828;
+          --border-1: #20263c;
+          --border-2: #2a324b;
+          --grid-line: #1c2235;
+
+          --accent: #F97316;
+          --accent-purple: #C054DC;
+          --accent-soft: rgba(249, 115, 22, 0.16);
+          --accent-soft-purple: rgba(192, 84, 220, 0.16);
+          --pill-bg: rgba(249, 115, 22, 0.12);
+
+          --title: #F1F5F9;
+          --text: #94A3B8;
+          --text-muted: #64748B;
+
+          --chip-bg: #0D111C;
+          --chip-border: #20263c;
+          --card-inner: #171E32;
+        }
+      }
+
+      text {
+        font-family: 'Space Grotesk', 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      .title { font-weight: 800; font-size: 16px; fill: var(--title); letter-spacing: -0.01em; }
+      .url-text { font-weight: 500; font-size: 11px; fill: var(--text-muted); }
+      .stat-val { font-weight: 800; font-size: 17px; fill: var(--accent); }
+      .stat-lbl { font-weight: 600; font-size: 10px; fill: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+      .mod-title { font-weight: 700; font-size: 12.5px; fill: var(--title); }
+      .mod-desc { font-weight: 400; font-size: 10.5px; fill: var(--text); line-height: 1.4; }
+      .chip-text { font-weight: 600; font-size: 10.5px; fill: var(--title); }
+      .badge-text { font-weight: 700; font-size: 9.5px; fill: var(--accent); letter-spacing: 0.04em; text-transform: uppercase; }
+
+      /* Classes linked to CSS vars */
+      .card-bg { fill: var(--bg-card); }
+      .border-1 { stroke: var(--border-1); }
+      .chip-bg { fill: var(--chip-bg); stroke: var(--chip-border); }
+      .card-inner { fill: var(--card-inner); stroke: var(--border-1); }
+      .pill-bg { fill: var(--pill-bg); stroke: var(--accent); }
+      .accent-stroke { stroke: var(--accent); }
+      .accent-fill { fill: var(--accent); }
+      .purple-stroke { stroke: var(--accent-purple); }
+      .purple-fill { fill: var(--accent-purple); }
+      .stop-accent { stop-color: var(--accent); }
+      .stop-border-1 { stop-color: var(--border-1); }
+      .stop-border-2 { stop-color: var(--border-2); }
+
+      /* Animations */
+      .glow-pulse { animation: pulseGlow 4s ease-in-out infinite alternate; transform-origin: 590px 6px; }
+      @keyframes pulseGlow { 0% { opacity: 0.35; } 100% { opacity: 0.85; } }
+      .shimmer-bar { animation: shimmerMove 5s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+      @keyframes shimmerMove { 0% { transform: translateX(-300px); } 35%, 100% { transform: translateX(600px); } }
+    </style>
+
+    <filter id="hub-shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#000000" flood-opacity="0.08"/>
+    </filter>
+
+    <linearGradient id="hub-border-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" class="stop-border-1" style="stop-color: var(--border-1);" stop-color="#E2E8F0"/>
+      <stop offset="50%" class="stop-border-2" style="stop-color: var(--border-2);" stop-color="#EDF2F7"/>
+      <stop offset="100%" class="stop-border-1" style="stop-color: var(--border-1);" stop-color="#E2E8F0"/>
+    </linearGradient>
+
+    <radialGradient id="hub-glow" cx="100%" cy="0%" r="90%">
+      <stop offset="0%" class="stop-accent" style="stop-color: var(--accent);" stop-color="#EA431B" stop-opacity="0.2"/>
+      <stop offset="100%" class="stop-accent" style="stop-color: var(--accent);" stop-color="#EA431B" stop-opacity="0"/>
+    </radialGradient>
+
+    <linearGradient id="hub-shimmer-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" class="stop-accent" style="stop-color: var(--accent);" stop-color="#EA431B" stop-opacity="0"/>
+      <stop offset="50%" class="stop-accent" style="stop-color: var(--accent);" stop-color="#EA431B" stop-opacity="0.08"/>
+      <stop offset="100%" class="stop-accent" style="stop-color: var(--accent);" stop-color="#EA431B" stop-opacity="0"/>
+    </linearGradient>
+
+    <clipPath id="hub-clip">
+      <rect x="8" y="6" width="584" height="368" rx="14"/>
+    </clipPath>
+  </defs>
+
+  <!-- Card Body with Shadow -->
+  <g filter="url(#hub-shadow)">
+    <!-- Base Card Frame -->
+    <rect x="8" y="6" width="584" height="368" rx="14" class="card-bg" style="fill: var(--bg-card);" fill="#FFFFFF" stroke="url(#hub-border-grad)" stroke-width="1.5"/>
+
+    <!-- Inside Card Contents (Clipped) -->
+    <g clip-path="url(#hub-clip)">
+      <!-- Ambient Radial Glow with SMIL + CSS -->
+      <circle class="glow-pulse" cx="590" cy="6" r="220" fill="url(#hub-glow)">
+        <animate attributeName="opacity" values="0.35; 0.85; 0.35" dur="4s" repeatCount="indefinite"/>
+        <animate attributeName="r" values="200; 240; 200" dur="4s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- Moving Shimmer Beam with SMIL + CSS -->
+      <rect class="shimmer-bar" x="-300" y="6" width="260" height="368" fill="url(#hub-shimmer-grad)">
+        <animate attributeName="x" values="-300; 650; -300" keyTimes="0; 0.45; 1" dur="6s" repeatCount="indefinite"/>
+      </rect>
+
+      <!-- Top Accent Line with SMIL Pulse -->
+      <line class="accent-stroke" x1="8" y1="6" x2="592" y2="6" style="stroke: var(--accent);" stroke="#EA431B" stroke-width="3.5">
+        <animate attributeName="stroke-width" values="3; 4.5; 3" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.7; 1; 0.7" dur="3s" repeatCount="indefinite"/>
+      </line>
+
+      <!-- Browser Top Navigation Bar -->
+      <g transform="translate(24, 18)">
+        <!-- Window Controls -->
+        <circle cx="6" cy="10" r="4.5" fill="#EF4444"/>
+        <circle cx="20" cy="10" r="4.5" fill="#F59E0B"/>
+        <circle cx="34" cy="10" r="4.5" fill="#10B981"/>
+
+        <!-- URL Pill Mockup -->
+        <rect x="52" y="0" width="220" height="20" rx="10" class="chip-bg" style="fill: var(--chip-bg); stroke: var(--chip-border);" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+        <text x="64" y="14" class="url-text">🔒 saveethahub.com/ecosystem</text>
+
+        <!-- Live Badge (Top Right) -->
+        <g transform="translate(370, 0)">
+          <rect x="0" y="0" width="165" height="20" rx="10" class="pill-bg" style="fill: var(--pill-bg); stroke: var(--accent);" fill="#FFF5F2" stroke="#EA431B" stroke-width="1"/>
+          <circle cx="11" cy="10" r="3.5" fill="#10B981">
+            <animate attributeName="r" values="3; 4.5; 3" dur="2s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.6; 1; 0.6" dur="2s" repeatCount="indefinite"/>
+          </circle>
+          <text x="22" y="13.5" class="badge-text">1,000+ SIMATS STUDENTS</text>
+        </g>
+      </g>
+
+      <!-- App Header Row -->
+      <g transform="translate(24, 52)">
+        <rect x="0" y="0" width="36" height="36" rx="8" class="chip-bg" style="fill: var(--chip-bg); stroke: var(--chip-border);" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.2"/>
+        <!-- SaveethaHub Custom Logo Icon -->
+        <g transform="translate(7, 7)">
+          <path class="accent-fill" d="M3 6L11 2L19 6L11 10Z" style="fill: var(--accent);" fill="#EA431B"/>
+          <path class="accent-stroke" d="M5 8V14C5 17 11 20 11 20C11 20 17 17 17 14V8" fill="none" style="stroke: var(--accent);" stroke="#EA431B" stroke-width="1.6" stroke-linecap="round"/>
+          <circle cx="11" cy="13" r="2.5" class="purple-fill" style="fill: var(--accent-purple);" fill="#9333EA"/>
+        </g>
+        <text x="46" y="17" class="title">SaveethaHub Ecosystem</text>
+        <text x="46" y="31" class="url-text">Full-Stack Academic &amp; Student Productivity Platform</text>
+      </g>
+
+      <!-- KPI Metrics Row (3 Cards) -->
+      <g transform="translate(24, 100)">
+        <!-- Stat 1 -->
+        <g transform="translate(0, 0)">
+          <rect x="0" y="0" width="174" height="46" rx="8" class="card-inner" style="fill: var(--card-inner); stroke: var(--border-1);" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+          <text x="14" y="22" class="stat-val">24,706</text>
+          <text x="14" y="36" class="stat-lbl">Search Clicks (Organic)</text>
+        </g>
+
+        <!-- Stat 2 -->
+        <g transform="translate(186, 0)">
+          <rect x="0" y="0" width="174" height="46" rx="8" class="card-inner" style="fill: var(--card-inner); stroke: var(--border-1);" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+          <text x="14" y="22" class="stat-val">3,800+</text>
+          <text x="14" y="36" class="stat-lbl">Active Monthly Users</text>
+        </g>
+
+        <!-- Stat 3 -->
+        <g transform="translate(372, 0)">
+          <rect x="0" y="0" width="180" height="46" rx="8" class="card-inner" style="fill: var(--card-inner); stroke: var(--border-1);" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+          <text x="14" y="22" class="stat-val" style="fill: var(--accent-purple);" fill="#9333EA">99.8%</text>
+          <text x="14" y="36" class="stat-lbl">Firebase Realtime Sync</text>
+        </g>
+      </g>
+
+      <!-- 2x2 Feature Modules Grid -->
+      <g transform="translate(24, 156)">
+        <!-- Module 1: QP & Study Materials -->
+        <g transform="translate(0, 0)">
+          <rect x="0" y="0" width="268" height="74" rx="8" class="card-inner" style="fill: var(--card-inner); stroke: var(--border-1);" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+          <circle cx="20" cy="22" r="10" class="pill-bg" style="fill: var(--pill-bg);" fill="#FFF5F2"/>
+          <text x="16" y="26" font-size="12">📚</text>
+          <text x="36" y="24" class="mod-title">Curriculum &amp; QP Archive</text>
+          <text x="14" y="44" class="mod-desc">Centralized syllabus, previous year question</text>
+          <text x="14" y="58" class="mod-desc">papers, and peer-reviewed study notes.</text>
+        </g>
+
+        <!-- Module 2: Gemini AI Assistant -->
+        <g transform="translate(284, 0)">
+          <rect x="0" y="0" width="268" height="74" rx="8" class="card-inner" style="fill: var(--card-inner); stroke: var(--border-1);" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+          <circle cx="20" cy="22" r="10" class="pill-bg" style="fill: var(--pill-bg);" fill="#FFF5F2"/>
+          <text x="16" y="26" font-size="12">⚡</text>
+          <text x="36" y="24" class="mod-title">Gemini AI Study Assist</text>
+          <text x="14" y="44" class="mod-desc">Context-aware question answering, unit summaries,</text>
+          <text x="14" y="58" class="mod-desc">and exam prep guides tailored for SIMATS.</text>
+        </g>
+
+        <!-- Module 3: CGPA Calculator -->
+        <g transform="translate(0, 84)">
+          <rect x="0" y="0" width="268" height="74" rx="8" class="card-inner" style="fill: var(--card-inner); stroke: var(--border-1);" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+          <circle cx="20" cy="22" r="10" class="pill-bg" style="fill: var(--pill-bg);" fill="#FFF5F2"/>
+          <text x="16" y="26" font-size="12">🧮</text>
+          <text x="36" y="24" class="mod-title">SIMATS CGPA Calculator</text>
+          <text x="14" y="44" class="mod-desc">Official university grading algorithm with custom</text>
+          <text x="14" y="58" class="mod-desc">credit-weighting &amp; target forecast planner.</text>
+        </g>
+
+        <!-- Module 4: Community Hub -->
+        <g transform="translate(284, 84)">
+          <rect x="0" y="0" width="268" height="74" rx="8" class="card-inner" style="fill: var(--card-inner); stroke: var(--border-1);" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+          <circle cx="20" cy="22" r="10" class="pill-bg" style="fill: var(--pill-bg);" fill="#FFF5F2"/>
+          <text x="16" y="26" font-size="12">💬</text>
+          <text x="36" y="24" class="mod-title">Real-Time Campus Hub</text>
+          <text x="14" y="44" class="mod-desc">Live project collaboration threads, event feeds,</text>
+          <text x="14" y="58" class="mod-desc">and verified student-only discussion rooms.</text>
+        </g>
+      </g>
+
+      <!-- Bottom Tech Stack Chips Bar -->
+      <g transform="translate(24, 328)">
+        <!-- React 18 -->
+        <g transform="translate(0, 0)">
+          <rect x="0" y="0" width="88" height="24" rx="12" class="chip-bg" style="fill: var(--chip-bg); stroke: var(--chip-border);" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+          <circle cx="10" cy="12" r="2.5" class="accent-fill" style="fill: var(--accent);" fill="#EA431B"/>
+          <text x="18" y="16" class="chip-text">⚡ React 18</text>
+        </g>
+
+        <!-- Tailwind CSS -->
+        <g transform="translate(96, 0)">
+          <rect x="0" y="0" width="102" height="24" rx="12" class="chip-bg" style="fill: var(--chip-bg); stroke: var(--chip-border);" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+          <circle cx="10" cy="12" r="2.5" class="accent-fill" style="fill: var(--accent);" fill="#EA431B"/>
+          <text x="18" y="16" class="chip-text">🎨 Tailwind</text>
+        </g>
+
+        <!-- Firebase -->
+        <g transform="translate(206, 0)">
+          <rect x="0" y="0" width="84" height="24" rx="12" class="chip-bg" style="fill: var(--chip-bg); stroke: var(--chip-border);" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+          <circle cx="10" cy="12" r="2.5" class="accent-fill" style="fill: var(--accent);" fill="#EA431B"/>
+          <text x="18" y="16" class="chip-text">🔥 Firebase</text>
+        </g>
+
+        <!-- Gemini AI -->
+        <g transform="translate(298, 0)">
+          <rect x="0" y="0" width="94" height="24" rx="12" class="chip-bg" style="fill: var(--chip-bg); stroke: var(--chip-border);" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+          <circle cx="10" cy="12" r="2.5" class="purple-fill" style="fill: var(--accent-purple);" fill="#9333EA"/>
+          <text x="18" y="16" class="chip-text">✨ Gemini AI</text>
+        </g>
+
+        <!-- Vite -->
+        <g transform="translate(400, 0)">
+          <rect x="0" y="0" width="68" height="24" rx="12" class="chip-bg" style="fill: var(--chip-bg); stroke: var(--chip-border);" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+          <circle cx="10" cy="12" r="2.5" class="accent-fill" style="fill: var(--accent);" fill="#EA431B"/>
+          <text x="18" y="16" class="chip-text">⚡ Vite</text>
+        </g>
+
+        <!-- Case Study Link CTA (Right) -->
+        <g transform="translate(476, 0)">
+          <rect x="0" y="0" width="76" height="24" rx="12" class="pill-bg" style="fill: var(--pill-bg); stroke: var(--accent);" fill="#FFF5F2" stroke="#EA431B" stroke-width="1"/>
+          <text x="38" y="16" class="badge-text" text-anchor="middle">LIVE ↗</text>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
