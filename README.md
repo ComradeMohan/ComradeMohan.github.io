@@ -58,25 +58,21 @@
 <br/>
 
 <div align="center">
-  <!-- Coding Aesthetic GIF & Developer Vibe -->
-  <table border="0" width="100%">
-    <tr>
-      <td width="55%" align="left" valign="middle">
-        <h3>🚀 Engineering with Speed &amp; Precision</h3>
-        <p>
-          Passionate about architecting cloud infrastructure, crafting pixel-perfect interfaces, and writing high-throughput backend services. Certified in <strong>Java SE 17</strong> &amp; <strong>Oracle Cloud Infrastructure</strong>.
-        </p>
-        <p>
-          <a href="https://mohanreddy.me/">
-            <img src="https://img.shields.io/badge/Explore_Projects-EA431B?style=for-the-badge&logo=rocket&logoColor=white" alt="Explore Projects"/>
-          </a>
-        </p>
-      </td>
-      <td width="45%" align="center" valign="middle">
-        <img src="https://user-images.githubusercontent.com/74038190/212749447-bfb7e725-6987-49d9-ae85-2015e3e7cc41.gif" width="100%" style="border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);" alt="Coding Vibe Animation" />
-      </td>
-    </tr>
-  </table>
+
+  <h3>🚀 Engineering with Speed &amp; Precision</h3>
+
+  <p align="center">
+    Passionate about architecting cloud infrastructure, crafting pixel-perfect interfaces, and writing high-throughput backend services.
+    <br/>
+    Certified in <strong>Java SE 17</strong> &amp; <strong>Oracle Cloud Infrastructure</strong>.
+  </p>
+
+  <p align="center">
+    <a href="https://mohanreddy.me/">
+      <img src="https://img.shields.io/badge/Explore_Projects-EA431B?style=for-the-badge&logo=rocket&logoColor=white" alt="Explore Projects"/>
+    </a>
+  </p>
+
 </div>
 
 ---
