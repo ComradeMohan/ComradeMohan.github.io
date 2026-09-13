@@ -57,12 +57,19 @@ const SEO = ({
     setMetaTag("property", "og:type", ogType);
     setMetaTag("property", "og:url", currentUrl);
     setMetaTag("property", "og:image", ogImage);
+    setMetaTag("property", "og:image:width", "1200");
+    setMetaTag("property", "og:image:height", "630");
+    setMetaTag("property", "og:image:type", "image/webp");
+    setMetaTag("property", "og:image:alt", title);
     setMetaTag("property", "og:site_name", "Mohan Reddy Portfolio");
 
     // 5. Set Twitter Card meta tags
     setMetaTag("name", "twitter:title", title);
     setMetaTag("name", "twitter:description", description);
     setMetaTag("name", "twitter:image", ogImage);
+    setMetaTag("name", "twitter:image:width", "1200");
+    setMetaTag("name", "twitter:image:height", "630");
+    setMetaTag("name", "twitter:image:alt", title);
     setMetaTag("name", "twitter:card", "summary_large_image");
 
     // 6. Set Canonical Link
