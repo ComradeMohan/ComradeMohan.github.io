@@ -51,10 +51,10 @@ export const DEFAULT_LEETCODE_STATS = {
     ranking: fallbackData.profile?.profile?.ranking || 225675,
   },
   profile: {
-    solvedProblem: getFallbackCount("All") ?? 477,
-    easySolved: getFallbackCount("Easy") ?? 158,
-    mediumSolved: getFallbackCount("Medium") ?? 247,
-    hardSolved: getFallbackCount("Hard") ?? 72,
+    solvedProblem: 426,
+    easySolved: 142,
+    mediumSolved: 219,
+    hardSolved: 65,
   },
   contest: {
     contestRating: fallbackData.contests?.userContestRanking?.rating || 1673.33,

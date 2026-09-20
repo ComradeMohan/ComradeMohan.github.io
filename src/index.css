@@ -4,23 +4,23 @@
 
 @layer base {
   :root {
-    --background: 230 25% 10%;
+    --background: 210 44% 3.5%;
     --foreground: 210 40% 95%;
 
-    --card: 230 30% 12%;
+    --card: 215 32% 6.5%;
     --card-foreground: 210 40% 95%;
 
-    --popover: 230 30% 12%;
+    --popover: 215 32% 6.5%;
     --popover-foreground: 210 40% 95%;
 
     --primary: 12 95% 58%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 230 20% 18%;
+    --secondary: 215 25% 10%;
     --secondary-foreground: 210 40% 95%;
 
-    --muted: 230 20% 18%;
-    --muted-foreground: 215 20% 55%;
+    --muted: 215 25% 10%;
+    --muted-foreground: 215 20% 58%;
 
     --accent: 289 65% 60%;
     --accent-foreground: 0 0% 100%;
@@ -28,19 +28,19 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 230 20% 20%;
-    --input: 230 20% 20%;
+    --border: 215 20% 14%;
+    --input: 215 20% 14%;
     --ring: 12 95% 58%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 230 25% 8%;
+    --sidebar-background: 210 44% 3%;
     --sidebar-foreground: 210 40% 95%;
     --sidebar-primary: 12 95% 58%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 230 20% 18%;
+    --sidebar-accent: 215 25% 10%;
     --sidebar-accent-foreground: 210 40% 95%;
-    --sidebar-border: 230 20% 20%;
+    --sidebar-border: 215 20% 14%;
     --sidebar-ring: 12 95% 58%;
   }
 
@@ -64,7 +64,7 @@
     --muted-foreground: 215 16% 47%;
 
     --accent: 289 65% 55%;
-    --accent-foreground: 0 0% 100%;
+    --accent-foreground: 230 25% 12%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
@@ -142,7 +142,7 @@
 
   html {
     scroll-behavior: smooth;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   section[id],
@@ -151,21 +151,22 @@
   }
 
   @media (min-width: 768px) {
+
     section[id],
     [id] {
-      scroll-margin-top: 5.5rem;
+      scroll-margin-top: 5rem;
     }
   }
 
   body {
     @apply bg-background text-foreground;
     font-family: 'Outfit', sans-serif;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   /* Prevent browser autofill from breaking input/textarea background and text colors */
   input:-webkit-autofill,
-  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
   input:-webkit-autofill:active,
   textarea:-webkit-autofill,
@@ -179,7 +180,7 @@
   }
 
   .dark input:-webkit-autofill,
-  .dark input:-webkit-autofill:hover, 
+  .dark input:-webkit-autofill:hover,
   .dark input:-webkit-autofill:focus,
   .dark input:-webkit-autofill:active,
   .dark textarea:-webkit-autofill,
@@ -241,6 +242,7 @@
   0% {
     transform: translateX(-100%);
   }
+
   100% {
     transform: translateX(100%);
   }
@@ -281,11 +283,27 @@
 
 /* Doodle active vibration keyframes and classes */
 @keyframes doodle-vibrate {
-  0%, 100% { transform: translate(0, 0) rotate(0deg); }
-  20% { transform: translate(-0.3px, 0.3px) rotate(-0.15deg); }
-  40% { transform: translate(0.3px, -0.3px) rotate(0.15deg); }
-  60% { transform: translate(-0.3px, -0.3px) rotate(-0.1deg); }
-  80% { transform: translate(0.3px, 0.3px) rotate(0.1deg); }
+
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  20% {
+    transform: translate(-0.3px, 0.3px) rotate(-0.15deg);
+  }
+
+  40% {
+    transform: translate(0.3px, -0.3px) rotate(0.15deg);
+  }
+
+  60% {
+    transform: translate(-0.3px, -0.3px) rotate(-0.1deg);
+  }
+
+  80% {
+    transform: translate(0.3px, 0.3px) rotate(0.1deg);
+  }
 }
 
 .animate-doodle-vibrate {
@@ -294,8 +312,15 @@
 }
 
 @keyframes paper-vibrate {
-  0%, 100% { transform: translateY(0) scaleY(1); }
-  50% { transform: translateY(0.4px) scaleY(1.005); }
+
+  0%,
+  100% {
+    transform: translateY(0) scaleY(1);
+  }
+
+  50% {
+    transform: translateY(0.4px) scaleY(1.005);
+  }
 }
 
 .animate-paper-vibrate {
@@ -304,17 +329,28 @@
 }
 
 /* Custom theme visibility utilities since the site is dark by default */
-.show-in-light { display: none !important; }
-.light .show-in-light { display: block !important; }
+.show-in-light {
+  display: none !important;
+}
 
-.hide-in-light { display: block !important; }
-.light .hide-in-light { display: none !important; }
+.light .show-in-light {
+  display: block !important;
+}
+
+.hide-in-light {
+  display: block !important;
+}
+
+.light .hide-in-light {
+  display: none !important;
+}
 
 /* India Border Single Beam Walking Animation */
 @keyframes singleBeamWalk {
   0% {
     stroke-dashoffset: 0;
   }
+
   100% {
     stroke-dashoffset: -100;
   }

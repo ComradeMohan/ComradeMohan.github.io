@@ -84,9 +84,8 @@ const CustomCursor = () => {
       {/* Main cursor */}
       <div
         ref={cursorRef}
-        className={`fixed pointer-events-none z-50 transition-opacity duration-200 ${
-          isVisible ? "opacity-100" : "opacity-0"
-        }`}
+        className={`fixed pointer-events-none z-50 transition-opacity duration-200 ${isVisible ? "opacity-100" : "opacity-0"
+          }`}
         style={{
           transform: "translate(-50%, -50%)",
         }}

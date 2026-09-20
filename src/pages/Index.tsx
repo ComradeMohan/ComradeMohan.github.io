@@ -11,15 +11,28 @@ import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import { trackEvent } from "@/lib/analytics";
 import SEO from "@/components/SEO";
+import ScrollProgressIndicator from "@/components/motion/ScrollProgressIndicator";
+
+// Module-level guard: persists in memory across client-side route navigations and state changes,
+// ensuring the splash screen fires strictly once per full page load only.
+let splashHasFired = false;
+
+const isSplashDismissed = (): boolean => {
+  if (splashHasFired) return true;
+  try {
+    if (typeof window !== "undefined") {
+      return !!sessionStorage.getItem("portfolio_has_loaded");
+    }
+  } catch {
+    // Fallback if sessionStorage is restricted or disabled
+    return splashHasFired;
+  }
+  return false;
+};
 
 const Index = () => {
   const { hash } = useLocation();
-  const [loading, setLoading] = useState(() => {
-    if (typeof window !== "undefined") {
-      return !sessionStorage.getItem("portfolio_has_loaded");
-    }
-    return true;
-  });
+  const [loading, setLoading] = useState(() => !isSplashDismissed());
 
 
 
@@ -73,7 +86,9 @@ const Index = () => {
       const element = document.getElementById(id);
       if (element) {
         const timer = setTimeout(() => {
-          element.scrollIntoView({ behavior: "smooth", block: "start" });
+          const navOffset = 76;
+          const elementTop = element.getBoundingClientRect().top + window.scrollY - navOffset;
+          window.scrollTo({ top: Math.max(0, elementTop), behavior: "smooth" });
         }, 150);
         return () => clearTimeout(timer);
       }
@@ -177,15 +192,23 @@ const Index = () => {
       {loading && (
         <LoadingScreen
           onComplete={() => {
-            if (typeof window !== "undefined") {
-              sessionStorage.setItem("portfolio_has_loaded", "true");
-            }
+            splashHasFired = true;
+            try {
+              if (typeof window !== "undefined") {
+                sessionStorage.setItem("portfolio_has_loaded", "true");
+              }
+            } catch {}
             setLoading(false);
           }}
         />
       )}
       <div className={loading ? "hidden" : ""}>
-        {!loading && <Navbar />}
+        {!loading && (
+          <>
+            <Navbar />
+            <ScrollProgressIndicator />
+          </>
+        )}
         <main>
           <HeroSection />
           <AboutSection />

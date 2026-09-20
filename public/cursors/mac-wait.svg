@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <defs>
+    <filter id="shadow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0.5" dy="1.5" stdDeviation="1.2" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+    <radialGradient id="gloss" cx="35%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.7"/>
+      <stop offset="45%" stop-color="#ffffff" stop-opacity="0.1"/>
+      <stop offset="85%" stop-color="#000000" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.45"/>
+    </radialGradient>
+  </defs>
+  <g filter="url(#shadow)">
+    <g>
+      <path d="M 12 12 L 20 7.4 A 9.2 9.2 0 0 1 20 16.6 Z" fill="#FF1744"/>
+      <path d="M 12 12 L 20 16.6 A 9.2 9.2 0 0 1 12 21.2 Z" fill="#FFD600"/>
+      <path d="M 12 12 L 12 21.2 A 9.2 9.2 0 0 1 4 16.6 Z" fill="#00E676"/>
+      <path d="M 12 12 L 4 16.6 A 9.2 9.2 0 0 1 4 7.4 Z" fill="#00E5FF"/>
+      <path d="M 12 12 L 4 7.4 A 9.2 9.2 0 0 1 12 2.8 Z" fill="#2979FF"/>
+      <path d="M 12 12 L 12 2.8 A 9.2 9.2 0 0 1 20 7.4 Z" fill="#D500F9"/>
+    </g>
+    <circle cx="12" cy="12" r="9.2" fill="url(#gloss)" stroke="#000000" stroke-width="0.6" stroke-opacity="0.35"/>
+    <circle cx="12" cy="12" r="2.5" fill="#FFFFFF" fill-opacity="0.9" stroke="#000000" stroke-width="0.4" stroke-opacity="0.3"/>
+  </g>
+</svg>

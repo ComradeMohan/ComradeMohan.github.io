@@ -155,6 +155,73 @@ const LinkedInBadge = ({ theme }: { theme: "light" | "dark" }) => {
   );
 };
 
+// Recognized brand SVG icons for Java, MySQL, and Python with bold, solid fill & zero transparency
+const JavaIcon = ({ className = "w-4 h-4 sm:w-4.5 sm:h-4.5" }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+    {/* Blue Steam */}
+    <path
+      d="M8 2.5c-.8 1.3.8 2.4 0 3.8M12 1.5c-.8 1.3.8 2.4 0 3.8M16 2.5c-.8 1.3.8 2.4 0 3.8"
+      stroke="#5382A1"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+    />
+    {/* Solid Coffee Cup Body in Java Orange */}
+    <path
+      d="M3 8.5h12.5v5a4.5 4.5 0 0 1-4.5 4.5h-3.5A4.5 4.5 0 0 1 3 13.5V8.5z"
+      fill="#E76F00"
+    />
+    {/* Sturdy Cup Handle */}
+    <path
+      d="M15.5 10h2a2 2 0 0 1 0 4h-2"
+      stroke="#E76F00"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+    />
+    {/* Saucer in Java Blue */}
+    <path
+      d="M2 20.5h17.5"
+      stroke="#5382A1"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+    />
+  </svg>
+);
+
+const MySQLIcon = ({ className = "w-4 h-4 sm:w-4.5 sm:h-4.5" }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+    {/* Solid MySQL Blue Dolphin Body */}
+    <path
+      d="M21.8 13.2c-1.5-2.2-3.8-3.6-6.4-4-2.8-.5-5.7.4-7.9 2.3-2.1 1.9-3.2 4.2-3.7 6.6 2.3-.8 4.8-1 7.2-.4 2.3.6 4.4 1.8 6.5 2.2.3-1.8 1.5-4.2 3.7-6.7z"
+      fill="#00758F"
+    />
+    {/* Solid Orange Dorsal Fin */}
+    <path
+      d="M13.2 7.2c-1.1-1.9-3-3.1-5-3.3 1 .8 1.7 1.7 2.1 2.9.5 1.1.6 2.4.3 3.6 1.1-.7 1.9-1.8 2.6-3.2z"
+      fill="#F29111"
+    />
+    {/* Tail Fluke */}
+    <path
+      d="M4.5 18.5c-.8.5-1.8.8-2.7.9.6-.8 1.4-1.5 2.4-2 .3.4.4.8.3 1.1z"
+      fill="#00758F"
+    />
+    {/* Eye dot */}
+    <circle cx="18.8" cy="12.8" r="0.9" fill="#FFFFFF" />
+  </svg>
+);
+
+const PythonIcon = ({ className = "w-4 h-4 sm:w-4.5 sm:h-4.5" }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      fill="#387EB8"
+      d="M11.914 2c-5.042 0-4.726 2.186-4.726 2.186l.006 2.264h4.81v.68H5.215S2 6.762 2 11.834c0 5.074 2.802 4.897 2.802 4.897h1.67v-2.348s-.09-2.802 2.748-2.802h4.724s2.656.044 2.656-2.597V4.597S16.958 2 11.914 2zm-2.6 1.48a.936.936 0 1 1 0 1.872.936.936 0 0 1 0-1.872z"
+    />
+    <path
+      fill="#FFE873"
+      d="M12.086 22c5.042 0 4.726-2.186 4.726-2.186l-.006-2.264h-4.81v-.68h6.789S22 17.238 22 12.166c0-5.074-2.802-4.897-2.802-4.897h-1.67v2.348s.09 2.802-2.748 2.802H10.056s-2.656-.044-2.656 2.597v4.382S7.042 22 12.086 22zm2.6-1.48a.936.936 0 1 1 0-1.872.936.936 0 0 1 0 1.872z"
+    />
+  </svg>
+);
+
 export const ContactSection = () => {
   const { toast } = useToast();
   const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
@@ -1036,6 +1103,11 @@ export const ContactSection = () => {
   };
 
   const renderLeetcodeContent = () => {
+    const rawLangData = leetcodeData?.skill?.languageProblemCount;
+    const javaCount = rawLangData?.find((l: any) => l.languageName === "Java")?.problemsSolved ?? 419;
+    const mysqlCount = rawLangData?.find((l: any) => l.languageName === "MySQL")?.problemsSolved ?? 40;
+    const pythonCount = rawLangData?.find((l: any) => l.languageName?.toLowerCase().includes("python"))?.problemsSolved ?? 14;
+
     return (
       <div className="w-full text-left space-y-4 font-outfit text-foreground">
         {/* Profile Card Header */}
@@ -1126,9 +1198,22 @@ export const ContactSection = () => {
               <Code2 className="w-3.5 h-3.5 text-orange-500" />
               <span className="text-[10px] uppercase font-bold tracking-wider">Primary Stack</span>
             </div>
-            <span className="text-xs font-bold text-foreground block truncate">
-              Java (419) • MySQL (40) • Python (14)
-            </span>
+            <div className="flex items-center gap-1.5 pt-0.5 font-grotesk text-foreground flex-wrap">
+              <div className="inline-flex items-center gap-1 group/lang cursor-default" title={`Java: ${javaCount} solved`}>
+                <JavaIcon className="w-4 h-4 sm:w-4.5 sm:h-4.5 shrink-0 transition-transform group-hover/lang:scale-110" />
+                <span className="text-xs font-extrabold text-foreground">{javaCount}</span>
+              </div>
+              <span className="text-muted-foreground/40 text-[9px]">•</span>
+              <div className="inline-flex items-center gap-1 group/lang cursor-default" title={`MySQL: ${mysqlCount} solved`}>
+                <MySQLIcon className="w-4 h-4 sm:w-4.5 sm:h-4.5 shrink-0 transition-transform group-hover/lang:scale-110" />
+                <span className="text-xs font-extrabold text-foreground">{mysqlCount}</span>
+              </div>
+              <span className="text-muted-foreground/40 text-[9px]">•</span>
+              <div className="inline-flex items-center gap-1 group/lang cursor-default" title={`Python: ${pythonCount} solved`}>
+                <PythonIcon className="w-4 h-4 sm:w-4.5 sm:h-4.5 shrink-0 transition-transform group-hover/lang:scale-110" />
+                <span className="text-xs font-extrabold text-foreground">{pythonCount}</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1271,15 +1356,21 @@ export const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="pb-6 sm:pb-10 lg:pb-12 scroll-mt-20 md:scroll-mt-24 relative overflow-hidden bg-background text-foreground transition-colors duration-300">
+    <section id="contact" className="pt-2 sm:pt-4 pb-6 sm:pb-10 lg:pb-12 scroll-mt-20 relative overflow-hidden bg-background text-foreground transition-colors duration-300">
 
       {/* Dynamic Ambient Background Glows */}
       <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-orange-500/10 dark:bg-orange-500/15 rounded-full blur-[140px] pointer-events-none -z-10" />
       <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-amber-500/10 dark:bg-amber-500/10 rounded-full blur-[120px] pointer-events-none -z-10" />
 
       <div className="max-w-7xl mx-auto px-0 sm:px-6 lg:px-8 relative z-10">
-        {/* Main Section Card constructed with Pure HTML/CSS/SVG for dynamic Light/Dark theme switching */}
-        <div className="relative rounded-2xl sm:rounded-[40px] bg-card/90 dark:bg-[#090C15]/95 border border-orange-500/30 dark:border-orange-500/20 shadow-[0_0_50px_rgba(249,115,22,0.08)] dark:shadow-[0_0_80px_rgba(249,115,22,0.12)] backdrop-blur-2xl p-4 sm:p-8 lg:p-10 overflow-hidden transition-colors duration-300">
+        {/* Main Section Card with smooth rising entry transition */}
+        <motion.div
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="relative rounded-2xl sm:rounded-[40px] bg-card/90 dark:bg-[#090C15]/95 border border-orange-500/30 dark:border-orange-500/20 shadow-[0_0_50px_rgba(249,115,22,0.08)] dark:shadow-[0_0_80px_rgba(249,115,22,0.12)] backdrop-blur-2xl p-4 sm:p-8 lg:p-10 overflow-hidden transition-colors duration-300"
+        >
 
           {/* Decorative Corner Dotted Matrix SVG */}
           <svg className="absolute top-4 right-4 w-32 h-32 text-orange-500/20 dark:text-orange-500/30 pointer-events-none" fill="currentColor">
@@ -1806,7 +1897,7 @@ export const ContactSection = () => {
             </motion.div>
 
           </div>
-        </div>
+        </motion.div>
       </div>
       {/* Floating Inspector Panel (Desktop Popover) */}
       <AnimatePresence>

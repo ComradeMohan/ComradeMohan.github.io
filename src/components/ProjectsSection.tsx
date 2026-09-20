@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useReducedMotion } from "framer-motion";
 import {
   ExternalLink, Github, Camera, Users, Database, Truck, Activity,
   FileText, MessageSquare, Share2, Calculator, Calendar, Lock, TrendingUp,
@@ -11,6 +11,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { trackEvent } from "@/lib/analytics";
 import { SpotlightCard } from "./SpotlightCard";
+import ProjectScrollyStage from "./ProjectScrollyStage";
+import MobileProjectStack from "./MobileProjectStack";
 import { ProgressiveImage } from "./ProgressiveImage";
 
 const Sparkline = ({ colorClass, path }: { colorClass: string; path: string }) => (
@@ -801,7 +803,7 @@ const ProjectDetailContent = ({ project }: { project: any }) => {
 
         {/* Research Paper Link */}
         {project.researchPaperLink && (
-          <Button asChild variant="outline" className="border-border hover:bg-white/5" onClick={() => trackEvent("click", "research_paper", project.title)}>
+          <Button asChild variant="outline" className="border-border hover:bg-secondary/60 hover:text-foreground" onClick={() => trackEvent("click", "research_paper", project.title)}>
             <a href={project.researchPaperLink} target="_blank" rel="noopener noreferrer">
               <FileText className="w-4 h-4 mr-2" /> View Research Paper
             </a>
@@ -821,7 +823,7 @@ const ProjectDetailContent = ({ project }: { project: any }) => {
 
         {/* Play Store Link */}
         {!project.pptLink && project.playStoreLink && (
-          <Button asChild size="icon" variant="outline" className="w-10 h-10 rounded-full border-border hover:bg-white/5 hover:scale-110 transition-transform" onClick={() => trackEvent("click", "play_store", project.title)}>
+          <Button asChild size="icon" variant="outline" className="w-10 h-10 rounded-full border-border hover:bg-secondary/60 hover:text-foreground hover:scale-110 transition-transform" onClick={() => trackEvent("click", "play_store", project.title)}>
             <a href={project.playStoreLink} target="_blank" rel="noopener noreferrer" title="View on Play Store">
               <img src="/icons/googleplay.svg" alt="Play Store" className="w-5 h-5 object-contain" />
             </a>
@@ -830,7 +832,7 @@ const ProjectDetailContent = ({ project }: { project: any }) => {
 
         {/* GitHub Link */}
         {!project.pptLink && project.githubLink && (
-          <Button asChild size="icon" variant="outline" className="w-10 h-10 rounded-full border-border hover:bg-white/5 hover:scale-110 transition-transform" onClick={() => trackEvent("click", "github_project", project.title)}>
+          <Button asChild size="icon" variant="outline" className="w-10 h-10 rounded-full border-border hover:bg-secondary/60 hover:text-foreground hover:scale-110 transition-transform" onClick={() => trackEvent("click", "github_project", project.title)}>
             <a href={project.githubLink} target="_blank" rel="noopener noreferrer" title="View on GitHub">
               <Github className="w-5 h-5" />
             </a>
@@ -857,7 +859,7 @@ const ProjectDetailContent = ({ project }: { project: any }) => {
 
         {/* Model Link */}
         {!project.pptLink && project.modelLink && (
-          <Button asChild variant="outline" className="border-border hover:bg-white/5" onClick={() => trackEvent("download", "model", project.title)}>
+          <Button asChild variant="outline" className="border-border hover:bg-secondary/60 hover:text-foreground" onClick={() => trackEvent("download", "model", project.title)}>
             <a href={project.modelLink} target="_blank" rel="noopener noreferrer">
               📦 Download YOLO Model (yolov8n.pt)
             </a>
@@ -866,7 +868,7 @@ const ProjectDetailContent = ({ project }: { project: any }) => {
 
         {/* Live Demo Link */}
         {!project.pptLink && project.hasLiveDemo && (project.link || project.demoLink) && (
-          <Button asChild variant="outline" className="border-border hover:bg-white/5" onClick={() => trackEvent("click", "demo", project.title)}>
+          <Button asChild variant="outline" className="border-border hover:bg-secondary/60 hover:text-foreground" onClick={() => trackEvent("click", "demo", project.title)}>
             <a href={project.demoLink || project.link} target="_blank" rel="noopener noreferrer">
               <ExternalLink className="w-4 h-4 mr-2" /> Live Demo
             </a>
@@ -891,6 +893,15 @@ const ProjectsSection = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [saveethaStars, setSaveethaStars] = useState<number | null>(null);
 
+  const desktopShowcaseRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+
+  // Scroll tracking for desktop sticky project progression
+  const { scrollYProgress } = useScroll({
+    target: desktopShowcaseRef,
+    offset: ["start start", "end end"],
+  });
+
   useEffect(() => {
     fetch("https://api.github.com/repos/ComradeMohan/saveetha-companion")
       .then((res) => {
@@ -907,24 +918,46 @@ const ProjectsSection = () => {
       });
   }, []);
 
+  // Update activeIndex based on scroll position in desktop sticky container
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+
+    const unsubscribe = scrollYProgress.on("change", (latest) => {
+      // Map 0 -> 1 progress to project index (0 to 5)
+      const count = projects.length;
+      const index = Math.min(count - 1, Math.max(0, Math.floor(latest * count)));
+      setActiveIndex(index);
+    });
+
+    return () => unsubscribe();
+  }, [scrollYProgress, prefersReducedMotion]);
+
+  const handleSelectProject = (i: number) => {
+    setActiveIndex(i);
+    trackEvent("view", "project", projects[i].title);
+
+    if (desktopShowcaseRef.current) {
+      const rect = desktopShowcaseRef.current.getBoundingClientRect();
+      const scrollTop = window.scrollY + rect.top;
+      const totalScrollDistance = desktopShowcaseRef.current.offsetHeight - window.innerHeight;
+      const targetScroll = scrollTop + (i / (projects.length - 1)) * totalScrollDistance;
+      window.scrollTo({ top: targetScroll, behavior: "smooth" });
+    }
+  };
+
   return (
-    <section id="projects" className="pb-12 sm:pb-16 scroll-mt-20 md:scroll-mt-24">
+    <section id="projects" className="pt-2 pb-12 sm:pt-3 sm:pb-16 scroll-mt-20 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-10 sm:mb-12"
-        >
-          <h2 className="text-4xl font-extrabold mb-4 font-outfit">
+        {/* Section Header: Sticky on mobile under navbar so 'My Projects' stays visible while cards stack below it */}
+        <div className="sticky top-[74px] z-40 bg-background/85 backdrop-blur-md py-2 sm:static sm:bg-transparent sm:backdrop-blur-none sm:py-0 text-center mb-4 sm:mb-8 transition-all">
+          <h2 className="text-4xl font-extrabold mb-3 sm:mb-4 font-outfit">
             My <span className="text-primary">Projects</span>
           </h2>
           <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
-        </motion.div>
+        </div>
 
-        {/* Mobile: Cards with direct links */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:hidden">
+        {/* Tablet: 2-column grid (640px to 1023px) - No change */}
+        <div className="hidden sm:grid sm:grid-cols-2 gap-5 lg:hidden">
           {projects.map((project, i) => {
             const ProjectIcon = project.icon;
             return (
@@ -992,7 +1025,7 @@ const ProjectsSection = () => {
                           </a>
                         </Button>
                         {project.researchPaperLink && (
-                          <Button asChild size="sm" variant="outline" className="border-border" onClick={() => trackEvent("click", "research_paper", project.title)}>
+                          <Button asChild size="sm" variant="outline" className="border-border hover:bg-secondary/60 hover:text-foreground" onClick={() => trackEvent("click", "research_paper", project.title)}>
                             <a href={project.researchPaperLink} target="_blank" rel="noopener noreferrer">
                               <FileText className="w-3.5 h-3.5 mr-1.5" /> Paper
                             </a>
@@ -1018,14 +1051,14 @@ const ProjectsSection = () => {
                           </Button>
                         )}
                         {project.playStoreLink && (
-                          <Button asChild size="icon" variant="outline" className="w-9 h-9 rounded-full border-border hover:bg-white/5 hover:scale-110 transition-transform" onClick={() => trackEvent("click", "play_store", project.title)}>
+                          <Button asChild size="icon" variant="outline" className="w-9 h-9 rounded-full border-border hover:bg-secondary/60 hover:text-foreground hover:scale-110 transition-transform" onClick={() => trackEvent("click", "play_store", project.title)}>
                             <a href={project.playStoreLink} target="_blank" rel="noopener noreferrer" title="View on Play Store">
                               <img src="/icons/googleplay.svg" alt="Play Store" className="w-4 h-4 object-contain" />
                             </a>
                           </Button>
                         )}
                         {project.githubLink && (
-                          <Button asChild size="icon" variant="outline" className="w-9 h-9 rounded-full border-border hover:bg-white/5 hover:scale-110 transition-transform" onClick={() => trackEvent("click", "github_project", project.title)}>
+                          <Button asChild size="icon" variant="outline" className="w-9 h-9 rounded-full border-border hover:bg-secondary/60 hover:text-foreground hover:scale-110 transition-transform" onClick={() => trackEvent("click", "github_project", project.title)}>
                             <a href={project.githubLink} target="_blank" rel="noopener noreferrer" title="View on GitHub">
                               <Github className="w-4 h-4" />
                             </a>
@@ -1054,74 +1087,27 @@ const ProjectsSection = () => {
           })}
         </div>
 
-        {/* Desktop: Split view */}
-        <div className="hidden lg:grid lg:grid-cols-12 gap-8 items-start">
-          {/* Left Project List */}
-          <div className="lg:col-span-5 space-y-4 max-h-[650px] overflow-y-auto pr-2 snap-y snap-mandatory">
-            {projects.map((project, i) => {
-              const ProjectIcon = project.icon;
-              const isActive = activeIndex === i;
-              return (
-                <motion.div
-                  key={project.title}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                >
-                  <SpotlightCard
-                    className={`rounded-2xl border cursor-pointer transition-all duration-300 snap-start ${isActive
-                      ? "border-primary bg-primary/5"
-                      : "border-border hover:border-primary/30 bg-card"
-                      }`}
-                    innerClassName={`p-5 flex items-center gap-4 w-full h-full ${isActive ? 'pl-8' : ''}`}
-                    onClick={() => {
-                      setActiveIndex(i);
-                      trackEvent("view", "project", project.title);
-                    }}
-                  >
-                    {/* Left border active indicator dot */}
-                    {isActive && (
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-primary animate-pulse" />
-                    )}
+        {/* Mobile: Smooth 3D Stack Scroll (< sm devices) */}
+        <MobileProjectStack
+          projects={projects}
+          saveethaStars={saveethaStars}
+          onOpenModal={(i) => {
+            setActiveIndex(i);
+            setIsMobileOpen(true);
+          }}
+          trackEvent={trackEvent}
+        />
 
-                    {/* Icon container */}
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 overflow-hidden ${project.logoImg ? "p-1.5" : project.iconBg}`}>
-                      {project.logoImg === "ethereum" ? (
-                        <EthereumLogo className="w-full h-full text-indigo-400" />
-                      ) : project.logoImg ? (
-                        <img src={project.logoImg} alt={project.title} className="w-full h-full object-contain" />
-                      ) : (
-                        <ProjectIcon className={`w-6 h-6 ${project.iconColor}`} />
-                      )}
-                    </div>
 
-                    <div>
-                      <h3 className="text-lg font-bold text-foreground mb-1 font-outfit">{project.title}</h3>
-                      <p className="text-xs text-muted-foreground line-clamp-2 font-grotesk">{project.desc}</p>
-                    </div>
-                  </SpotlightCard>
-                </motion.div>
-              );
-            })}
-          </div>
-
-          {/* Right Project Detail View */}
-          <div className="lg:col-span-7 sticky top-24">
-            <motion.div
-              key={activeIndex}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4 }}
-            >
-              <SpotlightCard
-                className={`rounded-2xl bg-gradient-to-br ${projects[activeIndex].color} border border-border h-full`}
-                innerClassName="p-6 flex flex-col justify-between w-full h-full"
-              >
-                <ProjectDetailContent project={projects[activeIndex]} />
-              </SpotlightCard>
-            </motion.div>
-          </div>
+        {/* ========================================================================= */}
+        {/* DESKTOP: 700vh SCROLL-DRIVEN STICKY SCROLLYTELLING STAGE                  */}
+        {/* The viewport is the stage. Scrolling drives project transitions.          */}
+        {/* ========================================================================= */}
+        <div ref={desktopShowcaseRef} id="projects-stage-container" className="hidden lg:block relative h-[700vh]">
+          <ProjectScrollyStage
+            scrollYProgress={scrollYProgress}
+            saveethaStars={saveethaStars}
+          />
         </div>
 
         {/* Mobile Popup Modal */}

@@ -16,15 +16,24 @@ const colors = [
   "hsl(145, 60%, 45%)",  // green
 ];
 
+const TEXT = "COMRADEMOHAN";
+const LETTER_STAGGER = 0.05; // seconds between each letter's entry
+const LETTER_DURATION = 0.5; // seconds for a single letter to settle
+const EXIT_DURATION = 0.6; // seconds of fade-out, shared by the exit transition
+
+// Derive the splash's lifetime from its own animation so the two can never drift
+// apart again. This used to be a flat 2800ms, which left ~1.2s of dead air after
+// the word had already finished assembling.
+const ENTRY_MS = ((TEXT.length - 1) * LETTER_STAGGER + LETTER_DURATION) * 1000;
+
 const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
   const [show, setShow] = useState(true);
-  const text = "COMRADEMOHAN";
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setShow(false);
-      setTimeout(onComplete, 600);
-    }, 2800);
+      setTimeout(onComplete, EXIT_DURATION * 1000);
+    }, ENTRY_MS);
     return () => clearTimeout(timer);
   }, [onComplete]);
 
@@ -34,16 +43,16 @@ const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
         <motion.div
           className="fixed inset-0 z-[100] flex items-center justify-center bg-background"
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: EXIT_DURATION }}
         >
           <div className="flex gap-1">
-            {text.split("").map((letter, i) => (
+            {TEXT.split("").map((letter, i) => (
               <motion.span
                 key={i}
                 className="text-3xl md:text-6xl font-extrabold font-outfit tracking-widest"
                 initial={{ opacity: 0, y: 30, scale: 0.5 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ delay: i * 0.1, duration: 0.5, type: "spring", stiffness: 200 }}
+                transition={{ delay: i * LETTER_STAGGER, duration: LETTER_DURATION, type: "spring", stiffness: 200 }}
                 style={{ color: colors[i] }}
               >
                 {letter}

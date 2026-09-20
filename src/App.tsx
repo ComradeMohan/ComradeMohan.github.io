@@ -52,6 +52,14 @@ const ScrollToTop = () => {
         page_title: document.title
       });
     }
+
+    // If the visitor is navigating or landed on an interior route, mark portfolio as loaded
+    // so internal client-side navigation to "/" will never trigger the splash screen.
+    if (pathname !== "/" && pathname !== "") {
+      try {
+        sessionStorage.setItem("portfolio_has_loaded", "true");
+      } catch { }
+    }
   }, [pathname, hash, navType]);
 
   return null;

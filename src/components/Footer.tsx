@@ -934,7 +934,8 @@ const Footer = () => {
         </div>
 
         {/* SEO Navigation & Quick Links */}
-        <nav
+        <div
+          role="navigation"
           className="flex flex-wrap justify-center items-center gap-x-3.5 sm:gap-x-5 gap-y-1 mt-2.5 sm:mt-3.5 text-[10px] sm:text-[11px] font-grotesk text-muted-foreground"
           aria-label="Footer Quick Navigation"
         >
@@ -947,7 +948,7 @@ const Footer = () => {
           <Link to="/developer" className="hover:text-primary transition-colors">Developer Profile</Link>
           <Link to="/resume" className="hover:text-primary transition-colors">Resume</Link>
           <Link to="/blog" className="hover:text-primary transition-colors">Technical Blog</Link>
-        </nav>
+        </div>
 
         {/* Copyright notice */}
         <p className="text-[10px] text-muted-foreground/70 font-grotesk text-center mt-1.5 sm:mt-2">
