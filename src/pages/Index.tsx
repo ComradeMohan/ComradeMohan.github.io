@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import LoadingScreen from "@/components/LoadingScreen";
+import IntroAnimation, { hasIntroPlayed } from "@/components/IntroAnimation";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
@@ -19,22 +19,16 @@ let splashHasFired = false;
 
 const isSplashDismissed = (): boolean => {
   if (splashHasFired) return true;
-  try {
-    if (typeof window !== "undefined") {
-      return !!sessionStorage.getItem("portfolio_has_loaded");
-    }
-  } catch {
-    // Fallback if sessionStorage is restricted or disabled
-    return splashHasFired;
-  }
-  return false;
+  return hasIntroPlayed();
 };
 
 const Index = () => {
   const { hash } = useLocation();
+  // loading = true while intro animation plays
   const [loading, setLoading] = useState(() => !isSplashDismissed());
-
-
+  // introActive = true while the intro overlay is covering the page.
+  // When false, the navbar logo becomes visible (handoff moment).
+  const [introActive, setIntroActive] = useState(() => !isSplashDismissed());
 
   useEffect(() => {
     if (loading) return;
@@ -49,35 +43,26 @@ const Index = () => {
             if (sectionId && !trackedSections.has(sectionId)) {
               trackedSections.add(sectionId);
               
-              // Map section ids to descriptive display names
               let displayName = sectionId;
               if (sectionId === "home") displayName = "hero";
               if (sectionId === "certifications") displayName = "certificates";
               
-              // Capitalize name for cleaner analytics display
               const formattedName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
-              
               trackEvent("scroll", "section_view", formattedName);
             }
           }
         });
       },
-      {
-        threshold: 0.15, // Trigger when 15% of the section is visible
-      }
+      { threshold: 0.15 }
     );
 
     const sectionIds = ["home", "about", "skills", "projects", "certifications", "contact"];
     sectionIds.forEach((id) => {
       const el = document.getElementById(id);
-      if (el) {
-        observer.observe(el);
-      }
+      if (el) observer.observe(el);
     });
 
-    return () => {
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, [loading]);
 
   useEffect(() => {
@@ -120,10 +105,7 @@ const Index = () => {
     "image": "https://mohanreddy.me/mohan-reddy-full-stack-developer.webp",
     "email": "madhiremohanreddy@gmail.com",
     "gender": "Male",
-    "nationality": {
-      "@type": "Country",
-      "name": "India"
-    },
+    "nationality": { "@type": "Country", "name": "India" },
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Chennai",
@@ -141,14 +123,8 @@ const Index = () => {
       "https://www.instagram.com/comrade_mohan666/"
     ],
     "knowsAbout": [
-      "Software Engineering",
-      "React",
-      "Next.js",
-      "TypeScript",
-      "Java",
-      "Kotlin",
-      "Firebase",
-      "Android Development"
+      "Software Engineering", "React", "Next.js", "TypeScript",
+      "Java", "Kotlin", "Firebase", "Android Development"
     ]
   };
 
@@ -189,26 +165,24 @@ const Index = () => {
         description="Explore the professional portfolio and resume of Mohan Reddy. Specializing in React, TypeScript, Java, and Kotlin. Open to internships, full-time jobs, and projects."
         schema={[websiteSchema, personSchema, faqSchema]}
       />
+
+      {/* Navbar is ALWAYS mounted (portal to body) so #navbar-logo is in the DOM
+          even during the intro — required for getBoundingClientRect measurement.
+          introActive=true hides the logo while the intro plays. */}
+      <Navbar skipEntryAnim={splashHasFired} introActive={introActive} />
+
       {loading && (
-        <LoadingScreen
+        <IntroAnimation
+          onHandoff={() => setIntroActive(false)}
           onComplete={() => {
             splashHasFired = true;
-            try {
-              if (typeof window !== "undefined") {
-                sessionStorage.setItem("portfolio_has_loaded", "true");
-              }
-            } catch {}
             setLoading(false);
           }}
         />
       )}
+
       <div className={loading ? "hidden" : ""}>
-        {!loading && (
-          <>
-            <Navbar />
-            <ScrollProgressIndicator />
-          </>
-        )}
+        {!loading && <ScrollProgressIndicator />}
         <main>
           <HeroSection />
           <AboutSection />
@@ -224,4 +198,3 @@ const Index = () => {
 };
 
 export default Index;
-

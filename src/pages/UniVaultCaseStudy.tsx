@@ -603,7 +603,7 @@ export default function UniVaultCaseStudy() {
       <div className="absolute bottom-[20%] left-8 text-orange-200 dark:text-orange-500/30 font-handwritten text-5xl select-none -rotate-12 hidden md:block">📱</div>
 
       {/* Top Navigation */}
-      <header className="max-w-6xl mx-auto px-6 py-8 flex justify-between items-center relative z-20">
+      <header className="max-w-6xl mx-auto px-3.5 sm:px-6 py-4 sm:py-8 flex justify-between items-center relative z-20 gap-2">
         <button
           onClick={(e) => {
             e.preventDefault();
@@ -613,35 +613,35 @@ export default function UniVaultCaseStudy() {
               navigate("/#projects");
             }
           }}
-          className="group flex items-center gap-2 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors font-medium bg-transparent border-none p-0 cursor-pointer"
+          className="group flex items-center gap-1.5 sm:gap-2 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors font-medium bg-transparent border-none p-0 cursor-pointer shrink-0 text-xs sm:text-sm whitespace-nowrap"
         >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          <span>Back to Portfolio</span>
+          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform shrink-0" />
+          <span>Back<span className="hidden xs:inline sm:inline"> to Portfolio</span></span>
         </button>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
           <button
             onClick={toggleTheme}
             aria-label={isDark ? "Switch to Light mode" : "Switch to Dark mode"}
-            className="flex items-center justify-center w-8 h-8 rounded-full border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-300 hover:text-[#6366f1] dark:hover:text-[#6366f1] hover:bg-indigo-50 dark:hover:bg-indigo-950/40 transition-all cursor-pointer"
+            className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-300 hover:text-[#6366f1] dark:hover:text-[#6366f1] hover:bg-indigo-50 dark:hover:bg-indigo-950/40 transition-all cursor-pointer shrink-0"
           >
-            {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
+            {isDark ? <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" /> : <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-700" />}
           </button>
           <a 
             href="https://github.com/ComradeMohan/192210400pdd" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="flex items-center gap-1.5 px-3 py-1.5 text-slate-500 dark:text-slate-300 hover:text-[#6366f1] dark:hover:text-[#6366f1] hover:bg-indigo-50 dark:hover:bg-indigo-950/40 rounded-full transition-all border border-slate-200 dark:border-slate-800 text-xs font-semibold"
+            className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 text-slate-500 dark:text-slate-300 hover:text-[#6366f1] dark:hover:text-[#6366f1] hover:bg-indigo-50 dark:hover:bg-indigo-950/40 rounded-full transition-all border border-slate-200 dark:border-slate-800 text-xs font-semibold whitespace-nowrap shrink-0"
           >
-            <Github className="w-4 h-4" />
+            <Github className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span>GitHub</span>
           </a>
           <a 
             href="https://web.univault.live/" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="flex items-center gap-1.5 px-3 py-1.5 text-slate-500 dark:text-slate-300 hover:text-[#6366f1] dark:hover:text-[#6366f1] hover:bg-indigo-50 dark:hover:bg-indigo-950/40 rounded-full transition-all border border-slate-200 dark:border-slate-800 text-xs font-semibold"
+            className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 text-slate-500 dark:text-slate-300 hover:text-[#6366f1] dark:hover:text-[#6366f1] hover:bg-indigo-50 dark:hover:bg-indigo-950/40 rounded-full transition-all border border-slate-200 dark:border-slate-800 text-xs font-semibold whitespace-nowrap shrink-0"
           >
-            <Rocket className="w-4 h-4 text-[#6366f1] animate-pulse" />
+            <Rocket className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#6366f1] animate-pulse" />
             <span>Live Project</span>
           </a>
         </div>

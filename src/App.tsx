@@ -57,6 +57,7 @@ const ScrollToTop = () => {
     // so internal client-side navigation to "/" will never trigger the splash screen.
     if (pathname !== "/" && pathname !== "") {
       try {
+        sessionStorage.setItem("mohan-intro-played", "true");
         sessionStorage.setItem("portfolio_has_loaded", "true");
       } catch { }
     }

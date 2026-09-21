@@ -42,11 +42,11 @@ const AnimatedMetricCard: React.FC<{
 );
 
 // Micro-Animation Helper: Interactive Tech Tag with Spring Scale
-const TechTag: React.FC<{ tag: string }> = ({ tag }) => (
+const TechTag: React.FC<{ tag: string; className?: string }> = ({ tag, className = "" }) => (
   <motion.span
     whileHover={{ y: -2, scale: 1.06 }}
     transition={{ type: "spring", stiffness: 400, damping: 17 }}
-    className="px-2.5 py-1 rounded-md bg-secondary/60 border border-border/60 text-xs font-mono text-foreground/80 hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-colors inline-block cursor-default select-none"
+    className={`px-2.5 py-1 rounded-md bg-secondary/60 border border-border/60 text-xs font-mono text-foreground/80 hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-colors inline-block cursor-default select-none ${className}`}
   >
     {tag}
   </motion.span>
@@ -163,7 +163,7 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
   };
 
   return (
-    <div className="sticky top-0 h-screen w-full flex flex-col justify-center items-center overflow-hidden z-20 px-4 sm:px-6 lg:px-8">
+    <div className="sticky top-0 h-screen w-full flex flex-col justify-between items-center pt-20 sm:pt-22 lg:pt-20 xl:pt-24 pb-3 sm:pb-4 lg:pb-3 xl:pb-6 overflow-hidden z-20 px-4 sm:px-6 lg:px-8">
 
       {/* Dynamic Background Atmosphere that changes per project */}
       <div
@@ -171,7 +171,7 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
         className="absolute w-[800px] h-[500px] rounded-full blur-[140px] pointer-events-none transition-colors duration-700"
       />
 
-      <div className="max-w-6xl xl:max-w-7xl w-full flex flex-col justify-between h-[88vh] max-h-[840px] relative z-10 select-none">
+      <div className="max-w-6xl xl:max-w-7xl w-full flex flex-col justify-between flex-1 h-full max-h-[calc(100vh-85px)] xl:max-h-[calc(100vh-105px)] relative z-10 select-none">
 
         {/* ========================================================================= */}
         {/* STAGE HEADER: Milestone Tracker & Scrolly Runner (01 / 06)                */}
@@ -220,7 +220,7 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
         {/* ========================================================================= */}
         {/* THE MAIN STAGE: Rich High-Impact Content with Micro-Animations            */}
         {/* ========================================================================= */}
-        <div className="relative flex-1 w-full my-3 flex items-center justify-center overflow-hidden">
+        <div className="relative flex-1 w-full my-1.5 lg:my-2 xl:my-3 flex items-center justify-center overflow-hidden">
           <AnimatePresence mode="wait" custom={direction}>
 
             {/* --------------------------------------------------------------------- */}
@@ -1023,90 +1023,90 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                 initial="enter"
                 animate="center"
                 exit="exit"
-                className="w-full grid grid-cols-12 gap-8 lg:gap-10 items-center"
+                className="w-full grid grid-cols-12 gap-6 lg:gap-6 xl:gap-10 items-center"
               >
                 {/* Left Story Column */}
-                <div className="col-span-12 lg:col-span-6 space-y-3.5 text-left">
+                <div className="col-span-12 lg:col-span-6 space-y-2 lg:space-y-2 xl:space-y-3 text-left">
                   <motion.div
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-purple-300 dark:border-purple-500/40 bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400 text-xs font-mono font-bold shadow-[0_0_15px_rgba(168,85,247,0.15)] dark:shadow-[0_0_15px_rgba(168,85,247,0.25)]"
+                    className="inline-flex items-center gap-1.5 px-3 py-0.5 xl:py-1 rounded-full border border-purple-300 dark:border-purple-500/40 bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400 text-xs font-mono font-bold shadow-[0_0_15px_rgba(168,85,247,0.15)] dark:shadow-[0_0_15px_rgba(168,85,247,0.25)]"
                   >
                     <Activity className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400 animate-pulse" />
                     <span>⭐ Culmination • GitHub Analytics SaaS</span>
                   </motion.div>
 
-                  <h3 className="text-3xl lg:text-4xl font-extrabold font-outfit text-foreground leading-tight">
+                  <h3 className="text-2xl sm:text-3xl lg:text-3xl xl:text-4xl font-extrabold font-outfit text-foreground leading-tight">
                     DevPulse <span className="text-amber-400">⭐</span>
                   </h3>
 
-                  <p className="text-sm text-muted-foreground font-grotesk leading-relaxed">
-                    A full-stack GitHub telemetry platform and dynamic widget generator transforming raw developer contributions into interactive real-time visual insights, commit streaks, PR tracking, and AI-powered tech stack evolution charts.
+                  <p className="text-xs sm:text-[13px] xl:text-sm text-muted-foreground font-grotesk leading-snug xl:leading-relaxed">
+                    A full-stack GitHub telemetry platform and dynamic SVG widget generator transforming developer contributions into real-time visual insights, commit streaks, and live repository metrics.
                   </p>
 
                   {/* Core Platform Capabilities with Micro-Animations */}
-                  <div className="grid grid-cols-3 gap-2.5">
-                    <AnimatedMetricCard delay={0.05} className="p-2.5 rounded-xl bg-card/80 border border-purple-200 dark:border-purple-500/30 text-center hover:border-purple-400/50">
-                      <span className="text-base font-extrabold text-purple-600 dark:text-purple-300 font-outfit block">GraphQL v4</span>
-                      <span className="text-[10px] text-muted-foreground font-mono">GitHub API Engine</span>
+                  <div className="grid grid-cols-3 gap-2 xl:gap-2.5">
+                    <AnimatedMetricCard delay={0.05} className="p-1.5 xl:p-2.5 rounded-xl bg-card/80 border border-purple-200 dark:border-purple-500/30 text-center hover:border-purple-400/50">
+                      <span className="text-sm xl:text-base font-extrabold text-purple-600 dark:text-purple-300 font-outfit block">GraphQL v4</span>
+                      <span className="text-[9px] xl:text-[10px] text-muted-foreground font-mono">GitHub API Engine</span>
                     </AnimatedMetricCard>
-                    <AnimatedMetricCard delay={0.1} className="p-2.5 rounded-xl bg-card/80 border border-purple-200 dark:border-purple-500/30 text-center hover:border-emerald-400/50">
-                      <span className="text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-outfit block">Edge CDN</span>
-                      <span className="text-[10px] text-muted-foreground font-mono">Global Cache &lt; 50ms</span>
+                    <AnimatedMetricCard delay={0.1} className="p-1.5 xl:p-2.5 rounded-xl bg-card/80 border border-purple-200 dark:border-purple-500/30 text-center hover:border-emerald-400/50">
+                      <span className="text-sm xl:text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-outfit block">Edge CDN</span>
+                      <span className="text-[9px] xl:text-[10px] text-muted-foreground font-mono">Global Cache &lt; 50ms</span>
                     </AnimatedMetricCard>
-                    <AnimatedMetricCard delay={0.15} className="p-2.5 rounded-xl bg-card/80 border border-purple-200 dark:border-purple-500/30 text-center hover:border-amber-400/50">
-                      <span className="text-base font-extrabold text-amber-600 dark:text-amber-400 font-outfit block">Custom SVG</span>
-                      <span className="text-[10px] text-muted-foreground font-mono">Real-Time Badges</span>
+                    <AnimatedMetricCard delay={0.15} className="p-1.5 xl:p-2.5 rounded-xl bg-card/80 border border-purple-200 dark:border-purple-500/30 text-center hover:border-amber-400/50">
+                      <span className="text-sm xl:text-base font-extrabold text-amber-600 dark:text-amber-400 font-outfit block">Custom SVG</span>
+                      <span className="text-[9px] xl:text-[10px] text-muted-foreground font-mono">Real-Time Badges</span>
                     </AnimatedMetricCard>
                   </div>
 
                   {/* Problem & Solution */}
-                  <div className="grid grid-cols-2 gap-2.5">
-                    <motion.div whileHover={{ scale: 1.02 }} className="p-2.5 rounded-xl bg-card/80 border border-purple-200 dark:border-purple-500/30 backdrop-blur-xs transition-colors hover:border-purple-400/30">
-                      <span className="text-[11px] font-bold text-foreground font-outfit block mb-1">🎯 Problem</span>
-                      <p className="text-[11px] text-muted-foreground font-grotesk leading-snug">
+                  <div className="grid grid-cols-2 gap-2 xl:gap-2.5">
+                    <motion.div whileHover={{ scale: 1.02 }} className="p-2 xl:p-2.5 rounded-xl bg-card/80 border border-purple-200 dark:border-purple-500/30 backdrop-blur-xs transition-colors hover:border-purple-400/30">
+                      <span className="text-[10.5px] xl:text-[11px] font-bold text-foreground font-outfit block mb-0.5 xl:mb-1">🎯 Problem</span>
+                      <p className="text-[10px] xl:text-[11px] text-muted-foreground font-grotesk leading-tight xl:leading-snug">
                         Developers need an automated, visually striking way to showcase live metrics on portfolios without manual updates.
                       </p>
                     </motion.div>
-                    <motion.div whileHover={{ scale: 1.02 }} className="p-2.5 rounded-xl bg-card/80 border border-purple-200 dark:border-purple-500/30 backdrop-blur-xs transition-colors hover:border-purple-400/30">
-                      <span className="text-[11px] font-bold text-foreground font-outfit block mb-1">🚀 Solution</span>
-                      <p className="text-[11px] text-muted-foreground font-grotesk leading-snug">
+                    <motion.div whileHover={{ scale: 1.02 }} className="p-2 xl:p-2.5 rounded-xl bg-card/80 border border-purple-200 dark:border-purple-500/30 backdrop-blur-xs transition-colors hover:border-purple-400/30">
+                      <span className="text-[10.5px] xl:text-[11px] font-bold text-foreground font-outfit block mb-0.5 xl:mb-1">🚀 Solution</span>
+                      <p className="text-[10px] xl:text-[11px] text-muted-foreground font-grotesk leading-tight xl:leading-snug">
                         Engineered on-the-fly SVG generation engine with GitHub GraphQL API integration and Edge CDN caching.
                       </p>
                     </motion.div>
                   </div>
 
                   {/* Feature Highlights */}
-                  <div className="space-y-1.5 text-xs text-muted-foreground font-grotesk">
-                    <motion.div initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="flex items-center gap-2">
+                  <div className="space-y-1 xl:space-y-1.5 text-[11px] xl:text-xs text-muted-foreground font-grotesk">
+                    <motion.div initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="flex items-center gap-1.5 xl:gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400 shrink-0" />
                       <span>Embeddable dynamic SVG telemetry widgets for GitHub READMEs and portfolios</span>
                     </motion.div>
-                    <motion.div initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.25 }} className="flex items-center gap-2">
+                    <motion.div initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.25 }} className="flex items-center gap-1.5 xl:gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400 shrink-0" />
                       <span>Privacy-first zero-storage architecture querying public GitHub endpoints directly</span>
                     </motion.div>
                   </div>
 
                   {/* Tech Stack Pills */}
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {["React", "GitHub API", "Tailwind CSS", "Framer Motion", "GraphQL", "Edge Functions"].map((t) => (
-                      <TechTag key={t} tag={t} />
+                  <div className="flex flex-wrap gap-1 xl:gap-1.5 pt-0.5 xl:pt-1">
+                    {["React", "GitHub API", "Tailwind CSS", "GraphQL", "Framer Motion", "Edge Functions"].map((t) => (
+                      <TechTag key={t} tag={t} className="px-2 py-0.5 xl:px-2.5 xl:py-1 text-[11px] xl:text-xs" />
                     ))}
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex items-center gap-3 pt-1">
+                  <div className="flex items-center gap-2.5 pt-0.5 xl:pt-1">
                     <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                      <Button asChild className="bg-purple-600 hover:bg-purple-700 text-white h-9 px-4 text-xs font-semibold shadow-lg shadow-purple-600/30" onClick={() => trackEvent("click", "demo", "DevPulse")}>
+                      <Button asChild className="bg-purple-600 hover:bg-purple-700 text-white h-8 xl:h-9 px-3.5 xl:px-4 text-xs font-semibold shadow-lg shadow-purple-600/30" onClick={() => trackEvent("click", "demo", "DevPulse")}>
                         <a href="https://devpulseweb.netlify.app/" target="_blank" rel="noopener noreferrer">
                           <ExternalLink className="w-4 h-4 mr-2" /> Launch DevPulse
                         </a>
                       </Button>
                     </motion.div>
                     <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                      <Button asChild size="icon" variant="outline" className="w-9 h-9 rounded-full border-purple-300 dark:border-purple-500/40 text-purple-600 dark:text-purple-400 hover:border-purple-400" onClick={() => trackEvent("click", "github_project", "DevPulse")}>
+                      <Button asChild size="icon" variant="outline" className="w-8 h-8 xl:w-9 xl:h-9 rounded-full border-purple-300 dark:border-purple-500/40 text-purple-600 dark:text-purple-400 hover:border-purple-400" onClick={() => trackEvent("click", "github_project", "DevPulse")}>
                         <a href="https://github.com/ComradeMohan" target="_blank" rel="noopener noreferrer" title="GitHub">
                           <Github className="w-4 h-4" />
                         </a>
@@ -1116,7 +1116,7 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                 </div>
 
                 {/* Right Visual Column: Glowing DevPulse Analytics Terminal + Live Heatmap Matrix */}
-                <div className="col-span-12 lg:col-span-6 flex flex-col justify-center gap-3">
+                <div className="col-span-12 lg:col-span-6 flex flex-col justify-center gap-2 xl:gap-3">
                   <motion.div
                     whileHover={{ scale: 1.015 }}
                     transition={{ duration: 0.3 }}
@@ -1142,8 +1142,8 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                     <div className="absolute inset-0 rounded-2xl border-2 border-purple-300/80 dark:border-purple-500/50 pointer-events-none transition-opacity duration-300 group-hover:opacity-0" />
 
                     {/* Inner Terminal Body */}
-                    <div className="relative z-10 w-full p-5 rounded-[14px] bg-white/95 dark:bg-[#0d0918]/95 backdrop-blur-md space-y-3.5 transition-colors duration-300">
-                      <div className="flex items-center justify-between border-b border-purple-200/70 dark:border-purple-500/30 pb-2.5">
+                    <div className="relative z-10 w-full p-3.5 lg:p-3.5 xl:p-5 rounded-[14px] bg-white/95 dark:bg-[#0d0918]/95 backdrop-blur-md space-y-2 lg:space-y-2.5 xl:space-y-3.5 transition-colors duration-300">
+                      <div className="flex items-center justify-between border-b border-purple-200/70 dark:border-purple-500/30 pb-1.5 xl:pb-2.5">
                         <div className="flex items-center gap-2">
                           <div className="w-3 h-3 rounded-full bg-red-500/80" />
                           <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
@@ -1156,30 +1156,30 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                       </div>
 
                       {/* Developer Telemetry Highlight Cards */}
-                      <div className="grid grid-cols-3 gap-2.5">
-                        <AnimatedMetricCard delay={0.05} className="p-2.5 rounded-xl bg-purple-50/80 dark:bg-purple-950/40 border border-purple-200/80 dark:border-purple-500/30 text-center hover:border-purple-400/50 shadow-xs">
-                          <span className="text-lg font-extrabold text-purple-700 dark:text-purple-300 font-outfit block">4,500+</span>
-                          <span className="text-[9px] text-muted-foreground font-mono">Total Commits</span>
+                      <div className="grid grid-cols-3 gap-2 xl:gap-2.5">
+                        <AnimatedMetricCard delay={0.05} className="p-1.5 xl:p-2.5 rounded-xl bg-purple-50/80 dark:bg-purple-950/40 border border-purple-200/80 dark:border-purple-500/30 text-center hover:border-purple-400/50 shadow-xs">
+                          <span className="text-base xl:text-lg font-extrabold text-purple-700 dark:text-purple-300 font-outfit block">4,500+</span>
+                          <span className="text-[8.5px] xl:text-[9px] text-muted-foreground font-mono">Total Commits</span>
                         </AnimatedMetricCard>
-                        <AnimatedMetricCard delay={0.1} className="p-2.5 rounded-xl bg-purple-50/80 dark:bg-purple-950/40 border border-purple-200/80 dark:border-purple-500/30 text-center hover:border-emerald-400/50 shadow-xs">
-                          <span className="text-lg font-extrabold text-emerald-600 dark:text-emerald-400 font-outfit block">229 Days</span>
-                          <span className="text-[9px] text-muted-foreground font-mono">Active Streak</span>
+                        <AnimatedMetricCard delay={0.1} className="p-1.5 xl:p-2.5 rounded-xl bg-purple-50/80 dark:bg-purple-950/40 border border-purple-200/80 dark:border-purple-500/30 text-center hover:border-emerald-400/50 shadow-xs">
+                          <span className="text-base xl:text-lg font-extrabold text-emerald-600 dark:text-emerald-400 font-outfit block">229 Days</span>
+                          <span className="text-[8.5px] xl:text-[9px] text-muted-foreground font-mono">Active Streak</span>
                         </AnimatedMetricCard>
-                        <AnimatedMetricCard delay={0.15} className="p-2.5 rounded-xl bg-purple-50/80 dark:bg-purple-950/40 border border-purple-200/80 dark:border-purple-500/30 text-center hover:border-amber-400/50 shadow-xs">
-                          <span className="text-lg font-extrabold text-amber-600 dark:text-amber-400 font-outfit block">Top 1%</span>
-                          <span className="text-[9px] text-muted-foreground font-mono">Velocity Rank</span>
+                        <AnimatedMetricCard delay={0.15} className="p-1.5 xl:p-2.5 rounded-xl bg-purple-50/80 dark:bg-purple-950/40 border border-purple-200/80 dark:border-purple-500/30 text-center hover:border-amber-400/50 shadow-xs">
+                          <span className="text-base xl:text-lg font-extrabold text-amber-600 dark:text-amber-400 font-outfit block">Top 1%</span>
+                          <span className="text-[8.5px] xl:text-[9px] text-muted-foreground font-mono">Velocity Rank</span>
                         </AnimatedMetricCard>
                       </div>
 
                       {/* Authentic Miniature GitHub Contribution Heatmap with Micro-Interactivity */}
-                      <div className="p-3 rounded-xl bg-purple-50/50 dark:bg-purple-950/20 border border-purple-200/60 dark:border-purple-500/20 space-y-2">
-                        <div className="flex items-center justify-between text-[11px] font-mono">
+                      <div className="p-2 lg:p-2.5 xl:p-3 rounded-xl bg-purple-50/50 dark:bg-purple-950/20 border border-purple-200/60 dark:border-purple-500/20 space-y-1 xl:space-y-2">
+                        <div className="flex items-center justify-between text-[10px] xl:text-[11px] font-mono">
                           <span className="text-purple-800 dark:text-purple-300 font-bold flex items-center gap-1.5">
                             <PulsingDot colorClass="bg-emerald-500 dark:bg-emerald-400" /> Contribution Activity (12 Weeks)
                           </span>
                           <span className="text-emerald-600 dark:text-emerald-400 font-semibold">1,840 commits</span>
                         </div>
-                        <div className="grid grid-flow-col grid-rows-5 gap-1.5 justify-between">
+                        <div className="grid grid-flow-col grid-rows-5 gap-1 xl:gap-1.5 justify-between">
                           {Array.from({ length: 70 }).map((_, i) => {
                             const levels = [
                               "bg-purple-100/90 dark:bg-purple-950/40",
@@ -1195,7 +1195,7 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                                 key={i}
                                 whileHover={{ scale: 1.4, zIndex: 10 }}
                                 transition={{ duration: 0.15 }}
-                                className={`w-2.5 h-2.5 rounded-xs ${level} cursor-pointer transition-shadow hover:shadow-[0_0_8px_rgba(52,211,153,0.6)]`}
+                                className={`w-2 h-2 xl:w-2.5 xl:h-2.5 rounded-[2px] ${level} cursor-pointer transition-shadow hover:shadow-[0_0_8px_rgba(52,211,153,0.6)]`}
                               />
                             );
                           })}
@@ -1203,12 +1203,12 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                       </div>
 
                       {/* Language Breakdown Bar with Stagger Animation */}
-                      <div className="space-y-1.5">
-                        <div className="flex justify-between text-[11px] font-mono text-muted-foreground">
+                      <div className="space-y-1 xl:space-y-1.5">
+                        <div className="flex justify-between text-[10px] xl:text-[11px] font-mono text-muted-foreground">
                           <span>Language Distribution</span>
                           <span className="text-purple-700 dark:text-purple-300 font-semibold">TypeScript 48% • Python 26% • Java 18%</span>
                         </div>
-                        <div className="h-2 rounded-full bg-slate-200 dark:bg-secondary/80 overflow-hidden flex">
+                        <div className="h-1.5 xl:h-2 rounded-full bg-slate-200 dark:bg-secondary/80 overflow-hidden flex">
                           <motion.div initial={{ width: 0 }} animate={{ width: "48%" }} transition={{ duration: 0.8, delay: 0.1 }} className="h-full bg-blue-500" title="TypeScript 48%" />
                           <motion.div initial={{ width: 0 }} animate={{ width: "26%" }} transition={{ duration: 0.8, delay: 0.2 }} className="h-full bg-yellow-500" title="Python 26%" />
                           <motion.div initial={{ width: 0 }} animate={{ width: "18%" }} transition={{ duration: 0.8, delay: 0.3 }} className="h-full bg-orange-500" title="Java 18%" />
@@ -1217,11 +1217,11 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                       </div>
 
                       {/* Live API Endpoint & CDN Status */}
-                      <div className="p-2 rounded-xl bg-purple-50/80 dark:bg-purple-950/30 border border-purple-200/80 dark:border-purple-500/20 text-xs font-mono text-purple-900 dark:text-purple-200/80 flex items-center justify-between">
-                        <span className="text-[11px] text-muted-foreground flex items-center gap-1.5">
+                      <div className="p-1.5 xl:p-2 rounded-xl bg-purple-50/80 dark:bg-purple-950/30 border border-purple-200/80 dark:border-purple-500/20 text-[10px] xl:text-xs font-mono text-purple-900 dark:text-purple-200/80 flex items-center justify-between">
+                        <span className="text-[10px] xl:text-[11px] text-muted-foreground flex items-center gap-1.5">
                           <Zap className="w-3 h-3 text-purple-600 dark:text-purple-400" /> GET /api/widget?user=ComradeMohan
                         </span>
-                        <span className="text-emerald-600 dark:text-emerald-400 font-bold text-[11px] flex items-center gap-1.5">
+                        <span className="text-emerald-600 dark:text-emerald-400 font-bold text-[10px] xl:text-[11px] flex items-center gap-1.5">
                           <PulsingDot colorClass="bg-emerald-500 dark:bg-emerald-400" /> Cached &lt; 42ms • 200 OK
                         </span>
                       </div>

@@ -949,7 +949,7 @@ const ProjectsSection = () => {
     <section id="projects" className="pt-2 pb-12 sm:pt-3 sm:pb-16 scroll-mt-20 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header: Sticky on mobile under navbar so 'My Projects' stays visible while cards stack below it */}
-        <div className="sticky top-[74px] z-40 bg-background/85 backdrop-blur-md py-2 sm:static sm:bg-transparent sm:backdrop-blur-none sm:py-0 text-center mb-4 sm:mb-8 transition-all">
+        <div className="sticky top-[74px] z-40 bg-background/85 backdrop-blur-md py-2 sm:static sm:bg-transparent sm:backdrop-blur-none sm:py-0 text-center mb-0 transition-all">
           <h2 className="text-4xl font-extrabold mb-3 sm:mb-4 font-outfit">
             My <span className="text-primary">Projects</span>
           </h2>

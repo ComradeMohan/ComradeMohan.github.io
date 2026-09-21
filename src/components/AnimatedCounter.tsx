@@ -3,12 +3,14 @@ import React, { useEffect, useState, useRef } from "react";
 interface AnimatedCounterProps {
   value: string | number;
   duration?: number;
+  delay?: number;
   className?: string;
 }
 
 export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   value,
   duration = 1600,
+  delay = 0,
   className = "",
 }) => {
   const [displayValue, setDisplayValue] = useState<string>("0");
@@ -92,9 +94,20 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
       }
     };
 
-    animationFrameId = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [value, duration, isVisible]);
+    let timerId: ReturnType<typeof setTimeout> | null = null;
+    if (delay > 0) {
+      timerId = setTimeout(() => {
+        animationFrameId = requestAnimationFrame(step);
+      }, delay);
+    } else {
+      animationFrameId = requestAnimationFrame(step);
+    }
+
+    return () => {
+      if (timerId) clearTimeout(timerId);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [value, duration, delay, isVisible]);
 
   return (
     <span ref={elementRef} className={className}>

@@ -368,11 +368,11 @@ export default function CertificationsSection() {
 
           {/* Main Section Header */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-10 sm:mb-12"
+            viewport={{ once: true, amount: 0.2, margin: "0px 0px -40px 0px" }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="text-center mb-10 sm:mb-12 transform-gpu"
           >
             <h2 className="text-4xl font-extrabold mb-3 font-outfit">
               <span className="text-primary">Certifications</span>
@@ -385,11 +385,11 @@ export default function CertificationsSection() {
 
           {/* Featured Certification */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="mb-16"
+            viewport={{ once: true, amount: 0.1, margin: "0px 0px -40px 0px" }}
+            transition={{ duration: 0.5, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+            className="mb-14 sm:mb-16 transform-gpu"
           >
             <div className="relative p-6 md:p-8 rounded-2xl bg-card/60 backdrop-blur-sm border-2 border-primary/30 shadow-[0_0_30px_rgba(234,88,12,0.05)] overflow-hidden group">
 
@@ -404,9 +404,9 @@ export default function CertificationsSection() {
                 <OracleBadge />
 
                 {/* Middle Side: Details & Checklist */}
-                <div className="flex-1 space-y-6 text-left">
+                <div className="flex-1 w-full space-y-4 sm:space-y-6 text-left">
                   <div className="space-y-2">
-                    <h3 className="text-2xl md:text-3xl font-bold font-outfit text-foreground leading-tight">
+                    <h3 className="text-lg sm:text-2xl md:text-3xl font-bold font-outfit text-foreground leading-snug sm:leading-tight">
                       {featuredCert.title}
                     </h3>
 
@@ -423,13 +423,13 @@ export default function CertificationsSection() {
                   </div>
 
                   {featuredCert.description && (
-                    <p className="text-sm md:text-base text-muted-foreground font-grotesk leading-relaxed">
+                    <p className="hidden sm:block text-sm md:text-base text-muted-foreground font-grotesk leading-relaxed">
                       {featuredCert.description}
                     </p>
                   )}
 
                   {/* Skills Checklist */}
-                  <div className="space-y-3">
+                  <div className="hidden sm:block space-y-3">
                     <h4 className="text-xs uppercase tracking-wider font-semibold text-muted-foreground font-outfit">
                       Skills Validated
                     </h4>
@@ -514,7 +514,13 @@ export default function CertificationsSection() {
           <div className="">
 
             {/* Header Title & Subtitle */}
-            <div className="mb-6 text-left">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2, margin: "0px 0px -30px 0px" }}
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              className="mb-6 text-left transform-gpu"
+            >
               <div className="flex items-center gap-2.5 mb-1">
                 <Trophy className="w-6 h-6 text-amber-500 shrink-0" />
                 <h3 className="text-2xl md:text-3xl font-extrabold font-outfit text-foreground tracking-tight">
@@ -527,10 +533,16 @@ export default function CertificationsSection() {
                   : "Professional certifications and achievements"}
               </p>
               <div className="w-12 h-0.5 bg-gradient-to-r from-amber-500 via-primary to-transparent mt-2 rounded-full" />
-            </div>
+            </motion.div>
 
             {/* Controls Bar: Top Pill Counter, Filter Dropdown & View Mode Switcher */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-6">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2, margin: "0px 0px -20px 0px" }}
+              transition={{ duration: 0.35, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+              className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-6 transform-gpu"
+            >
               {/* Left Counter Pill */}
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-card/90 border border-border/70 backdrop-blur-md shadow-sm text-xs font-semibold font-grotesk text-foreground w-fit">
                 <Calendar className="w-4 h-4 text-primary" />
@@ -590,7 +602,7 @@ export default function CertificationsSection() {
                   </button>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
 
 
@@ -602,11 +614,15 @@ export default function CertificationsSection() {
                 {filteredCerts.map((cert, i) => (
                   <motion.div
                     key={cert.id + cert.title}
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 18 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.05, duration: 0.4 }}
-                    className={`relative p-5 rounded-2xl bg-card/90 backdrop-blur-md border border-border/60 border-l-4 ${cert.theme.borderLeft} ${cert.theme.borderGlow} transition-all duration-300 group flex flex-col justify-between overflow-hidden shadow-lg text-left`}
+                    viewport={{ once: true, amount: 0.08, margin: "0px 0px -40px 0px" }}
+                    transition={{
+                      duration: 0.38,
+                      delay: (i % 3) * 0.05,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className={`relative p-5 rounded-2xl bg-card/90 backdrop-blur-md border border-border/60 border-l-4 ${cert.theme.borderLeft} ${cert.theme.borderGlow} transition-shadow transition-colors duration-300 group flex flex-col justify-between overflow-hidden shadow-lg text-left transform-gpu will-change-transform`}
                   >
                     <div>
                       {/* Top Header: Logo Icon, Title & Org, and Circle Number Badge */}
@@ -709,11 +725,15 @@ export default function CertificationsSection() {
                 {filteredCerts.map((cert, i) => (
                   <motion.div
                     key={cert.id + cert.title}
-                    initial={{ opacity: 0, y: 15 }}
+                    initial={{ opacity: 0, y: 14 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.04, duration: 0.3 }}
-                    className={`relative p-4 rounded-2xl bg-card/90 backdrop-blur-md border border-border/60 border-l-4 ${cert.theme.borderLeft} ${cert.theme.borderGlow} transition-all duration-300 group flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-md text-left`}
+                    viewport={{ once: true, amount: 0.12, margin: "0px 0px -30px 0px" }}
+                    transition={{
+                      duration: 0.32,
+                      delay: Math.min((i % 3) * 0.04, 0.08),
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className={`relative p-4 rounded-2xl bg-card/90 backdrop-blur-md border border-border/60 border-l-4 ${cert.theme.borderLeft} ${cert.theme.borderGlow} transition-shadow transition-colors duration-300 group flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-md text-left transform-gpu will-change-transform`}
                   >
                     <div className="flex items-start md:items-center gap-3.5 flex-1 min-w-0">
                       {/* Logo Squircle Icon Container */}
@@ -802,9 +822,9 @@ export default function CertificationsSection() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="border-t border-border/40 pt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            viewport={{ once: true, amount: 0.15, margin: "0px 0px -30px 0px" }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="border-t border-border/40 pt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 transform-gpu"
           >
             {/* Card 1 */}
             <div className="flex items-center space-x-4 p-4 rounded-2xl border border-border/40 bg-card/30 backdrop-blur-md shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300 group">

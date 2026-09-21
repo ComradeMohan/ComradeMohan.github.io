@@ -1,266 +1,347 @@
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
-import { MapPin, Award, GraduationCap, Calendar, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import {
+  MapPin,
+  GraduationCap,
+  Calendar,
+  ArrowRight,
+  Zap,
+  Layers,
+  Code2,
+  BarChart3
+} from "lucide-react";
+import { Link } from "react-router-dom";
+import ScrollHighlightSpan from "./motion/ScrollHighlightSpan";
+import EducationProgressionRoadmap from "./EducationProgressionRoadmap";
 
 const education = [
   {
     degree: "B.E. Computer Science & Engineering",
     school: "Saveetha School of Engineering (SIMATS)",
-    duration: "2022 – 2026",
+    duration: "2022 — 2026",
     location: "Chennai, Tamil Nadu",
     grade: "CGPA: 8.646 / 10",
-    isCurrent: true,
   },
   {
     degree: "Intermediate (MPC + Computer Science)",
     school: "Loyola Public School",
-    duration: "2020 – 2022",
+    duration: "2020 — 2022",
     location: "Guntur, Andhra Pradesh",
     grade: "Percentage: 81.6%",
-    isCurrent: false,
   }
 ];
-
-const interests = [
-  "💻 Full Stack Development",
-  "☕ Java & Software Engineering",
-  "🗄️ Database Management",
-  "🚀 Web Application Development",
-];
-
-const StaggeredHighlight = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
-  <motion.span
-    initial={{
-      color: "hsl(var(--muted-foreground))",
-      textShadow: "0 0 0px transparent"
-    }}
-    whileInView={{
-      color: "hsl(var(--primary))",
-      textShadow: "0 0 14px hsl(var(--primary) / 0.45)"
-    }}
-    viewport={{ once: true, amount: 0.3 }}
-    transition={{ duration: 0.65, delay, ease: "easeOut" }}
-    className="font-medium inline transition-colors"
-  >
-    {children}
-  </motion.span>
-);
 
 const AboutSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
 
-  // Scroll tracking for section depth
   const { scrollYProgress: sectionProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
   });
 
-  // Layered subtle parallax offsets
-  const leftColY = useTransform(sectionProgress, [0, 1], prefersReducedMotion ? [0, 0] : [30, -30]);
-  const rightColY = useTransform(sectionProgress, [0, 1], prefersReducedMotion ? [0, 0] : [50, -20]);
-
-  // Timeline-specific scroll progress for drawing the line
   const { scrollYProgress: timelineProgress } = useScroll({
     target: timelineRef,
-    offset: ["start 75%", "end 60%"],
+    offset: ["start 85%", "center 50%"],
   });
 
-  const timelineScaleY = useSpring(timelineProgress, {
-    stiffness: 220,
-    damping: 30,
-    restDelta: 0.001,
-  });
+  const timelineLineProgress = useTransform(
+    timelineProgress,
+    [0, 0.45],
+    prefersReducedMotion ? [1, 1] : [0, 1]
+  );
+
+  const subtleY = useTransform(sectionProgress, [0, 1], prefersReducedMotion ? [0, 0] : [10, -10]);
 
   return (
     <section
       ref={sectionRef}
       id="about"
-      className="pt-2 pb-10 sm:pt-3 sm:pb-14 scroll-mt-20 relative"
+      className="relative scroll-mt-14 lg:scroll-mt-16 pt-0 pb-3 sm:pb-5 lg:pb-6 flex flex-col justify-center min-h-[calc(100vh-76px)] overflow-hidden"
     >
-      {/* Visual Transition Bridge from Hero into About */}
-      <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-background/0 via-background/40 to-background pointer-events-none -z-10" />
+      {/* Visual Transition Glow from Hero into About */}
+      <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-background/0 via-background/40 to-background pointer-events-none -z-10" />
 
       {/* Subtle background ambient glows */}
-      <div className="absolute top-1/3 left-0 w-80 h-80 bg-primary/8 rounded-full blur-3xl pointer-events-none -z-10" />
-      <div className="absolute bottom-1/4 right-0 w-80 h-80 bg-accent/8 rounded-full blur-3xl pointer-events-none -z-10" />
+      <div className="absolute top-1/4 left-[-100px] w-80 h-80 bg-[#FF4500]/5 dark:bg-[#FF4500]/8 rounded-full blur-3xl pointer-events-none -z-10" />
+      <div className="absolute bottom-1/4 right-[-100px] w-80 h-80 bg-orange-600/5 dark:bg-orange-600/8 rounded-full blur-3xl pointer-events-none -z-10" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 flex flex-col justify-between h-full">
 
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-8 sm:mb-10"
-        >
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-outfit tracking-tight mb-2">
-            About <span className="text-primary">Me</span>
+        {/* ========================================================================= */}
+        {/* TOP SECTION HEADER: Centered Title & Subtitle                             */}
+        {/* ========================================================================= */}
+        <div className="text-center mb-3 sm:mb-4">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-outfit tracking-tight text-foreground dark:text-white leading-none">
+            About <span className="text-[#FF5722]">Me</span>
           </h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full" />
-        </motion.div>
+          <p className="text-xs sm:text-[13px] text-muted-foreground dark:text-slate-400 font-grotesk mt-1">
+            From curiosity to real-world software.
+          </p>
+        </div>
 
-        {/* 2-Column Layered Composition */}
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+        {/* ========================================================================= */}
+        {/* 2-COLUMN BALANCED DASHBOARD: WHO I AM (Left) & EDUCATION JOURNEY (Right)   */}
+        {/* ========================================================================= */}
+        <motion.div
+          style={{ y: subtleY }}
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5 }}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-3.5 lg:gap-4 items-stretch relative"
+        >
 
-          {/* Left Column (5 cols): Biography & Core Interests */}
-          <motion.div
-            style={{ y: leftColY }}
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6 }}
-            className="lg:col-span-6 space-y-8"
-          >
-            <div className="space-y-4 p-6 sm:p-8 rounded-2xl bg-card/70 border border-border/80 backdrop-blur-xs shadow-md">
-              <h3 className="text-2xl sm:text-3xl font-bold font-outfit leading-snug">
+          {/* ========================================================================= */}
+          {/* LEFT COLUMN: WHO I AM + CURRENT FOCUS + CTA                               */}
+          {/* ========================================================================= */}
+          <div className="rounded-2xl bg-card/90 dark:bg-[#0c1017]/95 border border-border/80 dark:border-[#22283a]/80 hover:border-[#FF5722]/40 backdrop-blur-md p-5 sm:p-6 flex flex-col justify-between transition-all duration-300 shadow-md dark:shadow-xl dark:shadow-black/30 group relative">
+            <div className="space-y-3 sm:space-y-3.5">
+              {/* Header Pill */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#FF4500] shadow-[0_0_8px_#FF4500] shrink-0" />
+                  <span className="text-[11px] sm:text-xs font-bold tracking-widest text-foreground/90 dark:text-slate-200 uppercase font-mono">
+                    WHO I AM
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono text-muted-foreground dark:text-slate-400 tracking-wider">
+                  // DEVELOPER AT HEART
+                </span>
+              </div>
+
+              {/* Headline */}
+              <h3 className="text-xl sm:text-2xl lg:text-[25px] font-bold font-outfit text-foreground dark:text-white tracking-tight leading-snug">
                 Passionate about{" "}
-                <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#FF5722] via-[#FF6B4A] to-[#f43f5e] bg-clip-text text-transparent">
                   Software Development
                 </span>
               </h3>
 
-              <p className="text-muted-foreground text-sm sm:text-base leading-relaxed font-grotesk">
-                Final-year Computer Science and Engineering student at Saveetha School of Engineering (SIMATS), Chennai, with a{" "}
-                <StaggeredHighlight delay={0.2}>CGPA of 8.646</StaggeredHighlight>. I enjoy building practical software that solves real problems and can be used beyond the classroom.
-              </p>
-              <p className="text-muted-foreground text-sm sm:text-base leading-relaxed font-grotesk">
-                I have independently built{" "}
-                <StaggeredHighlight delay={0.4}>SaveethaHub</StaggeredHighlight>, an academic platform using React, Supabase, Firebase, and AI features, and{" "}
-                <StaggeredHighlight delay={0.6}>UniVault</StaggeredHighlight>, an Android exam-preparation app published on the Google Play Store. I also hold the{" "}
-                <StaggeredHighlight delay={0.8}>Oracle Certified Professional: Java SE 17 Developer</StaggeredHighlight>{" "}
-                certification and am strengthening my skills in data structures, algorithms, and full-stack development.
-              </p>
-            </div>
+              {/* Bio Paragraphs with scroll-driven word-by-word highlight */}
+              <div className="space-y-2.5 text-xs sm:text-[13px] text-foreground/80 dark:text-slate-300 font-grotesk leading-relaxed">
+                <p>
+                  Final-year Computer Science and Engineering student at{" "}
+                  <ScrollHighlightSpan startIndex={0}>
+                    Saveetha School of Engineering (SIMATS)
+                  </ScrollHighlightSpan>
+                  , Chennai, with a{" "}
+                  <ScrollHighlightSpan startIndex={5}>
+                    CGPA of 8.646
+                  </ScrollHighlightSpan>
+                  . I enjoy building practical software that solves real problems and can be used beyond the classroom.
+                </p>
+                <p>
+                  I have independently built{" "}
+                  <ScrollHighlightSpan startIndex={8}>
+                    SaveethaHub
+                  </ScrollHighlightSpan>
+                  , an academic platform using React, Supabase, Firebase, and AI features, and{" "}
+                  <ScrollHighlightSpan startIndex={9}>
+                    UniVault
+                  </ScrollHighlightSpan>
+                  , an Android exam-preparation app published on the Google Play Store. I also hold the{" "}
+                  <ScrollHighlightSpan startIndex={10}>
+                    Oracle Certified Professional: Java SE 17 Developer
+                  </ScrollHighlightSpan>{" "}
+                  certification and am strengthening my skills in data structures, algorithms, and full-stack development.
+                </p>
+              </div>
 
-            {/* Core Interests: Layered Badges */}
-            <div className="p-6 rounded-2xl bg-card/50 border border-border/70 backdrop-blur-xs">
-              <h4 className="text-xs sm:text-sm font-semibold text-foreground uppercase tracking-wider mb-4 font-outfit flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                Core Interests
-              </h4>
-              <div className="flex flex-wrap gap-2.5">
-                {interests.map((interest, i) => (
-                  <motion.span
-                    key={interest}
-                    whileHover={{ scale: 1.04, y: -2 }}
-                    transition={{ type: "spring", stiffness: 350, damping: 20 }}
-                    className="px-3.5 py-2 rounded-xl bg-secondary/50 border border-border/80 text-xs sm:text-sm text-foreground/90 font-grotesk flex items-center transition-all duration-300 hover:border-primary/40 hover:bg-card/80 cursor-default shadow-xs"
-                  >
-                    {interest}
-                  </motion.span>
-                ))}
+              {/* Sub-card: CURRENT FOCUS */}
+              <div className="rounded-xl bg-secondary/50 dark:bg-[#080c13]/90 border border-border/70 dark:border-white/5 p-2.5 sm:p-3">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-1.5">
+                    <Zap className="w-3.5 h-3.5 text-[#FF5722]" />
+                    <span className="text-[10px] sm:text-[11px] font-bold tracking-wider text-foreground/90 dark:text-slate-200 uppercase font-mono">
+                      CURRENT FOCUS
+                    </span>
+                  </div>
+                  <span className="text-[9px] font-mono text-muted-foreground dark:text-slate-400">
+                    // ALWAYS LEARNING
+                  </span>
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-background dark:bg-[#111622] border border-border/70 dark:border-white/5 text-[10px] sm:text-[11px] font-medium text-foreground/90 dark:text-slate-300 shadow-2xs">
+                    <Layers className="w-3 h-3 text-orange-500 shrink-0" />
+                    <span className="truncate">Data Structures</span>
+                  </div>
+                  <div className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-background dark:bg-[#111622] border border-border/70 dark:border-white/5 text-[10px] sm:text-[11px] font-medium text-foreground/90 dark:text-slate-300 shadow-2xs">
+                    <Code2 className="w-3 h-3 text-pink-500 shrink-0" />
+                    <span className="truncate">Algorithms</span>
+                  </div>
+                  <div className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-background dark:bg-[#111622] border border-border/70 dark:border-white/5 text-[10px] sm:text-[11px] font-medium text-foreground/90 dark:text-slate-300 shadow-2xs">
+                    <BarChart3 className="w-3 h-3 text-blue-500 shrink-0" />
+                    <span className="truncate">Full-Stack Dev</span>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Link to Standalone Biography */}
-            <div className="pt-1">
-              <Button asChild className="rounded-xl border border-primary/30 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-grotesk font-semibold group shadow-xs">
-                <a href="/about">
-                  Read Full Biography & Stats
-                  <span className="inline-block transition-transform duration-300 group-hover:translate-x-1.5 ml-1.5">→</span>
-                </a>
-              </Button>
-            </div>
-          </motion.div>
+            {/* Bottom Row: CTA Button + Handwritten Quote */}
+            <div className="pt-4 sm:pt-5 flex items-center justify-between">
+              <Link
+                to="/about"
+                className="inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full border border-[#FF5722] bg-background dark:bg-[#0c1017] text-[#FF5722] hover:bg-[#FF5722]/10 hover:shadow-[0_0_15px_rgba(255,87,34,0.25)] transition-all duration-300 text-xs font-semibold font-grotesk group"
+              >
+                <span>Read Full Biography & Stats</span>
+                <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+              </Link>
 
-          {/* Right Column (6 cols): Scroll-Progressive Education Timeline */}
-          <motion.div
+              {/* Handwritten note */}
+              <div className="text-[11px] sm:text-xs text-muted-foreground/80 dark:text-slate-400/80 italic font-serif -rotate-3 text-right hidden sm:block leading-tight select-none">
+                Good Software<br />Creates Opportunities.
+              </div>
+            </div>
+          </div>
+
+          {/* ========================================================================= */}
+          {/* RIGHT COLUMN: EDUCATION JOURNEY (CONTENT FIRST ~65%, DECORATIVE VISUAL ~35%) */}
+          {/* ========================================================================= */}
+          <div
             ref={timelineRef}
-            style={{ y: rightColY }}
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6 }}
-            className="lg:col-span-6 space-y-6"
+            className="rounded-2xl bg-card/90 dark:bg-[#0c1017]/95 border border-border/80 dark:border-[#22283a]/80 hover:border-[#FF5722]/40 backdrop-blur-md p-5 sm:p-6 transition-all duration-300 shadow-md dark:shadow-xl dark:shadow-black/30 flex flex-col justify-between relative overflow-hidden group min-h-[320px]"
           >
-            <div className="flex items-center justify-between mb-4">
+            {/* Ambient Background Radial Glow behind Decorative Visual */}
+            <div className="absolute right-[-20px] top-1/2 -translate-y-1/2 w-64 h-64 bg-[#FF4500]/8 dark:bg-[#FF4500]/12 rounded-full blur-3xl pointer-events-none" />
+
+            {/* Card Header */}
+            <div className="flex items-center justify-between pb-3 border-b border-border/60 dark:border-white/5 relative z-10">
               <div className="flex items-center gap-2.5">
-                <GraduationCap className="w-6 h-6 text-primary" />
-                <h3 className="text-2xl font-bold font-outfit">Education Timeline</h3>
+                <GraduationCap className="w-5 h-5 text-[#FF5722]" />
+                <span className="text-xs sm:text-sm font-bold tracking-widest text-foreground/90 dark:text-slate-200 uppercase font-mono">
+                  EDUCATION JOURNEY
+                </span>
               </div>
-              <span className="text-xs font-mono text-muted-foreground px-2.5 py-1 rounded-full bg-secondary/60 border border-border/60">
+              <span className="text-xs sm:text-sm font-mono text-[#FF5722] font-semibold">
                 2020 — 2026
               </span>
             </div>
 
-            {/* Timeline Track Container */}
-            <div className="relative pl-8 sm:pl-10 space-y-8 sm:space-y-10">
+            {/* Main Area: Left (~55% Timeline) & Right (~45% Ascending Milestone Roadmap) */}
+            <div className="grid grid-cols-1 md:grid-cols-[1.12fr_1fr] gap-4 sm:gap-6 py-3.5 relative z-10 items-center h-full">
 
-              {/* Dynamic Scroll-Linked Track Line */}
-              <div className="absolute left-3.5 sm:left-4 top-4 bottom-4 w-4 -translate-x-1/2 flex justify-center pointer-events-none z-0">
-                {/* Background static line */}
-                <div className="w-[2px] h-full bg-border/60 rounded-full" />
-
-                {/* Animated glowing progress line that draws as the user scrolls */}
+              {/* ===================================================================== */}
+              {/* LEFT SIDE: SPACIOUS EDUCATION TIMELINE                                 */}
+              {/* ===================================================================== */}
+              <div className="relative pl-7 sm:pl-8 space-y-6 sm:space-y-7 min-w-0">
+                {/* Continuous Vertical Glowing Line (Draws from top to bottom on scroll) */}
                 <motion.div
-                  className="absolute top-0 w-[2px] h-full bg-gradient-to-b from-primary via-orange-500 to-accent rounded-full shadow-[0_0_12px_hsl(var(--primary)/0.7)]"
-                  style={{ originY: 0, scaleY: prefersReducedMotion ? 1 : timelineScaleY }}
+                  style={{ scaleY: timelineLineProgress, originY: 0 }}
+                  className="absolute left-[11px] sm:left-[13px] top-3 bottom-4 w-[2px] bg-gradient-to-b from-[#FF5722] via-[#FF6B4A] to-[#FF5722]/30"
                 />
+
+                {education.map((edu, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.45, delay: idx * 0.15 }}
+                    className="relative"
+                  >
+                    {/* Glowing Double Concentric Node Ring */}
+                    <div className="absolute -left-7 sm:-left-8 top-1.5 w-6 h-6 rounded-full border-2 border-[#FF5722] bg-card dark:bg-[#0c1017] flex items-center justify-center shadow-[0_0_10px_rgba(255,87,34,0.45)] z-10">
+                      <div className={`w-2 h-2 rounded-full bg-[#FF5722] ${idx === 0 ? "animate-pulse" : ""}`} />
+                    </div>
+
+                    {/* Timeline Item Content: Clean, Full Titles */}
+                    <div className="space-y-1.5 min-w-0">
+                      {/* Duration Pill Tag */}
+                      <div>
+                        <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full border border-[#FF5722]/40 bg-[#FF5722]/10 text-[11px] font-mono text-[#FF5722] font-semibold">
+                          <Calendar className="w-3 h-3" />
+                          <span>{edu.duration}</span>
+                        </span>
+                      </div>
+
+                      {/* Full Degree Title */}
+                      <h4 className="text-sm sm:text-base font-bold text-foreground dark:text-white font-outfit leading-snug tracking-tight">
+                        {edu.degree}
+                      </h4>
+
+                      {/* Institution Name */}
+                      <p className="text-xs sm:text-[13px] text-foreground/80 dark:text-slate-300 font-grotesk leading-normal">
+                        {edu.school}
+                      </p>
+
+                      {/* Location */}
+                      <div className="flex items-center gap-1.5 text-[11px] sm:text-xs text-muted-foreground dark:text-slate-400 font-grotesk pt-0.5">
+                        <MapPin className="w-3.5 h-3.5 text-[#FF5722] shrink-0" />
+                        <span>{edu.location}</span>
+                      </div>
+
+                      {/* Grade Pill Badge */}
+                      <div className="pt-1">
+                        <span className="inline-flex items-center px-3.5 py-1 rounded-full border border-[#FF5722]/60 bg-[#FF5722]/10 text-[#FF5722] dark:text-[#FF7849] text-xs font-mono font-bold">
+                          {edu.grade}
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
 
-              {education.map((edu, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 25, x: 15 }}
-                  whileInView={{ opacity: 1, y: 0, x: 0 }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  transition={{ duration: 0.55, delay: idx * 0.18, ease: "easeOut" }}
-                  className="relative"
-                >
-                  {/* Timeline Milestone Node */}
-                  <motion.span
-                    initial={{ scale: 0, opacity: 0 }}
-                    whileInView={{ scale: 1, opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: 0.15 + idx * 0.18, type: "spring", stiffness: 350, damping: 15 }}
-                    className="absolute -left-8 sm:-left-10 top-5 -translate-x-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-background border-2 border-primary shadow-[0_0_14px_hsl(var(--primary)/0.7)] z-10"
-                  >
-                    <span className={`h-2 w-2 rounded-full ${edu.isCurrent ? "bg-primary animate-pulse" : "bg-muted-foreground/60"}`} />
-                  </motion.span>
+              {/* ===================================================================== */}
+              {/* RIGHT SIDE: ASCENDING EDUCATION PROGRESSION ROADMAP (~45% WIDTH)      */}
+              {/* ===================================================================== */}
+              <div className="hidden md:flex w-full h-full flex-col justify-center">
+                <EducationProgressionRoadmap progress={timelineProgress} />
+              </div>
 
-                  {/* Milestone Card */}
-                  <div className="p-6 rounded-2xl bg-card border border-border/80 hover:border-primary/50 transition-all duration-300 shadow-md relative group overflow-hidden hover:shadow-primary/10 hover:-translate-y-1">
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-primary/5 to-accent/5 pointer-events-none" />
-
-                    <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary font-mono border border-primary/20">
-                        <Calendar className="w-3 h-3" />
-                        {edu.duration}
-                      </span>
-                      {edu.isCurrent && (
-                        <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
-                          Final Year
-                        </span>
-                      )}
-                    </div>
-
-                    <h4 className="text-xl font-bold text-foreground font-outfit mb-1 group-hover:text-primary transition-colors">
-                      {edu.degree}
-                    </h4>
-                    <p className="text-sm font-medium text-foreground/80 font-grotesk mb-3">
-                      {edu.school}
-                    </p>
-
-                    <div className="flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm text-muted-foreground pt-3 border-t border-border/70">
-                      <span className="flex items-center gap-1.5 font-grotesk">
-                        <MapPin className="w-3.5 h-3.5 text-primary" /> {edu.location}
-                      </span>
-
-                      {/* Highlighted Metric Badge for CGPA / Grade */}
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-primary/10 text-primary font-bold font-mono border border-primary/25 shadow-xs">
-                        <Award className="w-3.5 h-3.5 text-primary" /> {edu.grade}
-                      </span>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
             </div>
-          </motion.div>
+
+          </div>
+
+        </motion.div>
+
+        {/* ========================================================================= */}
+        {/* BOTTOM METRIC TICKER (Full width across columns)                          */}
+        {/* ========================================================================= */}
+        <div className="mt-3 sm:mt-4 pt-2.5 border-t border-border/80 dark:border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
+          {/* Currently Exploring Tags (Hidden on mobile) */}
+          <div className="hidden md:flex items-center gap-3">
+            <span className="text-[10px] font-mono text-muted-foreground dark:text-slate-400 tracking-wider">
+              // CURRENTLY EXPLORING
+            </span>
+            <div className="flex items-center gap-2.5 text-[11px] text-foreground/80 dark:text-slate-300 font-grotesk">
+              <span className="inline-flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#FF4500]" />
+                Better Solutions
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-500" />
+                Real-World Impact
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                Lifelong Learning
+              </span>
+            </div>
+          </div>
+
+          {/* Stats Cluster */}
+          <div className="flex items-center justify-between md:justify-end w-full md:w-auto gap-4 sm:gap-5 font-mono">
+            <div className="flex items-baseline gap-1">
+              <span className="text-sm font-bold text-[#FF5722]">10+</span>
+              <span className="text-[10px] text-muted-foreground dark:text-slate-400">Projects</span>
+            </div>
+            <div className="flex items-baseline gap-1">
+              <span className="text-sm font-bold text-foreground dark:text-white">5,009+</span>
+              <span className="text-[10px] text-muted-foreground dark:text-slate-400">Code Commits</span>
+            </div>
+            <div className="flex items-baseline gap-1">
+              <span className="text-sm font-bold text-[#FF5722]">8.646</span>
+              <span className="text-[10px] text-muted-foreground dark:text-slate-400">CGPA</span>
+            </div>
+            <div className="hidden lg:flex items-center gap-1 text-[9px] text-muted-foreground dark:text-slate-400 tracking-widest uppercase">
+              <span className="text-[#FF5722]/60 font-bold">//</span>
+              <span>MAKING IDEAS REAL</span>
+            </div>
+          </div>
         </div>
+
       </div>
     </section>
   );
