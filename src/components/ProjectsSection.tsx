@@ -955,17 +955,11 @@ const ProjectsSection = () => {
     <section id="projects" className="pt-2 pb-12 sm:pt-3 sm:pb-16 scroll-mt-20 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0">
         {/* Section Header: Sticky on mobile under navbar so 'My Projects' stays visible while cards stack below it */}
-        <div className="sticky top-[74px] z-40 bg-background/90 dark:bg-[#070a12]/90 backdrop-blur-md py-3 sm:static sm:bg-transparent sm:backdrop-blur-none sm:py-0 text-center mb-6 sm:mb-8 transition-all">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border/70 dark:border-white/10 bg-secondary/40 dark:bg-white/[0.03] text-[11px] font-mono tracking-wider text-muted-foreground uppercase mb-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#FF5722]" />
-            Selected Works
-          </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-outfit tracking-tight text-foreground dark:text-white leading-tight">
-            My <span className="bg-gradient-to-r from-[#FF5722] via-[#FF6B4A] to-[#f43f5e] bg-clip-text text-transparent">Projects</span>
+        <div className="sticky top-[74px] z-40 bg-background/85 backdrop-blur-md py-2 sm:static sm:bg-transparent sm:backdrop-blur-none sm:py-0 text-center mb-0 transition-all">
+          <h2 className="text-4xl font-extrabold mb-3 sm:mb-4 font-outfit">
+            My <span className="text-primary">Projects</span>
           </h2>
-          <p className="text-xs sm:text-sm text-muted-foreground dark:text-slate-400 font-grotesk mt-1.5 max-w-xl mx-auto">
-            Production platforms, machine learning models, and native Android applications built for real scale.
-          </p>
+          <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
         </div>
 
         {/* Tablet: 2-column grid (640px to 1023px) - No change */}
@@ -1141,12 +1135,12 @@ const ProjectsSection = () => {
                   initial={{ opacity: 0, scale: 0.95, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                  className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl bg-card/95 dark:bg-[#0c1017]/95 backdrop-blur-2xl border border-border/80 dark:border-white/10 p-6 shadow-2xl z-10 flex flex-col justify-between"
+                  className={`relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl bg-card bg-gradient-to-br ${projects[activeIndex].color} border border-border p-6 shadow-2xl z-10 flex flex-col justify-between`}
                 >
                   {/* Close Button */}
                   <button
                     onClick={() => setIsMobileOpen(false)}
-                    className="absolute top-4 right-4 p-2 rounded-full bg-secondary/80 hover:bg-secondary border border-border/60 text-foreground transition-all duration-200 z-50"
+                    className="absolute top-4 right-4 p-2 rounded-full bg-foreground/5 hover:bg-foreground/10 border border-border/40 text-foreground transition-all duration-200 z-50"
                     aria-label="Close modal"
                   >
                     <X className="w-4 h-4" />

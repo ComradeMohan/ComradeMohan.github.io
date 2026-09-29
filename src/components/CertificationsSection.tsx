@@ -372,18 +372,15 @@ export default function CertificationsSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2, margin: "0px 0px -40px 0px" }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="text-center mb-8 sm:mb-10 transform-gpu"
+            className="text-center mb-10 sm:mb-12 transform-gpu"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border/70 dark:border-white/10 bg-secondary/40 dark:bg-white/[0.03] text-[11px] font-mono tracking-wider text-muted-foreground uppercase mb-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#FF5722]" />
-              Verified Credentials
-            </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-outfit tracking-tight text-foreground dark:text-white leading-tight">
-              <span className="bg-gradient-to-r from-[#FF5722] via-[#FF6B4A] to-[#f43f5e] bg-clip-text text-transparent">Certifications</span>
+            <h2 className="text-4xl font-extrabold mb-3 font-outfit">
+              <span className="text-primary">Certifications</span>
             </h2>
-            <p className="text-xs sm:text-sm text-muted-foreground dark:text-slate-400 font-grotesk mt-1.5 max-w-md mx-auto">
-              Industry credentials and validated technical qualifications from Oracle, AWS, Google, and freeCodeCamp.
+            <p className="text-muted-foreground text-sm md:text-base font-grotesk max-w-md mx-auto">
+              Professional certifications & achievements
             </p>
+            <div className="w-16 h-1 bg-primary mx-auto rounded-full mt-4" />
           </motion.div>
 
           {/* Featured Certification */}
@@ -392,14 +389,14 @@ export default function CertificationsSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.1, margin: "0px 0px -40px 0px" }}
             transition={{ duration: 0.5, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-            className="mb-12 sm:mb-14 transform-gpu"
+            className="mb-14 sm:mb-16 transform-gpu"
           >
-            <div className="relative p-6 md:p-8 rounded-2xl bg-card/80 dark:bg-[#0c1017]/90 backdrop-blur-xl border border-border/80 dark:border-white/10 hover:border-[#FF5722]/30 shadow-lg dark:shadow-black/20 overflow-hidden group">
+            <div className="relative p-6 md:p-8 rounded-2xl bg-card/60 backdrop-blur-sm border-2 border-primary/30 shadow-[0_0_30px_rgba(234,88,12,0.05)] overflow-hidden group">
 
               {/* Featured Badge tag */}
-              <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-[#FF5722]/10 text-[#FF5722] border border-[#FF5722]/20">
+              <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
                 <Trophy className="w-3.5 h-3.5" />
-                <span>Featured Credential</span>
+                <span>Featured Certification</span>
               </div>
 
               <div className="flex flex-col lg:flex-row items-center gap-8 mt-6">
@@ -522,19 +519,20 @@ export default function CertificationsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2, margin: "0px 0px -30px 0px" }}
               transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="mb-5 text-left transform-gpu"
+              className="mb-6 text-left transform-gpu"
             >
-              <div className="flex items-center gap-2 mb-1">
-                <Trophy className="w-5 h-5 text-amber-500 shrink-0" />
-                <h3 className="text-xl md:text-2xl font-bold font-outfit text-foreground tracking-tight">
+              <div className="flex items-center gap-2.5 mb-1">
+                <Trophy className="w-6 h-6 text-amber-500 shrink-0" />
+                <h3 className="text-2xl md:text-3xl font-extrabold font-outfit text-foreground tracking-tight">
                   Other Certifications
                 </h3>
               </div>
-              <p className="text-xs md:text-sm text-muted-foreground font-grotesk">
+              <p className="text-sm md:text-base text-muted-foreground font-grotesk">
                 {viewMode === "list"
-                  ? "Explore additional verified professional certifications."
-                  : "Additional professional certifications and achievements."}
+                  ? "Explore my professional certifications"
+                  : "Professional certifications and achievements"}
               </p>
+              <div className="w-12 h-0.5 bg-gradient-to-r from-amber-500 via-primary to-transparent mt-2 rounded-full" />
             </motion.div>
 
             {/* Controls Bar: Top Pill Counter, Filter Dropdown & View Mode Switcher */}

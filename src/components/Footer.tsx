@@ -748,54 +748,58 @@ const IndiaMap = () => {
 // 3D Animated Tech Core / Orb (Matches Website Primary & Accent CSS Variables)
 const TechOrb = () => {
   return (
-    <div className="relative w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center flex-shrink-0 group">
+    <div className="relative w-8 h-8 sm:w-10 sm:h-10 lg:w-11 lg:h-11 flex items-center justify-center flex-shrink-0 group">
       {/* Outer ambient glow */}
-      <div className="absolute inset-0 rounded-full bg-[#FF5722]/10 blur-sm group-hover:bg-[#FF5722]/20 transition-all duration-300" />
+      <div className="absolute inset-0 rounded-full bg-primary/20 blur-md group-hover:bg-primary/35 transition-all duration-500" />
 
-      {/* Central Core */}
-      <div className="relative w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-gradient-to-tr from-[#FF5722] via-[#FF6B4A] to-[#FF5722]/70 shadow-sm" />
+      {/* Central 3D Glowing Core */}
+      <div className="relative w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 rounded-full bg-gradient-to-tr from-primary via-accent to-primary/80 shadow-[0_0_12px_hsl(var(--primary)/0.7),inset_0_2px_4px_rgba(255,255,255,0.6)] animate-pulse [animation-duration:3s]" />
 
       {/* Orbital Ring 1 */}
-      <svg className="absolute inset-0 w-full h-full animate-[spin_10s_linear_infinite] pointer-events-none opacity-60" viewBox="0 0 64 64">
+      <svg className="absolute inset-0 w-full h-full animate-[spin_8s_linear_infinite] pointer-events-none opacity-85" viewBox="0 0 64 64">
         <ellipse
           cx="32"
           cy="32"
-          rx="24"
-          ry="8"
+          rx="25"
+          ry="9"
           fill="none"
           stroke="url(#orbRing1)"
-          strokeWidth="1.2"
+          strokeWidth="1.5"
           strokeDasharray="4 2"
           transform="rotate(-25 32 32)"
         />
         <defs>
           <linearGradient id="orbRing1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FF5722" stopOpacity="0.8" />
-            <stop offset="100%" stopColor="#f43f5e" stopOpacity="0.2" />
+            <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="hsl(var(--accent))" stopOpacity="0.3" />
           </linearGradient>
         </defs>
       </svg>
 
       {/* Orbital Ring 2 */}
-      <svg className="absolute inset-0 w-full h-full animate-[spin_16s_linear_infinite_reverse] pointer-events-none opacity-50" viewBox="0 0 64 64">
+      <svg className="absolute inset-0 w-full h-full animate-[spin_12s_linear_infinite_reverse] pointer-events-none opacity-75" viewBox="0 0 64 64">
         <ellipse
           cx="32"
           cy="32"
-          rx="24"
-          ry="8"
+          rx="25"
+          ry="9"
           fill="none"
           stroke="url(#orbRing2)"
-          strokeWidth="1.2"
+          strokeWidth="1.5"
           strokeDasharray="3 3"
           transform="rotate(35 32 32)"
         />
         <defs>
           <linearGradient id="orbRing2" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FF6B4A" stopOpacity="0.8" />
-            <stop offset="100%" stopColor="#FF5722" stopOpacity="0.2" />
+            <stop offset="0%" stopColor="hsl(var(--accent))" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.3" />
           </linearGradient>
         </defs>
       </svg>
+
+      {/* Sparkle micro-particles */}
+      <Sparkles className="absolute -top-0.5 -right-0.5 w-3 h-3 text-primary animate-pulse" />
+      <span className="absolute bottom-0 left-0 w-1.5 h-1.5 rounded-full bg-accent shadow-[0_0_6px_hsl(var(--accent))] animate-ping" />
     </div>
   );
 };
@@ -804,22 +808,23 @@ const Footer = () => {
   const { data: latestCommit } = useLatestCommit();
 
   return (
-    <footer className="relative w-full border-t border-border/70 dark:border-white/10 bg-background overflow-hidden pt-3 pb-3 sm:pt-4 sm:pb-4 transition-colors duration-300">
+    <footer className="relative w-full border-t border-border/70 bg-background overflow-hidden pt-3 pb-3 sm:pt-4 sm:pb-4 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 relative z-10">
 
-        {/* Main Floating Footer Card Layout */}
-        <div className="relative rounded-2xl bg-card/75 dark:bg-[#0c1017]/85 border border-border/70 dark:border-white/10 backdrop-blur-xl p-3.5 sm:p-4 lg:p-5 transition-all duration-300 shadow-sm dark:shadow-black/20">
+        {/* Main Floating Footer Card Layout (No outer outline box, compact padding) */}
+        <div className="relative rounded-xl sm:rounded-2xl lg:rounded-2xl bg-card/60 p-2.5 sm:p-3 lg:p-4 transition-all duration-300">
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-2.5 sm:gap-3 lg:gap-0 lg:divide-x lg:divide-border/60 dark:lg:divide-white/10 items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-2.5 sm:gap-3 lg:gap-0 lg:divide-x lg:divide-border/60 items-center">
 
             {/* 1. Identity & Signature Bio Section (Mobile: full, SM: Col 1, LG: Cols 1-4) */}
             <div className="sm:col-span-1 lg:col-span-4 flex flex-col justify-center lg:pr-4">
-              <h3 className="font-signature text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-[#FF5722] via-[#FF6B4A] to-[#f43f5e] bg-clip-text text-transparent leading-tight tracking-wide">
+              <h3 className="font-signature text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent leading-tight tracking-wide">
                 Mohan Reddy
               </h3>
-              <p className="text-[11px] sm:text-xs text-muted-foreground dark:text-slate-400 font-grotesk mt-0.5 leading-snug">
+              <p className="text-[11px] sm:text-xs text-muted-foreground font-grotesk mt-0.5 leading-snug">
                 Building solutions that make an impact.
               </p>
+              <div className="h-0.5 w-7 sm:w-8 bg-gradient-to-r from-primary to-accent rounded-full mt-1 sm:mt-1.5" />
             </div>
 
             {/* 2. Let's Connect Socials (SM: Col 2 Top-Right, LG: Cols 9-10) */}
