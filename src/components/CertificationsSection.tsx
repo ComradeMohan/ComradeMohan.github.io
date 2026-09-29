@@ -543,14 +543,14 @@ export default function CertificationsSection() {
               transition={{ duration: 0.35, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
               className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-6 transform-gpu"
             >
-              {/* Left Counter Pill */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-card/90 border border-border/70 backdrop-blur-md shadow-sm text-xs font-semibold font-grotesk text-foreground w-fit">
+              {/* Left Counter Pill (hidden on mobile) */}
+              <div className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-card/90 border border-border/70 backdrop-blur-md shadow-sm text-xs font-semibold font-grotesk text-foreground w-fit">
                 <Calendar className="w-4 h-4 text-primary" />
                 <span>{filteredCerts.length} Certifications</span>
               </div>
 
               {/* Right Toolbar Controls */}
-              <div className="flex items-center gap-3 self-end sm:self-auto">
+              <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
                 {/* Filter Dropdown */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

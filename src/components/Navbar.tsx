@@ -205,103 +205,128 @@ const Navbar = ({ skipEntryAnim: _skipEntryAnim = false, introActive = false }: 
         )}
       </AnimatePresence>
 
-      <nav className="fixed top-3 sm:top-4 left-3 sm:left-4 right-3 sm:right-4 z-50 mx-auto max-w-5xl flex flex-col items-center pointer-events-none">
+      <nav className="fixed top-3 sm:top-4 left-3 sm:left-4 right-3 sm:right-4 z-50 mx-auto max-w-6xl flex flex-col items-center pointer-events-none">
         {/* Main Navbar Pill */}
-        <div className="relative w-full pointer-events-auto h-13 sm:h-14 rounded-full border border-border/70 dark:border-white/10 bg-background/80 dark:bg-[#070a12]/80 backdrop-blur-xl shadow-xs dark:shadow-md dark:shadow-black/30 px-3 sm:px-6 flex items-center justify-between transition-colors">
-          <a 
-            href="/" 
-            onClick={handleLogoClick}
-            id="navbar-logo"
-            className={`font-outfit text-base sm:text-lg font-black tracking-tight cursor-pointer select-none whitespace-nowrap shrink-0 transition-opacity duration-200 flex items-center gap-1.5 ${
-              introActive ? "opacity-0 pointer-events-none" : "opacity-100"
-            }`}
-          >
-            <span className="text-primary font-black">MOHAN</span>
-            <span className="font-bold text-foreground">REDDY</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-primary inline-block shrink-0" />
-          </a>
+        <div
+          className="relative overflow-hidden w-full pointer-events-auto shadow-lg h-14 rounded-[2rem] border border-foreground/10"
+          style={{
+            backgroundColor: "hsl(var(--background) / 0.20)",
+            boxShadow:
+              "0 8px 32px hsl(var(--primary) / 0.08), inset 0 1px 0 hsl(var(--foreground) / 0.08), inset 0 -1px 0 hsl(var(--foreground) / 0.04)",
+            backdropFilter: "blur(24px) saturate(1.6)",
+            WebkitBackdropFilter: "blur(24px) saturate(1.6)",
+          }}
+        >
+          <div
+            className="absolute inset-0 rounded-[2rem] pointer-events-none"
+            style={{
+              background: "linear-gradient(135deg, hsl(var(--background) / 0.75), hsl(var(--background) / 0.55))",
+            }}
+          />
 
-          {/* Centered Desktop Navigation Links */}
-          <div className="hidden md:flex items-center gap-5 absolute left-1/2 -translate-x-1/2">
-            {navLinks.map((link) => {
-              const active = isLinkActive(link.href);
-              return (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={(e) => handleNavLinkClick(e, link.href)}
-                  className={`text-sm font-medium transition-colors duration-200 font-grotesk relative px-3 py-1 rounded-full ${
-                    active
-                      ? "text-primary font-semibold"
-                      : "text-foreground/70 hover:text-primary"
-                  }`}
-                >
-                  {link.label}
-                  {active && (
-                    <div
-                      className="absolute inset-0 rounded-full -z-10"
-                      style={{
-                        background: "hsl(var(--primary) / 0.12)",
-                        boxShadow: "0 0 12px hsl(var(--primary) / 0.15)",
-                      }}
-                    />
-                  )}
-                </a>
-              );
-            })}
-          </div>
+          <div
+            className="absolute inset-0 rounded-[2rem] pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(ellipse 60% 80% at 50% 0%, hsl(var(--primary) / 0.12), transparent 70%)",
+            }}
+          />
 
-          {/* Desktop Actions */}
-          <div className="hidden md:flex items-center gap-3">
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-full text-foreground/60 hover:text-primary transition-colors cursor-pointer"
-              style={{
-                background: "hsl(var(--foreground) / 0.06)",
-              }}
-              aria-label="Toggle theme"
-            >
-              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </button>
-            <div>
-              <Button asChild size="sm" className="rounded-full bg-primary hover:bg-primary/80 shadow-[0_0_16px_hsl(var(--primary)/0.3)]">
-                <a href={HIRE_ME_MAILTO}>
-                  <Mail className="w-4 h-4 mr-1" /> Hire Me
-                </a>
-              </Button>
-            </div>
-          </div>
-
-          {/* Mobile Header Controls */}
-          <div className="flex items-center gap-2 md:hidden">
-            <button
-              onClick={toggleTheme}
-              className="w-9 h-9 rounded-full text-foreground/75 hover:text-[#FF5722] transition-all flex items-center justify-center border border-border/50 dark:border-white/10 active:scale-95 bg-secondary/40 dark:bg-white/5"
-              aria-label="Toggle theme"
-            >
-              {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700 dark:text-slate-300" />}
-            </button>
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className={`w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 border active:scale-95 ${
-                mobileOpen
-                  ? "border-[#FF5722] bg-[#FF5722]/15 text-[#FF5722] shadow-[0_0_12px_rgba(255,87,34,0.35)]"
-                  : "border-border/50 dark:border-white/10 bg-secondary/40 dark:bg-white/5 text-foreground/80 hover:text-[#FF5722]"
+          <div className="relative z-10 px-4 sm:px-6 h-full flex items-center justify-between">
+            <a
+              href="/"
+              onClick={handleLogoClick}
+              id="navbar-logo"
+              className={`font-outfit text-lg sm:text-xl font-bold tracking-wider cursor-pointer select-none whitespace-nowrap shrink-0 transition-opacity duration-200 ${
+                introActive ? "opacity-0 pointer-events-none" : "opacity-100"
               }`}
-              aria-label="Toggle navigation menu"
             >
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={mobileOpen ? "close" : "menu"}
-                  initial={{ rotate: -90, opacity: 0, scale: 0.8 }}
-                  animate={{ rotate: 0, opacity: 1, scale: 1 }}
-                  exit={{ rotate: 90, opacity: 0, scale: 0.8 }}
-                  transition={{ duration: 0.15 }}
-                >
-                  {mobileOpen ? <X size={18} /> : <Menu size={18} />}
-                </motion.div>
-              </AnimatePresence>
-            </button>
+              <span className="text-primary font-extrabold">MOHAN</span>{" "}
+              <span className="text-foreground dark:text-white">REDDY</span>
+            </a>
+
+            {/* Centered Desktop Navigation Links */}
+            <div className="hidden md:flex items-center gap-5 absolute left-1/2 -translate-x-1/2">
+              {navLinks.map((link) => {
+                const active = isLinkActive(link.href);
+                return (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={(e) => handleNavLinkClick(e, link.href)}
+                    className={`text-sm font-medium transition-colors duration-200 font-grotesk relative px-3 py-1 rounded-full ${
+                      active
+                        ? "text-primary font-semibold"
+                        : "text-foreground/70 hover:text-primary"
+                    }`}
+                  >
+                    {link.label}
+                    {active && (
+                      <div
+                        className="absolute inset-0 rounded-full -z-10"
+                        style={{
+                          background: "hsl(var(--primary) / 0.12)",
+                          boxShadow: "0 0 12px hsl(var(--primary) / 0.15)",
+                        }}
+                      />
+                    )}
+                  </a>
+                );
+              })}
+            </div>
+
+            {/* Desktop Actions */}
+            <div className="hidden md:flex items-center gap-5">
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-full text-foreground/60 hover:text-primary transition-colors cursor-pointer"
+                style={{
+                  background: "hsl(var(--foreground) / 0.06)",
+                }}
+                aria-label="Toggle theme"
+              >
+                {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              </button>
+              <div>
+                <Button asChild size="sm" className="rounded-full bg-primary hover:bg-primary/80 shadow-[0_0_16px_hsl(var(--primary)/0.3)]">
+                  <a href={HIRE_ME_MAILTO}>
+                    <Mail className="w-4 h-4 mr-1" /> Hire Me
+                  </a>
+                </Button>
+              </div>
+            </div>
+
+            {/* Mobile Header Controls */}
+            <div className="flex items-center gap-2 md:hidden">
+              <button
+                onClick={toggleTheme}
+                className="w-9 h-9 rounded-full text-foreground/75 hover:text-[#FF5722] transition-all flex items-center justify-center border border-border/50 dark:border-white/10 active:scale-95 bg-secondary/40 dark:bg-white/5"
+                aria-label="Toggle theme"
+              >
+                {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700 dark:text-slate-300" />}
+              </button>
+              <button
+                onClick={() => setMobileOpen(!mobileOpen)}
+                className={`w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 border active:scale-95 ${
+                  mobileOpen
+                    ? "border-[#FF5722] bg-[#FF5722]/15 text-[#FF5722] shadow-[0_0_12px_rgba(255,87,34,0.35)]"
+                    : "border-border/50 dark:border-white/10 bg-secondary/40 dark:bg-white/5 text-foreground/80 hover:text-[#FF5722]"
+                }`}
+                aria-label="Toggle navigation menu"
+              >
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={mobileOpen ? "close" : "menu"}
+                    initial={{ rotate: -90, opacity: 0, scale: 0.8 }}
+                    animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                    exit={{ rotate: 90, opacity: 0, scale: 0.8 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+                  </motion.div>
+                </AnimatePresence>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -367,7 +392,7 @@ const Navbar = ({ skipEntryAnim: _skipEntryAnim = false, introActive = false }: 
                 })}
               </div>
 
-              {/* Mobile CTA button */}
+              {/* CTA button */}
               <div className="pt-2 mt-1 border-t border-border/70 dark:border-white/10 relative z-10">
                 <a
                   href={HIRE_ME_MAILTO}
