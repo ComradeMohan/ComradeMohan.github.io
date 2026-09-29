@@ -221,8 +221,8 @@ const Navbar = ({ skipEntryAnim: _skipEntryAnim = false, introActive = false }: 
             <span className="w-1.5 h-1.5 rounded-full bg-primary inline-block shrink-0" />
           </a>
 
-          {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center gap-1.5 lg:gap-2">
+          {/* Centered Desktop Navigation Links */}
+          <div className="hidden md:flex items-center gap-5 absolute left-1/2 -translate-x-1/2">
             {navLinks.map((link) => {
               const active = isLinkActive(link.href);
               return (
@@ -230,18 +230,20 @@ const Navbar = ({ skipEntryAnim: _skipEntryAnim = false, introActive = false }: 
                   key={link.href}
                   href={link.href}
                   onClick={(e) => handleNavLinkClick(e, link.href)}
-                  className={`text-xs font-medium font-grotesk tracking-wide relative px-3 py-1.5 rounded-full transition-colors duration-200 ${
+                  className={`text-sm font-medium transition-colors duration-200 font-grotesk relative px-3 py-1 rounded-full ${
                     active
-                      ? "text-foreground font-semibold"
-                      : "text-muted-foreground hover:text-foreground"
+                      ? "text-primary font-semibold"
+                      : "text-foreground/70 hover:text-primary"
                   }`}
                 >
                   {link.label}
                   {active && (
-                    <motion.div
-                      layoutId="navbar-active-pill"
-                      className="absolute inset-0 rounded-full bg-secondary/90 dark:bg-white/[0.08] -z-10 border border-border/70 dark:border-white/[0.08]"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    <div
+                      className="absolute inset-0 rounded-full -z-10"
+                      style={{
+                        background: "hsl(var(--primary) / 0.12)",
+                        boxShadow: "0 0 12px hsl(var(--primary) / 0.15)",
+                      }}
                     />
                   )}
                 </a>
@@ -250,36 +252,41 @@ const Navbar = ({ skipEntryAnim: _skipEntryAnim = false, introActive = false }: 
           </div>
 
           {/* Desktop Actions */}
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-3">
             <button
               onClick={toggleTheme}
-              className="w-8 h-8 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary/70 transition-colors cursor-pointer border border-border/50 dark:border-white/5"
+              className="p-2 rounded-full text-foreground/60 hover:text-primary transition-colors cursor-pointer"
+              style={{
+                background: "hsl(var(--foreground) / 0.06)",
+              }}
               aria-label="Toggle theme"
             >
-              {isDark ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-slate-700" />}
+              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
-            <Button asChild size="sm" className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs px-3.5 h-8 shadow-xs transition-all duration-200">
-              <a href={HIRE_ME_MAILTO}>
-                <Mail className="w-3.5 h-3.5 mr-1.5" /> Hire Me
-              </a>
-            </Button>
+            <div>
+              <Button asChild size="sm" className="rounded-full bg-primary hover:bg-primary/80 shadow-[0_0_16px_hsl(var(--primary)/0.3)]">
+                <a href={HIRE_ME_MAILTO}>
+                  <Mail className="w-4 h-4 mr-1" /> Hire Me
+                </a>
+              </Button>
+            </div>
           </div>
 
           {/* Mobile Header Controls */}
           <div className="flex items-center gap-2 md:hidden">
             <button
               onClick={toggleTheme}
-              className="w-8 h-8 rounded-full text-foreground/80 hover:text-primary transition-all flex items-center justify-center border border-border/60 dark:border-white/10 active:scale-95 bg-secondary/40 dark:bg-white/5"
+              className="w-9 h-9 rounded-full text-foreground/75 hover:text-[#FF5722] transition-all flex items-center justify-center border border-border/50 dark:border-white/10 active:scale-95 bg-secondary/40 dark:bg-white/5"
               aria-label="Toggle theme"
             >
-              {isDark ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-slate-700 dark:text-slate-300" />}
+              {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700 dark:text-slate-300" />}
             </button>
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 border active:scale-95 ${
+              className={`w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 border active:scale-95 ${
                 mobileOpen
-                  ? "border-primary bg-primary/10 text-primary"
-                  : "border-border/60 dark:border-white/10 bg-secondary/40 dark:bg-white/5 text-foreground/80 hover:text-primary"
+                  ? "border-[#FF5722] bg-[#FF5722]/15 text-[#FF5722] shadow-[0_0_12px_rgba(255,87,34,0.35)]"
+                  : "border-border/50 dark:border-white/10 bg-secondary/40 dark:bg-white/5 text-foreground/80 hover:text-[#FF5722]"
               }`}
               aria-label="Toggle navigation menu"
             >
@@ -291,7 +298,7 @@ const Navbar = ({ skipEntryAnim: _skipEntryAnim = false, introActive = false }: 
                   exit={{ rotate: 90, opacity: 0, scale: 0.8 }}
                   transition={{ duration: 0.15 }}
                 >
-                  {mobileOpen ? <X size={16} /> : <Menu size={16} />}
+                  {mobileOpen ? <X size={18} /> : <Menu size={18} />}
                 </motion.div>
               </AnimatePresence>
             </button>
@@ -302,14 +309,18 @@ const Navbar = ({ skipEntryAnim: _skipEntryAnim = false, introActive = false }: 
         <AnimatePresence>
           {mobileOpen && (
             <motion.div
-              initial={{ opacity: 0, y: -8, scale: 0.98 }}
+              initial={{ opacity: 0, y: -10, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -8, scale: 0.98 }}
+              exit={{ opacity: 0, y: -10, scale: 0.96 }}
               transition={{ type: "spring", damping: 28, stiffness: 380 }}
-              className="w-full mt-2 rounded-2xl bg-card/95 dark:bg-[#070a12]/95 border border-border/80 dark:border-white/10 backdrop-blur-2xl p-3 shadow-xl flex flex-col gap-1 md:hidden z-50 relative overflow-hidden pointer-events-auto"
+              className="w-full mt-2.5 rounded-2xl bg-card/95 dark:bg-[#0c1017]/95 border border-border/80 dark:border-[#22283a] backdrop-blur-2xl p-3 sm:p-4 shadow-2xl flex flex-col gap-1.5 md:hidden z-50 relative overflow-hidden pointer-events-auto"
             >
+              {/* Subtle ambient gradient highlights */}
+              <div className="absolute top-0 right-0 w-36 h-36 bg-[#FF5722]/10 rounded-full blur-2xl pointer-events-none" />
+              <div className="absolute bottom-0 left-0 w-28 h-28 bg-[#FF5722]/5 rounded-full blur-xl pointer-events-none" />
+
               {/* Navigation Items */}
-              <div className="space-y-0.5 relative z-10">
+              <div className="space-y-1 relative z-10">
                 {navLinks.map((link, i) => {
                   const active = isLinkActive(link.href);
                   const Icon = link.icon;
@@ -317,39 +328,39 @@ const Navbar = ({ skipEntryAnim: _skipEntryAnim = false, introActive = false }: 
                     <motion.a
                       key={link.href}
                       href={link.href}
-                      initial={{ opacity: 0, x: -8 }}
+                      initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.02 + 0.02, duration: 0.18 }}
+                      transition={{ delay: i * 0.03 + 0.04, duration: 0.2 }}
                       onClick={(e) => {
                         setMobileOpen(false);
                         handleNavLinkClick(e, link.href);
                       }}
-                      className={`flex items-center justify-between px-3 py-2 rounded-xl transition-all duration-200 font-grotesk ${
+                      className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition-all duration-200 font-grotesk ${
                         active
-                          ? "bg-primary/10 text-primary font-semibold border border-primary/25"
-                          : "text-muted-foreground hover:text-foreground hover:bg-secondary/40"
+                          ? "bg-[#FF5722]/12 text-[#FF5722] font-semibold border border-[#FF5722]/30 shadow-xs"
+                          : "text-foreground/80 dark:text-slate-300 hover:text-foreground hover:bg-foreground/5 dark:hover:bg-white/5"
                       }`}
                     >
-                      <div className="flex items-center gap-2.5">
+                      <div className="flex items-center gap-3">
                         <div
-                          className={`w-6 h-6 rounded-md flex items-center justify-center transition-all ${
+                          className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
                             active
-                              ? "bg-primary text-primary-foreground"
-                              : "bg-muted dark:bg-white/5 text-muted-foreground"
+                              ? "bg-[#FF5722] text-white shadow-[0_0_10px_rgba(255,87,34,0.5)]"
+                              : "bg-muted dark:bg-white/5 text-muted-foreground dark:text-slate-400"
                           }`}
                         >
                           <Icon className="w-3.5 h-3.5" />
                         </div>
-                        <span className="text-xs font-medium">{link.label}</span>
+                        <span className="text-sm font-medium">{link.label}</span>
                       </div>
 
                       {active ? (
-                        <div className="flex items-center gap-1 font-mono text-[9px] text-primary font-semibold">
-                          <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                        <div className="flex items-center gap-1.5 font-mono text-[10px] text-[#FF5722] font-semibold">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#FF5722] animate-pulse" />
                           <span>ACTIVE</span>
                         </div>
                       ) : (
-                        <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/40" />
+                        <ChevronRight className="w-4 h-4 text-muted-foreground/40" />
                       )}
                     </motion.a>
                   );
@@ -361,9 +372,9 @@ const Navbar = ({ skipEntryAnim: _skipEntryAnim = false, introActive = false }: 
                 <a
                   href={HIRE_ME_MAILTO}
                   onClick={() => setMobileOpen(false)}
-                  className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs shadow-xs active:scale-[0.98] transition-all font-outfit"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#FF5722] to-[#FF4500] hover:from-[#FF4500] hover:to-[#FF5722] text-white font-semibold text-sm shadow-[0_0_18px_rgba(255,87,34,0.4)] active:scale-[0.98] transition-all font-outfit"
                 >
-                  <Mail className="w-3.5 h-3.5" />
+                  <Mail className="w-4 h-4" />
                   <span>Hire Me / Get in Touch</span>
                 </a>
               </div>
