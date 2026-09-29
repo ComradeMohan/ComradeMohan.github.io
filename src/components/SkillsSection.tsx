@@ -578,27 +578,19 @@ const BentoCard = ({ category }: { category: SkillCategory }) => {
       <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#FF5722]/50 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300" />
 
       <div className="relative z-10">
-        {/* Card Top: Icon, Titles & Credential Badge */}
-        <div className="flex items-start justify-between gap-3 mb-4">
-          <div className="flex items-center gap-2.5 sm:gap-3">
-            <div className="p-2 sm:p-2.5 rounded-xl bg-primary/10 border border-primary/20 text-primary shrink-0 transition-transform duration-300 group-hover/card:scale-105">
-              <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
-            </div>
-            <div>
-              <h3 className="font-outfit font-bold text-sm sm:text-base lg:text-lg text-foreground tracking-tight leading-snug">
-                {category.title}
-              </h3>
-              <p className="font-grotesk text-[11px] sm:text-xs text-muted-foreground mt-0.5 line-clamp-1">
-                {category.subtitle}
-              </p>
-            </div>
+        {/* Card Top: Icon & Titles (Single-line title, complete description with zero continuation dots) */}
+        <div className="flex items-start gap-3 mb-4">
+          <div className="p-2.5 rounded-xl bg-primary/10 border border-primary/20 text-primary shrink-0 transition-transform duration-300 group-hover/card:scale-105 mt-0.5">
+            <Icon className="w-5 h-5" />
           </div>
-
-          {category.badge && (
-            <span className="font-mono text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/25 shrink-0 hidden sm:inline-block">
-              {category.badge}
-            </span>
-          )}
+          <div className="min-w-0 flex-1">
+            <h3 className="font-outfit font-bold text-base sm:text-[17px] text-foreground tracking-tight leading-snug whitespace-nowrap">
+              {category.title}
+            </h3>
+            <p className="font-grotesk text-xs text-muted-foreground mt-0.5 leading-relaxed">
+              {category.subtitle}
+            </p>
+          </div>
         </div>
 
         {/* Flowing, Neat Tech Pills (NO cramped box-like list, zero truncation, neat & spacious) */}
