@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { motion, MotionValue, useTransform, AnimatePresence } from "framer-motion";
+import { motion, MotionValue, AnimatePresence, useMotionValueEvent } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
   ExternalLink, Github, Camera, Users, Database, Truck, Activity,
@@ -16,65 +16,55 @@ interface ProjectScrollyStageProps {
   saveethaStars: number | null;
 }
 
-// Micro-Animation Helper: Pulsing Live Indicator
+// Helper: Stable Indicator Dot
 const PulsingDot: React.FC<{ colorClass?: string }> = ({ colorClass = "bg-emerald-400" }) => (
-  <span className="relative flex h-2 w-2 shrink-0">
-    <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${colorClass}`} />
-    <span className={`relative inline-flex rounded-full h-2 w-2 ${colorClass}`} />
+  <span className="relative flex h-2 w-2 shrink-0 items-center justify-center">
+    <span className={`inline-flex rounded-full h-2 w-2 ${colorClass}`} />
   </span>
 );
 
-// Micro-Animation Helper: Interactive Metric Card with Hover Elevation
+// Helper: Metric Card with clean hover elevation and zero delayed fade-ins
 const AnimatedMetricCard: React.FC<{
   children: React.ReactNode;
   className?: string;
   delay?: number;
-}> = ({ children, className = "", delay = 0 }) => (
+}> = ({ children, className = "" }) => (
   <motion.div
-    initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.35, delay }}
-    whileHover={{ y: -3, scale: 1.02 }}
-    className={`transition-all duration-300 hover:shadow-lg cursor-default select-none ${className}`}
+    whileHover={{ y: -2, scale: 1.01 }}
+    transition={{ duration: 0.15 }}
+    className={`transition-all duration-200 hover:shadow-md cursor-default select-none ${className}`}
   >
     {children}
   </motion.div>
 );
 
-// Micro-Animation Helper: Interactive Tech Tag with Spring Scale
+// Helper: Interactive Tech Tag
 const TechTag: React.FC<{ tag: string; className?: string }> = ({ tag, className = "" }) => (
-  <motion.span
-    whileHover={{ y: -2, scale: 1.06 }}
-    transition={{ type: "spring", stiffness: 400, damping: 17 }}
+  <span
     className={`px-2.5 py-1 rounded-md bg-secondary/60 border border-border/60 text-xs font-mono text-foreground/80 hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-colors inline-block cursor-default select-none ${className}`}
   >
     {tag}
-  </motion.span>
+  </span>
 );
 
-// Micro-Animation Helper: Animated Accuracy Bar with Smooth Width Expansion
+// Helper: Progress Bar rendered immediately at full target width
 const AnimatedProgressBar: React.FC<{
   widthPercent: number;
   colorClass: string;
   delay?: number;
-}> = ({ widthPercent, colorClass, delay = 0.2 }) => (
+}> = ({ widthPercent, colorClass }) => (
   <div className="h-2 rounded-full bg-secondary/80 overflow-hidden">
-    <motion.div
-      initial={{ width: 0 }}
-      animate={{ width: `${widthPercent}%` }}
-      transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
+    <div
+      style={{ width: `${widthPercent}%` }}
       className={`h-full rounded-full ${colorClass}`}
     />
   </div>
 );
 
-// Micro-Animation Helper: Sparkline SVG with Draw-In Motion
-const Sparkline = ({ colorClass, path, delay = 0.2 }: { colorClass: string; path: string; delay?: number }) => (
+// Helper: Sparkline SVG rendered immediately without draw-in delay
+const Sparkline = ({ colorClass, path }: { colorClass: string; path: string; delay?: number }) => (
   <svg className={`w-full h-7 mt-1 opacity-70 ${colorClass}`} viewBox="0 0 100 30" fill="none">
-    <motion.path
-      initial={{ pathLength: 0, opacity: 0 }}
-      animate={{ pathLength: 1, opacity: 0.8 }}
-      transition={{ duration: 0.8, delay, ease: "easeOut" }}
+    <path
       d={path}
       stroke="currentColor"
       strokeWidth="2.2"
@@ -94,67 +84,78 @@ const bgGlowColors = [
 ];
 
 const slideVariants = {
-  enter: (dir: number) => ({
-    x: dir > 0 ? 36 : -36,
+  enter: {
     opacity: 0,
-    scale: 0.99,
-  }),
+  },
   center: {
-    x: 0,
     opacity: 1,
-    scale: 1,
     transition: {
-      duration: 0.26,
-      ease: [0.22, 1, 0.36, 1],
+      duration: 0.2,
+      ease: "easeInOut",
     },
   },
-  exit: (dir: number) => ({
-    x: dir > 0 ? -36 : 36,
+  exit: {
     opacity: 0,
-    scale: 0.99,
     transition: {
-      duration: 0.18,
-      ease: [0.22, 1, 0.36, 1],
+      duration: 0.15,
+      ease: "easeInOut",
     },
-  }),
+  },
+};
+
+// Exact 6-segment division: 0 -> 1/6, 1/6 -> 2/6, 2/6 -> 3/6, 3/6 -> 4/6, 4/6 -> 5/6, 5/6 -> 1.0
+const getProjectIndex = (progress: number): number => {
+  if (progress <= 0.001) return 0;
+  if (progress >= 0.999) return 5;
+  return Math.min(5, Math.max(0, Math.floor(progress * 6)));
 };
 
 export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
   scrollYProgress,
   saveethaStars,
 }) => {
-  // Current project index (0 to 5) determined cleanly by scroll threshold
-  const activeIndex = useTransform(scrollYProgress, (latest) => {
-    if (latest < 0.16) return 0;
-    if (latest < 0.33) return 1;
-    if (latest < 0.50) return 2;
-    if (latest < 0.67) return 3;
-    if (latest < 0.84) return 4;
-    return 5;
+  // Current project index (0 to 5) determined immediately by scroll progress
+  const [currentIndex, setCurrentIndex] = useState<number>(() => {
+    const initial = scrollYProgress.get();
+    return getProjectIndex(typeof initial === "number" ? initial : 0);
+  });
+  const [direction, setDirection] = useState<number>(1);
+  const prevIndexRef = useRef<number>(currentIndex);
+
+  // Instantly sync active project on scroll progress changes without delay
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    const newIdx = getProjectIndex(latest);
+    if (newIdx !== prevIndexRef.current) {
+      setDirection(newIdx > prevIndexRef.current ? 1 : -1);
+      prevIndexRef.current = newIdx;
+      setCurrentIndex(newIdx);
+    }
   });
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState(1);
-  const prevIndexRef = useRef(0);
-
+  // Ensure current index is in sync on mount or route navigation
   useEffect(() => {
-    return activeIndex.on("change", (latest) => {
-      if (latest !== prevIndexRef.current) {
-        setDirection(latest > prevIndexRef.current ? 1 : -1);
-        prevIndexRef.current = latest;
-        setCurrentIndex(latest);
-      }
-    });
-  }, [activeIndex]);
+    const current = getProjectIndex(scrollYProgress.get());
+    if (current !== prevIndexRef.current) {
+      setDirection(current > prevIndexRef.current ? 1 : -1);
+      prevIndexRef.current = current;
+      setCurrentIndex(current);
+    }
+  }, [scrollYProgress]);
 
   const handleJumpToProject = (idx: number) => {
-    const centers = [0.08, 0.25, 0.42, 0.58, 0.75, 0.92];
-    const targetProgress = centers[idx];
+    const targetIdx = Math.min(5, Math.max(0, idx));
+    const targetProgress = (targetIdx + 0.5) / 6;
     const stageEl = document.getElementById("projects-stage-container");
     if (stageEl) {
       const rect = stageEl.getBoundingClientRect();
       const scrollTop = window.scrollY + rect.top;
       const totalDist = stageEl.offsetHeight - window.innerHeight;
+
+      // Provide instant tactile visual update on click
+      setDirection(targetIdx >= currentIndex ? 1 : -1);
+      prevIndexRef.current = targetIdx;
+      setCurrentIndex(targetIdx);
+
       window.scrollTo({
         top: scrollTop + targetProgress * totalDist,
         behavior: "smooth",
@@ -163,7 +164,7 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
   };
 
   return (
-    <div className="sticky top-0 h-screen w-full flex flex-col justify-between items-center pt-20 sm:pt-22 lg:pt-20 xl:pt-24 pb-3 sm:pb-4 lg:pb-3 xl:pb-6 overflow-hidden z-20 px-4 sm:px-6 lg:px-8">
+    <div className="sticky top-0 h-screen w-full flex flex-col justify-between items-center pt-20 sm:pt-22 lg:pt-20 xl:pt-24 pb-3 sm:pb-4 lg:pb-3 xl:pb-6 overflow-hidden z-20 px-4 sm:px-6 lg:px-4 xl:px-6">
 
       {/* Dynamic Background Atmosphere that changes per project */}
       <div
@@ -220,8 +221,8 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
         {/* ========================================================================= */}
         {/* THE MAIN STAGE: Rich High-Impact Content with Micro-Animations            */}
         {/* ========================================================================= */}
-        <div className="relative flex-1 w-full my-1.5 lg:my-2 xl:my-3 flex items-center justify-center overflow-hidden">
-          <AnimatePresence mode="wait" custom={direction}>
+        <div className="relative flex-1 w-full my-1.5 lg:my-2 xl:my-3 flex items-center justify-center overflow-hidden min-h-[380px] xl:min-h-[440px]">
+          <AnimatePresence mode="popLayout" custom={direction} initial={false}>
 
             {/* --------------------------------------------------------------------- */}
             {/* PROJECT 01: Object Detection in Python                                */}
@@ -238,15 +239,10 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
               >
                 {/* Left Story Column */}
                 <div className="col-span-12 lg:col-span-6 space-y-3.5 text-left">
-                  <motion.div
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-mono font-bold"
-                  >
-                    <Camera className="w-3.5 h-3.5 animate-pulse" />
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-mono font-bold">
+                    <Camera className="w-3.5 h-3.5" />
                     <span>Computer Vision • YOLOv8</span>
-                  </motion.div>
+                  </div>
 
                   <h3 className="text-3xl lg:text-4xl font-extrabold font-outfit text-foreground leading-tight">
                     Object Detection in Python
@@ -290,14 +286,14 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
 
                   {/* Feature Highlights */}
                   <div className="space-y-1.5 text-xs text-muted-foreground font-grotesk">
-                    <motion.div initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="flex items-center gap-2">
+                    <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />
                       <span>Multi-target simultaneous tracking with bounding boxes & confidence scoring</span>
-                    </motion.div>
-                    <motion.div initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.25 }} className="flex items-center gap-2">
+                    </div>
+                    <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />
                       <span>Dynamic video stream inputs (Webcam, CCTV, and high-res MP4 files)</span>
-                    </motion.div>
+                    </div>
                   </div>
 
                   {/* Tech Stack Pills */}
@@ -338,9 +334,6 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                       alt="Object Detection Comparison"
                       className="w-full h-[240px] xl:h-[270px] rounded-xl object-cover"
                     />
-
-                    {/* Subtle detection scanline micro-effect */}
-                    <div className="absolute inset-x-2.5 top-2.5 h-[2px] bg-gradient-to-r from-transparent via-orange-500/40 to-transparent animate-[scanline_3s_ease-in-out_infinite] pointer-events-none" />
 
                     <div className="flex justify-between items-center px-2 pt-2 text-[10px] font-mono text-muted-foreground">
                       <span className="text-orange-400 font-bold flex items-center gap-1.5">
@@ -391,9 +384,9 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                       <Users className="w-3.5 h-3.5" />
                       <span>Campus Web Platform • Live</span>
                     </span>
-                    <motion.span whileHover={{ scale: 1.08 }} className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-0.5 rounded-full border border-yellow-500/30 bg-yellow-500/10 text-yellow-500 cursor-default">
-                      <Star className="w-3 h-3 fill-current animate-pulse" /> {saveethaStars !== null ? saveethaStars : "22"} Stars
-                    </motion.span>
+                    <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-0.5 rounded-full border border-yellow-500/30 bg-yellow-500/10 text-yellow-500 cursor-default">
+                      <Star className="w-3 h-3 fill-current" /> {saveethaStars !== null ? saveethaStars : "22"} Stars
+                    </span>
                   </div>
 
                   <h3 className="text-3xl lg:text-4xl font-extrabold font-outfit text-foreground leading-tight">
@@ -438,14 +431,14 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
 
                   {/* Feature Highlights */}
                   <div className="space-y-1.5 text-xs text-muted-foreground font-grotesk">
-                    <motion.div initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="flex items-center gap-2">
+                    <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-orange-400 shrink-0" />
                       <span>500+ curated subject syllabus notes, lab codes, and semester question papers</span>
-                    </motion.div>
-                    <motion.div initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.25 }} className="flex items-center gap-2">
+                    </div>
+                    <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-orange-400 shrink-0" />
                       <span>Automated CGPA calculator with target goal forecasting across 8 semesters</span>
-                    </motion.div>
+                    </div>
                   </div>
 
                   {/* Tech Stack Pills */}
@@ -595,14 +588,14 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
 
                   {/* Feature Highlights */}
                   <div className="space-y-1.5 text-xs text-muted-foreground font-grotesk">
-                    <motion.div initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="flex items-center gap-2">
+                    <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-blue-400 shrink-0" />
                       <span>Automated 75% attendance threshold tracker preventing exam debarment</span>
-                    </motion.div>
-                    <motion.div initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.25 }} className="flex items-center gap-2">
+                    </div>
+                    <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-blue-400 shrink-0" />
                       <span>Encrypted local storage via Room DB + Firebase Cloud Firestore sync</span>
-                    </motion.div>
+                    </div>
                   </div>
 
                   {/* Tech Stack Pills */}
@@ -645,12 +638,10 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                   </div>
                 </div>
 
-                {/* Right Visual Column: Floating Smartphone Mockup with Micro-Floating Bob */}
+                {/* Right Visual Column: Smartphone Mockup */}
                 <div className="col-span-12 lg:col-span-5 flex items-center justify-center gap-4">
                   <motion.div
-                    animate={{ y: [0, -7, 0] }}
-                    transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                    whileHover={{ scale: 1.04, rotate: 1 }}
+                    whileHover={{ scale: 1.02 }}
                     className="w-[165px] xl:w-[185px] aspect-[474/1024] rounded-[2.2rem] border-[3px] border-slate-800 bg-slate-950 p-1 shadow-2xl relative shrink-0 cursor-pointer"
                   >
                     <ProgressiveImage
@@ -698,7 +689,7 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                 {/* Left Story Column */}
                 <div className="col-span-12 lg:col-span-6 space-y-3.5 text-left">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 text-xs font-mono font-bold">
-                    <Coins className="w-3.5 h-3.5 animate-spin" style={{ animationDuration: '8s' }} />
+                    <Coins className="w-3.5 h-3.5" />
                     <span>Research Project • Blockchain Security</span>
                   </div>
 
@@ -744,14 +735,14 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
 
                   {/* Feature Highlights */}
                   <div className="space-y-1.5 text-xs text-muted-foreground font-grotesk">
-                    <motion.div initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="flex items-center gap-2">
+                    <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
                       <span>Benchmarked against 4 ML models (Decision Tree, KNN, AdaBoost, Random Forest)</span>
-                    </motion.div>
-                    <motion.div initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.25 }} className="flex items-center gap-2">
+                    </div>
+                    <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
                       <span>Two-sample t-test verification (t = 5.892, p &lt; 0.001) confirming superiority</span>
-                    </motion.div>
+                    </div>
                   </div>
 
                   {/* Tech Stack Pills */}
@@ -801,7 +792,7 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                         { name: "K Nearest Neighbor", val: 82, color: "bg-blue-600" },
                         { name: "AdaBoost", val: 77.1, color: "bg-yellow-500" },
                         { name: "Random Forest", val: 72.4, color: "bg-blue-500" },
-                      ].map((item, idx) => (
+                      ].map((item) => (
                         <div key={item.name} className="space-y-1">
                           <div className="flex justify-between text-xs font-semibold font-grotesk text-foreground/90">
                             <span className={item.highlight ? "text-indigo-400 font-bold flex items-center gap-1" : ""}>
@@ -812,7 +803,6 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                           <AnimatedProgressBar
                             widthPercent={item.val}
                             colorClass={item.color}
-                            delay={0.1 + idx * 0.08}
                           />
                         </div>
                       ))}
@@ -904,14 +894,14 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
 
                   {/* Feature Highlights */}
                   <div className="space-y-1.5 text-xs text-muted-foreground font-grotesk">
-                    <motion.div initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="flex items-center gap-2">
+                    <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-sky-400 shrink-0" />
                       <span>Dynamic re-routing algorithm mitigating traffic congestion and urban bottlenecks</span>
-                    </motion.div>
-                    <motion.div initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.25 }} className="flex items-center gap-2">
+                    </div>
+                    <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-sky-400 shrink-0" />
                       <span>Digital proof-of-delivery confirmation with geofence proximity verification</span>
-                    </motion.div>
+                    </div>
                   </div>
 
                   {/* Tech Stack Pills */}
@@ -940,7 +930,7 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                   </div>
                 </div>
 
-                {/* Right Visual Column: Dispatch Telemetry Visual with Shimmer and Waypoint Indicator */}
+                {/* Right Visual Column: Dispatch Telemetry Visual with Waypoint Indicator */}
                 <div className="col-span-12 lg:col-span-6 flex flex-col justify-center gap-3">
                   <motion.div
                     whileHover={{ scale: 1.015 }}
@@ -967,7 +957,7 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                       </AnimatedMetricCard>
                     </div>
 
-                    {/* Active Route Simulator Visual with Animated Bar */}
+                    {/* Active Route Simulator Visual with Bar */}
                     <div className="p-3 rounded-xl border border-sky-500/20 bg-sky-950/20 space-y-2">
                       <div className="flex items-center justify-between text-xs font-mono">
                         <span className="text-sky-300 font-bold flex items-center gap-1.5">
@@ -976,10 +966,8 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                         <span className="text-emerald-400 font-semibold">Waypoint 4/6</span>
                       </div>
                       <div className="h-1.5 rounded-full bg-secondary/80 overflow-hidden">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          animate={{ width: "75%" }}
-                          transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+                        <div
+                          style={{ width: "75%" }}
                           className="h-full rounded-full bg-gradient-to-r from-sky-500 to-emerald-400"
                         />
                       </div>
@@ -988,7 +976,7 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                     <div className="p-2.5 rounded-xl border border-border/60 bg-secondary/40 flex items-center justify-between text-xs font-mono">
                       <span className="text-muted-foreground">Transit Delay Mitigation Engine</span>
                       <span className="text-sky-400 font-bold flex items-center gap-1">
-                        <Zap className="w-3.5 h-3.5 text-sky-400 animate-pulse" /> Active Telemetry
+                        <Zap className="w-3.5 h-3.5 text-sky-400" /> Active Telemetry
                       </span>
                     </div>
                   </motion.div>
@@ -1027,15 +1015,10 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
               >
                 {/* Left Story Column */}
                 <div className="col-span-12 lg:col-span-6 space-y-2 lg:space-y-2 xl:space-y-3 text-left">
-                  <motion.div
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="inline-flex items-center gap-1.5 px-3 py-0.5 xl:py-1 rounded-full border border-purple-300 dark:border-purple-500/40 bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400 text-xs font-mono font-bold shadow-[0_0_15px_rgba(168,85,247,0.15)] dark:shadow-[0_0_15px_rgba(168,85,247,0.25)]"
-                  >
-                    <Activity className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400 animate-pulse" />
+                  <div className="inline-flex items-center gap-1.5 px-3 py-0.5 xl:py-1 rounded-full border border-purple-300 dark:border-purple-500/40 bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400 text-xs font-mono font-bold shadow-[0_0_15px_rgba(168,85,247,0.15)] dark:shadow-[0_0_15px_rgba(168,85,247,0.25)]">
+                    <Activity className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                     <span>⭐ Culmination • GitHub Analytics SaaS</span>
-                  </motion.div>
+                  </div>
 
                   <h3 className="text-2xl sm:text-3xl lg:text-3xl xl:text-4xl font-extrabold font-outfit text-foreground leading-tight">
                     DevPulse <span className="text-amber-400">⭐</span>
@@ -1079,14 +1062,14 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
 
                   {/* Feature Highlights */}
                   <div className="space-y-1 xl:space-y-1.5 text-[11px] xl:text-xs text-muted-foreground font-grotesk">
-                    <motion.div initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="flex items-center gap-1.5 xl:gap-2">
+                    <div className="flex items-center gap-1.5 xl:gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400 shrink-0" />
                       <span>Embeddable dynamic SVG telemetry widgets for GitHub READMEs and portfolios</span>
-                    </motion.div>
-                    <motion.div initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.25 }} className="flex items-center gap-1.5 xl:gap-2">
+                    </div>
+                    <div className="flex items-center gap-1.5 xl:gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400 shrink-0" />
                       <span>Privacy-first zero-storage architecture querying public GitHub endpoints directly</span>
-                    </motion.div>
+                    </div>
                   </div>
 
                   {/* Tech Stack Pills */}
@@ -1122,24 +1105,8 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                     transition={{ duration: 0.3 }}
                     className="relative w-full rounded-2xl p-[2px] overflow-hidden group shadow-[0_10px_35px_rgba(168,85,247,0.12)] dark:shadow-[0_0_50px_rgba(168,85,247,0.2)]"
                   >
-                    {/* Rotating color gradient border on hover */}
-                    <div
-                      className="absolute -inset-[150%] opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-[spin_8s_linear_infinite] pointer-events-none"
-                      style={{
-                        background: "conic-gradient(from 0deg at 50% 50%, #a855f7, #6366f1, #06b6d4, #10b981, #f59e0b, #ec4899, #a855f7)",
-                      }}
-                    />
-
-                    {/* Rotating glow blur aura behind the border on hover */}
-                    <div
-                      className="absolute -inset-[150%] opacity-0 group-hover:opacity-70 blur-md transition-opacity duration-500 animate-[spin_8s_linear_infinite] pointer-events-none"
-                      style={{
-                        background: "conic-gradient(from 0deg at 50% 50%, #a855f7, #6366f1, #06b6d4, #10b981, #f59e0b, #ec4899, #a855f7)",
-                      }}
-                    />
-
-                    {/* Default static border when not hovered */}
-                    <div className="absolute inset-0 rounded-2xl border-2 border-purple-300/80 dark:border-purple-500/50 pointer-events-none transition-opacity duration-300 group-hover:opacity-0" />
+                    {/* Default static border */}
+                    <div className="absolute inset-0 rounded-2xl border-2 border-purple-300/80 dark:border-purple-500/50 group-hover:border-purple-400 transition-colors duration-300 pointer-events-none" />
 
                     {/* Inner Terminal Body */}
                     <div className="relative z-10 w-full p-3.5 lg:p-3.5 xl:p-5 rounded-[14px] bg-white/95 dark:bg-[#0d0918]/95 backdrop-blur-md space-y-2 lg:space-y-2.5 xl:space-y-3.5 transition-colors duration-300">
@@ -1202,17 +1169,17 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                         </div>
                       </div>
 
-                      {/* Language Breakdown Bar with Stagger Animation */}
+                      {/* Language Breakdown Bar */}
                       <div className="space-y-1 xl:space-y-1.5">
                         <div className="flex justify-between text-[10px] xl:text-[11px] font-mono text-muted-foreground">
                           <span>Language Distribution</span>
                           <span className="text-purple-700 dark:text-purple-300 font-semibold">TypeScript 48% • Python 26% • Java 18%</span>
                         </div>
                         <div className="h-1.5 xl:h-2 rounded-full bg-slate-200 dark:bg-secondary/80 overflow-hidden flex">
-                          <motion.div initial={{ width: 0 }} animate={{ width: "48%" }} transition={{ duration: 0.8, delay: 0.1 }} className="h-full bg-blue-500" title="TypeScript 48%" />
-                          <motion.div initial={{ width: 0 }} animate={{ width: "26%" }} transition={{ duration: 0.8, delay: 0.2 }} className="h-full bg-yellow-500" title="Python 26%" />
-                          <motion.div initial={{ width: 0 }} animate={{ width: "18%" }} transition={{ duration: 0.8, delay: 0.3 }} className="h-full bg-orange-500" title="Java 18%" />
-                          <motion.div initial={{ width: 0 }} animate={{ width: "8%" }} transition={{ duration: 0.8, delay: 0.4 }} className="h-full bg-purple-500" title="Other 8%" />
+                          <div style={{ width: "48%" }} className="h-full bg-blue-500" title="TypeScript 48%" />
+                          <div style={{ width: "26%" }} className="h-full bg-yellow-500" title="Python 26%" />
+                          <div style={{ width: "18%" }} className="h-full bg-orange-500" title="Java 18%" />
+                          <div style={{ width: "8%" }} className="h-full bg-purple-500" title="Other 8%" />
                         </div>
                       </div>
 
@@ -1263,4 +1230,4 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
   );
 };
 
-export default ProjectScrollyStage;
+export default React.memo(ProjectScrollyStage);

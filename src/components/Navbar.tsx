@@ -1,6 +1,6 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Menu, 
   X, 
@@ -16,7 +16,6 @@ import {
   ChevronRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { MagneticButton } from "./MagneticButton";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const navLinks = [
@@ -34,105 +33,12 @@ export const HIRE_ME_MAILTO = `mailto:madhiremohanreddy@gmail.com?subject=${enco
   `Hi Mohan,\n\nWe came across your portfolio and would like to discuss an engineering opportunity with you.\n\nOpportunity Overview:\n- Company / Organization: \n- Role / Position: (e.g. SDE Intern / Full-Stack Engineer)\n- Employment Type: (Full-time / Internship / Contract)\n- Location / Work Mode: (Remote / Hybrid / On-site)\n- Estimated Timeline / Start Date: \n\nPlease let us know your availability for a brief introductory conversation.\n\nBest regards,\n[Your Name / Title]\n[Company / LinkedIn]`
 )}`;
 
-type NavAnimStage = "dot" | "circle" | "line" | "expanded" | "ready";
-
-const navVariants = {
-  dot: {
-    width: "12px",
-    height: "12px",
-    borderRadius: "9999px",
-    backgroundColor: "hsl(var(--primary))",
-    borderWidth: "0px",
-    borderColor: "transparent",
-    boxShadow: "0 0 16px 3px hsl(var(--primary) / 0.9)",
-    backdropFilter: "blur(0px)",
-    WebkitBackdropFilter: "blur(0px)",
-    transition: { duration: 0.25, ease: "easeOut" },
-  },
-  circle: {
-    width: "28px",
-    height: "28px",
-    borderRadius: "9999px",
-    backgroundColor: "hsl(var(--primary) / 0.15)",
-    borderWidth: "2px",
-    borderColor: "hsl(var(--primary))",
-    boxShadow: "0 0 24px 5px hsl(var(--primary) / 0.8)",
-    backdropFilter: "blur(0px)",
-    WebkitBackdropFilter: "blur(0px)",
-    transition: { type: "spring", stiffness: 350, damping: 20 },
-  },
-  line: {
-    width: "100%",
-    height: "3px",
-    borderRadius: "9999px",
-    backgroundColor: "hsl(var(--primary))",
-    borderWidth: "0px",
-    borderColor: "transparent",
-    boxShadow: "0 0 24px 3px hsl(var(--primary) / 0.85)",
-    backdropFilter: "blur(0px)",
-    WebkitBackdropFilter: "blur(0px)",
-    transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] },
-  },
-  expanded: {
-    width: "100%",
-    height: "56px",
-    borderRadius: "2rem",
-    backgroundColor: "hsl(var(--background) / 0.20)",
-    borderWidth: "1px",
-    borderColor: "hsl(var(--foreground) / 0.10)",
-    boxShadow:
-      "0 8px 32px hsl(var(--primary) / 0.08), inset 0 1px 0 hsl(var(--foreground) / 0.08), inset 0 -1px 0 hsl(var(--foreground) / 0.04)",
-    backdropFilter: "blur(24px) saturate(1.6)",
-    WebkitBackdropFilter: "blur(24px) saturate(1.6)",
-    transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] },
-  },
-  ready: {
-    width: "100%",
-    height: "56px",
-    borderRadius: "2rem",
-    backgroundColor: "hsl(var(--background) / 0.20)",
-    borderWidth: "1px",
-    borderColor: "hsl(var(--foreground) / 0.10)",
-    boxShadow:
-      "0 8px 32px hsl(var(--primary) / 0.08), inset 0 1px 0 hsl(var(--foreground) / 0.08), inset 0 -1px 0 hsl(var(--foreground) / 0.04)",
-    backdropFilter: "blur(24px) saturate(1.6)",
-    WebkitBackdropFilter: "blur(24px) saturate(1.6)",
-    transition: { duration: 0.2 },
-  },
-};
-
-const Navbar = ({ skipEntryAnim = false, introActive = false }: { skipEntryAnim?: boolean; introActive?: boolean }) => {
+const Navbar = ({ skipEntryAnim: _skipEntryAnim = false, introActive = false }: { skipEntryAnim?: boolean; introActive?: boolean }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const prefersReducedMotion = useReducedMotion();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("#home");
   const [isDark, setIsDark] = useState(true);
-  const [animStage, setAnimStage] = useState<NavAnimStage>(() => {
-    if (skipEntryAnim || introActive) return "ready";
-    if (typeof window !== "undefined" && window.innerWidth >= 1024) {
-      return "dot";
-    }
-    return "ready";
-  });
-  useEffect(() => {
-    if (skipEntryAnim || introActive || prefersReducedMotion || (typeof window !== "undefined" && window.innerWidth < 1024)) {
-      setAnimStage("ready");
-      return;
-    }
-
-    const t1 = setTimeout(() => setAnimStage("circle"), 350);
-    const t2 = setTimeout(() => setAnimStage("line"), 650);
-    const t3 = setTimeout(() => setAnimStage("expanded"), 950);
-    const t4 = setTimeout(() => setAnimStage("ready"), 1200);
-
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
-      clearTimeout(t4);
-    };
-  }, [prefersReducedMotion, skipEntryAnim]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -301,107 +207,88 @@ const Navbar = ({ skipEntryAnim = false, introActive = false }: { skipEntryAnim?
 
       <nav className="fixed top-3 sm:top-4 left-3 sm:left-4 right-3 sm:right-4 z-50 mx-auto max-w-6xl flex flex-col items-center pointer-events-none">
         {/* Main Navbar Pill */}
-        <motion.div
-          variants={navVariants}
-          initial={prefersReducedMotion ? "ready" : (typeof window !== "undefined" && window.innerWidth < 1024 ? "ready" : "dot")}
-          animate={animStage}
-          className="relative overflow-hidden w-full pointer-events-auto shadow-lg"
+        <div
+          className="relative overflow-hidden w-full pointer-events-auto shadow-lg h-14 rounded-[2rem] border border-foreground/10"
+          style={{
+            backgroundColor: "hsl(var(--background) / 0.20)",
+            boxShadow:
+              "0 8px 32px hsl(var(--primary) / 0.08), inset 0 1px 0 hsl(var(--foreground) / 0.08), inset 0 -1px 0 hsl(var(--foreground) / 0.04)",
+            backdropFilter: "blur(24px) saturate(1.6)",
+            WebkitBackdropFilter: "blur(24px) saturate(1.6)",
+          }}
         >
           <div
-            className="absolute inset-0 rounded-[2rem] pointer-events-none transition-opacity duration-300"
+            className="absolute inset-0 rounded-[2rem] pointer-events-none"
             style={{
               background: "linear-gradient(135deg, hsl(var(--background) / 0.75), hsl(var(--background) / 0.55))",
-              opacity: animStage === "expanded" || animStage === "ready" ? 1 : 0,
             }}
           />
 
           <div
-            className="absolute inset-0 rounded-[2rem] pointer-events-none transition-opacity duration-300"
+            className="absolute inset-0 rounded-[2rem] pointer-events-none"
             style={{
               background:
                 "radial-gradient(ellipse 60% 50% at 20% 0%, hsl(var(--primary) / 0.15), transparent 70%), radial-gradient(ellipse 40% 40% at 80% 100%, hsl(var(--accent) / 0.08), transparent 70%)",
-              opacity: animStage === "expanded" || animStage === "ready" ? 1 : 0,
             }}
           />
 
-          <div
-            className="relative flex items-center justify-between h-14 px-4 sm:px-8 w-full transition-opacity duration-200"
-            style={{
-              opacity: animStage === "ready" ? 1 : 0,
-              pointerEvents: animStage === "ready" ? "auto" : "none",
-            }}
-          >
-            <motion.a 
+          <div className="relative flex items-center justify-between h-14 px-4 sm:px-8 w-full">
+            <a 
               href="/" 
               onClick={handleLogoClick}
               id="navbar-logo"
-              initial={prefersReducedMotion ? false : { opacity: 0, y: 6 }}
-              animate={introActive ? { opacity: 0, y: 0 } : animStage === "ready" ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
-              transition={{ duration: 0.3, delay: introActive ? 0 : 0.05, ease: [0.22, 1, 0.36, 1] }}
-              className="font-outfit text-xl font-extrabold tracking-wider cursor-pointer select-none whitespace-nowrap shrink-0"
+              className={`font-outfit text-xl font-extrabold tracking-wider cursor-pointer select-none whitespace-nowrap shrink-0 transition-opacity duration-200 ${
+                introActive ? "opacity-0 pointer-events-none" : "opacity-100"
+              }`}
             >
               <span className="text-[#FF5722] drop-shadow-[0_0_8px_rgba(255,87,34,0.4)]">MOHAN</span>{" "}
               <span className="text-foreground dark:text-white">REDDY</span>
-            </motion.a>
+            </a>
 
             {/* Desktop Navigation Links */}
             <div className="hidden md:flex items-center gap-5">
-              {navLinks.map((link, i) => {
+              {navLinks.map((link) => {
                 const active = isLinkActive(link.href);
                 return (
-                  <motion.a
+                  <a
                     key={link.href}
                     href={link.href}
-                    initial={prefersReducedMotion ? false : { opacity: 0, y: 6 }}
-                    animate={animStage === "ready" ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
-                    transition={{ duration: 0.3, delay: 0.1 + i * 0.04, ease: [0.22, 1, 0.36, 1] }}
                     onClick={(e) => handleNavLinkClick(e, link.href)}
-                    className={`text-sm font-medium transition-all duration-300 font-grotesk relative px-3 py-1 rounded-full ${active
+                    className={`text-sm font-medium transition-colors duration-200 font-grotesk relative px-3 py-1 rounded-full ${active
                       ? "text-primary font-semibold"
                       : "text-foreground/70 hover:text-primary"
                       }`}
                   >
                     {link.label}
                     {active && (
-                      <motion.div
-                        layoutId="nav-pill"
+                      <div
                         className="absolute inset-0 rounded-full -z-10"
                         style={{
                           background: "hsl(var(--primary) / 0.12)",
                           boxShadow: "0 0 12px hsl(var(--primary) / 0.15)",
                         }}
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
                       />
                     )}
-                  </motion.a>
+                  </a>
                 );
               })}
-              <motion.button
+              <button
                 onClick={toggleTheme}
-                initial={prefersReducedMotion ? false : { opacity: 0, y: 6 }}
-                animate={animStage === "ready" ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
-                transition={{ duration: 0.3, delay: 0.38, ease: [0.22, 1, 0.36, 1] }}
-                className="p-2 rounded-full text-foreground/60 hover:text-primary transition-colors"
+                className="p-2 rounded-full text-foreground/60 hover:text-primary transition-colors cursor-pointer"
                 style={{
                   background: "hsl(var(--foreground) / 0.06)",
                 }}
                 aria-label="Toggle theme"
               >
                 {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-              </motion.button>
-              <motion.div
-                initial={prefersReducedMotion ? false : { opacity: 0, y: 6 }}
-                animate={animStage === "ready" ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
-                transition={{ duration: 0.35, delay: 0.44, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <MagneticButton>
-                  <Button asChild size="sm" className="rounded-full bg-primary hover:bg-primary/80 shadow-[0_0_16px_hsl(var(--primary)/0.3)]">
-                    <a href={HIRE_ME_MAILTO}>
-                      <Mail className="w-4 h-4 mr-1" /> Hire Me
-                    </a>
-                  </Button>
-                </MagneticButton>
-              </motion.div>
+              </button>
+              <div>
+                <Button asChild size="sm" className="rounded-full bg-primary hover:bg-primary/80 shadow-[0_0_16px_hsl(var(--primary)/0.3)]">
+                  <a href={HIRE_ME_MAILTO}>
+                    <Mail className="w-4 h-4 mr-1" /> Hire Me
+                  </a>
+                </Button>
+              </div>
             </div>
 
             {/* Mobile Header Controls */}
@@ -436,7 +323,7 @@ const Navbar = ({ skipEntryAnim = false, introActive = false }: { skipEntryAnim?
               </button>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Mobile Dropdown Menu Card */}
         <AnimatePresence>

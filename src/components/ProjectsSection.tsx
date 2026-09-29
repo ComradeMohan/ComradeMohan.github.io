@@ -922,10 +922,16 @@ const ProjectsSection = () => {
   useEffect(() => {
     if (prefersReducedMotion) return;
 
+    const count = projects.length;
+    const initialProgress = scrollYProgress.get();
+    if (typeof initialProgress === "number") {
+      const initialIndex = initialProgress <= 0 ? 0 : initialProgress >= 1 ? count - 1 : Math.min(count - 1, Math.max(0, Math.floor(initialProgress * count)));
+      setActiveIndex(initialIndex);
+    }
+
     const unsubscribe = scrollYProgress.on("change", (latest) => {
-      // Map 0 -> 1 progress to project index (0 to 5)
-      const count = projects.length;
-      const index = Math.min(count - 1, Math.max(0, Math.floor(latest * count)));
+      // Map 0 -> 1 progress cleanly to project index (0 to 5)
+      const index = latest <= 0.001 ? 0 : latest >= 0.999 ? count - 1 : Math.min(count - 1, Math.max(0, Math.floor(latest * count)));
       setActiveIndex(index);
     });
 
@@ -940,14 +946,14 @@ const ProjectsSection = () => {
       const rect = desktopShowcaseRef.current.getBoundingClientRect();
       const scrollTop = window.scrollY + rect.top;
       const totalScrollDistance = desktopShowcaseRef.current.offsetHeight - window.innerHeight;
-      const targetScroll = scrollTop + (i / (projects.length - 1)) * totalScrollDistance;
+      const targetScroll = scrollTop + ((i + 0.5) / projects.length) * totalScrollDistance;
       window.scrollTo({ top: targetScroll, behavior: "smooth" });
     }
   };
 
   return (
     <section id="projects" className="pt-2 pb-12 sm:pt-3 sm:pb-16 scroll-mt-20 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0">
         {/* Section Header: Sticky on mobile under navbar so 'My Projects' stays visible while cards stack below it */}
         <div className="sticky top-[74px] z-40 bg-background/85 backdrop-blur-md py-2 sm:static sm:bg-transparent sm:backdrop-blur-none sm:py-0 text-center mb-0 transition-all">
           <h2 className="text-4xl font-extrabold mb-3 sm:mb-4 font-outfit">
