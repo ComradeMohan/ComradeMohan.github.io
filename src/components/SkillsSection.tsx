@@ -544,7 +544,7 @@ const marqueeTechs = [
 ];
 
 // ============================================================================
-// 3. INTERACTIVE BENTO CARD (Neat, spacious, non-boxy flowing pills)
+// 3. INTERACTIVE BENTO CARD (Human-crafted, crisp borders, tactile pills)
 // ============================================================================
 const BentoCard = ({ category }: { category: SkillCategory }) => {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -563,57 +563,56 @@ const BentoCard = ({ category }: { category: SkillCategory }) => {
     <div
       ref={cardRef}
       onMouseMove={handleMouseMove}
-      className="relative h-full flex flex-col justify-between rounded-2xl border border-border/80 bg-card/90 dark:bg-[#0c1017]/95 p-4 sm:p-5 lg:p-6 backdrop-blur-md transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5 group/card overflow-hidden"
+      className="relative h-full flex flex-col justify-between rounded-2xl border border-border/80 dark:border-white/10 bg-card/80 dark:bg-[#0c1017]/90 p-5 sm:p-6 backdrop-blur-xl transition-all duration-300 hover:border-[#FF5722]/40 hover:shadow-lg dark:hover:shadow-black/40 group/card overflow-hidden"
     >
       {/* Subtle Ambient Radial Glow tracking mouse */}
       <div
         className="pointer-events-none absolute -inset-px rounded-[inherit] opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 z-0"
         style={{
           background:
-            "radial-gradient(350px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), hsl(var(--primary) / 0.12), transparent 80%)",
+            "radial-gradient(300px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), hsl(var(--primary) / 0.08), transparent 80%)",
         }}
       />
 
-      {/* Ambient Top Accent Line */}
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#FF5722]/50 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300" />
-
-      <div className="relative z-10">
+      <div className="relative z-10 flex flex-col justify-between h-full">
         {/* Card Top: Icon, Titles & Credential Badge */}
-        <div className="flex items-start justify-between gap-3 mb-4">
-          <div className="flex items-center gap-2.5 sm:gap-3">
-            <div className="p-2 sm:p-2.5 rounded-xl bg-primary/10 border border-primary/20 text-primary shrink-0 transition-transform duration-300 group-hover/card:scale-105">
-              <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+        <div>
+          <div className="flex items-start justify-between gap-3 mb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-[#FF5722]/10 border border-[#FF5722]/20 text-[#FF5722] shrink-0 transition-transform duration-200 group-hover/card:scale-105">
+                <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+              </div>
+              <div>
+                <h3 className="font-outfit font-bold text-base sm:text-lg text-foreground dark:text-white tracking-tight leading-snug">
+                  {category.title}
+                </h3>
+                <p className="font-grotesk text-xs text-muted-foreground dark:text-slate-400 mt-0.5 line-clamp-1">
+                  {category.subtitle}
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="font-outfit font-bold text-sm sm:text-base lg:text-lg text-foreground tracking-tight leading-snug">
-                {category.title}
-              </h3>
-              <p className="font-grotesk text-[11px] sm:text-xs text-muted-foreground mt-0.5 line-clamp-1">
-                {category.subtitle}
-              </p>
-            </div>
+
+            {category.badge && (
+              <span className="font-mono text-[10px] font-medium px-2 py-0.5 rounded-md bg-[#FF5722]/10 text-[#FF5722] border border-[#FF5722]/20 shrink-0 hidden sm:inline-block">
+                {category.badge}
+              </span>
+            )}
           </div>
 
-          {category.badge && (
-            <span className="font-mono text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/25 shrink-0 hidden sm:inline-block">
-              {category.badge}
-            </span>
-          )}
-        </div>
-
-        {/* Flowing, Neat Tech Pills (NO cramped box-like list, zero truncation, neat & spacious) */}
-        <div className="flex flex-wrap gap-2 sm:gap-2.5 mt-3">
-          {category.items.map((item) => (
-            <div
-              key={item.name}
-              className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl border border-border/60 bg-secondary/40 hover:bg-card hover:border-primary/50 hover:shadow-xs hover:-translate-y-0.5 transition-all duration-200 cursor-default"
-            >
-              <TechIcon name={item.name} className="w-4 h-4 sm:w-4.5 sm:h-4.5 shrink-0" />
-              <span className="font-outfit font-semibold text-xs sm:text-[13px] text-foreground whitespace-nowrap">
-                {item.name}
-              </span>
-            </div>
-          ))}
+          {/* Flowing, Neat Tech Pills */}
+          <div className="flex flex-wrap gap-2 pt-2">
+            {category.items.map((item) => (
+              <div
+                key={item.name}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border/70 dark:border-white/10 bg-secondary/40 dark:bg-white/[0.03] hover:bg-card dark:hover:bg-white/[0.08] hover:border-[#FF5722]/40 transition-all duration-150 cursor-default shadow-2xs"
+              >
+                <TechIcon name={item.name} className="w-4 h-4 shrink-0" />
+                <span className="font-outfit font-medium text-xs sm:text-[13px] text-foreground dark:text-slate-200 whitespace-nowrap">
+                  {item.name}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -627,31 +626,36 @@ export const SkillsSection = () => {
   return (
     <section
       id="skills"
-      className="relative scroll-mt-12 sm:scroll-mt-14 pt-0 pb-10 sm:pb-14 lg:pb-16 overflow-hidden bg-background/50 border-t border-border/60"
+      className="relative scroll-mt-12 sm:scroll-mt-14 pt-2 pb-12 sm:pb-16 lg:pb-20 overflow-hidden bg-background/50 border-t border-border/60 dark:border-white/5"
     >
       {/* Background Ambient Glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-primary/8 dark:bg-primary/10 rounded-full blur-[140px] pointer-events-none -z-10" />
-      <div className="absolute bottom-1/4 right-[-100px] w-80 h-80 bg-orange-600/5 dark:bg-orange-600/8 rounded-full blur-3xl pointer-events-none -z-10" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[550px] h-[300px] bg-[#FF5722]/5 rounded-full blur-[140px] pointer-events-none -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         {/* ========================================================================= */}
-        {/* SECTION HEADER: Clean, Minimal Title                                      */}
+        {/* SECTION HEADER: Clean, Editorial Title                                    */}
         {/* ========================================================================= */}
-        <div className="text-center max-w-3xl mx-auto pt-2 sm:pt-4 mb-5 sm:mb-7">
-          {/* Heading (matches 'Skills & Tech' for tests and branding) */}
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold font-outfit tracking-tight text-foreground leading-tight">
+        <div className="text-center max-w-3xl mx-auto pt-2 sm:pt-4 mb-6 sm:mb-8">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border/70 dark:border-white/10 bg-secondary/40 dark:bg-white/[0.03] text-[11px] font-mono tracking-wider text-muted-foreground uppercase mb-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#FF5722]" />
+            Technical Arsenal
+          </div>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-outfit tracking-tight text-foreground dark:text-white leading-tight">
             Skills &{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-[#FF5722] to-amber-500">
+            <span className="bg-gradient-to-r from-[#FF5722] via-[#FF6B4A] to-[#f43f5e] bg-clip-text text-transparent">
               Tech
             </span>
           </h2>
+          <p className="text-xs sm:text-sm text-muted-foreground dark:text-slate-400 font-grotesk mt-1.5 max-w-xl mx-auto">
+            Tools, languages, and frameworks used to architect high-throughput applications and scalable systems.
+          </p>
         </div>
 
         {/* ========================================================================= */}
-        {/* MAIN BENTO GRID: 6 Categories of Skills (Neat, clean, flowing pills)      */}
+        {/* MAIN BENTO GRID: 6 Categories of Skills                                   */}
         {/* ========================================================================= */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4 lg:gap-5 mb-10 sm:mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 mb-10 sm:mb-12">
           {skillCategoriesData.map((category) => (
             <BentoCard key={category.id} category={category} />
           ))}
@@ -660,16 +664,16 @@ export const SkillsSection = () => {
         {/* ========================================================================= */}
         {/* INFINITE TECH MARQUEE: Continuous Band of Brand Logos                     */}
         {/* ========================================================================= */}
-        <div className="relative overflow-hidden py-3 sm:py-3.5 border-t border-b border-border/70 bg-card/30 rounded-xl group/marquee">
+        <div className="relative overflow-hidden py-3 sm:py-3.5 border-y border-border/70 dark:border-white/10 bg-card/40 dark:bg-white/[0.015] rounded-xl group/marquee">
           {/* Edge Gradient Fades */}
-          <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-20 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-20 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+          <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
           <div className="animate-marquee group-hover/marquee:[animation-play-state:paused] flex gap-3 sm:gap-4 whitespace-nowrap">
             {[...marqueeTechs, ...marqueeTechs].map((tech, i) => (
               <span
                 key={`${tech}-${i}`}
-                className="inline-flex items-center gap-2 text-xs sm:text-[13px] font-mono text-muted-foreground hover:text-foreground transition-all duration-200 px-3.5 py-1.5 rounded-lg border border-border/60 bg-card/70 hover:bg-card hover:border-primary/40 hover:shadow-xs cursor-default shrink-0 group/tech"
+                className="inline-flex items-center gap-2 text-xs sm:text-[13px] font-mono text-muted-foreground hover:text-foreground dark:hover:text-white transition-all duration-200 px-3.5 py-1.5 rounded-lg border border-border/60 dark:border-white/10 bg-background/80 dark:bg-[#0c1017] hover:border-[#FF5722]/40 cursor-default shrink-0 group/tech"
               >
                 <TechIcon
                   name={tech}

@@ -1369,11 +1369,11 @@ export const ContactSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          className="relative rounded-2xl sm:rounded-[40px] bg-card/90 dark:bg-[#090C15]/95 border border-orange-500/30 dark:border-orange-500/20 shadow-[0_0_50px_rgba(249,115,22,0.08)] dark:shadow-[0_0_80px_rgba(249,115,22,0.12)] backdrop-blur-2xl p-4 sm:p-8 lg:p-10 overflow-hidden transition-colors duration-300"
+          className="relative rounded-2xl sm:rounded-[32px] bg-card/80 dark:bg-[#0c1017]/90 border border-border/80 dark:border-white/10 shadow-xl dark:shadow-black/30 backdrop-blur-xl p-5 sm:p-8 lg:p-10 overflow-hidden transition-colors duration-300"
         >
 
           {/* Decorative Corner Dotted Matrix SVG */}
-          <svg className="absolute top-4 right-4 w-32 h-32 text-orange-500/20 dark:text-orange-500/30 pointer-events-none" fill="currentColor">
+          <svg className="absolute top-4 right-4 w-32 h-32 text-border/60 dark:text-white/5 pointer-events-none" fill="currentColor">
             <pattern id="matrix-dots" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
               <circle cx="2" cy="2" r="1.2" />
             </pattern>
@@ -1386,15 +1386,15 @@ export const ContactSection = () => {
               <path
                 d="M 30,0 Q 270,300 30,600"
                 stroke="url(#center-arc-gradient)"
-                strokeWidth="2.5"
-                className="drop-shadow-[0_0_10px_rgba(249,115,22,0.6)]"
+                strokeWidth="1.5"
+                className="opacity-70"
               />
               <defs>
                 <linearGradient id="center-arc-gradient" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="#f97316" stopOpacity="0.05" />
-                  <stop offset="20%" stopColor="#f97316" stopOpacity="0.4" />
-                  <stop offset="50%" stopColor="#f97316" stopOpacity="1" />
-                  <stop offset="80%" stopColor="#f59e0b" stopOpacity="0.4" />
+                  <stop offset="20%" stopColor="#f97316" stopOpacity="0.3" />
+                  <stop offset="50%" stopColor="#f97316" stopOpacity="0.8" />
+                  <stop offset="80%" stopColor="#f59e0b" stopOpacity="0.3" />
                   <stop offset="100%" stopColor="#f97316" stopOpacity="0.05" />
                 </linearGradient>
               </defs>
@@ -1402,10 +1402,10 @@ export const ContactSection = () => {
 
             {/* Centered Orbit Rings & Node */}
             <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 flex items-center justify-center pointer-events-auto">
-              <div className="w-24 h-24 rounded-full border border-orange-500/30 border-dashed animate-[spin_40s_linear_infinite] flex items-center justify-center">
-                <div className="w-16 h-16 rounded-full border border-orange-500/50 flex items-center justify-center shadow-[0_0_15px_rgba(249,115,22,0.3)]">
-                  <div className="w-10 h-10 rounded-full bg-card border border-orange-500 shadow-[0_0_20px_rgba(249,115,22,0.6)] flex items-center justify-center cursor-pointer hover:scale-110 transition-transform">
-                    <Send className="w-4 h-4 text-orange-500" />
+              <div className="w-20 h-20 rounded-full border border-border/80 dark:border-white/10 border-dashed animate-[spin_40s_linear_infinite] flex items-center justify-center">
+                <div className="w-14 h-14 rounded-full border border-[#FF5722]/30 flex items-center justify-center">
+                  <div className="w-9 h-9 rounded-full bg-background dark:bg-[#0c1017] border border-border dark:border-white/15 shadow-sm flex items-center justify-center cursor-pointer hover:scale-105 hover:border-[#FF5722]/60 transition-transform">
+                    <Send className="w-3.5 h-3.5 text-[#FF5722]" />
                   </div>
                 </div>
               </div>
@@ -1424,18 +1424,18 @@ export const ContactSection = () => {
             >
               {/* Header Info */}
               <div className="space-y-4">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-orange-500/30 bg-orange-500/10 text-orange-500 dark:text-orange-400 text-xs font-bold uppercase tracking-wider font-outfit shadow-[0_0_12px_rgba(249,115,22,0.15)]">
-                  <Rocket className="w-3.5 h-3.5 text-orange-500" />
-                  <span>Let's Connect</span>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border/70 dark:border-white/10 bg-secondary/40 dark:bg-white/[0.03] text-[11px] font-mono tracking-wider text-muted-foreground uppercase">
+                  <Rocket className="w-3.5 h-3.5 text-[#FF5722]" />
+                  <span>Get in Touch</span>
                 </div>
 
-                <h2 className="text-3xl sm:text-4xl lg:text-[40px] font-extrabold text-foreground leading-[1.18] font-outfit tracking-tight">
+                <h2 className="text-3xl sm:text-4xl lg:text-[40px] font-bold text-foreground dark:text-white leading-[1.2] font-outfit tracking-tight">
                   Have an opportunity?<br />
-                  Let's <span className="bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(249,115,22,0.3)]">build something amazing</span> together.
+                  Let's <span className="bg-gradient-to-r from-[#FF5722] via-[#FF6B4A] to-[#f43f5e] bg-clip-text text-transparent">build something meaningful</span> together.
                 </h2>
 
-                <p className="text-xs sm:text-sm text-muted-foreground font-grotesk leading-relaxed">
-                  I'm always open to discussing new opportunities, interesting projects, and innovative ideas.
+                <p className="text-xs sm:text-sm text-muted-foreground dark:text-slate-400 font-grotesk leading-relaxed max-w-md">
+                  I'm open to discussing full-time software engineering roles, internship opportunities, and ambitious technical projects.
                 </p>
               </div>
 

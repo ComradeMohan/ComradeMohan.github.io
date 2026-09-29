@@ -59,7 +59,9 @@ const IntroAnimation = ({ onHandoff, onComplete }: IntroAnimationProps) => {
         setTimeout(() => {
           try {
             sessionStorage.setItem(INTRO_PLAYED_KEY, "true");
-          } catch {}
+          } catch (_err) {
+            // Ignore session storage errors (e.g. private browsing)
+          }
           onComplete();
         }, 460);
       }
@@ -80,60 +82,54 @@ const IntroAnimation = ({ onHandoff, onComplete }: IntroAnimationProps) => {
         <motion.div
           key="intro-overlay"
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, scale: 1.03 }}
-          transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
+          exit={{ opacity: 0, scale: 1.02 }}
+          transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
           className="fixed inset-0 flex flex-col items-center justify-center select-none overflow-hidden"
           style={{
             zIndex: 200,
             backgroundColor: isDark ? "#06080F" : "#FAFAFC",
           }}
         >
-          {/* Ambient background soft glow */}
+          {/* Subtle ambient background glow */}
           <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] blur-3xl pointer-events-none -z-10"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] blur-3xl pointer-events-none -z-10 opacity-60"
             style={{
               background: isDark
-                ? "radial-gradient(circle at center, rgba(255, 87, 34, 0.15) 0%, rgba(147, 51, 234, 0.05) 50%, transparent 75%)"
-                : "radial-gradient(circle at center, rgba(255, 87, 34, 0.08) 0%, rgba(249, 115, 22, 0.03) 50%, transparent 75%)",
+                ? "radial-gradient(circle at center, rgba(255, 87, 34, 0.12) 0%, transparent 70%)"
+                : "radial-gradient(circle at center, rgba(255, 87, 34, 0.06) 0%, transparent 70%)",
             }}
           />
 
           <div className="flex flex-col items-center justify-center px-4 max-w-xl text-center z-10">
             {/* Top Status Pill */}
             <motion.div
-              initial={{ opacity: 0, y: -10 }}
+              initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full border mb-6 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase shadow-xs"
-              style={{
-                backgroundColor: isDark ? "rgba(255, 255, 255, 0.04)" : "rgba(0, 0, 0, 0.03)",
-                borderColor: isDark ? "rgba(255, 255, 255, 0.09)" : "rgba(0, 0, 0, 0.08)",
-                color: isDark ? "#94A3B8" : "#64748B",
-              }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full border mb-6 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase shadow-xs border-border/80 bg-secondary/50 text-muted-foreground"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#FF5722] animate-pulse shadow-[0_0_8px_#FF5722]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-primary" />
               <span>INITIALIZING PORTFOLIO</span>
             </motion.div>
 
             {/* Main Centerpiece Typography: MOHAN REDDY */}
             <div className="overflow-hidden mb-3">
               <motion.h1
-                initial={{ opacity: 0, y: 28, scale: 0.94 }}
+                initial={{ opacity: 0, y: 24, scale: 0.96 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                 className="text-4xl sm:text-6xl md:text-7xl font-black font-outfit tracking-tight leading-none flex items-center justify-center gap-3 sm:gap-4.5"
               >
                 <span
-                  className="text-[#FF5722] drop-shadow-[0_0_24px_rgba(255,87,34,0.42)] inline-block"
-                  style={{ letterSpacing: "0.02em" }}
+                  className="text-primary inline-block font-black"
+                  style={{ letterSpacing: "0.01em" }}
                 >
                   MOHAN
                 </span>
                 <span
-                  className="inline-block"
+                  className="inline-block text-foreground font-black"
                   style={{
-                    color: isDark ? "#F8FAFC" : "#0F172A",
-                    letterSpacing: "0.02em",
+                    letterSpacing: "0.01em",
                   }}
                 >
                   REDDY
