@@ -84,23 +84,26 @@ const bgGlowColors = [
 ];
 
 const slideVariants = {
-  enter: {
+  enter: (dir: number) => ({
     opacity: 0,
-  },
+    y: dir > 0 ? 8 : -8,
+  }),
   center: {
     opacity: 1,
+    y: 0,
     transition: {
-      duration: 0.2,
-      ease: "easeInOut",
+      duration: 0.22,
+      ease: [0.25, 1, 0.5, 1],
     },
   },
-  exit: {
+  exit: (dir: number) => ({
     opacity: 0,
+    y: dir > 0 ? -8 : 8,
     transition: {
-      duration: 0.15,
-      ease: "easeInOut",
+      duration: 0.14,
+      ease: "easeIn",
     },
-  },
+  }),
 };
 
 // Exact 6-segment division: 0 -> 1/6, 1/6 -> 2/6, 2/6 -> 3/6, 3/6 -> 4/6, 4/6 -> 5/6, 5/6 -> 1.0
@@ -121,9 +124,20 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
   });
   const [direction, setDirection] = useState<number>(1);
   const prevIndexRef = useRef<number>(currentIndex);
+  const isJumpingRef = useRef<boolean>(false);
+  const jumpTimerRef = useRef<number | null>(null);
 
-  // Instantly sync active project on scroll progress changes without delay
+  useEffect(() => {
+    return () => {
+      if (jumpTimerRef.current !== null) {
+        window.clearTimeout(jumpTimerRef.current);
+      }
+    };
+  }, []);
+
+  // Instantly sync active project on scroll progress changes without delay, muted during programmatic jumps
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (isJumpingRef.current) return;
     const newIdx = getProjectIndex(latest);
     if (newIdx !== prevIndexRef.current) {
       setDirection(newIdx > prevIndexRef.current ? 1 : -1);
@@ -144,12 +158,18 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
 
   const handleJumpToProject = (idx: number) => {
     const targetIdx = Math.min(5, Math.max(0, idx));
-    const targetProgress = (targetIdx + 0.5) / 6;
+    const targetProgress = targetIdx === 5 ? (5 + 0.35) / 6 : (targetIdx + 0.5) / 6;
     const stageEl = document.getElementById("projects-stage-container");
     if (stageEl) {
       const rect = stageEl.getBoundingClientRect();
-      const scrollTop = window.scrollY + rect.top;
-      const totalDist = stageEl.offsetHeight - window.innerHeight;
+      const scrollTop = window.scrollY + rect.top - 74;
+      const totalDist = stageEl.offsetHeight - (window.innerHeight - 74);
+
+      // Lock scroll listener to prevent intermediate frame thrashing and animation glitches
+      isJumpingRef.current = true;
+      if (jumpTimerRef.current !== null) {
+        window.clearTimeout(jumpTimerRef.current);
+      }
 
       // Provide instant tactile visual update on click
       setDirection(targetIdx >= currentIndex ? 1 : -1);
@@ -160,11 +180,15 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
         top: scrollTop + targetProgress * totalDist,
         behavior: "smooth",
       });
+
+      jumpTimerRef.current = window.setTimeout(() => {
+        isJumpingRef.current = false;
+      }, 750);
     }
   };
 
   return (
-    <div className="sticky top-0 h-screen w-full flex flex-col justify-between items-center pt-20 sm:pt-22 lg:pt-20 xl:pt-24 pb-3 sm:pb-4 lg:pb-3 xl:pb-6 overflow-hidden z-20 px-4 sm:px-6 lg:px-4 xl:px-6">
+    <div className="sticky top-[74px] h-[calc(100vh-74px)] w-full flex flex-col justify-between items-center pt-0 pb-1.5 sm:pb-2.5 overflow-hidden z-20 px-4 sm:px-6 lg:px-4 xl:px-6">
 
       {/* Dynamic Background Atmosphere that changes per project */}
       <div
@@ -172,12 +196,22 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
         className="absolute w-[800px] h-[500px] rounded-full blur-[140px] pointer-events-none transition-colors duration-700"
       />
 
-      <div className="max-w-6xl xl:max-w-7xl w-full flex flex-col justify-between flex-1 h-full max-h-[calc(100vh-85px)] xl:max-h-[calc(100vh-105px)] relative z-10 select-none">
+      <div className="max-w-6xl xl:max-w-7xl w-full flex flex-col justify-between flex-1 h-full max-h-full relative z-10 select-none">
+
+        {/* ========================================================================= */}
+        {/* SECTION HEADER: My Projects (Replacing top padding, 0 gap to container)    */}
+        {/* ========================================================================= */}
+        <div className="text-center pt-0.5 pb-1 shrink-0">
+          <h2 className="text-2xl sm:text-2xl lg:text-3xl xl:text-4xl font-extrabold mb-0.5 sm:mb-1 font-outfit">
+            My <span className="text-primary">Projects</span>
+          </h2>
+          <div className="w-16 sm:w-20 h-0.5 sm:h-1 bg-primary mx-auto rounded-full" />
+        </div>
 
         {/* ========================================================================= */}
         {/* STAGE HEADER: Milestone Tracker & Scrolly Runner (01 / 06)                */}
         {/* ========================================================================= */}
-        <div className="flex items-center justify-between pb-3 border-b border-border/60 shrink-0">
+        <div className="flex items-center justify-between pb-1.5 lg:pb-2 xl:pb-2.5 border-b border-border/60 shrink-0">
           <div className="flex items-center gap-3">
             <span className="text-xs font-mono font-bold tracking-wider px-2.5 py-1 rounded-md bg-primary/10 text-primary border border-primary/20">
               0{currentIndex + 1} / 06
@@ -221,8 +255,8 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
         {/* ========================================================================= */}
         {/* THE MAIN STAGE: Rich High-Impact Content with Micro-Animations            */}
         {/* ========================================================================= */}
-        <div className="relative flex-1 w-full my-1.5 lg:my-2 xl:my-3 flex items-center justify-center overflow-hidden min-h-[380px] xl:min-h-[440px]">
-          <AnimatePresence mode="popLayout" custom={direction} initial={false}>
+        <div className="relative flex-1 w-full my-1 lg:my-1.5 xl:my-2 flex flex-col justify-center overflow-visible min-h-0">
+          <AnimatePresence mode="wait" custom={direction} initial={false}>
 
             {/* --------------------------------------------------------------------- */}
             {/* PROJECT 01: Object Detection in Python                                */}
@@ -235,85 +269,85 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                 initial="enter"
                 animate="center"
                 exit="exit"
-                className="w-full grid grid-cols-12 gap-8 lg:gap-10 items-center"
+                className="w-full grid grid-cols-12 gap-6 lg:gap-8 xl:gap-10 items-center"
               >
                 {/* Left Story Column */}
-                <div className="col-span-12 lg:col-span-6 space-y-3.5 text-left">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-mono font-bold">
+                <div className="col-span-12 lg:col-span-6 space-y-2 lg:space-y-2.5 xl:space-y-3.5 text-left">
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 xl:px-3 xl:py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-[11px] xl:text-xs font-mono font-bold">
                     <Camera className="w-3.5 h-3.5" />
                     <span>Computer Vision • YOLOv8</span>
                   </div>
 
-                  <h3 className="text-3xl lg:text-4xl font-extrabold font-outfit text-foreground leading-tight">
+                  <h3 className="text-2xl lg:text-[26px] xl:text-3xl font-extrabold font-outfit text-foreground leading-tight">
                     Object Detection in Python
                   </h3>
 
-                  <p className="text-sm text-muted-foreground font-grotesk leading-relaxed">
+                  <p className="text-xs lg:text-[13px] xl:text-sm text-muted-foreground font-grotesk leading-snug xl:leading-relaxed">
                     Real-time object detection and classification system built with Python and OpenCV. Utilizes machine learning models for accurate identification and classification of objects in live video streams with low inference latency.
                   </p>
 
                   {/* Engineering Highlights row with Micro-Animations */}
-                  <div className="grid grid-cols-3 gap-2.5">
-                    <AnimatedMetricCard delay={0.05} className="p-2.5 rounded-xl bg-card/80 border border-border/80 text-center hover:border-primary/40">
-                      <span className="text-base font-extrabold text-primary font-outfit block">45+ FPS</span>
-                      <span className="text-[10px] text-muted-foreground font-mono">Real-Time Speed</span>
+                  <div className="grid grid-cols-3 gap-2 xl:gap-2.5">
+                    <AnimatedMetricCard delay={0.05} className="p-1.5 xl:p-2.5 rounded-xl bg-card/80 border border-border/80 text-center hover:border-primary/40">
+                      <span className="text-sm xl:text-base font-extrabold text-primary font-outfit block">45+ FPS</span>
+                      <span className="text-[9px] xl:text-[10px] text-muted-foreground font-mono">Real-Time Speed</span>
                     </AnimatedMetricCard>
-                    <AnimatedMetricCard delay={0.1} className="p-2.5 rounded-xl bg-card/80 border border-border/80 text-center hover:border-foreground/30">
-                      <span className="text-base font-extrabold text-foreground font-outfit block">80 Classes</span>
-                      <span className="text-[10px] text-muted-foreground font-mono">COCO Dataset</span>
+                    <AnimatedMetricCard delay={0.1} className="p-1.5 xl:p-2.5 rounded-xl bg-card/80 border border-border/80 text-center hover:border-foreground/30">
+                      <span className="text-sm xl:text-base font-extrabold text-foreground font-outfit block">80 Classes</span>
+                      <span className="text-[9px] xl:text-[10px] text-muted-foreground font-mono">COCO Dataset</span>
                     </AnimatedMetricCard>
-                    <AnimatedMetricCard delay={0.15} className="p-2.5 rounded-xl bg-card/80 border border-border/80 text-center hover:border-emerald-500/40">
-                      <span className="text-base font-extrabold text-emerald-400 font-outfit block">YOLOv8n</span>
-                      <span className="text-[10px] text-muted-foreground font-mono">Ultralytics Engine</span>
+                    <AnimatedMetricCard delay={0.15} className="p-1.5 xl:p-2.5 rounded-xl bg-card/80 border border-border/80 text-center hover:border-emerald-500/40">
+                      <span className="text-sm xl:text-base font-extrabold text-emerald-400 font-outfit block">YOLOv8n</span>
+                      <span className="text-[9px] xl:text-[10px] text-muted-foreground font-mono">Ultralytics Engine</span>
                     </AnimatedMetricCard>
                   </div>
 
                   {/* Problem & Solution with hover lift */}
-                  <div className="grid grid-cols-2 gap-2.5">
-                    <motion.div whileHover={{ scale: 1.02 }} className="p-2.5 rounded-xl bg-card/70 border border-border/70 backdrop-blur-xs transition-colors hover:border-primary/30">
-                      <span className="text-[11px] font-bold text-foreground font-outfit block mb-1">🎯 Problem</span>
-                      <p className="text-[11px] text-muted-foreground font-grotesk leading-snug">
+                  <div className="grid grid-cols-2 gap-2 xl:gap-2.5">
+                    <motion.div whileHover={{ scale: 1.02 }} className="p-2 xl:p-2.5 rounded-xl bg-card/70 border border-border/70 backdrop-blur-xs transition-colors hover:border-primary/30">
+                      <span className="text-[10.5px] xl:text-[11px] font-bold text-foreground font-outfit block mb-0.5 xl:mb-1">🎯 Problem</span>
+                      <p className="text-[10px] xl:text-[11px] text-muted-foreground font-grotesk leading-tight xl:leading-snug">
                         Manual identification is slow and error-prone in video surveillance and real-time sorting.
                       </p>
                     </motion.div>
-                    <motion.div whileHover={{ scale: 1.02 }} className="p-2.5 rounded-xl bg-card/70 border border-border/70 backdrop-blur-xs transition-colors hover:border-primary/30">
-                      <span className="text-[11px] font-bold text-foreground font-outfit block mb-1">🚀 Solution</span>
-                      <p className="text-[11px] text-muted-foreground font-grotesk leading-snug">
+                    <motion.div whileHover={{ scale: 1.02 }} className="p-2 xl:p-2.5 rounded-xl bg-card/70 border border-border/70 backdrop-blur-xs transition-colors hover:border-primary/30">
+                      <span className="text-[10.5px] xl:text-[11px] font-bold text-foreground font-outfit block mb-0.5 xl:mb-1">🚀 Solution</span>
+                      <p className="text-[10px] xl:text-[11px] text-muted-foreground font-grotesk leading-tight xl:leading-snug">
                         High-frame-rate YOLOv8 pipeline for simultaneous multi-object recognition and bounding boxes.
                       </p>
                     </motion.div>
                   </div>
 
                   {/* Feature Highlights */}
-                  <div className="space-y-1.5 text-xs text-muted-foreground font-grotesk">
-                    <div className="flex items-center gap-2">
+                  <div className="space-y-1 xl:space-y-1.5 text-[11px] xl:text-xs text-muted-foreground font-grotesk">
+                    <div className="flex items-center gap-1.5 xl:gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />
                       <span>Multi-target simultaneous tracking with bounding boxes & confidence scoring</span>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5 xl:gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />
                       <span>Dynamic video stream inputs (Webcam, CCTV, and high-res MP4 files)</span>
                     </div>
                   </div>
 
                   {/* Tech Stack Pills */}
-                  <div className="flex flex-wrap gap-1.5 pt-1">
+                  <div className="flex flex-wrap gap-1 xl:gap-1.5 pt-0.5 xl:pt-1">
                     {["Python", "OpenCV", "YOLOv8", "cvzone", "ultralytics", "NumPy"].map((t) => (
-                      <TechTag key={t} tag={t} />
+                      <TechTag key={t} tag={t} className="px-2 py-0.5 xl:px-2.5 xl:py-1 text-[11px] xl:text-xs" />
                     ))}
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex items-center gap-3 pt-1">
+                  <div className="flex items-center gap-2.5 pt-0.5 xl:pt-1">
                     <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                      <Button asChild className="bg-primary hover:bg-primary/80 h-9 px-4 text-xs font-semibold shadow-md hover:shadow-primary/20" onClick={() => trackEvent("click", "github_project", "Object Detection in Python")}>
+                      <Button asChild className="bg-primary hover:bg-primary/80 h-8 xl:h-9 px-3.5 xl:px-4 text-xs font-semibold shadow-md hover:shadow-primary/20" onClick={() => trackEvent("click", "github_project", "Object Detection in Python")}>
                         <a href="https://github.com/ComradeMohan/CSA0810PythonProgramming/tree/main/Various%20Object%20Identification" target="_blank" rel="noopener noreferrer">
                           <Github className="w-4 h-4 mr-2" /> View GitHub Repository
                         </a>
                       </Button>
                     </motion.div>
                     <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                      <Button asChild variant="outline" className="border-border hover:bg-secondary/60 hover:text-foreground h-9 px-4 text-xs font-semibold" onClick={() => trackEvent("download", "model", "yolov8n.pt")}>
+                      <Button asChild variant="outline" className="border-border hover:bg-secondary/60 hover:text-foreground h-8 xl:h-9 px-3.5 xl:px-4 text-xs font-semibold" onClick={() => trackEvent("download", "model", "yolov8n.pt")}>
                         <a href="https://github.com/ComradeMohan/CSA0810PythonProgramming/blob/main/Various%20Object%20Identification/yolov8n.pt" target="_blank" rel="noopener noreferrer">
                           📦 Download Model
                         </a>
@@ -323,19 +357,19 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                 </div>
 
                 {/* Right Visual Column */}
-                <div className="col-span-12 lg:col-span-6 flex flex-col justify-center gap-3">
+                <div className="col-span-12 lg:col-span-6 flex flex-col justify-center gap-2 xl:gap-3">
                   <motion.div
                     whileHover={{ scale: 1.015 }}
                     transition={{ duration: 0.3 }}
-                    className="w-full rounded-2xl overflow-hidden border border-border/80 bg-card/80 shadow-2xl p-2.5 relative group"
+                    className="w-full rounded-2xl overflow-hidden border border-border/80 bg-card/80 shadow-2xl p-2 xl:p-2.5 relative group"
                   >
                     <ProgressiveImage
                       src="/object_detection_comparison.webp"
                       alt="Object Detection Comparison"
-                      className="w-full h-[240px] xl:h-[270px] rounded-xl object-cover"
+                      className="w-full h-[180px] lg:h-[190px] xl:h-[260px] rounded-xl object-cover"
                     />
 
-                    <div className="flex justify-between items-center px-2 pt-2 text-[10px] font-mono text-muted-foreground">
+                    <div className="flex justify-between items-center px-1.5 pt-1.5 xl:px-2 xl:pt-2 text-[9.5px] xl:text-[10px] font-mono text-muted-foreground">
                       <span className="text-orange-400 font-bold flex items-center gap-1.5">
                         <PulsingDot colorClass="bg-orange-400" /> Input Image
                       </span>
@@ -346,18 +380,18 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                   </motion.div>
 
                   {/* Live Telemetry Panel with Hover Lift */}
-                  <div className="p-3.5 rounded-xl border border-primary/20 bg-card/60 backdrop-blur-md grid grid-cols-3 gap-2 text-center text-xs font-mono">
-                    <AnimatedMetricCard delay={0.1} className="p-2 rounded-lg bg-secondary/50">
-                      <span className="text-muted-foreground text-[10px] block">Inference Time</span>
-                      <span className="text-primary font-bold">18.4ms</span>
+                  <div className="p-2.5 xl:p-3.5 rounded-xl border border-primary/20 bg-card/60 backdrop-blur-md grid grid-cols-3 gap-1.5 xl:gap-2 text-center text-xs font-mono">
+                    <AnimatedMetricCard delay={0.1} className="p-1.5 xl:p-2 rounded-lg bg-secondary/50">
+                      <span className="text-muted-foreground text-[9px] xl:text-[10px] block">Inference Time</span>
+                      <span className="text-primary font-bold text-xs xl:text-sm">18.4ms</span>
                     </AnimatedMetricCard>
-                    <AnimatedMetricCard delay={0.15} className="p-2 rounded-lg bg-secondary/50">
-                      <span className="text-muted-foreground text-[10px] block">Mean Avg Precision</span>
-                      <span className="text-emerald-400 font-bold">mAP@0.5: 78.2%</span>
+                    <AnimatedMetricCard delay={0.15} className="p-1.5 xl:p-2 rounded-lg bg-secondary/50">
+                      <span className="text-muted-foreground text-[9px] xl:text-[10px] block">Mean Avg Precision</span>
+                      <span className="text-emerald-400 font-bold text-xs xl:text-sm">mAP@0.5: 78.2%</span>
                     </AnimatedMetricCard>
-                    <AnimatedMetricCard delay={0.2} className="p-2 rounded-lg bg-secondary/50">
-                      <span className="text-muted-foreground text-[10px] block">Input Resolution</span>
-                      <span className="text-foreground font-bold">1080p @ 60Hz</span>
+                    <AnimatedMetricCard delay={0.2} className="p-1.5 xl:p-2 rounded-lg bg-secondary/50">
+                      <span className="text-muted-foreground text-[9px] xl:text-[10px] block">Input Resolution</span>
+                      <span className="text-foreground font-bold text-xs xl:text-sm">1080p @ 60Hz</span>
                     </AnimatedMetricCard>
                   </div>
                 </div>
@@ -375,97 +409,97 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                 initial="enter"
                 animate="center"
                 exit="exit"
-                className="w-full grid grid-cols-12 gap-8 lg:gap-10 items-center"
+                className="w-full grid grid-cols-12 gap-6 lg:gap-8 xl:gap-10 items-center"
               >
                 {/* Left Story Column */}
-                <div className="col-span-12 lg:col-span-6 space-y-3.5 text-left">
+                <div className="col-span-12 lg:col-span-6 space-y-2 lg:space-y-2.5 xl:space-y-3.5 text-left">
                   <div className="flex items-center gap-2">
-                    <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-orange-500/30 bg-orange-500/10 text-orange-400 text-xs font-mono font-bold">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 xl:px-3 xl:py-1 rounded-full border border-orange-500/30 bg-orange-500/10 text-orange-400 text-[11px] xl:text-xs font-mono font-bold">
                       <Users className="w-3.5 h-3.5" />
                       <span>Campus Web Platform • Live</span>
                     </span>
-                    <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-0.5 rounded-full border border-yellow-500/30 bg-yellow-500/10 text-yellow-500 cursor-default">
+                    <span className="inline-flex items-center gap-1 text-[11px] xl:text-xs font-bold px-2 py-0.5 xl:px-2.5 xl:py-0.5 rounded-full border border-yellow-500/30 bg-yellow-500/10 text-yellow-500 cursor-default">
                       <Star className="w-3 h-3 fill-current" /> {saveethaStars !== null ? saveethaStars : "22"} Stars
                     </span>
                   </div>
 
-                  <h3 className="text-3xl lg:text-4xl font-extrabold font-outfit text-foreground leading-tight">
+                  <h3 className="text-2xl lg:text-[26px] xl:text-3xl font-extrabold font-outfit text-foreground leading-tight">
                     Saveetha Hub
                   </h3>
 
-                  <p className="text-sm text-muted-foreground font-grotesk leading-relaxed">
+                  <p className="text-xs lg:text-[13px] xl:text-sm text-muted-foreground font-grotesk leading-snug xl:leading-relaxed">
                     A centralized digital ecosystem for Saveetha University engineering students to access semester study materials, collaborate on projects, calculate CGPA with predictive modeling, and stay connected with campus activities.
                   </p>
 
                   {/* Impact Highlights with Micro-Animations */}
-                  <div className="grid grid-cols-3 gap-2.5">
-                    <AnimatedMetricCard delay={0.05} className="p-2.5 rounded-xl bg-card/80 border border-orange-500/20 text-center hover:border-orange-500/40">
-                      <span className="text-base font-extrabold text-orange-400 font-outfit block">3,800+</span>
-                      <span className="text-[10px] text-muted-foreground font-mono">Active Users</span>
+                  <div className="grid grid-cols-3 gap-2 xl:gap-2.5">
+                    <AnimatedMetricCard delay={0.05} className="p-1.5 xl:p-2.5 rounded-xl bg-card/80 border border-orange-500/20 text-center hover:border-orange-500/40">
+                      <span className="text-sm xl:text-base font-extrabold text-orange-400 font-outfit block">3,800+</span>
+                      <span className="text-[9px] xl:text-[10px] text-muted-foreground font-mono">Active Users</span>
                     </AnimatedMetricCard>
-                    <AnimatedMetricCard delay={0.1} className="p-2.5 rounded-xl bg-card/80 border border-orange-500/20 text-center hover:border-foreground/30">
-                      <span className="text-base font-extrabold text-foreground font-outfit block">24.7K</span>
-                      <span className="text-[10px] text-muted-foreground font-mono">Google Clicks</span>
+                    <AnimatedMetricCard delay={0.1} className="p-1.5 xl:p-2.5 rounded-xl bg-card/80 border border-orange-500/20 text-center hover:border-foreground/30">
+                      <span className="text-sm xl:text-base font-extrabold text-foreground font-outfit block">24.7K</span>
+                      <span className="text-[9px] xl:text-[10px] text-muted-foreground font-mono">Google Clicks</span>
                     </AnimatedMetricCard>
-                    <AnimatedMetricCard delay={0.15} className="p-2.5 rounded-xl bg-card/80 border border-orange-500/20 text-center hover:border-emerald-500/40">
-                      <span className="text-base font-extrabold text-emerald-400 font-outfit block">99.8%</span>
-                      <span className="text-[10px] text-muted-foreground font-mono">Production Uptime</span>
+                    <AnimatedMetricCard delay={0.15} className="p-1.5 xl:p-2.5 rounded-xl bg-card/80 border border-orange-500/20 text-center hover:border-emerald-500/40">
+                      <span className="text-sm xl:text-base font-extrabold text-emerald-400 font-outfit block">99.8%</span>
+                      <span className="text-[9px] xl:text-[10px] text-muted-foreground font-mono">Production Uptime</span>
                     </AnimatedMetricCard>
                   </div>
 
                   {/* Problem & Solution */}
-                  <div className="grid grid-cols-2 gap-2.5">
-                    <motion.div whileHover={{ scale: 1.02 }} className="p-2.5 rounded-xl bg-card/70 border border-border/70 backdrop-blur-xs transition-colors hover:border-orange-500/30">
-                      <span className="text-[11px] font-bold text-foreground font-outfit block mb-1">🎯 Problem</span>
-                      <p className="text-[11px] text-muted-foreground font-grotesk leading-snug">
+                  <div className="grid grid-cols-2 gap-2 xl:gap-2.5">
+                    <motion.div whileHover={{ scale: 1.02 }} className="p-2 xl:p-2.5 rounded-xl bg-card/70 border border-border/70 backdrop-blur-xs transition-colors hover:border-orange-500/30">
+                      <span className="text-[10.5px] xl:text-[11px] font-bold text-foreground font-outfit block mb-0.5 xl:mb-1">🎯 Problem</span>
+                      <p className="text-[10px] xl:text-[11px] text-muted-foreground font-grotesk leading-tight xl:leading-snug">
                         Students lacked a unified portal for verified notes, semester syllabus, and attendance tracking.
                       </p>
                     </motion.div>
-                    <motion.div whileHover={{ scale: 1.02 }} className="p-2.5 rounded-xl bg-card/70 border border-border/70 backdrop-blur-xs transition-colors hover:border-orange-500/30">
-                      <span className="text-[11px] font-bold text-foreground font-outfit block mb-1">🚀 Solution</span>
-                      <p className="text-[11px] text-muted-foreground font-grotesk leading-snug">
+                    <motion.div whileHover={{ scale: 1.02 }} className="p-2 xl:p-2.5 rounded-xl bg-card/70 border border-border/70 backdrop-blur-xs transition-colors hover:border-orange-500/30">
+                      <span className="text-[10.5px] xl:text-[11px] font-bold text-foreground font-outfit block mb-0.5 xl:mb-1">🚀 Solution</span>
+                      <p className="text-[10px] xl:text-[11px] text-muted-foreground font-grotesk leading-tight xl:leading-snug">
                         Engineered all-in-one portal with Supabase real-time sync, AI features, and secure auth.
                       </p>
                     </motion.div>
                   </div>
 
                   {/* Feature Highlights */}
-                  <div className="space-y-1.5 text-xs text-muted-foreground font-grotesk">
-                    <div className="flex items-center gap-2">
+                  <div className="space-y-1 xl:space-y-1.5 text-[11px] xl:text-xs text-muted-foreground font-grotesk">
+                    <div className="flex items-center gap-1.5 xl:gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-orange-400 shrink-0" />
                       <span>500+ curated subject syllabus notes, lab codes, and semester question papers</span>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5 xl:gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-orange-400 shrink-0" />
                       <span>Automated CGPA calculator with target goal forecasting across 8 semesters</span>
                     </div>
                   </div>
 
                   {/* Tech Stack Pills */}
-                  <div className="flex flex-wrap gap-1.5 pt-1">
+                  <div className="flex flex-wrap gap-1 xl:gap-1.5 pt-0.5 xl:pt-1">
                     {["React", "Next.js", "Tailwind CSS", "Firebase", "Vite", "Supabase"].map((t) => (
-                      <TechTag key={t} tag={t} />
+                      <TechTag key={t} tag={t} className="px-2 py-0.5 xl:px-2.5 xl:py-1 text-[11px] xl:text-xs" />
                     ))}
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex items-center gap-3 pt-1">
+                  <div className="flex items-center gap-2.5 pt-0.5 xl:pt-1">
                     <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                      <Button asChild className="bg-primary hover:bg-primary/80 h-9 px-4 text-xs font-semibold shadow-md hover:shadow-primary/20" onClick={() => trackEvent("click", "case_study", "Saveetha Hub")}>
+                      <Button asChild className="bg-primary hover:bg-primary/80 h-8 xl:h-9 px-3.5 xl:px-4 text-xs font-semibold shadow-md hover:shadow-primary/20" onClick={() => trackEvent("click", "case_study", "Saveetha Hub")}>
                         <Link to="/case-study/saveethahub">
                           <BookOpen className="w-4 h-4 mr-2" /> Open Case Study
                         </Link>
                       </Button>
                     </motion.div>
                     <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                      <Button asChild variant="outline" className="border-border hover:bg-secondary/60 h-9 px-4 text-xs font-semibold" onClick={() => trackEvent("click", "demo", "Saveetha Hub")}>
+                      <Button asChild variant="outline" className="border-border hover:bg-secondary/60 h-8 xl:h-9 px-3.5 xl:px-4 text-xs font-semibold" onClick={() => trackEvent("click", "demo", "Saveetha Hub")}>
                         <a href="https://saveetha-hub.netlify.app/" target="_blank" rel="noopener noreferrer">
                           <ExternalLink className="w-4 h-4 mr-2" /> Live Demo
                         </a>
                       </Button>
                     </motion.div>
                     <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                      <Button asChild size="icon" variant="outline" className="w-9 h-9 rounded-full border-border hover:border-primary/50" onClick={() => trackEvent("click", "github_project", "Saveetha Hub")}>
+                      <Button asChild size="icon" variant="outline" className="w-8 h-8 xl:w-9 xl:h-9 rounded-full border-border hover:border-primary/50" onClick={() => trackEvent("click", "github_project", "Saveetha Hub")}>
                         <a href="https://github.com/ComradeMohan/saveetha-companion" target="_blank" rel="noopener noreferrer" title="View on GitHub">
                           <Github className="w-4 h-4" />
                         </a>
@@ -475,13 +509,13 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                 </div>
 
                 {/* Right Visual Column: Live Google Analytics Metric Dashboard */}
-                <div className="col-span-12 lg:col-span-6 flex flex-col justify-center gap-3">
+                <div className="col-span-12 lg:col-span-6 flex flex-col justify-center gap-2 xl:gap-3">
                   <motion.div
                     whileHover={{ scale: 1.015 }}
                     transition={{ duration: 0.3 }}
-                    className="w-full p-5 rounded-2xl border border-orange-500/30 bg-card/80 backdrop-blur-md shadow-xl space-y-4"
+                    className="w-full p-3.5 lg:p-3.5 xl:p-5 rounded-2xl border border-orange-500/30 bg-card/80 backdrop-blur-md shadow-xl space-y-2.5 xl:space-y-4"
                   >
-                    <div className="flex items-center justify-between border-b border-border/60 pb-3">
+                    <div className="flex items-center justify-between border-b border-border/60 pb-2 xl:pb-3">
                       <span className="text-xs font-bold font-outfit uppercase tracking-wider text-orange-400 flex items-center gap-1.5">
                         <TrendingUp className="w-4 h-4" /> Verified Google Analytics
                       </span>
@@ -490,32 +524,32 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
-                      <AnimatedMetricCard delay={0.05} className="p-3 rounded-xl bg-secondary/80 border border-border/40 hover:border-red-400/40">
-                        <span className="text-lg lg:text-xl font-extrabold text-red-400 font-outfit block">24,706</span>
-                        <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-tight">Search Clicks</p>
+                    <div className="grid grid-cols-2 gap-2 xl:gap-3">
+                      <AnimatedMetricCard delay={0.05} className="p-2 xl:p-3 rounded-xl bg-secondary/80 border border-border/40 hover:border-red-400/40">
+                        <span className="text-base xl:text-xl font-extrabold text-red-400 font-outfit block">24,706</span>
+                        <p className="text-[8.5px] xl:text-[9px] font-bold text-muted-foreground uppercase tracking-tight">Search Clicks</p>
                         <Sparkline delay={0.1} colorClass="text-red-400" path="M0,25 Q15,10 30,20 T60,12 T90,24 T100,8" />
                       </AnimatedMetricCard>
-                      <AnimatedMetricCard delay={0.1} className="p-3 rounded-xl bg-secondary/80 border border-border/40 hover:border-emerald-400/40">
-                        <span className="text-lg lg:text-xl font-extrabold text-emerald-400 font-outfit block">3.8K+</span>
-                        <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-tight">Active Users</p>
+                      <AnimatedMetricCard delay={0.1} className="p-2 xl:p-3 rounded-xl bg-secondary/80 border border-border/40 hover:border-emerald-400/40">
+                        <span className="text-base xl:text-xl font-extrabold text-emerald-400 font-outfit block">3.8K+</span>
+                        <p className="text-[8.5px] xl:text-[9px] font-bold text-muted-foreground uppercase tracking-tight">Active Users</p>
                         <Sparkline delay={0.15} colorClass="text-emerald-400" path="M0,28 Q20,25 40,15 T70,12 T90,6 T100,2" />
                       </AnimatedMetricCard>
-                      <AnimatedMetricCard delay={0.15} className="p-3 rounded-xl bg-secondary/80 border border-border/40 hover:border-purple-400/40">
-                        <span className="text-lg lg:text-xl font-extrabold text-purple-400 font-outfit block">1.7K+</span>
-                        <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-tight">New Users</p>
+                      <AnimatedMetricCard delay={0.15} className="p-2 xl:p-3 rounded-xl bg-secondary/80 border border-border/40 hover:border-purple-400/40">
+                        <span className="text-base xl:text-xl font-extrabold text-purple-400 font-outfit block">1.7K+</span>
+                        <p className="text-[8.5px] xl:text-[9px] font-bold text-muted-foreground uppercase tracking-tight">New Users</p>
                         <Sparkline delay={0.2} colorClass="text-purple-400" path="M0,22 Q10,5 25,18 T50,5 T75,25 T100,15" />
                       </AnimatedMetricCard>
-                      <AnimatedMetricCard delay={0.2} className="p-3 rounded-xl bg-secondary/80 border border-border/40 hover:border-blue-400/40">
-                        <span className="text-lg lg:text-xl font-extrabold text-blue-400 font-outfit block">50s</span>
-                        <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-tight">Avg Engagement</p>
+                      <AnimatedMetricCard delay={0.2} className="p-2 xl:p-3 rounded-xl bg-secondary/80 border border-border/40 hover:border-blue-400/40">
+                        <span className="text-base xl:text-xl font-extrabold text-blue-400 font-outfit block">50s</span>
+                        <p className="text-[8.5px] xl:text-[9px] font-bold text-muted-foreground uppercase tracking-tight">Avg Engagement</p>
                         <Sparkline delay={0.25} colorClass="text-blue-400" path="M0,15 Q25,18 50,14 T75,16 T100,15" />
                       </AnimatedMetricCard>
                     </div>
                   </motion.div>
 
                   {/* Architecture & Reliability Pill */}
-                  <div className="p-3 rounded-xl border border-border/60 bg-secondary/40 flex items-center justify-between text-xs font-mono">
+                  <div className="p-2 xl:p-3 rounded-xl border border-border/60 bg-secondary/40 flex items-center justify-between text-[11px] xl:text-xs font-mono">
                     <span className="text-muted-foreground">⚡ Netlify Global Edge CDN + Supabase BaaS</span>
                     <span className="text-emerald-400 font-bold flex items-center gap-1.5">
                       <PulsingDot colorClass="bg-emerald-400" /> Zero Downtime Deploy
@@ -536,100 +570,100 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                 initial="enter"
                 animate="center"
                 exit="exit"
-                className="w-full grid grid-cols-12 gap-8 lg:gap-10 items-center"
+                className="w-full grid grid-cols-12 gap-6 lg:gap-8 xl:gap-10 items-center"
               >
                 {/* Left Story Column */}
-                <div className="col-span-12 lg:col-span-7 space-y-3.5 text-left">
+                <div className="col-span-12 lg:col-span-7 space-y-2 lg:space-y-2.5 xl:space-y-3.5 text-left">
                   <div className="flex items-center gap-2">
-                    <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-xs font-mono font-bold">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 xl:px-3 xl:py-1 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-[11px] xl:text-xs font-mono font-bold">
                       <Database className="w-3.5 h-3.5" />
                       <span>Android App • Google Play Store</span>
                     </span>
                   </div>
 
-                  <h3 className="text-3xl lg:text-4xl font-extrabold font-outfit text-foreground leading-tight">
+                  <h3 className="text-2xl lg:text-[26px] xl:text-3xl font-extrabold font-outfit text-foreground leading-tight">
                     UniVault
                   </h3>
 
-                  <p className="text-sm text-muted-foreground font-grotesk leading-relaxed">
+                  <p className="text-xs lg:text-[13px] xl:text-sm text-muted-foreground font-grotesk leading-snug xl:leading-relaxed">
                     A smart academic management platform designed for university students to track grades, calculate CGPA, manage courses, monitor attendance thresholds, and access study materials with offline caching.
                   </p>
 
                   {/* Stats highlights with Micro-Animations */}
-                  <div className="grid grid-cols-4 gap-2">
+                  <div className="grid grid-cols-4 gap-1.5 xl:gap-2">
                     {[
                       { label: "Students", val: "2.4K+" },
                       { label: "Materials", val: "10K+" },
                       { label: "Tests", val: "5K+" },
                       { label: "Prep Focus", val: "98%" },
                     ].map((s, idx) => (
-                      <AnimatedMetricCard key={s.label} delay={idx * 0.05} className="p-2.5 rounded-xl bg-card/70 border border-border/70 text-center hover:border-blue-500/40">
-                        <span className="text-sm font-extrabold text-primary font-outfit block">{s.val}</span>
-                        <span className="text-[9px] text-muted-foreground font-mono">{s.label}</span>
+                      <AnimatedMetricCard key={s.label} delay={idx * 0.05} className="p-1.5 xl:p-2.5 rounded-xl bg-card/70 border border-border/70 text-center hover:border-blue-500/40">
+                        <span className="text-xs xl:text-sm font-extrabold text-primary font-outfit block">{s.val}</span>
+                        <span className="text-[8.5px] xl:text-[9px] text-muted-foreground font-mono">{s.label}</span>
                       </AnimatedMetricCard>
                     ))}
                   </div>
 
                   {/* Problem & Solution */}
-                  <div className="grid grid-cols-2 gap-2.5">
-                    <motion.div whileHover={{ scale: 1.02 }} className="p-2.5 rounded-xl bg-card/70 border border-border/70 backdrop-blur-xs transition-colors hover:border-blue-500/30">
-                      <span className="text-[11px] font-bold text-foreground font-outfit block mb-1">🎯 Problem</span>
-                      <p className="text-[11px] text-muted-foreground font-grotesk leading-snug">
+                  <div className="grid grid-cols-2 gap-2 xl:gap-2.5">
+                    <motion.div whileHover={{ scale: 1.02 }} className="p-2 xl:p-2.5 rounded-xl bg-card/70 border border-border/70 backdrop-blur-xs transition-colors hover:border-blue-500/30">
+                      <span className="text-[10.5px] xl:text-[11px] font-bold text-foreground font-outfit block mb-0.5 xl:mb-1">🎯 Problem</span>
+                      <p className="text-[10px] xl:text-[11px] text-muted-foreground font-grotesk leading-tight xl:leading-snug">
                         Students struggled to monitor real-time class attendance thresholds, risking debarment.
                       </p>
                     </motion.div>
-                    <motion.div whileHover={{ scale: 1.02 }} className="p-2.5 rounded-xl bg-card/70 border border-border/70 backdrop-blur-xs transition-colors hover:border-blue-500/30">
-                      <span className="text-[11px] font-bold text-foreground font-outfit block mb-1">🚀 Solution</span>
-                      <p className="text-[11px] text-muted-foreground font-grotesk leading-snug">
+                    <motion.div whileHover={{ scale: 1.02 }} className="p-2 xl:p-2.5 rounded-xl bg-card/70 border border-border/70 backdrop-blur-xs transition-colors hover:border-blue-500/30">
+                      <span className="text-[10.5px] xl:text-[11px] font-bold text-foreground font-outfit block mb-0.5 xl:mb-1">🚀 Solution</span>
+                      <p className="text-[10px] xl:text-[11px] text-muted-foreground font-grotesk leading-tight xl:leading-snug">
                         Engineered automated 75% attendance alerts with predictive absence modeling.
                       </p>
                     </motion.div>
                   </div>
 
                   {/* Feature Highlights */}
-                  <div className="space-y-1.5 text-xs text-muted-foreground font-grotesk">
-                    <div className="flex items-center gap-2">
+                  <div className="space-y-1 xl:space-y-1.5 text-[11px] xl:text-xs text-muted-foreground font-grotesk">
+                    <div className="flex items-center gap-1.5 xl:gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-blue-400 shrink-0" />
                       <span>Automated 75% attendance threshold tracker preventing exam debarment</span>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5 xl:gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-blue-400 shrink-0" />
                       <span>Encrypted local storage via Room DB + Firebase Cloud Firestore sync</span>
                     </div>
                   </div>
 
                   {/* Tech Stack Pills */}
-                  <div className="flex flex-wrap gap-1.5 pt-1">
+                  <div className="flex flex-wrap gap-1 xl:gap-1.5 pt-0.5 xl:pt-1">
                     {["Next.js", "Firebase", "Kotlin (Android)", "PHP", "SQL", "Material 3"].map((t) => (
-                      <TechTag key={t} tag={t} />
+                      <TechTag key={t} tag={t} className="px-2 py-0.5 xl:px-2.5 xl:py-1 text-[11px] xl:text-xs" />
                     ))}
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex items-center gap-3 pt-1">
+                  <div className="flex items-center gap-2.5 pt-0.5 xl:pt-1">
                     <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                      <Button asChild className="bg-primary hover:bg-primary/80 h-9 px-4 text-xs font-semibold shadow-md hover:shadow-primary/20" onClick={() => trackEvent("click", "case_study", "UniVault")}>
+                      <Button asChild className="bg-primary hover:bg-primary/80 h-8 xl:h-9 px-3.5 xl:px-4 text-xs font-semibold shadow-md hover:shadow-primary/20" onClick={() => trackEvent("click", "case_study", "UniVault")}>
                         <Link to="/case-study/univault">
                           <BookOpen className="w-4 h-4 mr-2" /> Open Case Study
                         </Link>
                       </Button>
                     </motion.div>
                     <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                      <Button asChild variant="outline" className="border-border hover:bg-secondary/60 h-9 px-4 text-xs font-semibold" onClick={() => trackEvent("click", "demo", "UniVault")}>
+                      <Button asChild variant="outline" className="border-border hover:bg-secondary/60 h-8 xl:h-9 px-3.5 xl:px-4 text-xs font-semibold" onClick={() => trackEvent("click", "demo", "UniVault")}>
                         <a href="https://web.univault.live/" target="_blank" rel="noopener noreferrer">
                           <ExternalLink className="w-4 h-4 mr-2" /> Website Demo
                         </a>
                       </Button>
                     </motion.div>
                     <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                      <Button asChild size="icon" variant="outline" className="w-9 h-9 rounded-full border-border hover:border-blue-500/50" onClick={() => trackEvent("click", "play_store", "UniVault")}>
+                      <Button asChild size="icon" variant="outline" className="w-8 h-8 xl:w-9 xl:h-9 rounded-full border-border hover:border-blue-500/50" onClick={() => trackEvent("click", "play_store", "UniVault")}>
                         <a href="https://play.google.com/store/apps/details?id=com.simats.univault" target="_blank" rel="noopener noreferrer" title="Google Play Store">
                           <img src="/icons/googleplay.svg" alt="Play Store" className="w-4 h-4 object-contain" />
                         </a>
                       </Button>
                     </motion.div>
                     <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                      <Button asChild size="icon" variant="outline" className="w-9 h-9 rounded-full border-border hover:border-blue-500/50" onClick={() => trackEvent("click", "github_project", "UniVault")}>
+                      <Button asChild size="icon" variant="outline" className="w-8 h-8 xl:w-9 xl:h-9 rounded-full border-border hover:border-blue-500/50" onClick={() => trackEvent("click", "github_project", "UniVault")}>
                         <a href="https://github.com/ComradeMohan/192210400pdd" target="_blank" rel="noopener noreferrer" title="View on GitHub">
                           <Github className="w-4 h-4" />
                         </a>
@@ -639,34 +673,34 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                 </div>
 
                 {/* Right Visual Column: Smartphone Mockup */}
-                <div className="col-span-12 lg:col-span-5 flex items-center justify-center gap-4">
+                <div className="col-span-12 lg:col-span-5 flex items-center justify-center gap-3 xl:gap-4">
                   <motion.div
                     whileHover={{ scale: 1.02 }}
-                    className="w-[165px] xl:w-[185px] aspect-[474/1024] rounded-[2.2rem] border-[3px] border-slate-800 bg-slate-950 p-1 shadow-2xl relative shrink-0 cursor-pointer"
+                    className="w-[135px] lg:w-[145px] xl:w-[175px] aspect-[474/1024] rounded-[2rem] border-[3px] border-slate-800 bg-slate-950 p-1 shadow-2xl relative shrink-0 cursor-pointer"
                   >
                     <ProgressiveImage
                       src="/univault_mobile.webp"
                       alt="UniVault Android App Mockup"
-                      className="w-full h-full object-cover rounded-[1.9rem]"
+                      className="w-full h-full object-cover rounded-[1.75rem]"
                     />
                   </motion.div>
 
                   {/* Side Telemetry Cards with Micro-Elevation */}
-                  <div className="flex flex-col gap-3">
-                    <AnimatedMetricCard delay={0.1} className="p-3.5 rounded-xl border border-blue-500/30 bg-card/80 backdrop-blur-md shadow-lg space-y-1 text-left max-w-[200px] hover:border-blue-500/60">
-                      <span className="text-[10px] font-mono text-blue-400 font-bold uppercase block flex items-center gap-1.5">
+                  <div className="flex flex-col gap-2.5 xl:gap-3">
+                    <AnimatedMetricCard delay={0.1} className="p-2.5 xl:p-3.5 rounded-xl border border-blue-500/30 bg-card/80 backdrop-blur-md shadow-lg space-y-0.5 xl:space-y-1 text-left max-w-[190px] hover:border-blue-500/60">
+                      <span className="text-[9.5px] xl:text-[10px] font-mono text-blue-400 font-bold uppercase block flex items-center gap-1.5">
                         <PulsingDot colorClass="bg-blue-400" /> Play Store Build
                       </span>
-                      <p className="text-xs font-semibold text-foreground">Verified App Bundle</p>
-                      <p className="text-[10px] text-muted-foreground font-mono">100% Crash-Free Rate</p>
+                      <p className="text-[11px] xl:text-xs font-semibold text-foreground">Verified App Bundle</p>
+                      <p className="text-[9px] xl:text-[10px] text-muted-foreground font-mono">100% Crash-Free Rate</p>
                     </AnimatedMetricCard>
 
-                    <AnimatedMetricCard delay={0.2} className="p-3.5 rounded-xl border border-emerald-500/30 bg-card/80 backdrop-blur-md shadow-lg space-y-1 text-left max-w-[200px] hover:border-emerald-500/60">
-                      <span className="text-[10px] font-mono text-emerald-400 font-bold uppercase block flex items-center gap-1.5">
+                    <AnimatedMetricCard delay={0.2} className="p-2.5 xl:p-3.5 rounded-xl border border-emerald-500/30 bg-card/80 backdrop-blur-md shadow-lg space-y-0.5 xl:space-y-1 text-left max-w-[190px] hover:border-emerald-500/60">
+                      <span className="text-[9.5px] xl:text-[10px] font-mono text-emerald-400 font-bold uppercase block flex items-center gap-1.5">
                         <PulsingDot colorClass="bg-emerald-400" /> Smart Engine
                       </span>
-                      <p className="text-xs font-semibold text-foreground">Attendance Predictor</p>
-                      <p className="text-[10px] text-muted-foreground font-mono">Safe Margin Forecasting</p>
+                      <p className="text-[11px] xl:text-xs font-semibold text-foreground">Attendance Predictor</p>
+                      <p className="text-[9px] xl:text-[10px] text-muted-foreground font-mono">Safe Margin Forecasting</p>
                     </AnimatedMetricCard>
                   </div>
                 </div>
@@ -684,85 +718,85 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                 initial="enter"
                 animate="center"
                 exit="exit"
-                className="w-full grid grid-cols-12 gap-8 lg:gap-10 items-center"
+                className="w-full grid grid-cols-12 gap-6 lg:gap-8 xl:gap-10 items-center"
               >
                 {/* Left Story Column */}
-                <div className="col-span-12 lg:col-span-6 space-y-3.5 text-left">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 text-xs font-mono font-bold">
+                <div className="col-span-12 lg:col-span-6 space-y-2 lg:space-y-2.5 xl:space-y-3 text-left">
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 xl:px-3 xl:py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 text-[11px] xl:text-xs font-mono font-bold">
                     <Coins className="w-3.5 h-3.5" />
                     <span>Research Project • Blockchain Security</span>
                   </div>
 
-                  <h3 className="text-3xl lg:text-4xl font-extrabold font-outfit text-foreground leading-tight">
+                  <h3 className="text-2xl lg:text-[26px] xl:text-3xl font-extrabold font-outfit text-foreground leading-tight">
                     Ethereum Fraud Detection Using XGBoost
                   </h3>
 
-                  <p className="text-sm text-muted-foreground font-grotesk leading-relaxed">
+                  <p className="text-xs lg:text-[13px] xl:text-sm text-muted-foreground font-grotesk leading-snug xl:leading-relaxed">
                     Machine learning-based Ethereum fraud detection system achieving 94% accuracy using XGBoost, outperforming multiple baseline classification algorithms on heavily imbalanced blockchain transactions.
                   </p>
 
                   {/* Research Metrics with Micro-Animations */}
-                  <div className="grid grid-cols-3 gap-2.5">
-                    <AnimatedMetricCard delay={0.05} className="p-2.5 rounded-xl bg-card/70 border border-indigo-500/30 text-center hover:border-indigo-500/60">
-                      <span className="text-base font-extrabold text-indigo-400 font-outfit block">94%</span>
-                      <span className="text-[10px] text-muted-foreground font-mono">Best Accuracy</span>
+                  <div className="grid grid-cols-3 gap-1.5 xl:gap-2.5">
+                    <AnimatedMetricCard delay={0.05} className="p-1.5 xl:p-2.5 rounded-xl bg-card/70 border border-indigo-500/30 text-center hover:border-indigo-500/60">
+                      <span className="text-sm xl:text-base font-extrabold text-indigo-400 font-outfit block">94%</span>
+                      <span className="text-[9px] xl:text-[10px] text-muted-foreground font-mono">Best Accuracy</span>
                     </AnimatedMetricCard>
-                    <AnimatedMetricCard delay={0.1} className="p-2.5 rounded-xl bg-card/70 border border-border/70 text-center hover:border-foreground/30">
-                      <span className="text-base font-extrabold text-foreground font-outfit block">9,841 TXs</span>
-                      <span className="text-[10px] text-muted-foreground font-mono">Trained Dataset</span>
+                    <AnimatedMetricCard delay={0.1} className="p-1.5 xl:p-2.5 rounded-xl bg-card/70 border border-border/70 text-center hover:border-foreground/30">
+                      <span className="text-sm xl:text-base font-extrabold text-foreground font-outfit block">9,841 TXs</span>
+                      <span className="text-[9px] xl:text-[10px] text-muted-foreground font-mono">Trained Dataset</span>
                     </AnimatedMetricCard>
-                    <AnimatedMetricCard delay={0.15} className="p-2.5 rounded-xl bg-card/70 border border-border/70 text-center hover:border-emerald-500/40">
-                      <span className="text-base font-extrabold text-emerald-400 font-outfit block">p &lt; 0.001</span>
-                      <span className="text-[10px] text-muted-foreground font-mono">Statistically Sig.</span>
+                    <AnimatedMetricCard delay={0.15} className="p-1.5 xl:p-2.5 rounded-xl bg-card/70 border border-border/70 text-center hover:border-emerald-500/40">
+                      <span className="text-sm xl:text-base font-extrabold text-emerald-400 font-outfit block">p &lt; 0.001</span>
+                      <span className="text-[9px] xl:text-[10px] text-muted-foreground font-mono">Statistically Sig.</span>
                     </AnimatedMetricCard>
                   </div>
 
                   {/* Problem & Solution */}
-                  <div className="grid grid-cols-2 gap-2.5">
-                    <motion.div whileHover={{ scale: 1.02 }} className="p-2.5 rounded-xl bg-card/70 border border-border/70 backdrop-blur-xs transition-colors hover:border-indigo-500/30">
-                      <span className="text-[11px] font-bold text-foreground font-outfit block mb-1">🎯 Problem</span>
-                      <p className="text-[11px] text-muted-foreground font-grotesk leading-snug">
+                  <div className="grid grid-cols-2 gap-2 xl:gap-2.5">
+                    <motion.div whileHover={{ scale: 1.02 }} className="p-2 xl:p-2.5 rounded-xl bg-card/70 border border-border/70 backdrop-blur-xs transition-colors hover:border-indigo-500/30">
+                      <span className="text-[10.5px] xl:text-[11px] font-bold text-foreground font-outfit block mb-0.5 xl:mb-1">🎯 Problem</span>
+                      <p className="text-[10px] xl:text-[11px] text-muted-foreground font-grotesk leading-tight xl:leading-snug">
                         Severely imbalanced blockchain datasets hide illicit wallet behaviors.
                       </p>
                     </motion.div>
-                    <motion.div whileHover={{ scale: 1.02 }} className="p-2.5 rounded-xl bg-card/70 border border-border/70 backdrop-blur-xs transition-colors hover:border-indigo-500/30">
-                      <span className="text-[11px] font-bold text-foreground font-outfit block mb-1">🚀 Solution</span>
-                      <p className="text-[11px] text-muted-foreground font-grotesk leading-snug">
+                    <motion.div whileHover={{ scale: 1.02 }} className="p-2 xl:p-2.5 rounded-xl bg-card/70 border border-border/70 backdrop-blur-xs transition-colors hover:border-indigo-500/30">
+                      <span className="text-[10.5px] xl:text-[11px] font-bold text-foreground font-outfit block mb-0.5 xl:mb-1">🚀 Solution</span>
+                      <p className="text-[10px] xl:text-[11px] text-muted-foreground font-grotesk leading-tight xl:leading-snug">
                         Engineered 42 statistical transaction features + SMOTE balanced sampling.
                       </p>
                     </motion.div>
                   </div>
 
                   {/* Feature Highlights */}
-                  <div className="space-y-1.5 text-xs text-muted-foreground font-grotesk">
-                    <div className="flex items-center gap-2">
+                  <div className="space-y-1 xl:space-y-1.5 text-[11px] xl:text-xs text-muted-foreground font-grotesk">
+                    <div className="flex items-center gap-1.5 xl:gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-                      <span>Benchmarked against 4 ML models (Decision Tree, KNN, AdaBoost, Random Forest)</span>
+                      <span>Benchmarked against 4 ML baselines (Decision Tree, KNN, AdaBoost, RF)</span>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5 xl:gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
                       <span>Two-sample t-test verification (t = 5.892, p &lt; 0.001) confirming superiority</span>
                     </div>
                   </div>
 
                   {/* Tech Stack Pills */}
-                  <div className="flex flex-wrap gap-1.5 pt-1">
+                  <div className="flex flex-wrap gap-1 xl:gap-1.5 pt-0.5 xl:pt-1">
                     {["Python", "Pandas", "Scikit-Learn", "XGBoost", "Google Colab", "SMOTE"].map((t) => (
-                      <TechTag key={t} tag={t} />
+                      <TechTag key={t} tag={t} className="px-2 py-0.5 xl:px-2.5 xl:py-1 text-[11px] xl:text-xs" />
                     ))}
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex items-center gap-3 pt-1">
+                  <div className="flex items-center gap-2.5 pt-0.5 xl:pt-1">
                     <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                      <Button asChild className="bg-primary hover:bg-primary/80 h-9 px-4 text-xs font-semibold shadow-md hover:shadow-primary/20" onClick={() => trackEvent("download", "ppt", "Ethereum Fraud Detection")}>
+                      <Button asChild className="bg-primary hover:bg-primary/80 h-8 xl:h-9 px-3.5 xl:px-4 text-xs font-semibold shadow-md hover:shadow-primary/20" onClick={() => trackEvent("download", "ppt", "Ethereum Fraud Detection")}>
                         <a href="/Ethereum%20Fraud%20Detection%20Using%20XGBoost.pptx" download target="_blank" rel="noopener noreferrer">
                           <FileDown className="w-4 h-4 mr-2" /> PPT Presentation
                         </a>
                       </Button>
                     </motion.div>
                     <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                      <Button asChild variant="outline" className="border-border hover:bg-secondary/60 hover:text-foreground h-9 px-4 text-xs font-semibold" onClick={() => trackEvent("click", "research_paper", "Ethereum Fraud Detection")}>
+                      <Button asChild variant="outline" className="border-border hover:bg-secondary/60 hover:text-foreground h-8 xl:h-9 px-3.5 xl:px-4 text-xs font-semibold" onClick={() => trackEvent("click", "research_paper", "Ethereum Fraud Detection")}>
                         <a href="https://github.com/ComradeMohan" target="_blank" rel="noopener noreferrer">
                           <FileText className="w-4 h-4 mr-2" /> Research Paper
                         </a>
@@ -772,20 +806,20 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                 </div>
 
                 {/* Right Visual Column: Algorithm Comparison Bars with Animated Fill */}
-                <div className="col-span-12 lg:col-span-6 flex flex-col justify-center gap-3">
+                <div className="col-span-12 lg:col-span-6 flex flex-col justify-center gap-2 xl:gap-3">
                   <motion.div
                     whileHover={{ scale: 1.015 }}
                     transition={{ duration: 0.3 }}
-                    className="w-full p-5 rounded-2xl border border-indigo-500/30 bg-card/80 backdrop-blur-md shadow-xl space-y-3.5"
+                    className="w-full p-3 lg:p-3.5 xl:p-5 rounded-2xl border border-indigo-500/30 bg-card/80 backdrop-blur-md shadow-xl space-y-2 lg:space-y-2 xl:space-y-3"
                   >
-                    <div className="flex items-center justify-between border-b border-border/60 pb-2.5">
+                    <div className="flex items-center justify-between border-b border-border/60 pb-1.5 xl:pb-2.5">
                       <span className="text-xs font-bold font-outfit uppercase tracking-wider text-indigo-400 flex items-center gap-1.5">
                         <Brain className="w-4 h-4" /> Algorithm Accuracy Benchmark
                       </span>
                       <span className="text-[10px] font-mono text-muted-foreground">Etherscan Dataset</span>
                     </div>
 
-                    <div className="space-y-2.5">
+                    <div className="space-y-1.5 xl:space-y-2">
                       {[
                         { name: "XGBoost (Proposed)", val: 94, color: "bg-indigo-500", highlight: true },
                         { name: "Decision Tree", val: 88.5, color: "bg-green-500" },
@@ -793,8 +827,8 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                         { name: "AdaBoost", val: 77.1, color: "bg-yellow-500" },
                         { name: "Random Forest", val: 72.4, color: "bg-blue-500" },
                       ].map((item) => (
-                        <div key={item.name} className="space-y-1">
-                          <div className="flex justify-between text-xs font-semibold font-grotesk text-foreground/90">
+                        <div key={item.name} className="space-y-0.5 xl:space-y-1">
+                          <div className="flex justify-between text-[11px] xl:text-xs font-semibold font-grotesk text-foreground/90">
                             <span className={item.highlight ? "text-indigo-400 font-bold flex items-center gap-1" : ""}>
                               {item.name} {item.highlight && "⭐"}
                             </span>
@@ -808,24 +842,24 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                       ))}
                     </div>
 
-                    <p className="text-[10px] font-mono text-muted-foreground pt-2 border-t border-border/40 leading-snug">
+                    <p className="text-[9px] xl:text-[10px] font-mono text-muted-foreground pt-1.5 xl:pt-2 border-t border-border/40 leading-snug">
                       t-test statistical verification: t = 5.892, p &lt; 0.001 (significantly superior).
                     </p>
                   </motion.div>
 
                   {/* Research Model Evaluation Metrics */}
-                  <div className="p-3 rounded-xl border border-indigo-500/20 bg-card/60 backdrop-blur-md grid grid-cols-3 gap-2 text-center text-xs font-mono">
-                    <AnimatedMetricCard delay={0.1} className="p-1.5 rounded-lg bg-secondary/50 hover:border-indigo-400/40">
-                      <span className="text-muted-foreground text-[10px] block">Precision</span>
-                      <span className="text-indigo-400 font-bold">93.4%</span>
+                  <div className="p-2 xl:p-2.5 rounded-xl border border-indigo-500/20 bg-card/60 backdrop-blur-md grid grid-cols-3 gap-1.5 xl:gap-2 text-center text-xs font-mono">
+                    <AnimatedMetricCard delay={0.1} className="p-1 xl:p-1.5 rounded-lg bg-secondary/50 hover:border-indigo-400/40">
+                      <span className="text-muted-foreground text-[9px] xl:text-[10px] block">Precision</span>
+                      <span className="text-indigo-400 font-bold text-xs xl:text-sm">93.4%</span>
                     </AnimatedMetricCard>
-                    <AnimatedMetricCard delay={0.15} className="p-1.5 rounded-lg bg-secondary/50 hover:border-emerald-400/40">
-                      <span className="text-muted-foreground text-[10px] block">Recall</span>
-                      <span className="text-emerald-400 font-bold">91.8%</span>
+                    <AnimatedMetricCard delay={0.15} className="p-1 xl:p-1.5 rounded-lg bg-secondary/50 hover:border-emerald-400/40">
+                      <span className="text-muted-foreground text-[9px] xl:text-[10px] block">Recall</span>
+                      <span className="text-emerald-400 font-bold text-xs xl:text-sm">91.8%</span>
                     </AnimatedMetricCard>
-                    <AnimatedMetricCard delay={0.2} className="p-1.5 rounded-lg bg-secondary/50 hover:border-amber-400/40">
-                      <span className="text-muted-foreground text-[10px] block">F1-Score</span>
-                      <span className="text-amber-400 font-bold">0.926</span>
+                    <AnimatedMetricCard delay={0.2} className="p-1 xl:p-1.5 rounded-lg bg-secondary/50 hover:border-amber-400/40">
+                      <span className="text-muted-foreground text-[9px] xl:text-[10px] block">F1-Score</span>
+                      <span className="text-amber-400 font-bold text-xs xl:text-sm">0.926</span>
                     </AnimatedMetricCard>
                   </div>
                 </div>
@@ -843,85 +877,85 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                 initial="enter"
                 animate="center"
                 exit="exit"
-                className="w-full grid grid-cols-12 gap-8 lg:gap-10 items-center"
+                className="w-full grid grid-cols-12 gap-6 lg:gap-8 xl:gap-10 items-center"
               >
                 {/* Left Story Column */}
-                <div className="col-span-12 lg:col-span-6 space-y-3.5 text-left">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-sky-500/30 bg-sky-500/10 text-sky-400 text-xs font-mono font-bold">
+                <div className="col-span-12 lg:col-span-6 space-y-2 lg:space-y-2.5 xl:space-y-3.5 text-left">
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 xl:px-3 xl:py-1 rounded-full border border-sky-500/30 bg-sky-500/10 text-sky-400 text-[11px] xl:text-xs font-mono font-bold">
                     <Truck className="w-3.5 h-3.5" />
                     <span>Logistics & Route Optimization</span>
                   </div>
 
-                  <h3 className="text-3xl lg:text-4xl font-extrabold font-outfit text-foreground leading-tight">
+                  <h3 className="text-2xl lg:text-[26px] xl:text-3xl font-extrabold font-outfit text-foreground leading-tight">
                     Skylink Deliveries
                   </h3>
 
-                  <p className="text-sm text-muted-foreground font-grotesk leading-relaxed">
+                  <p className="text-xs lg:text-[13px] xl:text-sm text-muted-foreground font-grotesk leading-snug xl:leading-relaxed">
                     A full-stack logistics and delivery dispatch system featuring real-time package telemetry, dynamic multi-stop route optimization using Mapbox GL, and automated customer tracking notifications.
                   </p>
 
                   {/* Operational Metrics with Micro-Animations */}
-                  <div className="grid grid-cols-3 gap-2.5">
-                    <AnimatedMetricCard delay={0.05} className="p-2.5 rounded-xl bg-card/80 border border-sky-500/20 text-center hover:border-sky-500/50">
-                      <span className="text-base font-extrabold text-sky-400 font-outfit block">-28%</span>
-                      <span className="text-[10px] text-muted-foreground font-mono">Route Latency</span>
+                  <div className="grid grid-cols-3 gap-2 xl:gap-2.5">
+                    <AnimatedMetricCard delay={0.05} className="p-1.5 xl:p-2.5 rounded-xl bg-card/80 border border-sky-500/20 text-center hover:border-sky-500/50">
+                      <span className="text-sm xl:text-base font-extrabold text-sky-400 font-outfit block">-28%</span>
+                      <span className="text-[9px] xl:text-[10px] text-muted-foreground font-mono">Route Latency</span>
                     </AnimatedMetricCard>
-                    <AnimatedMetricCard delay={0.1} className="p-2.5 rounded-xl bg-card/80 border border-sky-500/20 text-center hover:border-emerald-500/40">
-                      <span className="text-base font-extrabold text-emerald-400 font-outfit block">+18%</span>
-                      <span className="text-[10px] text-muted-foreground font-mono">Fuel Efficiency</span>
+                    <AnimatedMetricCard delay={0.1} className="p-1.5 xl:p-2.5 rounded-xl bg-card/80 border border-sky-500/20 text-center hover:border-emerald-500/40">
+                      <span className="text-sm xl:text-base font-extrabold text-emerald-400 font-outfit block">+18%</span>
+                      <span className="text-[9px] xl:text-[10px] text-muted-foreground font-mono">Fuel Efficiency</span>
                     </AnimatedMetricCard>
-                    <AnimatedMetricCard delay={0.15} className="p-2.5 rounded-xl bg-card/80 border border-sky-500/20 text-center hover:border-foreground/30">
-                      <span className="text-base font-extrabold text-foreground font-outfit block">&lt; 150ms</span>
-                      <span className="text-[10px] text-muted-foreground font-mono">GPS Ping Latency</span>
+                    <AnimatedMetricCard delay={0.15} className="p-1.5 xl:p-2.5 rounded-xl bg-card/80 border border-sky-500/20 text-center hover:border-foreground/30">
+                      <span className="text-sm xl:text-base font-extrabold text-foreground font-outfit block">&lt; 150ms</span>
+                      <span className="text-[9px] xl:text-[10px] text-muted-foreground font-mono">GPS Ping Latency</span>
                     </AnimatedMetricCard>
                   </div>
 
                   {/* Problem & Solution */}
-                  <div className="grid grid-cols-2 gap-2.5">
-                    <motion.div whileHover={{ scale: 1.02 }} className="p-2.5 rounded-xl bg-card/70 border border-border/70 backdrop-blur-xs transition-colors hover:border-sky-500/30">
-                      <span className="text-[11px] font-bold text-foreground font-outfit block mb-1">🎯 Problem</span>
-                      <p className="text-[11px] text-muted-foreground font-grotesk leading-snug">
+                  <div className="grid grid-cols-2 gap-2 xl:gap-2.5">
+                    <motion.div whileHover={{ scale: 1.02 }} className="p-2 xl:p-2.5 rounded-xl bg-card/70 border border-border/70 backdrop-blur-xs transition-colors hover:border-sky-500/30">
+                      <span className="text-[10.5px] xl:text-[11px] font-bold text-foreground font-outfit block mb-0.5 xl:mb-1">🎯 Problem</span>
+                      <p className="text-[10px] xl:text-[11px] text-muted-foreground font-grotesk leading-tight xl:leading-snug">
                         Traditional fleet operations suffer high transit delays, manual dispatch, and opaque tracking.
                       </p>
                     </motion.div>
-                    <motion.div whileHover={{ scale: 1.02 }} className="p-2.5 rounded-xl bg-card/70 border border-border/70 backdrop-blur-xs transition-colors hover:border-sky-500/30">
-                      <span className="text-[11px] font-bold text-foreground font-outfit block mb-1">🚀 Solution</span>
-                      <p className="text-[11px] text-muted-foreground font-grotesk leading-snug">
+                    <motion.div whileHover={{ scale: 1.02 }} className="p-2 xl:p-2.5 rounded-xl bg-card/70 border border-border/70 backdrop-blur-xs transition-colors hover:border-sky-500/30">
+                      <span className="text-[10.5px] xl:text-[11px] font-bold text-foreground font-outfit block mb-0.5 xl:mb-1">🚀 Solution</span>
+                      <p className="text-[10px] xl:text-[11px] text-muted-foreground font-grotesk leading-tight xl:leading-snug">
                         Engineered Mapbox GL engine with dynamic waypoint optimization and live WebSockets.
                       </p>
                     </motion.div>
                   </div>
 
                   {/* Feature Highlights */}
-                  <div className="space-y-1.5 text-xs text-muted-foreground font-grotesk">
-                    <div className="flex items-center gap-2">
+                  <div className="space-y-1 xl:space-y-1.5 text-[11px] xl:text-xs text-muted-foreground font-grotesk">
+                    <div className="flex items-center gap-1.5 xl:gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-sky-400 shrink-0" />
                       <span>Dynamic re-routing algorithm mitigating traffic congestion and urban bottlenecks</span>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5 xl:gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-sky-400 shrink-0" />
                       <span>Digital proof-of-delivery confirmation with geofence proximity verification</span>
                     </div>
                   </div>
 
                   {/* Tech Stack Pills */}
-                  <div className="flex flex-wrap gap-1.5 pt-1">
+                  <div className="flex flex-wrap gap-1 xl:gap-1.5 pt-0.5 xl:pt-1">
                     {["React", "Mapbox API", "Node.js", "Express", "MongoDB", "WebSockets"].map((t) => (
-                      <TechTag key={t} tag={t} />
+                      <TechTag key={t} tag={t} className="px-2 py-0.5 xl:px-2.5 xl:py-1 text-[11px] xl:text-xs" />
                     ))}
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex items-center gap-3 pt-1">
+                  <div className="flex items-center gap-2.5 pt-0.5 xl:pt-1">
                     <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                      <Button asChild className="bg-primary hover:bg-primary/80 h-9 px-4 text-xs font-semibold shadow-md hover:shadow-primary/20" onClick={() => trackEvent("click", "demo", "Skylink Deliveries")}>
+                      <Button asChild className="bg-primary hover:bg-primary/80 h-8 xl:h-9 px-3.5 xl:px-4 text-xs font-semibold shadow-md hover:shadow-primary/20" onClick={() => trackEvent("click", "demo", "Skylink Deliveries")}>
                         <a href="https://skylinkdeliveries.netlify.app/" target="_blank" rel="noopener noreferrer">
                           <ExternalLink className="w-4 h-4 mr-2" /> Live Demo
                         </a>
                       </Button>
                     </motion.div>
                     <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                      <Button asChild size="icon" variant="outline" className="w-9 h-9 rounded-full border-border hover:border-sky-500/50" onClick={() => trackEvent("click", "github_project", "Skylink Deliveries")}>
+                      <Button asChild size="icon" variant="outline" className="w-8 h-8 xl:w-9 xl:h-9 rounded-full border-border hover:border-sky-500/50" onClick={() => trackEvent("click", "github_project", "Skylink Deliveries")}>
                         <a href="https://github.com/ComradeMohan" target="_blank" rel="noopener noreferrer" title="GitHub">
                           <Github className="w-4 h-4" />
                         </a>
@@ -931,13 +965,13 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                 </div>
 
                 {/* Right Visual Column: Dispatch Telemetry Visual with Waypoint Indicator */}
-                <div className="col-span-12 lg:col-span-6 flex flex-col justify-center gap-3">
+                <div className="col-span-12 lg:col-span-6 flex flex-col justify-center gap-2 xl:gap-3">
                   <motion.div
                     whileHover={{ scale: 1.015 }}
                     transition={{ duration: 0.3 }}
-                    className="w-full p-5 rounded-2xl border border-sky-500/30 bg-card/80 backdrop-blur-md shadow-xl space-y-3.5"
+                    className="w-full p-3.5 lg:p-3.5 xl:p-5 rounded-2xl border border-sky-500/30 bg-card/80 backdrop-blur-md shadow-xl space-y-2 lg:space-y-2.5 xl:space-y-3.5"
                   >
-                    <div className="flex items-center justify-between border-b border-border/60 pb-2.5">
+                    <div className="flex items-center justify-between border-b border-border/60 pb-1.5 xl:pb-2.5">
                       <span className="text-xs font-bold font-outfit uppercase tracking-wider text-sky-400 flex items-center gap-1.5">
                         <Navigation className="w-4 h-4" /> Live Fleet Routing Telemetry
                       </span>
@@ -946,26 +980,26 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
-                      <AnimatedMetricCard delay={0.05} className="p-3 rounded-xl bg-secondary/80 border border-border/40 hover:border-sky-400/40">
-                        <span className="text-base font-extrabold text-sky-400 font-outfit block">Optimized</span>
-                        <span className="text-[10px] text-muted-foreground font-mono">Dijkstra & TSP Routing</span>
+                    <div className="grid grid-cols-2 gap-2 xl:gap-3">
+                      <AnimatedMetricCard delay={0.05} className="p-2 xl:p-3 rounded-xl bg-secondary/80 border border-border/40 hover:border-sky-400/40">
+                        <span className="text-sm xl:text-base font-extrabold text-sky-400 font-outfit block">Optimized</span>
+                        <span className="text-[9px] xl:text-[10px] text-muted-foreground font-mono">Dijkstra & TSP Routing</span>
                       </AnimatedMetricCard>
-                      <AnimatedMetricCard delay={0.1} className="p-3 rounded-xl bg-secondary/80 border border-border/40 hover:border-emerald-400/40">
-                        <span className="text-base font-extrabold text-emerald-400 font-outfit block">Real-Time</span>
-                        <span className="text-[10px] text-muted-foreground font-mono">Continuous Driver Broadcast</span>
+                      <AnimatedMetricCard delay={0.1} className="p-2 xl:p-3 rounded-xl bg-secondary/80 border border-border/40 hover:border-emerald-400/40">
+                        <span className="text-sm xl:text-base font-extrabold text-emerald-400 font-outfit block">Real-Time</span>
+                        <span className="text-[9px] xl:text-[10px] text-muted-foreground font-mono">Continuous Driver Broadcast</span>
                       </AnimatedMetricCard>
                     </div>
 
                     {/* Active Route Simulator Visual with Bar */}
-                    <div className="p-3 rounded-xl border border-sky-500/20 bg-sky-950/20 space-y-2">
-                      <div className="flex items-center justify-between text-xs font-mono">
+                    <div className="p-2.5 xl:p-3 rounded-xl border border-sky-500/20 bg-sky-950/20 space-y-1.5 xl:space-y-2">
+                      <div className="flex items-center justify-between text-[11px] xl:text-xs font-mono">
                         <span className="text-sky-300 font-bold flex items-center gap-1.5">
                           <PulsingDot colorClass="bg-sky-400" /> Route Leg: Chennai Hub → Simats
                         </span>
                         <span className="text-emerald-400 font-semibold">Waypoint 4/6</span>
                       </div>
-                      <div className="h-1.5 rounded-full bg-secondary/80 overflow-hidden">
+                      <div className="h-1.5 xl:h-2 rounded-full bg-secondary/80 overflow-hidden">
                         <div
                           style={{ width: "75%" }}
                           className="h-full rounded-full bg-gradient-to-r from-sky-500 to-emerald-400"
@@ -973,7 +1007,7 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                       </div>
                     </div>
 
-                    <div className="p-2.5 rounded-xl border border-border/60 bg-secondary/40 flex items-center justify-between text-xs font-mono">
+                    <div className="p-2 xl:p-2.5 rounded-xl border border-border/60 bg-secondary/40 flex items-center justify-between text-[11px] xl:text-xs font-mono">
                       <span className="text-muted-foreground">Transit Delay Mitigation Engine</span>
                       <span className="text-sky-400 font-bold flex items-center gap-1">
                         <Zap className="w-3.5 h-3.5 text-sky-400" /> Active Telemetry
@@ -982,18 +1016,18 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                   </motion.div>
 
                   {/* Fleet Dispatch Statistics */}
-                  <div className="p-3 rounded-xl border border-sky-500/20 bg-card/60 backdrop-blur-md grid grid-cols-3 gap-2 text-center text-xs font-mono">
-                    <AnimatedMetricCard delay={0.1} className="p-1.5 rounded-lg bg-secondary/50 hover:border-sky-400/40">
-                      <span className="text-muted-foreground text-[10px] block">Active Couriers</span>
-                      <span className="text-sky-400 font-bold">24 Fleets</span>
+                  <div className="p-2 xl:p-3 rounded-xl border border-sky-500/20 bg-card/60 backdrop-blur-md grid grid-cols-3 gap-1.5 xl:gap-2 text-center text-xs font-mono">
+                    <AnimatedMetricCard delay={0.1} className="p-1 xl:p-1.5 rounded-lg bg-secondary/50 hover:border-sky-400/40">
+                      <span className="text-muted-foreground text-[9px] xl:text-[10px] block">Active Couriers</span>
+                      <span className="text-sky-400 font-bold text-xs xl:text-sm">24 Fleets</span>
                     </AnimatedMetricCard>
-                    <AnimatedMetricCard delay={0.15} className="p-1.5 rounded-lg bg-secondary/50 hover:border-emerald-400/40">
-                      <span className="text-muted-foreground text-[10px] block">Avg Delivery Time</span>
-                      <span className="text-emerald-400 font-bold">22 Mins</span>
+                    <AnimatedMetricCard delay={0.15} className="p-1 xl:p-1.5 rounded-lg bg-secondary/50 hover:border-emerald-400/40">
+                      <span className="text-muted-foreground text-[9px] xl:text-[10px] block">Avg Delivery Time</span>
+                      <span className="text-emerald-400 font-bold text-xs xl:text-sm">22 Mins</span>
                     </AnimatedMetricCard>
-                    <AnimatedMetricCard delay={0.2} className="p-1.5 rounded-lg bg-secondary/50 hover:border-foreground/30">
-                      <span className="text-muted-foreground text-[10px] block">SLA Compliance</span>
-                      <span className="text-foreground font-bold">99.4%</span>
+                    <AnimatedMetricCard delay={0.2} className="p-1 xl:p-1.5 rounded-lg bg-secondary/50 hover:border-foreground/30">
+                      <span className="text-muted-foreground text-[9px] xl:text-[10px] block">SLA Compliance</span>
+                      <span className="text-foreground font-bold text-xs xl:text-sm">99.4%</span>
                     </AnimatedMetricCard>
                   </div>
                 </div>
@@ -1015,44 +1049,44 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
               >
                 {/* Left Story Column */}
                 <div className="col-span-12 lg:col-span-6 space-y-2 lg:space-y-2 xl:space-y-3 text-left">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-0.5 xl:py-1 rounded-full border border-purple-300 dark:border-purple-500/40 bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400 text-xs font-mono font-bold shadow-[0_0_15px_rgba(168,85,247,0.15)] dark:shadow-[0_0_15px_rgba(168,85,247,0.25)]">
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 xl:px-3 xl:py-1 rounded-full border border-purple-300 dark:border-purple-500/40 bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400 text-[11px] xl:text-xs font-mono font-bold shadow-[0_0_15px_rgba(168,85,247,0.15)] dark:shadow-[0_0_15px_rgba(168,85,247,0.25)]">
                     <Activity className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                     <span>⭐ Culmination • GitHub Analytics SaaS</span>
                   </div>
 
-                  <h3 className="text-2xl sm:text-3xl lg:text-3xl xl:text-4xl font-extrabold font-outfit text-foreground leading-tight">
+                  <h3 className="text-2xl lg:text-[26px] xl:text-3xl font-extrabold font-outfit text-foreground leading-tight">
                     DevPulse <span className="text-amber-400">⭐</span>
                   </h3>
 
-                  <p className="text-xs sm:text-[13px] xl:text-sm text-muted-foreground font-grotesk leading-snug xl:leading-relaxed">
+                  <p className="text-xs lg:text-[13px] xl:text-sm text-muted-foreground font-grotesk leading-snug xl:leading-relaxed">
                     A full-stack GitHub telemetry platform and dynamic SVG widget generator transforming developer contributions into real-time visual insights, commit streaks, and live repository metrics.
                   </p>
 
                   {/* Core Platform Capabilities with Micro-Animations */}
-                  <div className="grid grid-cols-3 gap-2 xl:gap-2.5">
-                    <AnimatedMetricCard delay={0.05} className="p-1.5 xl:p-2.5 rounded-xl bg-card/80 border border-purple-200 dark:border-purple-500/30 text-center hover:border-purple-400/50">
-                      <span className="text-sm xl:text-base font-extrabold text-purple-600 dark:text-purple-300 font-outfit block">GraphQL v4</span>
-                      <span className="text-[9px] xl:text-[10px] text-muted-foreground font-mono">GitHub API Engine</span>
+                  <div className="grid grid-cols-3 gap-1.5 xl:gap-2.5">
+                    <AnimatedMetricCard delay={0.05} className="p-1 xl:p-2.5 rounded-xl bg-card/80 border border-purple-200 dark:border-purple-500/30 text-center hover:border-purple-400/50">
+                      <span className="text-xs lg:text-sm xl:text-base font-extrabold text-purple-600 dark:text-purple-300 font-outfit block">GraphQL v4</span>
+                      <span className="text-[8.5px] xl:text-[10px] text-muted-foreground font-mono">GitHub API Engine</span>
                     </AnimatedMetricCard>
-                    <AnimatedMetricCard delay={0.1} className="p-1.5 xl:p-2.5 rounded-xl bg-card/80 border border-purple-200 dark:border-purple-500/30 text-center hover:border-emerald-400/50">
-                      <span className="text-sm xl:text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-outfit block">Edge CDN</span>
-                      <span className="text-[9px] xl:text-[10px] text-muted-foreground font-mono">Global Cache &lt; 50ms</span>
+                    <AnimatedMetricCard delay={0.1} className="p-1 xl:p-2.5 rounded-xl bg-card/80 border border-purple-200 dark:border-purple-500/30 text-center hover:border-emerald-400/50">
+                      <span className="text-xs lg:text-sm xl:text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-outfit block">Edge CDN</span>
+                      <span className="text-[8.5px] xl:text-[10px] text-muted-foreground font-mono">Global Cache &lt; 50ms</span>
                     </AnimatedMetricCard>
-                    <AnimatedMetricCard delay={0.15} className="p-1.5 xl:p-2.5 rounded-xl bg-card/80 border border-purple-200 dark:border-purple-500/30 text-center hover:border-amber-400/50">
-                      <span className="text-sm xl:text-base font-extrabold text-amber-600 dark:text-amber-400 font-outfit block">Custom SVG</span>
-                      <span className="text-[9px] xl:text-[10px] text-muted-foreground font-mono">Real-Time Badges</span>
+                    <AnimatedMetricCard delay={0.15} className="p-1 xl:p-2.5 rounded-xl bg-card/80 border border-purple-200 dark:border-purple-500/30 text-center hover:border-amber-400/50">
+                      <span className="text-xs lg:text-sm xl:text-base font-extrabold text-amber-600 dark:text-amber-400 font-outfit block">Custom SVG</span>
+                      <span className="text-[8.5px] xl:text-[10px] text-muted-foreground font-mono">Real-Time Badges</span>
                     </AnimatedMetricCard>
                   </div>
 
                   {/* Problem & Solution */}
                   <div className="grid grid-cols-2 gap-2 xl:gap-2.5">
-                    <motion.div whileHover={{ scale: 1.02 }} className="p-2 xl:p-2.5 rounded-xl bg-card/80 border border-purple-200 dark:border-purple-500/30 backdrop-blur-xs transition-colors hover:border-purple-400/30">
+                    <motion.div whileHover={{ scale: 1.02 }} className="p-1.5 xl:p-2.5 rounded-xl bg-card/80 border border-purple-200 dark:border-purple-500/30 backdrop-blur-xs transition-colors hover:border-purple-400/30">
                       <span className="text-[10.5px] xl:text-[11px] font-bold text-foreground font-outfit block mb-0.5 xl:mb-1">🎯 Problem</span>
                       <p className="text-[10px] xl:text-[11px] text-muted-foreground font-grotesk leading-tight xl:leading-snug">
                         Developers need an automated, visually striking way to showcase live metrics on portfolios without manual updates.
                       </p>
                     </motion.div>
-                    <motion.div whileHover={{ scale: 1.02 }} className="p-2 xl:p-2.5 rounded-xl bg-card/80 border border-purple-200 dark:border-purple-500/30 backdrop-blur-xs transition-colors hover:border-purple-400/30">
+                    <motion.div whileHover={{ scale: 1.02 }} className="p-1.5 xl:p-2.5 rounded-xl bg-card/80 border border-purple-200 dark:border-purple-500/30 backdrop-blur-xs transition-colors hover:border-purple-400/30">
                       <span className="text-[10.5px] xl:text-[11px] font-bold text-foreground font-outfit block mb-0.5 xl:mb-1">🚀 Solution</span>
                       <p className="text-[10px] xl:text-[11px] text-muted-foreground font-grotesk leading-tight xl:leading-snug">
                         Engineered on-the-fly SVG generation engine with GitHub GraphQL API integration and Edge CDN caching.
@@ -1109,38 +1143,38 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                     <div className="absolute inset-0 rounded-2xl border-2 border-purple-300/80 dark:border-purple-500/50 group-hover:border-purple-400 transition-colors duration-300 pointer-events-none" />
 
                     {/* Inner Terminal Body */}
-                    <div className="relative z-10 w-full p-3.5 lg:p-3.5 xl:p-5 rounded-[14px] bg-white/95 dark:bg-[#0d0918]/95 backdrop-blur-md space-y-2 lg:space-y-2.5 xl:space-y-3.5 transition-colors duration-300">
-                      <div className="flex items-center justify-between border-b border-purple-200/70 dark:border-purple-500/30 pb-1.5 xl:pb-2.5">
+                    <div className="relative z-10 w-full p-2.5 lg:p-3 xl:p-5 rounded-[14px] bg-white/95 dark:bg-[#0d0918]/95 backdrop-blur-md space-y-1.5 lg:space-y-2 xl:space-y-3.5 transition-colors duration-300">
+                      <div className="flex items-center justify-between border-b border-purple-200/70 dark:border-purple-500/30 pb-1 xl:pb-2">
                         <div className="flex items-center gap-2">
-                          <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                          <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                          <div className="w-3 h-3 rounded-full bg-green-500/80" />
-                          <span className="text-xs font-mono text-purple-700 dark:text-purple-300 font-medium ml-2">devpulse-widget.svg</span>
+                          <div className="w-2.5 h-2.5 xl:w-3 xl:h-3 rounded-full bg-red-500/80" />
+                          <div className="w-2.5 h-2.5 xl:w-3 xl:h-3 rounded-full bg-yellow-500/80" />
+                          <div className="w-2.5 h-2.5 xl:w-3 xl:h-3 rounded-full bg-green-500/80" />
+                          <span className="text-[11px] xl:text-xs font-mono text-purple-700 dark:text-purple-300 font-medium ml-1.5">devpulse-widget.svg</span>
                         </div>
-                        <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 font-bold flex items-center gap-1.5">
+                        <span className="text-[9.5px] xl:text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 font-bold flex items-center gap-1.5">
                           <PulsingDot colorClass="bg-emerald-500 dark:bg-emerald-400" /> Live Telemetry
                         </span>
                       </div>
 
                       {/* Developer Telemetry Highlight Cards */}
-                      <div className="grid grid-cols-3 gap-2 xl:gap-2.5">
-                        <AnimatedMetricCard delay={0.05} className="p-1.5 xl:p-2.5 rounded-xl bg-purple-50/80 dark:bg-purple-950/40 border border-purple-200/80 dark:border-purple-500/30 text-center hover:border-purple-400/50 shadow-xs">
-                          <span className="text-base xl:text-lg font-extrabold text-purple-700 dark:text-purple-300 font-outfit block">4,500+</span>
-                          <span className="text-[8.5px] xl:text-[9px] text-muted-foreground font-mono">Total Commits</span>
+                      <div className="grid grid-cols-3 gap-1.5 xl:gap-2.5">
+                        <AnimatedMetricCard delay={0.05} className="p-1 xl:p-2 rounded-xl bg-purple-50/80 dark:bg-purple-950/40 border border-purple-200/80 dark:border-purple-500/30 text-center hover:border-purple-400/50 shadow-xs">
+                          <span className="text-sm xl:text-lg font-extrabold text-purple-700 dark:text-purple-300 font-outfit block">4,500+</span>
+                          <span className="text-[8px] xl:text-[9px] text-muted-foreground font-mono">Total Commits</span>
                         </AnimatedMetricCard>
-                        <AnimatedMetricCard delay={0.1} className="p-1.5 xl:p-2.5 rounded-xl bg-purple-50/80 dark:bg-purple-950/40 border border-purple-200/80 dark:border-purple-500/30 text-center hover:border-emerald-400/50 shadow-xs">
-                          <span className="text-base xl:text-lg font-extrabold text-emerald-600 dark:text-emerald-400 font-outfit block">229 Days</span>
-                          <span className="text-[8.5px] xl:text-[9px] text-muted-foreground font-mono">Active Streak</span>
+                        <AnimatedMetricCard delay={0.1} className="p-1 xl:p-2 rounded-xl bg-purple-50/80 dark:bg-purple-950/40 border border-purple-200/80 dark:border-purple-500/30 text-center hover:border-emerald-400/50 shadow-xs">
+                          <span className="text-sm xl:text-lg font-extrabold text-emerald-600 dark:text-emerald-400 font-outfit block">229 Days</span>
+                          <span className="text-[8px] xl:text-[9px] text-muted-foreground font-mono">Active Streak</span>
                         </AnimatedMetricCard>
-                        <AnimatedMetricCard delay={0.15} className="p-1.5 xl:p-2.5 rounded-xl bg-purple-50/80 dark:bg-purple-950/40 border border-purple-200/80 dark:border-purple-500/30 text-center hover:border-amber-400/50 shadow-xs">
-                          <span className="text-base xl:text-lg font-extrabold text-amber-600 dark:text-amber-400 font-outfit block">Top 1%</span>
-                          <span className="text-[8.5px] xl:text-[9px] text-muted-foreground font-mono">Velocity Rank</span>
+                        <AnimatedMetricCard delay={0.15} className="p-1 xl:p-2 rounded-xl bg-purple-50/80 dark:bg-purple-950/40 border border-purple-200/80 dark:border-purple-500/30 text-center hover:border-amber-400/50 shadow-xs">
+                          <span className="text-sm xl:text-lg font-extrabold text-amber-600 dark:text-amber-400 font-outfit block">Top 1%</span>
+                          <span className="text-[8px] xl:text-[9px] text-muted-foreground font-mono">Velocity Rank</span>
                         </AnimatedMetricCard>
                       </div>
 
                       {/* Authentic Miniature GitHub Contribution Heatmap with Micro-Interactivity */}
-                      <div className="p-2 lg:p-2.5 xl:p-3 rounded-xl bg-purple-50/50 dark:bg-purple-950/20 border border-purple-200/60 dark:border-purple-500/20 space-y-1 xl:space-y-2">
-                        <div className="flex items-center justify-between text-[10px] xl:text-[11px] font-mono">
+                      <div className="p-1.5 lg:p-2 xl:p-2.5 rounded-xl bg-purple-50/50 dark:bg-purple-950/20 border border-purple-200/60 dark:border-purple-500/20 space-y-1 xl:space-y-1.5">
+                        <div className="flex items-center justify-between text-[9.5px] xl:text-[11px] font-mono">
                           <span className="text-purple-800 dark:text-purple-300 font-bold flex items-center gap-1.5">
                             <PulsingDot colorClass="bg-emerald-500 dark:bg-emerald-400" /> Contribution Activity (12 Weeks)
                           </span>
@@ -1162,7 +1196,7 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                                 key={i}
                                 whileHover={{ scale: 1.4, zIndex: 10 }}
                                 transition={{ duration: 0.15 }}
-                                className={`w-2 h-2 xl:w-2.5 xl:h-2.5 rounded-[2px] ${level} cursor-pointer transition-shadow hover:shadow-[0_0_8px_rgba(52,211,153,0.6)]`}
+                                className={`w-1.5 h-1.5 xl:w-2 xl:h-2 rounded-[2px] ${level} cursor-pointer transition-shadow hover:shadow-[0_0_8px_rgba(52,211,153,0.6)]`}
                               />
                             );
                           })}
@@ -1170,8 +1204,8 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                       </div>
 
                       {/* Language Breakdown Bar */}
-                      <div className="space-y-1 xl:space-y-1.5">
-                        <div className="flex justify-between text-[10px] xl:text-[11px] font-mono text-muted-foreground">
+                      <div className="space-y-0.5 xl:space-y-1">
+                        <div className="flex justify-between text-[9.5px] xl:text-[11px] font-mono text-muted-foreground">
                           <span>Language Distribution</span>
                           <span className="text-purple-700 dark:text-purple-300 font-semibold">TypeScript 48% • Python 26% • Java 18%</span>
                         </div>
@@ -1184,11 +1218,11 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
                       </div>
 
                       {/* Live API Endpoint & CDN Status */}
-                      <div className="p-1.5 xl:p-2 rounded-xl bg-purple-50/80 dark:bg-purple-950/30 border border-purple-200/80 dark:border-purple-500/20 text-[10px] xl:text-xs font-mono text-purple-900 dark:text-purple-200/80 flex items-center justify-between">
-                        <span className="text-[10px] xl:text-[11px] text-muted-foreground flex items-center gap-1.5">
+                      <div className="p-1 xl:p-1.5 rounded-xl bg-purple-50/80 dark:bg-purple-950/30 border border-purple-200/80 dark:border-purple-500/20 text-[9px] xl:text-xs font-mono text-purple-900 dark:text-purple-200/80 flex items-center justify-between">
+                        <span className="text-[9.5px] xl:text-[11px] text-muted-foreground flex items-center gap-1.5">
                           <Zap className="w-3 h-3 text-purple-600 dark:text-purple-400" /> GET /api/widget?user=ComradeMohan
                         </span>
-                        <span className="text-emerald-600 dark:text-emerald-400 font-bold text-[10px] xl:text-[11px] flex items-center gap-1.5">
+                        <span className="text-emerald-600 dark:text-emerald-400 font-bold text-[9.5px] xl:text-[11px] flex items-center gap-1.5">
                           <PulsingDot colorClass="bg-emerald-500 dark:bg-emerald-400" /> Cached &lt; 42ms • 200 OK
                         </span>
                       </div>
@@ -1204,7 +1238,7 @@ export const ProjectScrollyStage: React.FC<ProjectScrollyStageProps> = ({
         {/* ========================================================================= */}
         {/* STAGE FOOTER: Project Direct Jumper Navigation                            */}
         {/* ========================================================================= */}
-        <div className="flex items-center justify-between pt-3 border-t border-border/50 shrink-0 text-xs text-muted-foreground font-mono">
+        <div className="flex items-center justify-between pt-1.5 lg:pt-2 xl:pt-3 border-t border-border/50 shrink-0 text-xs text-muted-foreground font-mono">
           <span className="hidden sm:inline">
             Scroll down ↓
           </span>

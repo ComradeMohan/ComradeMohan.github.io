@@ -899,7 +899,7 @@ const ProjectsSection = () => {
   // Scroll tracking for desktop sticky project progression
   const { scrollYProgress } = useScroll({
     target: desktopShowcaseRef,
-    offset: ["start start", "end end"],
+    offset: ["start 74px", "end end"],
   });
 
   useEffect(() => {
@@ -944,18 +944,19 @@ const ProjectsSection = () => {
 
     if (desktopShowcaseRef.current) {
       const rect = desktopShowcaseRef.current.getBoundingClientRect();
-      const scrollTop = window.scrollY + rect.top;
-      const totalScrollDistance = desktopShowcaseRef.current.offsetHeight - window.innerHeight;
-      const targetScroll = scrollTop + ((i + 0.5) / projects.length) * totalScrollDistance;
+      const scrollTop = window.scrollY + rect.top - 74;
+      const totalScrollDistance = desktopShowcaseRef.current.offsetHeight - (window.innerHeight - 74);
+      const targetProgress = i === projects.length - 1 ? (i + 0.35) / projects.length : (i + 0.5) / projects.length;
+      const targetScroll = scrollTop + targetProgress * totalScrollDistance;
       window.scrollTo({ top: targetScroll, behavior: "smooth" });
     }
   };
 
   return (
-    <section id="projects" className="pt-2 pb-12 sm:pt-3 sm:pb-16 scroll-mt-20 relative">
+    <section id="projects" className="pt-2 pb-12 sm:pt-3 sm:pb-16 lg:pt-0 lg:pb-0 scroll-mt-[74px] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0">
-        {/* Section Header: Sticky on mobile under navbar so 'My Projects' stays visible while cards stack below it */}
-        <div className="sticky top-[74px] z-40 bg-background/85 backdrop-blur-md py-2 sm:static sm:bg-transparent sm:backdrop-blur-none sm:py-0 text-center mb-0 transition-all">
+        {/* Section Header: Sticky on mobile under navbar so 'My Projects' stays visible while cards stack below it. Hidden on lg as ProjectScrollyStage integrates header with 0 gap */}
+        <div className="sticky top-[74px] z-40 bg-background/85 backdrop-blur-md py-2 sm:static sm:bg-transparent sm:backdrop-blur-none sm:py-0 text-center mb-0 transition-all lg:hidden">
           <h2 className="text-4xl font-extrabold mb-3 sm:mb-4 font-outfit">
             My <span className="text-primary">Projects</span>
           </h2>
