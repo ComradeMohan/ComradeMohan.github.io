@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useTheme } from "@/hooks/useTheme";
 
 const navLinks = [
   { label: "Home", href: "/#home", icon: Home },
@@ -38,7 +39,7 @@ const Navbar = ({ skipEntryAnim: _skipEntryAnim = false, introActive = false }: 
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("#home");
-  const [isDark, setIsDark] = useState(true);
+  const { isDark, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -113,52 +114,6 @@ const Navbar = ({ skipEntryAnim: _skipEntryAnim = false, introActive = false }: 
     return location.pathname === href;
   };
 
-  useEffect(() => {
-    const handleThemeChange = () => {
-      const saved = localStorage.getItem("theme");
-      const metaThemeColor = document.querySelector("meta[name='theme-color']");
-      if (saved === "light") {
-        setIsDark(false);
-        document.documentElement.classList.add("light");
-        document.documentElement.classList.remove("dark");
-        metaThemeColor?.setAttribute("content", "hsla(12, 65%, 88%, 1.00)");
-      } else {
-        setIsDark(true);
-        document.documentElement.classList.remove("light");
-        document.documentElement.classList.add("dark");
-        metaThemeColor?.setAttribute("content", "hsl(289, 65%, 10%)");
-      }
-    };
-    handleThemeChange();
-
-    window.addEventListener("storage", handleThemeChange);
-    window.addEventListener("local-storage", handleThemeChange);
-    return () => {
-      window.removeEventListener("storage", handleThemeChange);
-      window.removeEventListener("local-storage", handleThemeChange);
-    };
-  }, []);
-
-  const toggleTheme = () => {
-    setIsDark((prev) => {
-      const next = !prev;
-      const metaThemeColor = document.querySelector("meta[name='theme-color']");
-      if (next) {
-        document.documentElement.classList.remove("light");
-        document.documentElement.classList.add("dark");
-        localStorage.setItem("theme", "dark");
-        metaThemeColor?.setAttribute("content", "hsl(289, 65%, 10%)");
-      } else {
-        document.documentElement.classList.add("light");
-        document.documentElement.classList.remove("dark");
-        localStorage.setItem("theme", "light");
-        metaThemeColor?.setAttribute("content", "hsl(289, 65%, 95%)");
-      }
-      window.dispatchEvent(new Event("local-storage"));
-      window.dispatchEvent(new Event("storage"));
-      return next;
-    });
-  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -278,14 +233,14 @@ const Navbar = ({ skipEntryAnim: _skipEntryAnim = false, introActive = false }: 
             {/* Desktop Actions */}
             <div className="hidden md:flex items-center gap-5">
               <button
-                onClick={toggleTheme}
+                onClick={(e) => toggleTheme(e)}
                 className="p-2 rounded-full text-foreground/60 hover:text-primary transition-colors cursor-pointer"
                 style={{
                   background: "hsl(var(--foreground) / 0.06)",
                 }}
                 aria-label="Toggle theme"
               >
-                {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700 dark:text-slate-300" />}
               </button>
               <div>
                 <Button asChild size="sm" className="rounded-full bg-primary hover:bg-primary/80 shadow-[0_0_16px_hsl(var(--primary)/0.3)]">
@@ -299,7 +254,7 @@ const Navbar = ({ skipEntryAnim: _skipEntryAnim = false, introActive = false }: 
             {/* Mobile Header Controls */}
             <div className="flex items-center gap-2 md:hidden">
               <button
-                onClick={toggleTheme}
+                onClick={(e) => toggleTheme(e)}
                 className="w-9 h-9 rounded-full text-foreground/75 hover:text-[#FF5722] transition-all flex items-center justify-center border border-border/50 dark:border-white/10 active:scale-95 bg-secondary/40 dark:bg-white/5"
                 aria-label="Toggle theme"
               >

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { executeCircleThemeTransition } from "@/lib/themeTransition";
 import {
   CommandDialog,
   CommandInput,
@@ -75,22 +76,31 @@ export const CommandMenu = ({ open: customOpen, onOpenChange }: CommandMenuProps
 
   const applyTheme = (t: "dark" | "light" | "midnight" | "violet") => {
     setIsOpen(false);
-    localStorage.setItem("theme", t);
-    document.documentElement.classList.remove("light", "midnight", "violet");
-    if (t !== "dark") {
-      document.documentElement.classList.add(t);
-    }
-    const meta = document.querySelector("meta[name='theme-color']");
-    const map = {
-      dark: "hsl(289, 65%, 10%)",
-      light: "hsl(12, 65%, 88%)",
-      midnight: "hsl(205, 90%, 12%)",
-      violet: "hsl(286, 80%, 12%)",
-    };
-    meta?.setAttribute("content", map[t]);
-    // Dispatch local storage change event to sync Navbar and theme switchers
-    window.dispatchEvent(new Event("storage"));
-    window.dispatchEvent(new Event("local-storage"));
+    executeCircleThemeTransition(
+      null,
+      () => {
+        localStorage.setItem("theme", t);
+        document.documentElement.classList.remove("light", "midnight", "violet", "dark");
+        if (t === "light") {
+          document.documentElement.classList.add("light");
+        } else {
+          document.documentElement.classList.add("dark");
+          if (t !== "dark") document.documentElement.classList.add(t);
+        }
+        const meta = document.querySelector("meta[name='theme-color']");
+        const map = {
+          dark: "hsl(289, 65%, 10%)",
+          light: "hsl(12, 65%, 88%)",
+          midnight: "hsl(205, 90%, 12%)",
+          violet: "hsl(286, 80%, 12%)",
+        };
+        meta?.setAttribute("content", map[t]);
+        // Dispatch local storage change event to sync Navbar and theme switchers
+        window.dispatchEvent(new Event("storage"));
+        window.dispatchEvent(new Event("local-storage"));
+      },
+      t
+    );
   };
 
   return (

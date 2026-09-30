@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { executeCircleThemeTransition } from "@/lib/themeTransition";
 
 type Theme = "dark" | "light" | "midnight" | "violet";
 
@@ -13,25 +14,32 @@ export default function ThemePanel({ open, onClose }: { open: boolean; onClose: 
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  const apply = (t: Theme) => {
-    localStorage.setItem("theme", t);
-    document.documentElement.classList.remove("light", "midnight", "violet", "dark");
-    if (t === "light") {
-      document.documentElement.classList.add("light");
-    } else {
-      document.documentElement.classList.add("dark");
-      if (t !== "dark") document.documentElement.classList.add(t);
-    }
-    const meta = document.querySelector("meta[name='theme-color']");
-    const map: Record<Theme, string> = {
-      dark: "hsl(289, 65%, 10%)",
-      light: "hsl(12, 65%, 88%)",
-      midnight: "hsl(205, 90%, 12%)",
-      violet: "hsl(286, 80%, 12%)",
-    };
-    meta?.setAttribute("content", map[t]);
-    window.dispatchEvent(new Event("local-storage"));
+  const apply = (t: Theme, e?: React.MouseEvent) => {
     onClose();
+    executeCircleThemeTransition(
+      e,
+      () => {
+        localStorage.setItem("theme", t);
+        document.documentElement.classList.remove("light", "midnight", "violet", "dark");
+        if (t === "light") {
+          document.documentElement.classList.add("light");
+        } else {
+          document.documentElement.classList.add("dark");
+          if (t !== "dark") document.documentElement.classList.add(t);
+        }
+        const meta = document.querySelector("meta[name='theme-color']");
+        const map: Record<Theme, string> = {
+          dark: "hsl(289, 65%, 10%)",
+          light: "hsl(12, 65%, 88%)",
+          midnight: "hsl(205, 90%, 12%)",
+          violet: "hsl(286, 80%, 12%)",
+        };
+        meta?.setAttribute("content", map[t]);
+        window.dispatchEvent(new Event("local-storage"));
+        window.dispatchEvent(new Event("storage"));
+      },
+      t
+    );
   };
 
   if (!open) return null;
@@ -46,7 +54,7 @@ export default function ThemePanel({ open, onClose }: { open: boolean; onClose: 
           {themes.map((t) => (
             <button
               key={t}
-              onClick={() => apply(t)}
+              onClick={(e) => apply(t, e)}
               className="px-3 py-2 rounded-lg border border-white/8 bg-white/3 text-sm hover:scale-105 transition-transform"
             >
               {t}

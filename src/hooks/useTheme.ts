@@ -30,7 +30,7 @@ export function useTheme() {
     };
   }, []);
 
-  const toggleTheme = (e?: React.MouseEvent | MouseEvent | { clientX: number; clientY: number }) => {
+  const toggleTheme = (e?: React.MouseEvent | MouseEvent | { clientX?: number; clientY?: number; currentTarget?: any; target?: any }) => {
     const nextIsDark = !isDark;
     const targetTheme = nextIsDark ? "dark" : "light";
 
@@ -40,16 +40,16 @@ export function useTheme() {
         setIsDark(nextIsDark);
         localStorage.setItem("theme", targetTheme);
         const metaThemeColor = document.querySelector("meta[name='theme-color']");
+        document.documentElement.classList.remove("light", "midnight", "violet", "dark");
         if (nextIsDark) {
-          document.documentElement.classList.remove("light");
           document.documentElement.classList.add("dark");
           metaThemeColor?.setAttribute("content", "hsl(289, 65%, 10%)");
         } else {
           document.documentElement.classList.add("light");
-          document.documentElement.classList.remove("dark");
           metaThemeColor?.setAttribute("content", "hsla(12, 65%, 88%, 1.00)");
         }
         window.dispatchEvent(new Event("local-storage"));
+        window.dispatchEvent(new Event("storage"));
       },
       targetTheme
     );
