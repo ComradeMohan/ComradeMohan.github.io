@@ -1,9 +1,10 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Calendar, Clock, Bookmark, Share2, Check, User } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, Bookmark, Share2, Check, User, Copy, MessageCircle, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { blogArticles } from "@/data/blogArticles";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
@@ -17,6 +18,7 @@ const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
   const [copied, setCopied] = useState(false);
   const [headers, setHeaders] = useState<HeaderItem[]>([]);
+  const [activeId, setActiveId] = useState<string>("");
 
   // Find corresponding article
   const article = blogArticles.find((a) => a.slug === slug);
@@ -39,6 +41,55 @@ const BlogPost = () => {
     }
     setHeaders(parsedHeaders);
   }, [article]);
+
+  // Scrollspy: automatically highlight visible heading in Table of Contents
+  useEffect(() => {
+    if (headers.length === 0) return;
+
+    const currentHash = window.location.hash.replace("#", "");
+    if (currentHash && headers.some((h) => h.id === currentHash)) {
+      setActiveId(currentHash);
+    } else {
+      setActiveId(headers[0].id);
+    }
+
+    const handleScroll = () => {
+      // If near the bottom of page, activate the last header
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100) {
+        setActiveId(headers[headers.length - 1].id);
+        return;
+      }
+
+      // Offset from top of viewport for sticky navbar
+      const scrollPosition = window.scrollY + 160;
+
+      const headerElements = headers
+        .map((h) => ({ id: h.id, el: document.getElementById(h.id) }))
+        .filter((item): item is { id: string; el: HTMLElement } => item.el !== null);
+
+      if (headerElements.length === 0) return;
+
+      let currentActive = headerElements[0].id;
+      for (let i = 0; i < headerElements.length; i++) {
+        const top = headerElements[i].el.getBoundingClientRect().top + window.scrollY;
+        if (top <= scrollPosition) {
+          currentActive = headerElements[i].id;
+        } else {
+          break;
+        }
+      }
+
+      setActiveId(currentActive);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    const timer = setTimeout(handleScroll, 100);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(timer);
+    };
+  }, [headers]);
 
   if (!article) {
     return (
@@ -98,6 +149,19 @@ const BlogPost = () => {
     ]
   };
 
+  const isLocalhost = typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
+  const articleShareUrl = isLocalhost
+    ? `https://mohanreddy.me/blog/${article.slug}`
+    : (typeof window !== "undefined" ? window.location.href : `https://mohanreddy.me/blog/${article.slug}`);
+
+  const fullCoverImageUrl = article?.coverImage
+    ? article.coverImage.startsWith("http")
+      ? article.coverImage
+      : `https://mohanreddy.me${article.coverImage.startsWith("/") ? "" : "/"}${article.coverImage}`
+    : "https://mohanreddy.me/favicon.png";
+
+  const encodedCoverImageUrl = encodeURI(fullCoverImageUrl);
+
   // Article / BlogPosting schema
   const articleSchema = {
     "@type": "BlogPosting",
@@ -107,7 +171,7 @@ const BlogPost = () => {
     },
     "headline": article.title,
     "description": article.description,
-    "image": "https://mohanreddy.me/mohan-reddy-full-stack-developer.webp",
+    "image": encodedCoverImageUrl,
     "datePublished": "2026-07-02T00:00:00+05:30",
     "dateModified": "2026-07-02T00:00:00+05:30",
     "author": {
@@ -123,10 +187,58 @@ const BlogPost = () => {
     }
   };
 
-  const copyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [copiedLink, setCopiedLink] = useState(false);
+
+  const handleShare = async () => {
+    const url = articleShareUrl;
+    const title = article.title;
+    const text = article.description;
+
+    // 1. Native Web Share API (opens native Android/iOS share drawer if available in context)
+    if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
+      try {
+        await navigator.share({
+          title,
+          text,
+          url,
+        });
+        return; // Native share drawer successfully opened
+      } catch (err: any) {
+        if (err.name === "AbortError") {
+          return; // User dismissed share sheet
+        }
+      }
+    }
+
+    // 2. Open Interactive Social Share Modal on mobile/desktop
+    setIsShareModalOpen(true);
+  };
+
+  const handleCopyLink = async () => {
+    const url = articleShareUrl;
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(url);
+      } else {
+        // Fallback for non-secure contexts (e.g. mobile testing on local Wi-Fi)
+        const textArea = document.createElement("textarea");
+        textArea.value = url;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand("copy");
+        textArea.remove();
+      }
+
+      setCopiedLink(true);
+      setTimeout(() => setCopiedLink(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy link:", err);
+    }
   };
 
   return (
@@ -136,6 +248,8 @@ const BlogPost = () => {
         description={article.description}
         keywords={`${article.tags.join(", ")}, Mohan Reddy technical post, code guides, web engineering`}
         ogType="article"
+        ogImage={fullCoverImageUrl}
+        ogUrl={`https://mohanreddy.me/blog/${article.slug}`}
         schema={[breadcrumbSchema, articleSchema]}
       />
       <style>{`
@@ -184,11 +298,11 @@ const BlogPost = () => {
       <div className="min-h-screen bg-background text-foreground flex flex-col font-outfit">
         <Navbar />
 
-        <main className="flex-grow pt-28 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        <main className="flex-grow pt-24 pb-16 px-3 sm:px-5 lg:px-6 max-w-[96%] xl:max-w-[1550px] 2xl:max-w-[1700px] mx-auto w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
             
             {/* Left/Center Column (Article Body) */}
-            <article className="lg:col-span-8 space-y-6">
+            <article className="lg:col-span-9 space-y-6 w-full">
               
               {/* Back button */}
               <Button asChild variant="ghost" className="hover:bg-foreground/5 hover:text-primary text-muted-foreground gap-2 pl-2">
@@ -229,19 +343,12 @@ const BlogPost = () => {
                     <Calendar className="w-3.5 h-3.5" /> {article.date}
                   </span>
                   <button
-                    onClick={copyLink}
-                    className="flex items-center gap-1 hover:text-primary transition-colors focus:outline-none"
+                    onClick={handleShare}
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-card hover:bg-muted border border-border text-xs text-muted-foreground hover:text-primary transition-colors focus:outline-none cursor-pointer"
                     aria-label="Share article"
                   >
-                    {copied ? (
-                      <>
-                        <Check className="w-3.5 h-3.5 text-emerald-400" /> <span className="text-emerald-400">Copied!</span>
-                      </>
-                    ) : (
-                      <>
-                        <Share2 className="w-3.5 h-3.5" /> Share
-                      </>
-                    )}
+                    <Share2 className="w-3.5 h-3.5 text-primary" />
+                    <span>Share</span>
                   </button>
                 </div>
               </div>
@@ -290,24 +397,45 @@ const BlogPost = () => {
             </article>
 
             {/* Right Column (Sidebar - Table of Contents) */}
-            <aside className="lg:col-span-4 lg:sticky lg:top-24 space-y-6 lg:border-l lg:border-foreground/10 lg:pl-6">
+            <aside className="lg:col-span-3 lg:sticky lg:top-24 space-y-6 lg:border-l lg:border-border/80 lg:pl-5">
               
               {headers.length > 0 && (
                 <nav className="space-y-4" aria-label="Table of contents">
                   <h2 className="text-xs font-bold uppercase tracking-wider text-muted-foreground font-grotesk flex items-center gap-1.5">
                     <Bookmark className="w-3.5 h-3.5" /> Table of Contents
                   </h2>
-                  <ul className="space-y-2.5 font-grotesk text-xs">
-                    {headers.map((h) => (
-                      <li key={h.id}>
-                        <a
-                          href={`#${h.id}`}
-                          className="text-muted-foreground hover:text-primary transition-colors block leading-snug py-0.5 border-l border-transparent hover:border-primary pl-3 -ml-px"
-                        >
-                          {h.text}
-                        </a>
-                      </li>
-                    ))}
+                  <ul className="space-y-1.5 font-grotesk text-xs">
+                    {headers.map((h) => {
+                      const isActive = activeId === h.id;
+                      return (
+                        <li key={h.id}>
+                          <a
+                            href={`#${h.id}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              const el = document.getElementById(h.id);
+                              if (el) {
+                                const yOffset = -100;
+                                const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                                window.scrollTo({ top: y, behavior: "smooth" });
+                                setActiveId(h.id);
+                                window.history.pushState(null, "", `#${h.id}`);
+                              }
+                            }}
+                            className={`group flex items-center justify-between text-xs py-1.5 pl-3 -ml-px border-l-2 transition-all duration-200 leading-snug rounded-r-md ${
+                              isActive
+                                ? "border-primary text-primary font-semibold bg-primary/10 shadow-sm"
+                                : "border-transparent text-muted-foreground hover:text-foreground hover:border-foreground/30 hover:bg-muted/40"
+                            }`}
+                          >
+                            <span className="truncate">{h.text}</span>
+                            {isActive && (
+                              <span className="w-1.5 h-1.5 rounded-full bg-primary ml-2 mr-1 animate-pulse shrink-0" />
+                            )}
+                          </a>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </nav>
               )}
@@ -333,6 +461,100 @@ const BlogPost = () => {
             </aside>
 
           </div>
+
+          {/* Social Share Modal for Mobile & Desktop */}
+          <Dialog open={isShareModalOpen} onOpenChange={setIsShareModalOpen}>
+            <DialogContent className="sm:max-w-md bg-card border-border p-6 rounded-2xl">
+              <DialogHeader className="text-left space-y-1">
+                <DialogTitle className="text-lg font-bold font-outfit flex items-center gap-2 text-foreground">
+                  <Share2 className="w-4 h-4 text-primary" /> Share Article
+                </DialogTitle>
+                <DialogDescription className="text-xs text-muted-foreground font-grotesk">
+                  Share "{article.title}" with your network or friends.
+                </DialogDescription>
+              </DialogHeader>
+
+              {/* Social Share Buttons Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-4 font-grotesk">
+                {/* WhatsApp */}
+                <a
+                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(article.title + "\n\n" + articleShareUrl)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center justify-center p-3 rounded-xl bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/20 text-[#25D366] transition-all group cursor-pointer"
+                >
+                  <div className="w-10 h-10 rounded-full bg-[#25D366] text-white flex items-center justify-center mb-1.5 shadow-sm group-hover:scale-110 transition-transform">
+                    <MessageCircle className="w-5 h-5 fill-current" />
+                  </div>
+                  <span className="text-xs font-semibold text-foreground">WhatsApp</span>
+                </a>
+
+                {/* LinkedIn */}
+                <a
+                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(articleShareUrl)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center justify-center p-3 rounded-xl bg-[#0A66C2]/10 hover:bg-[#0A66C2]/20 border border-[#0A66C2]/20 text-[#0A66C2] transition-all group cursor-pointer"
+                >
+                  <div className="w-10 h-10 rounded-full bg-[#0A66C2] text-white flex items-center justify-center mb-1.5 shadow-sm group-hover:scale-110 transition-transform">
+                    <span className="text-sm font-bold font-mono">in</span>
+                  </div>
+                  <span className="text-xs font-semibold text-foreground">LinkedIn</span>
+                </a>
+
+                {/* Twitter / X */}
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(article.title)}&url=${encodeURIComponent(articleShareUrl)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center justify-center p-3 rounded-xl bg-foreground/5 hover:bg-foreground/10 border border-foreground/15 transition-all group cursor-pointer"
+                >
+                  <div className="w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center mb-1.5 shadow-sm group-hover:scale-110 transition-transform">
+                    <span className="text-sm font-bold font-mono">𝕏</span>
+                  </div>
+                  <span className="text-xs font-semibold text-foreground">X (Twitter)</span>
+                </a>
+
+                {/* Telegram */}
+                <a
+                  href={`https://t.me/share/url?url=${encodeURIComponent(articleShareUrl)}&text=${encodeURIComponent(article.title)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center justify-center p-3 rounded-xl bg-[#229ED9]/10 hover:bg-[#229ED9]/20 border border-[#229ED9]/20 text-[#229ED9] transition-all group cursor-pointer"
+                >
+                  <div className="w-10 h-10 rounded-full bg-[#229ED9] text-white flex items-center justify-center mb-1.5 shadow-sm group-hover:scale-110 transition-transform">
+                    <Send className="w-5 h-5 ml-0.5" />
+                  </div>
+                  <span className="text-xs font-semibold text-foreground">Telegram</span>
+                </a>
+              </div>
+
+              {/* Quick Copy Link Row */}
+              <div className="flex items-center gap-2 pt-2 border-t border-border">
+                <input
+                  type="text"
+                  readOnly
+                  value={articleShareUrl}
+                  className="flex-grow px-3 py-2 text-xs rounded-xl bg-muted/60 border border-border text-muted-foreground font-mono truncate focus:outline-none"
+                />
+                <Button
+                  onClick={handleCopyLink}
+                  size="sm"
+                  className="gap-1.5 text-xs font-medium bg-primary hover:bg-primary/90 text-primary-foreground shrink-0 cursor-pointer"
+                >
+                  {copiedLink ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-white" /> Copied!
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5" /> Copy Link
+                    </>
+                  )}
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
         </main>
 
         <Footer />

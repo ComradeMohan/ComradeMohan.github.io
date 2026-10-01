@@ -51,28 +51,36 @@ const SEO = ({
     setMetaTag("name", "robots", robots);
     setMetaTag("name", "author", "Mohan Reddy");
 
+    // Format absolute image URL for OpenGraph & Twitter crawlers
+    const rawImage = ogImage || "https://mohanreddy.me/mohan-reddy-full-stack-developer.webp";
+    const fullOgImage = rawImage.startsWith("http")
+      ? rawImage
+      : `https://mohanreddy.me${rawImage.startsWith("/") ? "" : "/"}${rawImage}`;
+    const formattedOgImage = encodeURI(fullOgImage);
+
     // 4. Set OpenGraph meta tags
     setMetaTag("property", "og:title", title);
     setMetaTag("property", "og:description", description);
     setMetaTag("property", "og:type", ogType);
     setMetaTag("property", "og:url", currentUrl);
-    setMetaTag("property", "og:image", ogImage);
+    setMetaTag("property", "og:image", formattedOgImage);
+    setMetaTag("property", "og:image:secure_url", formattedOgImage);
     setMetaTag("property", "og:image:width", "1200");
     setMetaTag("property", "og:image:height", "630");
-    setMetaTag("property", "og:image:type", "image/webp");
     setMetaTag("property", "og:image:alt", title);
     setMetaTag("property", "og:site_name", "Mohan Reddy Portfolio");
 
     // 5. Set Twitter Card meta tags
     setMetaTag("name", "twitter:title", title);
     setMetaTag("name", "twitter:description", description);
-    setMetaTag("name", "twitter:image", ogImage);
+    setMetaTag("name", "twitter:image", formattedOgImage);
     setMetaTag("name", "twitter:image:width", "1200");
     setMetaTag("name", "twitter:image:height", "630");
     setMetaTag("name", "twitter:image:alt", title);
     setMetaTag("name", "twitter:card", "summary_large_image");
+    setMetaTag("name", "thumbnail", formattedOgImage);
 
-    // 6. Set Canonical Link
+    // 6. Set Canonical Link & Image Source Link
     let canonicalElement = document.querySelector('link[rel="canonical"]');
     if (canonicalElement) {
       canonicalElement.setAttribute("href", canonicalUrl);
@@ -81,6 +89,16 @@ const SEO = ({
       canonicalElement.setAttribute("rel", "canonical");
       canonicalElement.setAttribute("href", canonicalUrl);
       document.head.appendChild(canonicalElement);
+    }
+
+    let imageSrcElement = document.querySelector('link[rel="image_src"]');
+    if (imageSrcElement) {
+      imageSrcElement.setAttribute("href", formattedOgImage);
+    } else {
+      imageSrcElement = document.createElement("link");
+      imageSrcElement.setAttribute("rel", "image_src");
+      imageSrcElement.setAttribute("href", formattedOgImage);
+      document.head.appendChild(imageSrcElement);
     }
 
     // 7. Inject JSON-LD Schema

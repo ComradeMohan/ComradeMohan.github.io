@@ -12,14 +12,258 @@ export interface BlogArticle {
 
 export const blogArticles: BlogArticle[] = [
   {
+    slug: "oracle-java-se-17-certification-guide",
+    title: "How I Passed the Oracle Certified Professional Java SE 17 (1Z0-829) Exam as an Undergrad",
+    description: "A complete preparation roadmap for the Oracle Certified Professional Java SE 17 Developer exam (1Z0-829): core syllabus breakdown, switch pattern matching, sealed classes, and concurrency tips.",
+    date: "September 24, 2026",
+    readTime: "8 min read",
+    category: "Java & Backend",
+    tags: ["Java", "Oracle OCP", "JVM Architecture"],
+    coverImage: "/certifications/Oracle Certified Professional_ Java SE 17 Developer.webp",
+    content: `
+      <h2>Why Pursue OCP Java SE 17 (1Z0-829)?</h2>
+      <p>The Oracle Certified Professional (OCP) Java SE 17 Developer certification (Exam 1Z0-829) is widely recognized as one of the most rigorous developer certifications in the software industry. Unlike beginner multiple-choice tests, 1Z0-829 tests your nuanced understanding of memory models, class design, stream pipeline laziness, and edge-case exceptions.</p>
+      <p>Fewer than 1% of undergraduate computer science engineers take this certification before graduating. Achieving it demonstrates not just an ability to write Java code, but deep expertise in writing robust, enterprise-grade, memory-efficient software.</p>
+
+      <h2>Core Exam Topics &amp; Weightage</h2>
+      <p>Java 17 is a Long-Term Support (LTS) release packed with language enhancements. The exam is structured around key domains:</p>
+      <ul>
+        <li><strong>Modern Language Enhancements:</strong> Sealed classes, records, text blocks, and pattern matching for <code>instanceof</code> and <code>switch</code>.</li>
+        <li><strong>Collections and Generics:</strong> Wildcard bounds (<code>? extends T</code> vs <code>? super T</code>), stream reduction operations, and collector pipelines.</li>
+        <li><strong>Concurrency &amp; Multithreading:</strong> ExecutorService lifecycle, ForkJoinPool, Atomic primitives, Lock frameworks, and concurrent collection implementations.</li>
+        <li><strong>I/O and NIO.2:</strong> Path operations, Files streams, serialization rules, and custom channel handling.</li>
+        <li><strong>Secure Coding &amp; Modularization:</strong> Java Platform Module System (JPMS), module declarations (<code>exports</code>, <code>opens</code>, <code>provides ... with</code>), and defense against deserialization attacks.</li>
+      </ul>
+
+      <h2>Key Modern Java Features You Must Master</h2>
+
+      <h3>1. Sealed Classes and Interfaces</h3>
+      <p>Sealed classes allow developers to restrict which classes or interfaces may extend or implement them. This is essential for domain modeling where domain states must be finite.</p>
+      <pre><code>// Defining a sealed hierarchy
+public sealed interface PaymentStatus 
+    permits PaymentSuccess, PaymentFailed, PaymentPending {}
+
+public final record PaymentSuccess(String transactionId, double amount) implements PaymentStatus {}
+public final record PaymentFailed(String reason, int errorCode) implements PaymentStatus {}
+public final record PaymentPending(long timestamp) implements PaymentStatus {}</code></pre>
+      <p>Because the compiler knows all permitted subtypes, exhaustive pattern matching in <code>switch</code> expressions eliminates the need for a default clause.</p>
+
+      <h3>2. Records and Canonical Constructors</h3>
+      <p>Records provide a compact syntax for declaring classes that are transparent holders for immutable data. The exam tests tricky edge cases around compact constructors and custom getters.</p>
+      <pre><code>// Compact constructor validation
+public record StudentRecord(String id, String name, double gpa) {
+    public StudentRecord {
+        if (gpa &lt; 0.0 || gpa &gt; 10.0) {
+            throw new IllegalArgumentException("Invalid CGPA score");
+        }
+        name = name.trim();
+    }
+}</code></pre>
+
+      <h3>3. Stream Pipelines &amp; Collector Nuances</h3>
+      <p>A frequent stumbling block on the 1Z0-829 exam is stream termination and short-circuiting behavior. Questions often pair <code>peek()</code> with non-terminal steps or parallel streams where reduction order is non-deterministic.</p>
+
+      <h2>My 30-Day Preparation Strategy</h2>
+      <p>To pass the exam with high marks while balancing university coursework, I followed a disciplined 4-week cycle:
+        <ul>
+          <li><strong>Week 1:</strong> Foundations, OOP edge cases, Polymorphism, Exception hierarchies, and Nested/Inner classes.</li>
+          <li><strong>Week 2:</strong> Generics, Collections, Functional Interfaces (Function, Predicate, Consumer, Supplier), and Streams.</li>
+          <li><strong>Week 3:</strong> Concurrency, Locks, Atomic types, NIO.2 File systems, and JDBC transactions.</li>
+          <li><strong>Week 4:</strong> Mock exams under strict 90-minute timers, reviewing every incorrect option and reading Java Language Specification (JLS) documentation.</li>
+        </ul>
+      </p>
+
+      <h2>Conclusion</h2>
+      <p>Preparing for the OCP Java SE 17 certification fundamentally leveled up my engineering capabilities. It forces you to transition from thinking like someone who merely uses Java libraries to thinking like an engineer who understands how the Java Virtual Machine (JVM) executes code under the hood.</p>
+    `
+  },
+  {
+    slug: "scaling-univault-offline-first-architecture",
+    title: "Architecting UniVault: Scaling an Offline-First Android & Web Platform to 50,000+ Students",
+    description: "A system design deep-dive into how we built UniVault's local-first sync pipeline using Room Database, Kotlin Coroutines, and Firebase Firestore to serve 50,000+ students during peak semester exams.",
+    date: "September 28, 2026",
+    readTime: "7 min read",
+    category: "System Architecture",
+    tags: ["Android", "Kotlin", "System Design"],
+    coverImage: "/univault_mobile.webp",
+    content: `
+      <h2>The Problem: Campus Network Failures During Exam Week</h2>
+      <p>During end-semester examinations, thousands of students simultaneously attempt to download question blueprints, lecture notes, and syllabus guides. On campus networks with spotty Wi-Fi and congested cellular coverage, typical client-server architectures fail immediately. Students encounter infinite loading spinners, timed-out connections, and inaccessible study resources right before entering examination halls.</p>
+      <p>We built UniVault from the ground up to solve this exact bottleneck through a resilient, <strong>offline-first architecture</strong>.</p>
+
+      <h2>The Offline-First Architectural Philosophy</h2>
+      <p>In UniVault, the local database is not an auxiliary cache—it is the single source of truth for the user interface. The UI observes local database tables, and all remote sync processes occur asynchronously in the background.</p>
+
+      <h3>1. Local Persistence Layer: Android Room &amp; SQLite</h3>
+      <p>We modeled all core academic data using Room entities. By utilizing Flow and LiveData wrappers, the UI updates instantly whenever local data changes without waiting for network round-trips.</p>
+      <pre><code>// Room Entity with offline sync metadata
+@Entity(tableName = "academic_resources")
+data class AcademicResourceEntity(
+    @PrimaryKey val id: String,
+    val subjectCode: String,
+    val title: String,
+    val fileUrl: String,
+    val localFilePath: String?,
+    val isDownloaded: Boolean = false,
+    val lastSyncedTimestamp: Long = System.currentTimeMillis()
+)</code></pre>
+
+      <h3>2. Background Synchronization with WorkManager</h3>
+      <p>To keep local repositories updated without draining device batteries, we utilized Android's <code>WorkManager</code> with battery-not-low and unmetered network constraints. WorkManager guarantees execution even if the user forces close the application or reboots their device.</p>
+
+      <h2>Optimizing Cloud Firestore: Slashing Read Costs by 80%</h2>
+      <p>Firebase Firestore charges per document read. When serving 50,000+ active students during exam week, naive querying patterns can generate millions of document reads in hours, creating massive cloud bills.</p>
+      <p>We engineered a delta-sync mechanism:
+        <ul>
+          <li>Each client stores a <code>last_sync_timestamp</code> locally in EncryptedSharedPreferences.</li>
+          <li>When syncing, the client only queries resources where <code>updatedAt &gt; last_sync_timestamp</code>.</li>
+          <li>Static document collections (such as syllabus schemas) are bundled as compressed pre-populated SQLite assets within the APK, eliminating initial download overhead entirely.</li>
+        </ul>
+      </p>
+
+      <h2>Key Metrics and Real-World Impact</h2>
+      <table class="w-full border-collapse border border-border my-6">
+        <thead>
+          <tr class="bg-muted">
+            <th class="border border-border p-3 text-left">Metric</th>
+            <th class="border border-border p-3 text-left">Before UniVault</th>
+            <th class="border border-border p-3 text-left">With UniVault Architecture</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="border border-border p-3">Resource Load Latency</td>
+            <td class="border border-border p-3">3,200ms (Network dependent)</td>
+            <td class="border border-border p-3"><strong>&lt; 45ms (Local disk instant)</strong></td>
+          </tr>
+          <tr>
+            <td class="border border-border p-3">Offline Usability</td>
+            <td class="border border-border p-3">0% (Threw network errors)</td>
+            <td class="border border-border p-3"><strong>100% full offline study support</strong></td>
+          </tr>
+          <tr>
+            <td class="border border-border p-3">Active Student Reach</td>
+            <td class="border border-border p-3">Fragmented WhatsApp groups</td>
+            <td class="border border-border p-3"><strong>50,000+ registered student users</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Conclusion</h2>
+      <p>Building for users in resource-constrained environments requires rethinking default architectural assumptions. Prioritizing local-first caching, disciplined background syncing, and defensive cloud data fetching transformed UniVault into a battle-tested product trusted by tens of thousands of engineering students.</p>
+    `
+  },
+  {
+    slug: "ethereum-fraud-detection-xgboost",
+    title: "Detecting Ethereum Fraud with XGBoost: Achieving 94% Accuracy on Imbalanced Blockchain Data",
+    description: "How we developed an automated fraud detection pipeline for Ethereum transactions using machine learning, addressing severe class imbalance with SMOTE and outperforming legacy tree ensembles.",
+    date: "October 01, 2026",
+    readTime: "9 min read",
+    category: "AI & Machine Learning",
+    tags: ["Machine Learning", "XGBoost", "FinTech"],
+    coverImage: "/object_detection_comparison.webp",
+    content: `
+      <h2>The Challenge of Illicit Activity on Decentralized Networks</h2>
+      <p>Public blockchains like Ethereum process hundreds of millions of peer-to-peer financial transactions each year. While transparency and pseudo-anonymity are core tenets of decentralized finance (DeFi), they also attract bad actors conducting phishing attacks, ponzi schemes, flash loan exploits, and money laundering.</p>
+      <p>Detecting fraudulent accounts manually is impossible given transaction velocities. In this project, we designed a machine learning pipeline using <strong>XGBoost (Extreme Gradient Boosting)</strong> that flags high-risk accounts with <strong>94% accuracy</strong>.</p>
+
+      <h2>The Severe Class Imbalance Problem</h2>
+      <p>In real-world blockchain data, fraudulent accounts constitute less than 2% of total transaction volume. A naive classifier that predicts "Legitimate" for every transaction would achieve 98% accuracy while being completely useless for security.</p>
+      <p>To combat this, we implemented a dual mitigation strategy:
+        <ul>
+          <li><strong>SMOTE (Synthetic Minority Over-sampling Technique):</strong> Generates synthetic feature instances along the feature space line segments joining k-nearest minority neighbors.</li>
+          <li><strong>Cost-Sensitive Loss Optimization:</strong> Tuning the <code>scale_pos_weight</code> parameter in XGBoost to penalize false negatives far more heavily than false positives.</li>
+        </ul>
+      </p>
+
+      <h2>Feature Engineering: Extracting Behavioral Signatures</h2>
+      <p>Raw transaction hashes tell you little on their own. We engineered composite behavioral features from wallet transaction histories:</p>
+      <ul>
+        <li><strong>Time Delta Variance:</strong> Fraudulent accounts often demonstrate bursty activity—rapid high-frequency fund distributions followed by permanent dormancy.</li>
+        <li><strong>ERC-20 Token Velocity:</strong> Ratio of ERC-20 token movements relative to base Ether transfers.</li>
+        <li><strong>Value In/Out Skewness:</strong> Difference between maximum Ether received versus minimum Ether sent.</li>
+        <li><strong>Unique Interaction Ratio:</strong> Total distinct smart contract addresses interacted with per 100 transactions.</li>
+      </ul>
+
+      <h2>Model Evaluation and Comparison</h2>
+      <table class="w-full border-collapse border border-border my-6">
+        <thead>
+          <tr class="bg-muted">
+            <th class="border border-border p-3 text-left">Model</th>
+            <th class="border border-border p-3 text-left">Accuracy</th>
+            <th class="border border-border p-3 text-left">Precision</th>
+            <th class="border border-border p-3 text-left">Recall</th>
+            <th class="border border-border p-3 text-left">F1-Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="border border-border p-3">Decision Tree</td>
+            <td class="border border-border p-3">86.4%</td>
+            <td class="border border-border p-3">0.82</td>
+            <td class="border border-border p-3">0.81</td>
+            <td class="border border-border p-3">0.81</td>
+          </tr>
+          <tr>
+            <td class="border border-border p-3">Random Forest</td>
+            <td class="border border-border p-3">91.2%</td>
+            <td class="border border-border p-3">0.89</td>
+            <td class="border border-border p-3">0.87</td>
+            <td class="border border-border p-3">0.88</td>
+          </tr>
+          <tr>
+            <td class="border border-border p-3">AdaBoost</td>
+            <td class="border border-border p-3">89.7%</td>
+            <td class="border border-border p-3">0.86</td>
+            <td class="border border-border p-3">0.85</td>
+            <td class="border border-border p-3">0.85</td>
+          </tr>
+          <tr class="bg-primary/10 font-semibold">
+            <td class="border border-border p-3 text-primary">XGBoost (Optimized)</td>
+            <td class="border border-border p-3 text-primary"><strong>94.2%</strong></td>
+            <td class="border border-border p-3 text-primary"><strong>0.93</strong></td>
+            <td class="border border-border p-3 text-primary"><strong>0.92</strong></td>
+            <td class="border border-border p-3 text-primary"><strong>0.93</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Pipeline Architecture</h2>
+      <pre><code># Core model training snippet
+import xgboost as xgb
+from sklearn.model_selection import StratifiedKFold
+from imblearn.over_sampling import SMOTE
+
+# Balance dataset
+smote = SMOTE(random_state=42)
+X_resampled, y_resampled = smote.fit_resample(X_train, y_train)
+
+# Initialize XGBoost with tuned hyper-parameters
+model = xgb.XGBClassifier(
+    n_estimators=300,
+    max_depth=6,
+    learning_rate=0.05,
+    subsample=0.8,
+    colsample_bytree=0.8,
+    scale_pos_weight=1.5,
+    eval_metric="logloss",
+    random_state=42
+)
+model.fit(X_resampled, y_resampled)</code></pre>
+
+      <h2>Conclusion &amp; Production Deployability</h2>
+      <p>By transforming raw blockchain transaction graphs into nuanced temporal and behavioral features, XGBoost proved uniquely adept at cutting through noise in decentralized transaction ledgers. This model serves as the backbone for automated AML (Anti-Money Laundering) transaction scoring in next-generation Web3 payment gateways.</p>
+    `
+  },
+  {
     slug: "react-state-management",
     title: "Advanced State Management in React 18: Beyond Redux",
     description: "Explore modern state management paradigms in React 18, including Zustand, Recoil, and Signals, comparing performance and developer experience.",
     date: "July 02, 2026",
     readTime: "6 min read",
-    category: "React",
-    tags: ["React", "Zustand", "Frontend", "Performance"],
-    coverImage: "/mohan-reddy-full-stack-developer.webp",
+    category: "Frontend Engineering",
+    tags: ["React", "Zustand", "Performance"],
+    coverImage: "/saveetha_hub_screenshot.webp",
     content: `
       <h2>Introduction</h2>
       <p>React 18 introduced powerful features like Concurrent Rendering, automatic batching, and transition APIs. With these advancements, traditional global state management solutions like Redux often feel overly verbose and heavy. Developers are increasingly moving towards lightweight, decentralized, or atomic state libraries. In this article, we'll dive deep into Zustand, Recoil, and the emerging Signals paradigm.</p>
@@ -85,336 +329,6 @@ const useBearStore = create&lt;BearState&gt;((set) => ({
 
       <h2>Conclusion</h2>
       <p>For most React 18 applications, <strong>Zustand</strong> represents the sweet spot of Flux architecture and hook simplicity. If your app handles complex graphical layouts or relational nodes, atomic state libraries like <strong>Jotai</strong> shine. Selecting the correct library can improve both Core Web Vitals (specifically Interaction to Next Paint - INP) and developer productivity.</p>
-    `
-  },
-  {
-    slug: "firestore-realtime-react",
-    title: "Building Real-Time Web Apps with Cloud Firestore and React",
-    description: "Learn how to design scalable real-time architectures using Firebase Firestore and React, including caching, security rules, and performance tips.",
-    date: "June 25, 2026",
-    readTime: "5 min read",
-    category: "Firebase",
-    tags: ["Firebase", "Firestore", "React", "NoSQL", "Real-time"],
-    coverImage: "/mohan-reddy-full-stack-developer.webp",
-    content: `
-      <h2>Introduction</h2>
-      <p>Real-time updates are a standard expectation for modern web applications. Cloud Firestore provides native WebSocket-based synchronization via its SDK, allowing developers to listen to document change streams effortlessly. In this guide, we'll build a custom React hook to fetch and synchronize database values in real time while maintaining memory-efficient cleanup cycles.</p>
-
-      <h2>Understanding Firestore Listeners</h2>
-      <p>Firestore uses the <code>onSnapshot</code> API to bind a local callback to database changes. When a matching document is added, modified, or deleted, the Firestore backend pushes a changeset delta to the client, triggering the UI callback.</p>
-
-      <h2>Implementing the useRealtime Hook</h2>
-      <p>To avoid memory leaks and duplicate connections, React components must clean up database listeners when they unmount. Below is an industry-grade hook implementation:</p>
-      <pre><code>import { useEffect, useState } from "react";
-import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
-import { db } from "./firebaseConfig"; // initialized Firestore reference
-
-export function useRealtimeCollection(collectionPath: string) {
-  const [data, setData] = useState&lt;any[]&gt;([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState&lt;Error | null&gt;(null);
-
-  useEffect(() => {
-    const q = query(collection(db, collectionPath), orderBy("createdAt", "desc"));
-    
-    const unsubscribe = onSnapshot(
-      q,
-      (snapshot) => {
-        const items = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setData(items);
-        setLoading(false);
-      },
-      (err) => {
-        console.error("Firestore listener error: ", err);
-        setError(err);
-        setLoading(false);
-      }
-    );
-
-    // Unsubscribe from Firestore snapshot on unmount
-    return () => unsubscribe();
-  }, [collectionPath]);
-
-  return { data, loading, error };
-}</code></pre>
-
-      <h2>Security Rules: The Foundation of Firestore Safety</h2>
-      <p>Unlike traditional backend databases, clients read directly from Firestore. Therefore, security rules are crucial. Always use Firebase Auth to restrict reads and writes to authorized domain users:</p>
-      <pre><code>rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /posts/{postId} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null && request.auth.token.email.matches('.*@saveetha\\\\.com$');
-    }
-  }
-}</code></pre>
-
-      <h2>Performance Optimization Tips</h2>
-      <ul>
-        <li><strong>Offline Persistence:</strong> Enable offline cache persistence to load data instantly from local disk before fetching from the cloud.</li>
-        <li><strong>Query Limitations:</strong> Never fetch boundless collections. Always use <code>limit()</code> clauses.</li>
-        <li><strong>Debounced Write Operations:</strong> For collaborative dashboards, batch write requests using Firestore's <code>writeBatch</code> class to lower network calls.</li>
-      </ul>
-
-      <h2>Conclusion</h2>
-      <p>Combining React's hook lifecycle with Firestore's snapshot subscriptions results in a robust reactive data flow. By isolating database logic inside reusable hooks, you ensure your app is modular, performant, and simple to test.</p>
-    `
-  },
-  {
-    slug: "typescript-type-safety",
-    title: "Mastering TypeScript: Type-Safe Development for Full Stack Engineers",
-    description: "Dive into advanced TypeScript concepts including conditional types, mapped types, utility types, and structural typing for full-stack engineering.",
-    date: "June 18, 2026",
-    readTime: "7 min read",
-    category: "TypeScript",
-    tags: ["TypeScript", "Programming", "Clean Code", "Type-safety"],
-    coverImage: "/mohan-reddy-full-stack-developer.webp",
-    content: `
-      <h2>The Full Stack Type-Safety Challenge</h2>
-      <p>In full stack development, maintaining type integrity from the database schema down to the UI components is one of the hardest problems. Discrepancies between what database drivers return and what UI templates expect cause runtime failures. TypeScript bridges this gap, allowing us to enforce compile-time validation rules.</p>
-
-      <h2>Advanced Type System Concepts</h2>
-      <p>To write scalable types, developers must understand the dynamic programming aspects of TypeScript's compiler. It's not just about defining interfaces; it's about composing types programmatically.</p>
-
-      <h3>1. Mapped Types</h3>
-      <p>Mapped types allow you to create new types based on old ones by iterating over keys. For instance, creating a read-only or optional version of an interface:</p>
-      <pre><code>type ReadOnlyCustom&lt;T&gt; = {
-  readonly [P in keyof T]: T[P];
-};
-
-interface Student {
-  name: string;
-  cgpa: number;
-}
-
-const lockedStudent: ReadOnlyCustom&lt;Student&gt; = {
-  name: "Mohan Reddy",
-  cgpa: 8.646,
-};
-// lockedStudent.cgpa = 9.0; // Error: Cannot assign to 'cgpa' because it is a read-only property</code></pre>
-
-      <h3>2. Conditional Types</h3>
-      <p>Conditional types allow you to declare a type that changes based on a condition, similar to a ternary operator:</p>
-      <pre><code>type IsString&lt;T&gt; = T extends string ? true : false;
-type A = IsString&lt;string&gt;; // true
-type B = IsString&lt;number&gt;; // false</code></pre>
-
-      <h3>3. Template Literal Types</h3>
-      <p>Introduced in TS 4.1, template literal types allow you to manipulate strings inside type expressions, which is highly useful for API route handlers and CSS utilities:</p>
-      <pre><code>type Direction = "top" | "right" | "bottom" | "left";
-type MarginProperty = \`margin-\${Direction}\`;
-// Resulting Type: "margin-top" | "margin-right" | "margin-bottom" | "margin-left"</code></pre>
-
-      <h2>Sharing Types Across Frontend and Backend</h2>
-      <p>For Vite-based apps, sharing interfaces is straightforward since the compiler resolves tsconfig paths. Sharing types with an API layer (like a Node or Kotlin backend) requires compiling interfaces into schema definitions (like OpenAPI/Swagger specs or JSON Schema) that both client and server can validate. Using tools like <strong>Zod</strong> allows you to perform schema runtime validation while automatically inferring TypeScript compile-time typings.</p>
-
-      <h2>Conclusion</h2>
-      <p>Mastering advanced TypeScript helps build bulletproof applications. By leveraging mapped types, generics, and schema validation, you eliminate a class of runtime bugs and provide an excellent autocomplete experience for your team.</p>
-    `
-  },
-  {
-    slug: "modern-java-features",
-    title: "Oracle Java SE 17: Deep Dive into Modern Language Features",
-    description: "A detailed guide to the most impactful features introduced in LTS Java 17, including pattern matching, records, sealed classes, and garbage collectors.",
-    date: "June 10, 2026",
-    readTime: "8 min read",
-    category: "Java",
-    tags: ["Java", "OOP", "Backend", "LTS"],
-    coverImage: "/mohan-reddy-full-stack-developer.webp",
-    content: `
-      <h2>The Evolution of Java</h2>
-      <p>Java has transitioned to a six-month release cycle, which accelerates feature additions. However, corporate enterprises focus primarily on Long-Term Support (LTS) versions. Java 17 SE represents one of the most critical LTS releases, introducing modern paradigms that make Java code concise, functional, and highly optimized. As an Oracle Certified Professional Java SE 17 Developer, I've seen firsthand how these features reduce boilerplate and enhance safety.</p>
-
-      <h2>Key Modern Features of Java 17</h2>
-
-      <h3>1. Records (Data Classes)</h3>
-      <p>Historically, writing a simple POJO required getters, setters, equals(), hashCode(), and toString() methods. Java 17 records introduce a compact class declaration for immutable data carriers:</p>
-      <pre><code>// Simple Record Declaration
-public record Student(String name, double cgpa, String school) {}
-
-// Usage
-Student s = new Student("Mohan Reddy", 8.646, "Saveetha School of Engineering");
-System.out.println(s.name()); // "Mohan Reddy"
-System.out.println(s); // prints: Student[name=Mohan Reddy, cgpa=8.646, school=Saveetha...]</code></pre>
-
-      <h3>2. Sealed Classes</h3>
-      <p>Sealed classes allow superclasses to restrict which subclasses can extend or implement them. This is incredibly helpful for domain modeling and compiler-enforced pattern validation:</p>
-      <pre><code>public sealed class Shape permits Circle, Square, Rectangle {}
-
-public final class Circle extends Shape {
-  public double radius;
-}
-public final class Square extends Shape {
-  public double side;
-}
-// Any other class attempting to extend Shape will trigger compile-time errors.</code></pre>
-
-      <h3>3. Pattern Matching for switch</h3>
-      <p>Pattern matching extends switch statements, allowing you to test objects against patterns and automatically cast variables:</p>
-      <pre><code>public static double getArea(Shape shape) {
-  return switch (shape) {
-    case Circle c -&gt; Math.PI * c.radius * c.radius;
-    case Square s -&gt; s.side * s.side;
-    default -&gt; throw new IllegalArgumentException("Unknown Shape");
-  };
-}</code></pre>
-
-      <h2>Garbage Collection Enhancements</h2>
-      <p>Java 17 features improvements in the G1 garbage collector and makes the Z Garbage Collector (ZGC) production-ready. ZGC operates concurrently with application threads, keeping stop-the-world pauses below 10 milliseconds even on terabyte-scale heaps. This directly lowers API request latencies on enterprise servers.</p>
-
-      <h2>Conclusion</h2>
-      <p>Java 17 brings Java closer to languages like Kotlin and Scala while maintaining its backward compatibility and virtual machine performance. Transitioning to Java 17 enables developers to write clean, type-safe, and highly efficient backend software.</p>
-    `
-  },
-  {
-    slug: "secure-offline-android-univault",
-    title: "Designing UniVault: Building Secure Offline-First Android Applications",
-    description: "Behind the scenes of UniVault, a secure Android application built with Kotlin, Room DB, AES-256 encryption, and offline-first capabilities.",
-    date: "June 03, 2026",
-    readTime: "8 min read",
-    category: "Android",
-    tags: ["Android", "Kotlin", "Security", "RoomDB", "Mobile"],
-    coverImage: "/mohan-reddy-full-stack-developer.webp",
-    content: `
-      <h2>The Genesis of UniVault</h2>
-      <p>University exam preparation requires quick access to syllabus files, question banks, and material notes. However, university campuses often have unreliable cellular connectivity. I designed and published <strong>UniVault</strong> to solve this exact problem, creating a secure, offline-first Android application where students can store, index, and view academic files without an active internet connection.</p>
-
-      <h2>UniVault Architecture Overview</h2>
-      <p>UniVault utilizes the MVVM (Model-View-ViewModel) architecture pattern, adhering to Google's Modern Android Development (MAD) guidelines. By utilizing Jetpack libraries, state flow, and repository decoupling, the app remains responsive and testable.</p>
-
-      <h3>1. Offline-First Database Layer (Room DB)</h3>
-      <p>SQLite forms the database engine, managed through Jetpack Room. Room compiles SQL statements at compile time, eliminating syntax bugs. To support offline search, UniVault indexes material titles using Room's Full-Text Search (FTS4) extensions.</p>
-      <pre><code>// Room Entity definition in Kotlin
-@Entity(tableName = "materials")
-data class MaterialEntity(
-  @PrimaryKey val id: String,
-  val title: String,
-  val courseCode: String,
-  val localFilePath: String?,
-  val downloadUrl: String,
-  val isDownloaded: Boolean
-)</code></pre>
-
-      <h3>2. Data Encryption Pipeline (AES-256)</h3>
-      <p>Security is paramount. Downloaded materials and user profile credentials are encrypted locally on disk. UniVault utilizes Android Jetpack Security (EncryptedSharedPreferences and MasterKeys) to manage symmetric encryption keys inside the device hardware-backed Keystore:</p>
-      <pre><code>// Initializing EncryptedSharedPreferences in Kotlin
-val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
-val sharedPreferences = EncryptedSharedPreferences.create(
-    "secret_shared_prefs",
-    masterKeyAlias,
-    context,
-    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-)</code></pre>
-
-      <h2>Optimizing PDF Loading Performance</h2>
-      <p>Loading large academic PDFs requires significant memory, which can lead to Out Of Memory (OOM) exceptions. UniVault resolves this by:
-        <ul>
-          <li>Caching parsed page bitmaps in memory using an LruCache.</li>
-          <li>Rendering PDF pages on-demand using Android's native <code>PdfRenderer</code> inside background Coroutines.</li>
-          <li>Releasing page buffers when they scroll off-screen.</li>
-        </ul>
-      </p>
-
-      <h2>Conclusion</h2>
-      <p>UniVault proves that rich mobile utilities do not need constant cloud connectivity to provide a great user experience. By implementing solid offline storage, local encryption, and background worker threads, you build responsive applications that work in any environment.</p>
-    `
-  },
-  {
-    slug: "developer-portfolio-design",
-    title: "How to Design a Developer Portfolio That Wins Recruiter Attention",
-    description: "Best practices for designing portfolios that recruiters love, focusing on real-world projects, proof of work, performance, and UI details.",
-    date: "May 28, 2026",
-    readTime: "5 min read",
-    category: "Portfolio",
-    tags: ["Portfolio", "Web Design", "Recruiting", "Career"],
-    coverImage: "/mohan-reddy-full-stack-developer.webp",
-    content: `
-      <h2>The Recruiter Screen Challenge</h2>
-      <p>Technical recruiters spend an average of 6 to 10 seconds reviewing a developer's portfolio before deciding to read further. Standard boilerplates with simple landing paragraphs and mock project lists do not stand out. To get interviews, your portfolio must convey three indicators: <strong>competence</strong>, <strong>proof of work</strong>, and <strong>high-fidelity engineering</strong>.</p>
-
-      <h2>1. Focus on Proof of Work, Not Lists of Skills</h2>
-      <p>Recruiters are skeptical of lists of tools (e.g. "React, Docker, AWS"). Anyone can paste badges. Instead, write comprehensive case studies. For every project, clearly explain:
-        <ul>
-          <li><strong>The Problem:</strong> What real-world challenge does this project solve?</li>
-          <li><strong>Architecture:</strong> How did you structure the databases, servers, and clients? Make this interactive or visual.</li>
-          <li><strong>Lessons Learned:</strong> What went wrong, and how did you resolve it? This demonstrates senior-level troubleshooting.</li>
-        </ul>
-      </p>
-
-      <h2>2. Design for Instant Visual Impact</h2>
-      <p>First impressions matter. Integrate polished layouts that make your website feel premium:
-        <ul>
-          <li><strong>Modern Palettes:</strong> Use HSL colors with high-contrast modes, subtle gradient cards, and smooth transitions (using Framer Motion).</li>
-          <li><strong>Micro-animations:</strong> Make components feel responsive. Add magnetic buttons or subtle hover cards.</li>
-          <li><strong>Real Assets:</strong> Include functional mockups, screenshots, or even video walkthroughs of your projects. Avoid blank gray boxes.</li>
-        </ul>
-      </p>
-
-      <h2>3. Performance and Accessibility: The Ultimate Test</h2>
-      <p>A portfolio is itself a software product. If your portfolio has slow load times or fails basic Lighthouse accessibility checks, it sends a bad signal. Ensure:
-        <ul>
-          <li><strong>Core Web Vitals:</strong> Optimize LCP (Largest Contentful Paint) by preloading critical resources, deferring non-essential JS, and compression.</li>
-          <li><strong>ARIA and Semantics:</strong> Make your site keyboard navigable. Screen readers should read your content in the correct order.</li>
-          <li><strong>Responsive Design:</strong> Half of all recruiter checks happen on mobile screens. Ensure your grid structures collapse elegantly.</li>
-        </ul>
-      </p>
-
-      <h2>Conclusion</h2>
-      <p>Your portfolio is the single most valuable asset in your career search. By treating it as a real software project—optimizing it for performance, accessibility, SEO, and developer depth—you elevate your profile above standard resumes.</p>
-    `
-  },
-  {
-    slug: "technical-seo-react-spa",
-    title: "Technical SEO for React Single Page Applications: The Ultimate Guide",
-    description: "A complete guide to resolving indexation, dynamic meta tags, structured data, and performance issues in React Single Page Applications.",
-    date: "May 20, 2026",
-    readTime: "7 min read",
-    category: "SEO",
-    tags: ["SEO", "React", "SPAs", "Googlebot", "Structured Data"],
-    coverImage: "/mohan-reddy-full-stack-developer.webp",
-    content: `
-      <h2>The SPA Crawler Problem</h2>
-      <p>Search engine crawlers historically scanned static HTML. Modern search engine bots like Googlebot are capable of running client-side Javascript, but they operate in a two-stage indexation pipeline. Stage 1 grabs the initial HTML. Stage 2 renders the Javascript when rendering resources are available. If your meta tags, title, or canonical URLs are missing from the initial HTML, indexation can be delayed or inaccurate. We must resolve this to maximize SEO performance.</p>
-
-      <h2>Resolving SPA Crawling Challenges</h2>
-
-      <h3>1. Dynamic Head Tags and React Helmet Alternatives</h3>
-      <p>In client-rendered Single Page Apps, page titles and meta headers must change as the user navigates. Using components that tap into React's lifecycle allows us to dynamically inject meta values. Always ensure you also have high-quality, static meta tags in your entry <code>index.html</code> to act as safety fallbacks during Stage 1 crawling.</p>
-
-      <h3>2. Structured Data (JSON-LD) Integration</h3>
-      <p>Structured data helps search engines understand the entities on your website. Google recommends injecting schemas in the JSON-LD format. Schema types like <code>Person</code>, <code>WebSite</code>, <code>WebPage</code>, and <code>Article</code> tell Google exactly who you are, what you build, and what articles you write. By maintaining a single schema script tag in your document head and changing its contents on page transitions, you feed search crawlers clean metadata.</p>
-      <pre><code>// Example schema script injection in React
-const scriptId = "jsonld-seo";
-let scriptElement = document.getElementById(scriptId);
-if (!scriptElement) {
-  scriptElement = document.createElement("script");
-  scriptElement.id = scriptId;
-  scriptElement.type = "application/ld+json";
-  document.head.appendChild(scriptElement);
-}
-scriptElement.textContent = JSON.stringify(myPageSchema);</code></pre>
-
-      <h3>3. Crawlable Link Routing</h3>
-      <p>Never rely on click listeners on non-anchor tags (like div or button elements) for page navigation. Search crawlers do not click buttons. They extract <code>&lt;a href="..."&gt;</code> attributes to discover new links. Use standard React Router <code>&lt;Link&gt;</code> components and ensure your hosting provider (like Netlify or Vercel) is configured with redirect rules so direct URL entries do not throw 404 errors.</p>
-      <pre><code># public/_redirects for Netlify SPA routing
-/*    /index.html   200</code></pre>
-
-      <h2>Core Web Vitals for SEO</h2>
-      <p>Search ranking factors include page speed and layout stability. Focus on:
-        <ul>
-          <li><strong>LCP:</strong> Optimize image formats (use WebP/AVIF), compress assets, and defer third-party scripts.</li>
-          <li><strong>FID / INP:</strong> Ensure long tasks are broken up so input response times are quick.</li>
-          <li><strong>CLS:</strong> Reserve width/height sizes for media wrappers to prevent layout shifts during asset load cycles.</li>
-        </ul>
-      </p>
-
-      <h2>Conclusion</h2>
-      <p>Optimizing single page apps for SEO requires a combination of dynamic metadata injection, crawlable routing, structured schemas, and performance optimizations. Combining these features allows Google to index your SPA as quickly and accurately as a static site.</p>
     `
   }
 ];
